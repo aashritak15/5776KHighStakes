@@ -2,5 +2,7 @@
 
 using namespace okapi;
 
-extern Motor intakeMotor1;
-extern Motor intakeMotor2;
+extern Motor intakeMotor;
+
+void intakeInnit();
+void updateIntake();

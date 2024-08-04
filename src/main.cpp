@@ -1,7 +1,10 @@
 #include "main.h"
 #include "lemlib/api.hpp" // IWYU pragma: keep
+#include "subsystems/ports.hpp"
+#include "subsystems/pistons.hpp"
+#include "subsystems/intake.hpp"
 
-pros::Controller controller(pros::E_CONTROLLER_MASTER);
+pros::Controller controllerPro(pros::E_CONTROLLER_MASTER);
 
 pros::MotorGroup leftMotors({-5, 4, -3}, pros::MotorGearset::blue);
 pros::MotorGroup rightMotors({6, -9, 7}, pros::MotorGearset::blue);
@@ -67,6 +70,8 @@ lemlib::Chassis chassis(drivetrain, linearController, angularController, sensors
 void initialize() {
     pros::lcd::initialize(); // initialize brain screen
     chassis.calibrate(); // calibrate sensors
+    clampInit();
+    intakeInnit();
 
     // the default rate is 50. however, if you need to change the rate, you
     // can do the following.
@@ -116,11 +121,13 @@ void opcontrol() {
     // loop to continuously update motors
     while (true) {
         // get joystick positions
-        int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
-        int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+        int leftY = controllerPro.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
+        int rightX = controllerPro.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
         // move the chassis with curvature drive
         chassis.arcade(leftY, rightX);
-        // delay to save resources
+        updateIntake();
+        updateClamp();
+
         pros::delay(10);
     }
 }

@@ -4,4 +4,6 @@
 
 using namespace okapi;
 
-const std::uint8_t intakePort = 20;
+const std::uint8_t intakePort1 = 20;
+
+const std::uint8_t clampPort = 'H';
