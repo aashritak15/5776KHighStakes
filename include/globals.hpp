@@ -1,5 +1,3 @@
 #include "main.h"
 
-using namespace okapi;
-
-static Controller controller;
+pros::Controller controller(pros::E_CONTROLLER_MASTER);

@@ -1,8 +1,6 @@
 #include "main.h"
 
-using namespace okapi;
-
-extern Motor intakeMotor;
+inline pros::Motor intake(20, pros::MotorGearset::blue);
 
 void intakeInnit();
 void updateIntake();

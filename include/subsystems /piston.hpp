@@ -1,7 +1,6 @@
 #include "main.h"
 
-using namespace okapi;
+inline pros::adi::DigitalOut mogoClamp('A');
 
-extern pros::ADIDigitalOut mogoClamp;
 void updateClamp();
 void clampInit();
