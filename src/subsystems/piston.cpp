@@ -1,10 +1,8 @@
 
 #include "main.h"
-#include "subsystems/ports.hpp"
-#include "subsystems/pistons.hpp"
+#include "ports.hpp"
+#include "piston.hpp"
 #include "globals.hpp"
-
-pros::adi::DigitalOut mogoClamp('A');
 
 void clampInit() { mogoClamp.set_value(false); }
 

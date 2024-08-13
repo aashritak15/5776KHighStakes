@@ -1,10 +1,9 @@
 #include "main.h"
 #include "lemlib/api.hpp" // IWYU pragma: keep
-#include "subsystems/ports.hpp"
-#include "subsystems/pistons.hpp"
-#include "subsystems/intake.hpp"
-
-pros::Controller controllerPro(pros::E_CONTROLLER_MASTER);
+#include "ports.hpp"
+#include "piston.hpp"
+#include "intake.hpp"
+#include "globals.hpp"
 
 pros::MotorGroup leftMotors({-5, 4, -3}, pros::MotorGearset::blue);
 pros::MotorGroup rightMotors({6, -9, 7}, pros::MotorGearset::blue);
@@ -121,8 +120,8 @@ void opcontrol() {
     // loop to continuously update motors
     while (true) {
         // get joystick positions
-        int leftY = controllerPro.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
-        int rightX = controllerPro.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+        int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
+        int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
         // move the chassis with curvature drive
         chassis.arcade(leftY, rightX);
         updateIntake();
