@@ -4,6 +4,7 @@
 #include "piston.hpp"
 #include "intake.hpp"
 #include "globals.hpp"
+#include "lift.hpp"
 
 pros::MotorGroup leftMotors({-5, 4, -3}, pros::MotorGearset::blue);
 pros::MotorGroup rightMotors({6, -9, 7}, pros::MotorGearset::blue);
@@ -71,6 +72,7 @@ void initialize() {
     chassis.calibrate(); // calibrate sensors
     clampInit();
     intakeInnit();
+    liftInit();
 
     // the default rate is 50. however, if you need to change the rate, you
     // can do the following.
@@ -126,7 +128,7 @@ void opcontrol() {
         chassis.arcade(leftY, rightX);
         updateIntake();
         updateClamp();
-
+        updateLift();
         pros::delay(10);
     }
 }
