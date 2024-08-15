@@ -18,7 +18,7 @@ void updateIntake() {
             intake.move_velocity(0);
             intaking++;
         }
-    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
+    } else if (!controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
         if (intaking == 1) {
             intaking++;
         } else if (intaking == 3) {

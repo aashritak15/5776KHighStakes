@@ -17,7 +17,7 @@ void updateClamp() {
             mogoClamp.set_value(false);
             clampState++;
         }
-    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
+    } else if (!controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
         if (clampState == 1) {
             clampState++;
         } else if (clampState == 3) {
