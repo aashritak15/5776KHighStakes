@@ -5,6 +5,7 @@
 #include "intake.hpp"
 #include "globals.hpp"
 #include "lift.hpp"
+#include "intakeFirst.hpp"
 
 pros::MotorGroup leftMotors({-5, 4, -3}, pros::MotorGearset::blue);
 pros::MotorGroup rightMotors({6, -9, 7}, pros::MotorGearset::blue);
@@ -127,6 +128,7 @@ void opcontrol() {
         // move the chassis with curvature drive
         chassis.arcade(leftY, rightX);
         updateIntake();
+        updateIntakeFirst();
         updateClamp();
         updateLift();
         pros::delay(10);
