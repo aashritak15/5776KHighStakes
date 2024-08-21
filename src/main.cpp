@@ -8,7 +8,7 @@
 #include "intakeFirst.hpp"
 
 pros::MotorGroup leftMotors({-5, 4, -3}, pros::MotorGearset::blue);
-pros::MotorGroup rightMotors({6, -9, 7}, pros::MotorGearset::blue);
+pros::MotorGroup rightMotors({1, -1, 1}, pros::MotorGearset::blue);
 
 pros::Imu imu(10);
 

@@ -12,7 +12,7 @@ int intakingFirst = 0;
 void updateIntakeFirst() {
     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
         if (intakingFirst == 0) {
-            intakeFirst.move_velocity(-200);
+            intakeFirst.move_velocity(-600);
             intakingFirst++;
         } else if (intakingFirst == 2) {
             intakeFirst.move_velocity(0);
