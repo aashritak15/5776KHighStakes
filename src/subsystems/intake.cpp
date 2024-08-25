@@ -25,4 +25,20 @@ void updateIntake() {
             intaking = 0;
         }
     }
+
+    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) {
+        if (intaking == 0) {
+            intake.move_voltage(12000);
+            intaking++;
+        } else if (intaking == 2) {
+            intake.move_voltage(0);
+            intaking++;
+        }
+    } else if (!controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) {
+        if (intaking == 1) {
+            intaking++;
+        } else if (intaking == 3) {
+            intaking = 0;
+        }
+    }
 }

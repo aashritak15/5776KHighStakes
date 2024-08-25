@@ -25,4 +25,20 @@ void updateIntakeFirst() {
             intakingFirst = 0;
         }
     }
+
+    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
+        if (intakingFirst == 0) {
+            intakeFirst.move_velocity(600);
+            intakingFirst++;
+        } else if (intakingFirst == 2) {
+            intakeFirst.move_velocity(0);
+            intakingFirst++;
+        }
+    } else if (!controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
+        if (intakingFirst == 1) {
+            intakingFirst++;
+        } else if (intakingFirst == 3) {
+            intakingFirst = 0;
+        }
+    }
 }

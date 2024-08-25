@@ -8,9 +8,9 @@
 void liftInit() { lift.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE); }
 
 void updateLift() {
-    if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
+    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
         lift.move_velocity(-100);
-    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
+    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
         lift.move_velocity(100);
     } else {
         lift.move_velocity(0);
