@@ -119,10 +119,18 @@ void autonomous() {}
  * Runs in driver control
  */
 void opcontrol() {
+
+    
     // controller
     // loop to continuously update motors
     while (true) {
+            // pros::lcd::set_text(0, "X: %f", chassis.getPose().x); // x
+            // pros::lcd::set_text(1, "Y: %f", chassis.getPose().y); // y
+            // pros::lcd::set_text(2, "Theta: %f", chassis.getPose().theta); // heading
+            // // log position telemetry
+            // lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
         // get joystick positions
+        pros::lcd::set_text(0, "X: %f"); // x
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
         // move the chassis with curvature drive
