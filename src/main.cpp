@@ -10,7 +10,7 @@
 pros::MotorGroup leftMotors({-3, -1, -16}, pros::MotorGearset::blue);
 pros::MotorGroup rightMotors({19, 2, 18}, pros::MotorGearset::blue);
 
-pros::Imu imu(10);
+pros::Imu imu(12);
 
 // drivetrain settings
 lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 10, lemlib::Omniwheel::NEW_325, 425,
@@ -18,21 +18,21 @@ lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 10, lemlib::Omniwheel::
 );
 
 // lateral motion controller
-lemlib::ControllerSettings linearController(10, // proportional gain (kP)
+lemlib::ControllerSettings linearController(8, // proportional gain (kP)
                                             0, // integral gain (kI)
-                                            3, // derivative gain (kD)
+                                            1, // derivative gain (kD)
                                             3, // anti windup
                                             1, // small error range, in inches
                                             100, // small error range timeout, in milliseconds
                                             3, // large error range, in inches
                                             500, // large error range timeout, in milliseconds
-                                            20 // slew
+                                            0 // slew
 );
 
 // angular motion controller
-lemlib::ControllerSettings angularController(2, // proportional gain (kP)
+lemlib::ControllerSettings angularController(0, // proportional gain (kP)
                                              0, // integral gain (kI)
-                                             10, // derivative gain (kD)
+                                             0, // derivative gain (kD)
                                              3, // anti windup
                                              1, // small error range, in degrees
                                              100, // small error range timeout, in milliseconds
@@ -113,11 +113,16 @@ void competition_initialize() {}
  *
  * This is an example autonomous routine which demonstrates a lot of the features LemLib has to offer
  */
-void autonomous() {}
+void autonomous() {
+    chassis.setPose(0,0,0);
+    chassis.moveToPoint(0, 24, 3000);
+} 
 
 /**
  * Runs in driver control
  */
+
+
 void opcontrol() {
 
     
@@ -130,7 +135,9 @@ void opcontrol() {
             // // log position telemetry
             // lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
         // get joystick positions
-        pros::lcd::set_text(0, "X: %f"); // x
+        pros::lcd::set_text(0,  std::to_string(chassis.getPose().x)); 
+        pros::lcd::set_text(1,  std::to_string(chassis.getPose().y));
+         pros::lcd::set_text(2, std::to_string(chassis.getPose().theta));
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
         // move the chassis with curvature drive
