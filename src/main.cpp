@@ -18,9 +18,9 @@ lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 10, lemlib::Omniwheel::
 );
 
 // lateral motion controller
-lemlib::ControllerSettings linearController(16, // proportional gain (kP)
+lemlib::ControllerSettings linearController(12, // proportional gain (kP)
                                             0, // integral gain (kI)
-                                            18, // derivative gain (kD)
+                                            7, // derivative gain (kD)
                                             3, // anti windup
                                             1, // small error range, in inches
                                             100, // small error range timeout, in milliseconds
@@ -30,13 +30,13 @@ lemlib::ControllerSettings linearController(16, // proportional gain (kP)
 );
 
 // angular motion controller
-lemlib::ControllerSettings angularController(2, // proportional gain (kP)
+lemlib::ControllerSettings angularController(3, // proportional gain (kP)
                                              0, // integral gain (kI)
-                                             15, // derivative gain (kD)
+                                             21.5, // derivative gain (kD)
                                              3, // anti windup
                                              1, // small error range, in degrees
                                              100, // small error range timeout, in milliseconds
-                                             3, // large error range, in degrees
+                                             2, // large error range, in degrees
                                              500, // large error range timeout, in milliseconds
                                              0 // slew
 );
@@ -116,8 +116,9 @@ void competition_initialize() {}
 void autonomous() {
     chassis.setPose(0,0,0);
     //chassis.moveToPoint(0,24, 3000);
-    //chassis.turnToPoint(24, 0, 3000);
-    //chassis.turnToHeading(180, 3000);
+    chassis.turnToPoint(24, 0, 3000);
+    //chassis.turnToHeading(90, 3000);
+    //chassis.turnToHeading(90, 3000);
 } 
 
 
