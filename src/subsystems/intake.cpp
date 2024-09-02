@@ -7,38 +7,39 @@
 
 void intakeInnit() { intake.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD); }
 
-int intaking = 0;
+int intakeState = 0;
 
 void updateIntake() {
+    static bool buttonl1Pressed = false;
+    static bool buttonxPressed = false;
+
     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
-        if (intaking == 0) {
-            intake.move_voltage(-12000);
-            intaking++;
-        } else if (intaking == 2) {
-            intake.move_voltage(0);
-            intaking++;
+        if (!buttonl1Pressed) {
+            buttonl1Pressed = true;
+            if (intakeState == 0 || intakeState == 2) {
+                intake.move_voltage(-12000);
+                intakeState = 1;
+            } else if (intakeState == 1) {
+                intake.move_voltage(0);
+                intakeState = 0;
+            }
         }
-    } else if (!controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
-        if (intaking == 1) {
-            intaking++;
-        } else if (intaking == 3) {
-            intaking = 0;
-        }
+    } else {
+        buttonl1Pressed = false;
     }
 
     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) {
-        if (intaking == 0) {
-            intake.move_voltage(12000);
-            intaking++;
-        } else if (intaking == 2) {
-            intake.move_voltage(0);
-            intaking++;
+        if (!buttonxPressed) {
+            buttonxPressed = true;
+            if (intakeState == 0 || intakeState == 1) {
+                intake.move_voltage(12000);
+                intakeState = 2;
+            } else if (intakeState == 2) {
+                intake.move_voltage(0);
+                intakeState = 0;
+            }
         }
-    } else if (!controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) {
-        if (intaking == 1) {
-            intaking++;
-        } else if (intaking == 3) {
-            intaking = 0;
-        }
+    } else {
+        buttonxPressed = false;
     }
 }
