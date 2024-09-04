@@ -7,38 +7,39 @@
 
 void intakeFirstInnit() { intakeFirst.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD); }
 
-int intakingFirst = 0;
+int intakingFirstState = 0;
 
 void updateIntakeFirst() {
+    static bool buttonl2Pressed = false;
+    static bool buttonaPressed = false;
+
     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
-        if (intakingFirst == 0) {
-            intakeFirst.move_velocity(-600);
-            intakingFirst++;
-        } else if (intakingFirst == 2) {
-            intakeFirst.move_velocity(0);
-            intakingFirst++;
+        if (!buttonl2Pressed) {
+            buttonl2Pressed = true;
+            if (intakingFirstState == 0 || intakingFirstState == 2) {
+                intakeFirst.move_velocity(-600);
+                intakingFirstState = 1;
+            } else if (intakingFirstState == 1) {
+                intakeFirst.move_velocity(0);
+                intakingFirstState = 0;
+            }
         }
-    } else if (!controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
-        if (intakingFirst == 1) {
-            intakingFirst++;
-        } else if (intakingFirst == 3) {
-            intakingFirst = 0;
-        }
+    } else {
+        buttonl2Pressed = false;
     }
 
     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
-        if (intakingFirst == 0) {
-            intakeFirst.move_velocity(600);
-            intakingFirst++;
-        } else if (intakingFirst == 2) {
-            intakeFirst.move_velocity(0);
-            intakingFirst++;
+        if (!buttonaPressed) {
+            buttonaPressed = true;
+            if (intakingFirstState == 0 || intakingFirstState == 1) {
+                intakeFirst.move_velocity(600);
+                intakingFirstState = 2;
+            } else if (intakingFirstState == 2) {
+                intakeFirst.move_velocity(0);
+                intakingFirstState = 0;
+            }
         }
-    } else if (!controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
-        if (intakingFirst == 1) {
-            intakingFirst++;
-        } else if (intakingFirst == 3) {
-            intakingFirst = 0;
-        }
+    } else {
+        buttonaPressed = false;
     }
 }
