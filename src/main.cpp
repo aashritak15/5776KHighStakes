@@ -6,6 +6,7 @@
 #include "globals.hpp"
 #include "lift.hpp"
 #include "intakeFirst.hpp"
+#include "intakePiston.hpp"
 
 pros::MotorGroup leftMotors({-3, -1, -16}, pros::MotorGearset::blue);
 pros::MotorGroup rightMotors({19, 20, 18}, pros::MotorGearset::blue);
@@ -116,8 +117,8 @@ void competition_initialize() {}
 void autonomous() {
     chassis.setPose(0,0,0);
     //chassis.moveToPoint(0,24, 3000);
-    chassis.turnToPoint(24, 0, 3000);
-    //chassis.turnToHeading(90, 3000);
+    //chassis.turnToPoint(24, 0, 3000);
+    chassis.turnToHeading(180, 3000);
     //chassis.turnToHeading(90, 3000);
 } 
 
@@ -152,6 +153,7 @@ void opcontrol() {
         updateIntake();
         updateIntakeFirst();
         updateClamp();
+        updateIntakeClamp();
         updateLift();
         pros::delay(10);
     }

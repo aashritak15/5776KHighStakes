@@ -5,7 +5,7 @@
 #include "intake.hpp"
 #include "globals.hpp"
 
-void intakeInnit() { intake.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD); }
+void intakeInnit() { intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST); }
 
 int intaking = 0;
 
