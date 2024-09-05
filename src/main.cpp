@@ -16,13 +16,13 @@ pros::Imu imu(14);
 
 // drivetrain settings
 lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 10, lemlib::Omniwheel::NEW_325, 425,
-                              8 // 2 w/o traction
+                              6 // 2 w/o traction
 );
 
 // lateral motion controller
-lemlib::ControllerSettings linearController(12, // proportional gain (kP)
+lemlib::ControllerSettings linearController(13.5, // proportional gain (kP)
                                             0, // integral gain (kI)
-                                            7, // derivative gain (kD)
+                                            22.4,//22, // derivative gain (kD)
                                             3, // anti windup
                                             1, // small error range, in inches
                                             100, // small error range timeout, in milliseconds
@@ -32,9 +32,9 @@ lemlib::ControllerSettings linearController(12, // proportional gain (kP)
 );
 
 // angular motion controller
-lemlib::ControllerSettings angularController(4.7, // proportional gain (kP)
+lemlib::ControllerSettings angularController(4.6, // proportional gain (kP)
                                              0, // integral gain (kI)
-                                             25.5, // derivative gain (kD)
+                                             37.38, // derivative gain (kD)
                                              0, // anti windup
                                              1, // small error range, in degrees
                                              100, // small error range timeout, in milliseconds
@@ -76,6 +76,7 @@ void initialize() {
     clampInit();
     intakeInnit();
     liftInit();
+    intakeClampInit();
 
     // the default rate is 50. however, if you need to change the rate, you
     // can do the following.
@@ -117,9 +118,9 @@ void competition_initialize() {}
  */
 void autonomous() {
     chassis.setPose(0,0,0);
-    //chassis.moveToPoint(0,24, 3000);
-    //chassis.turnToPoint(24, 0, 3000);
-    chassis.turnToHeading(180, 3000);
+    chassis.moveToPoint(0,24, 3000);
+    // chassis.turnToPoint(24, 0, 3000);
+    //chassis.turnToHeading(180, 3000);
     //chassis.turnToHeading(90, 3000);
 } 
 

@@ -4,17 +4,17 @@
 #include "intakePiston.hpp"
 #include "globals.hpp"
 
-void intakeClampInit() { mogoClamp.set_value(false); }
+void intakeClampInit() { intakeClamp.set_value(false); }
 
 int intakeClampState = 0;
 
 void updateIntakeClamp() {
     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_UP)) {
         if (intakeClampState == 0) {
-            mogoClamp.set_value(true);
+            intakeClamp.set_value(true);
             intakeClampState++;
         } else if (intakeClampState == 2) {
-            mogoClamp.set_value(false);
+            intakeClamp.set_value(false);
             intakeClampState++;
         }
     } else if (!controller.get_digital(pros::E_CONTROLLER_DIGITAL_UP)) {
