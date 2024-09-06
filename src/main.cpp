@@ -11,7 +11,7 @@
 pros::MotorGroup leftMotors({-3, -1, -16}, pros::MotorGearset::blue);
 pros::MotorGroup rightMotors({19, 20, 18}, pros::MotorGearset::blue);
 
-pros::Imu imu(14);
+pros::Imu imu(2);
 
 
 // drivetrain settings
@@ -22,7 +22,7 @@ lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 10, lemlib::Omniwheel::
 // lateral motion controller
 lemlib::ControllerSettings linearController(13.5, // proportional gain (kP)
                                             0, // integral gain (kI)
-                                            22.4,//22, // derivative gain (kD)
+                                            30.43,//22, // derivative gain (kD)
                                             3, // anti windup
                                             1, // small error range, in inches
                                             100, // small error range timeout, in milliseconds
@@ -117,11 +117,12 @@ void competition_initialize() {}
  * This is an example autonomous routine which demonstrates a lot of the features LemLib has to offer
  */
 void autonomous() {
-    chassis.setPose(0,0,0);
-    chassis.moveToPoint(0,24, 3000);
-    // chassis.turnToPoint(24, 0, 3000);
-    //chassis.turnToHeading(180, 3000);
-    //chassis.turnToHeading(90, 3000);
+    mogoClamp.set_value(true);
+    chassis.moveToPoint(0, -19.52, 3000, {.forwards = false});
+    mogoClamp.set_value(false);
+    intake.move_voltage(-12000);
+   
+    
 } 
 
 
