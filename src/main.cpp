@@ -117,12 +117,25 @@ void competition_initialize() {}
  * This is an example autonomous routine which demonstrates a lot of the features LemLib has to offer
  */
 void autonomous() {
+    //theta = 32.26
     mogoClamp.set_value(true);
-    chassis.moveToPoint(0, -19.52, 3000, {.forwards = false});
+    chassis.moveToPoint(0, -14.52, 2000, {.forwards = false});
+    chassis.moveToPoint(0, -19.52, 3000, {.forwards = false, .maxSpeed = 50});
+    chassis.waitUntilDone();
+    pros::delay(250);
     mogoClamp.set_value(false);
     intake.move_voltage(-12000);
-   
+    pros::delay(1000);
     
+    chassis.turnToHeading(78.2, 3000);
+    chassis.moveToPose(8.88, -15.97, 74.84, 2000);
+    intakeFirst.move_velocity(-600);
+    intake.move_voltage(-12000);
+
+    //chassis.moveToPose()
+    
+    //81.80
+    //19, -18.397
 } 
 
 
