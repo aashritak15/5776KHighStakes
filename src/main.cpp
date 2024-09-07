@@ -123,14 +123,22 @@ void autonomous() {
     chassis.moveToPoint(0, -19.52, 3000, {.forwards = false, .maxSpeed = 50});
     chassis.waitUntilDone();
     pros::delay(250);
-    mogoClamp.set_value(false);
+    mogoClamp.set_value(false); 
     intake.move_voltage(-12000);
     pros::delay(1000);
+    mogoClamp.set_value(true);
     
-    chassis.turnToHeading(78.2, 3000);
-    chassis.moveToPose(8.88, -15.97, 74.84, 2000);
+    chassis.turnToHeading(78.2, 800);
+    chassis.moveToPose(9, -15.97, 90, 2000);
+    mogoClamp.set_value(false);
     intakeFirst.move_velocity(-600);
     intake.move_voltage(-12000);
+    pros::delay(1500);
+    intake.move_voltage(0);
+    chassis.moveToPose(-33, -16, 59.89, 2000, {.forwards = false});
+    chassis.turnToHeading(154, 2000);
+  
+    
 
     //chassis.moveToPose()
     
