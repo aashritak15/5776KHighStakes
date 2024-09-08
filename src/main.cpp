@@ -118,27 +118,35 @@ void competition_initialize() {}
  */
 void autonomous() {
     //theta = 32.26
+    //go to mogo and clamp
     mogoClamp.set_value(true);
-    chassis.moveToPoint(0, -14.52, 2000, {.forwards = false});
-    chassis.moveToPoint(0, -19.52, 3000, {.forwards = false, .maxSpeed = 50});
+    chassis.moveToPoint(0, -16, 2000, {.forwards = false});
+    chassis.moveToPoint(0, -21, 3000, {.forwards = false, .maxSpeed = 50});
     chassis.waitUntilDone();
     pros::delay(250);
     mogoClamp.set_value(false); 
     intake.move_voltage(-12000);
     pros::delay(1000);
-    mogoClamp.set_value(true);
     
-    chassis.turnToHeading(78.2, 800);
-    chassis.moveToPose(9, -15.97, 90, 2000);
-    mogoClamp.set_value(false);
+    //go to first ring
+    //chassis.turnToHeading(78.2, 800);
+    chassis.moveToPose(11.29, -17.44, 76.95, 2000); 
     intakeFirst.move_velocity(-600);
     intake.move_voltage(-12000);
-    pros::delay(1500);
+    pros::delay(3250);
+
+    //go to second ring
+    chassis.moveToPose(19.16, -26.32, 142.41, 2000);
+    pros::delay(2400);
+    intakeFirst.move_velocity(0);
+    intake.move_voltage(0);
+    mogoClamp.set_value(true);
+
+    /*
     intake.move_voltage(0);
     chassis.moveToPose(-33, -16, 59.89, 2000, {.forwards = false});
     chassis.turnToHeading(154, 2000);
-  
-    
+    */
 
     //chassis.moveToPose()
     
