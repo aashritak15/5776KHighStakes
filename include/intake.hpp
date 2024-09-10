@@ -4,3 +4,5 @@ inline pros::Motor intake(9, pros::MotorGearset::green); //changed from blue to 
 
 void intakeInnit();
 void updateIntake();
+void resetIntake();
+void stepIntake();

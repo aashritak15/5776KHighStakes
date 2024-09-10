@@ -93,6 +93,7 @@ void initialize() {
             pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
             pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
             pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
+            pros::lcd::print(3, "Lift: %f", lift.get_position()); //lift encoder
             // log position telemetry
             lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
             // delay to save resources
@@ -130,19 +131,32 @@ void autonomous() {
     
     //go to first ring
     //chassis.turnToHeading(78.2, 800);
+    //chassis.moveToPose(11.04, -18.63, 82.26, 2000);
     chassis.moveToPose(11.29, -17.44, 76.95, 2000); 
     intakeFirst.move_velocity(-600);
     intake.move_voltage(-12000);
-    pros::delay(3250);
+    pros::delay(3400); //could be less
 
     //go to second ring
-    chassis.moveToPose(19.16, -26.32, 142.41, 2000);
-    pros::delay(2400);
+    chassis.moveToPose(20.64, -26.97, 134.9, 2000);
+    pros::delay(2150); //could be less 
     intakeFirst.move_velocity(0);
     intake.move_voltage(0);
-    mogoClamp.set_value(true);
 
-    /*
+    //go to point and release mogo
+    chassis.moveToPoint(-0.11, -3.49, 2000, {.forwards = false});
+    chassis.waitUntilDone();
+    mogoClamp.set_value(true);
+    pros::delay(500);
+    
+    //move to alliance
+    chassis.moveToPoint(5.32, -9.88, 2000, {.forwards = false});
+    chassis.moveToPose(-32.6, -2.23, 153.06, 2000, {.forwards = false}); //doesnt push one ring away enough
+    lift.move_absolute(265, 100);//lift encoder: 265
+    mogoClamp.set_value(false);
+
+    
+    /*chassis.moveToPose(-32.1, 0.51, 113.93, 2000);    /*
     intake.move_voltage(0);
     chassis.moveToPose(-33, -16, 59.89, 2000, {.forwards = false});
     chassis.turnToHeading(154, 2000);
@@ -187,6 +201,9 @@ void opcontrol() {
         updateClamp();
         updateIntakeClamp();
         updateLift();
+        resetIntake();
+        stepIntake();
+        //allianceStake();
         pros::delay(10);
     }
 }

@@ -43,3 +43,23 @@ void updateIntake() {
         buttonxPressed = false;
     }
 }
+
+void resetIntake(){
+    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) {
+        if(intake.get_position()/120 == 0) {
+        intake.move_absolute(0, 200);
+        }
+        else if(intake.get_position()/120 == 1) {
+            intake.move_absolute(120, 200);
+        }
+        else if(intake.get_position()/120 == 2) {
+            intake.move_absolute(240, 200);
+        }
+    }
+}
+
+void stepIntake(){
+    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT)) {
+        intake.move_relative(120, 200);
+    }
+}

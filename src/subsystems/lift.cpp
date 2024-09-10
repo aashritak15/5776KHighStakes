@@ -11,8 +11,15 @@ void updateLift() {
     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
         lift.move_velocity(-100);
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
-        lift.move_velocity(100);
+       // if(lift.get_position()<=0)
+            //lift.move_velocity(0);
+        //else
+            lift.move_velocity(100);
     } else {
         lift.move_velocity(0);
     }
+}
+
+void allianceStake() {
+    lift.move_absolute(9000000, 200);
 }
