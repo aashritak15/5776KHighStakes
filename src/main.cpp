@@ -118,43 +118,76 @@ void competition_initialize() {}
  * This is an example autonomous routine which demonstrates a lot of the features LemLib has to offer
  */
 void autonomous() {
+
+
+   
+    double liftPosition = lift.get_position();
+
     //theta = 32.26
     //go to mogo and clamp
     mogoClamp.set_value(true);
     chassis.moveToPoint(0, -16, 2000, {.forwards = false});
     chassis.moveToPoint(0, -21, 3000, {.forwards = false, .maxSpeed = 50});
     chassis.waitUntilDone();
-    pros::delay(250);
+    
     mogoClamp.set_value(false); 
     intake.move_voltage(-12000);
-    pros::delay(1000);
+    pros::delay(150);
+    
     
     //go to first ring
     //chassis.turnToHeading(78.2, 800);
     //chassis.moveToPose(11.04, -18.63, 82.26, 2000);
     chassis.moveToPose(11.29, -17.44, 76.95, 2000); 
     intakeFirst.move_velocity(-600);
-    intake.move_voltage(-12000);
-    pros::delay(3400); //could be less
+    //pros::delay(250;0); //could be less IF  ERROR UNCOMMENT THIS
+    ;// LINE <---------------------
+   
+    
 
-    //go to second ring
-    chassis.moveToPose(20.64, -26.97, 134.9, 2000);
-    pros::delay(2150); //could be less 
-    intakeFirst.move_velocity(0);
-    intake.move_voltage(0);
+    chassis.moveToPose(20.64, -26.97, 125.9, 2000);
+     
+    chassis.waitUntilDone(); //could be less 
+    
+    
 
     //go to point and release mogo
-    chassis.moveToPoint(-0.11, -3.49, 2000, {.forwards = false});
+    intake.move_voltage(0);
+    chassis.moveToPoint(-5.83, -3.54, 2000, {.forwards = false});
+    chassis.waitUntilDone();
+    chassis.turnToHeading(249,800);
+    
     chassis.waitUntilDone();
     mogoClamp.set_value(true);
-    pros::delay(500);
     
+    chassis.waitUntilDone();
+    pros::delay(500);
+
     //move to alliance
+    intakeFirst.move_velocity(0);
+    chassis.moveToPose(-27.5, -13.5, 243.33, 3000, {.earlyExitRange = 5});
+    chassis.turnToHeading(153, 1000);
+    mogoClamp.set_value(false);
+    chassis.moveToPoint(-29, -3, 2000,{.forwards = false});
+    intake.move_voltage(-12000);
+    lift.move_absolute(143, 40);
+    pros::delay(1500);
+    intake.move_voltage(0);
+    lift.move_absolute(liftPosition, -60);
+
+    intakeFirst.move_voltage(12000);
+    chassis.moveToPose(-19.98, -31.39, 164, 3000, {.minSpeed = 75});
+    
+
+    
+
+    //move to alliance
+    /*
     chassis.moveToPoint(5.32, -9.88, 2000, {.forwards = false});
     chassis.moveToPose(-32.6, -2.23, 153.06, 2000, {.forwards = false}); //doesnt push one ring away enough
     lift.move_absolute(265, 100);//lift encoder: 265
     mogoClamp.set_value(false);
-
+*/
     
     /*chassis.moveToPose(-32.1, 0.51, 113.93, 2000);    /*
     intake.move_voltage(0);
