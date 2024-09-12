@@ -13,7 +13,6 @@ pros::MotorGroup rightMotors({19, 20, 18}, pros::MotorGearset::blue);
 
 pros::Imu imu(2);
 
-
 // drivetrain settings
 lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 10, lemlib::Omniwheel::NEW_325, 425,
                               6 // 2 w/o traction
@@ -22,7 +21,7 @@ lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 10, lemlib::Omniwheel::
 // lateral motion controller
 lemlib::ControllerSettings linearController(13.5, // proportional gain (kP)
                                             0, // integral gain (kI)
-                                            30.43,//22, // derivative gain (kD)
+                                            30.43, // 22, // derivative gain (kD)
                                             3, // anti windup
                                             1, // small error range, in inches
                                             100, // small error range timeout, in milliseconds
@@ -93,7 +92,7 @@ void initialize() {
             pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
             pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
             pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
-            pros::lcd::print(3, "Lift: %f", lift.get_position()); //lift encoder
+            pros::lcd::print(3, "Lift: %f", lift.get_position()); // lift encoder
             // log position telemetry
             lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
             // delay to save resources
@@ -118,58 +117,52 @@ void competition_initialize() {}
  * This is an example autonomous routine which demonstrates a lot of the features LemLib has to offer
  */
 
-void redSoloWP(){
-
+void redSoloWP() {
     double liftPosition = lift.get_position();
 
-    //theta = 32.26
-    //go to mogo and clamp
+    // theta = 32.26
+    // go to mogo and clamp
     mogoClamp.set_value(true);
     chassis.moveToPoint(0, -16, 2000, {.forwards = false});
     chassis.moveToPoint(0, -21, 3000, {.forwards = false, .maxSpeed = 50});
     chassis.waitUntilDone();
-    
-    mogoClamp.set_value(false); 
+
+    mogoClamp.set_value(false);
     intake.move_voltage(-12000);
     pros::delay(150);
-    
-    
-    //go to first ring
-    //chassis.turnToHeading(78.2, 800);
-    //chassis.moveToPose(11.04, -18.63, 82.26, 2000);
-    chassis.moveToPose(11.29, -17.44, 76.95, 2000); 
+
+    // go to first ring
+    // chassis.turnToHeading(78.2, 800);
+    // chassis.moveToPose(11.04, -18.63, 82.26, 2000);
+    chassis.moveToPose(11.29, -17.44, 76.95, 2000);
     intakeFirst.move_velocity(-600);
-    //pros::delay(250;0); //could be less IF  ERROR UNCOMMENT THIS
-    // LINE <---------------------
-   
-    
+    // pros::delay(250;0); //could be less IF  ERROR UNCOMMENT THIS
+    //  LINE <---------------------
 
     chassis.moveToPose(20.64, -26.97, 125.9, 2000);
-     
-    chassis.waitUntilDone(); //could be less 
-    
-    
 
-    //go to point and release mogo
+    chassis.waitUntilDone(); // could be less
+
+    // go to point and release mogo
     pros::delay(250);
     intake.move_voltage(0);
     chassis.moveToPoint(-5.83, -3.54, 2000, {.forwards = false});
     chassis.waitUntilDone();
-    chassis.turnToHeading(249,800);
-    
+    chassis.turnToHeading(249, 800);
+
     chassis.waitUntilDone();
     mogoClamp.set_value(true);
-    
+
     chassis.waitUntilDone();
     pros::delay(500);
 
-    //move to alliance
+    // move to alliance
     intakeFirst.move_velocity(0);
-    //chassis.moveToPose(-24.5, -15.7, 243.33, 3000, {.earlyExitRange = 5});
+    // chassis.moveToPose(-24.5, -15.7, 243.33, 3000, {.earlyExitRange = 5});
     chassis.moveToPose(-27.5, -13.5, 243.33, 3000, {.earlyExitRange = 5});
     chassis.turnToHeading(153, 1000);
     mogoClamp.set_value(false);
-    chassis.moveToPose(-29.12, -4.96, 153, 2000,{.forwards = false});
+    chassis.moveToPose(-29.12, -4.96, 153, 2000, {.forwards = false});
     intake.move_voltage(-12000);
     lift.move_absolute(183, 40);
     pros::delay(1500);
@@ -181,118 +174,124 @@ void redSoloWP(){
 }
 
 void redSoloWPMogo() {
-    
     double liftPosition = lift.get_position();
 
-    //MOGO RUSH MOGO RUSH
     mogoClamp.set_value(true);
-    chassis.moveToPoint(0, 0, 0, {.forwards=false});
-    chassis.moveToPoint(0, 0, 0, {.forwards = false, .maxSpeed = 50});
+
+    // mogo rush
+    chassis.moveToPoint(0, -24, 800, {.forwards = false});
+    chassis.moveToPose(5.4, -46, -25, 1000, {.forwards = false});
+
     chassis.waitUntilDone();
     mogoClamp.set_value(false);
+    pros::delay(300);
+
+    // getting the rings
+    chassis.turnToHeading(18.64, 800);
+    chassis.moveToPoint(6.25, -39.98, 800);
+    intakeFirst.move_velocity(-600);
+    intake.move_voltage(-12000);
+
+    // going to the ladder
+    chassis.turnToHeading(116.69, 800);
+    chassis.moveToPoint(20.6, -42.6, 800);
+
+    pros::delay(2000);
+
+    mogoClamp.set_value(false);
+    // mogoClamp.set_value(false); 116.69 20.6 -42.6
 }
 
 void blueSoloWP() {
     double liftPosition = lift.get_position();
 
-    //theta = 32.26
-    //go to mogo and clamp
+    // theta = 32.26
+    // go to mogo and clamp
     mogoClamp.set_value(true);
     chassis.moveToPoint(0, -16, 2000, {.forwards = false});
     chassis.moveToPoint(0, -21, 3000, {.forwards = false, .maxSpeed = 50});
     chassis.waitUntilDone();
-    
-    mogoClamp.set_value(false); 
+
+    mogoClamp.set_value(false);
     intake.move_voltage(-12000);
+
     pros::delay(150);
-    
-    
-    //go to first ring
-    //chassis.turnToHeading(78.2, 800);
-    //chassis.moveToPose(11.04, -18.63, 82.26, 2000);
-    chassis.moveToPose(-11.29, -17.44, -76.95, 2000); 
+
+    chassis.turnToHeading(-76.82, 800);
+
+    chassis.moveToPoint(-9.47, -22.93, 1000);
+
     intakeFirst.move_velocity(-600);
-    //pros::delay(250;0); //could be less IF  ERROR UNCOMMENT THIS
-    // LINE <---------------------
-   
-    
+    // // pros::delay(250;0); //could be less IF  ERROR UNCOMMENT THIS
+    // //  LINE <---------------------
 
     chassis.moveToPose(-16.3, -31.6, -132.89, 2000);
-     
-    chassis.waitUntilDone(); //could be less 
-    
-    
 
-    //go to point and release mogo
+    chassis.waitUntilDone(); // could be less
+
+    // go to point and release mogo
     pros::delay(250);
     intake.move_voltage(0);
     chassis.moveToPoint(13.2, -10.96, 2000, {.forwards = false});
     chassis.waitUntilDone();
-    chassis.turnToHeading(-238.5,800);
-    
+
+    // turning to alliance
+    chassis.turnToHeading(-238.5, 800);
     chassis.waitUntilDone();
     mogoClamp.set_value(true);
-    
     chassis.waitUntilDone();
     pros::delay(500);
+    chassis.moveToPoint(37.97, -16.5, 1000);
 
-    //move to alliance
+    // face alliance stake
+    chassis.turnToHeading(-149.37, 800);
     intakeFirst.move_velocity(0);
-    //chassis.moveToPose(-24.5, -15.7, 243.33, 3000, {.earlyExitRange = 5});
-    chassis.moveToPose(35.96, -13.65, -240.5, 3000, {.earlyExitRange = 5});
-    chassis.turnToHeading(-150.6, 1000);
     mogoClamp.set_value(false);
-    chassis.moveToPose(39, -14.4, -150.6, 2000,{.forwards = false});
+
+    // going back into alliance stake
+    chassis.moveToPose(39.59, -13.97, -149.37, 800, {.forwards = false});
+
+    // scoring on alliance
     intake.move_voltage(-12000);
     lift.move_absolute(183, 40);
     pros::delay(1500);
     intake.move_voltage(0);
     lift.move_absolute(liftPosition, -60);
 
-    intakeFirst.move_voltage(12000);
+    // moving to ladder
     chassis.moveToPose(22.27, -32.37, -136.4, 3000, {.minSpeed = 75});
-    
-
 }
 
-
-
 void autonomous() {
+    // redSoloWP(); // red alliance solo AWP
 
-    redSoloWP(); //red alliance solo AWP
+    blueSoloWP(); // blue alliance solo AWP
 
-    //blueSoloWP(); //blue alliance solo AWP
-
-} 
-
-
-
+    // redSoloWPMogo();
+}
 
 /**
  * Runs in driver control
  */
 
-
 void opcontrol() {
-
-    
     // controller
     // loop to continuously update motors
     while (true) {
-            // pros::lcd::set_text(0, "X: %f", chassis.getPose().x); // x
-            // pros::lcd::set_text(1, "Y: %f", chassis.getPose().y); // y
-            // pros::lcd::set_text(2, "Theta: %f", chassis.getPose().theta); // heading
-            // // log position telemetry
-            // lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
+        // pros::lcd::set_text(0, "X: %f", chassis.getPose().x); // x
+        // pros::lcd::set_text(1, "Y: %f", chassis.getPose().y); // y
+        // pros::lcd::set_text(2, "Theta: %f", chassis.getPose().theta); // heading
+        // // log position telemetry
+        // lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
         // get joystick positions
-        pros::lcd::set_text(0,  std::to_string(chassis.getPose().x)); 
-        pros::lcd::set_text(1,  std::to_string(chassis.getPose().y));
+        pros::lcd::set_text(0, std::to_string(chassis.getPose().x));
+        pros::lcd::set_text(1, std::to_string(chassis.getPose().y));
         pros::lcd::set_text(2, std::to_string(chassis.getPose().theta));
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
         // move the chassis with curvature drive
         chassis.arcade(leftY, rightX);
-        //chassis.arcade(leftY, rightX, false, 1);
+        // chassis.arcade(leftY, rightX, false, 1);
         updateIntake();
         updateIntakeFirst();
         updateClamp();
@@ -300,7 +299,7 @@ void opcontrol() {
         updateLift();
         resetIntake();
         stepIntake();
-        //allianceStake();
+        // allianceStake();
         pros::delay(10);
     }
 }
