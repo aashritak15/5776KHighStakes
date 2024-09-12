@@ -117,10 +117,9 @@ void competition_initialize() {}
  *
  * This is an example autonomous routine which demonstrates a lot of the features LemLib has to offer
  */
-void autonomous() {
 
+void redSoloWP(){
 
-   
     double liftPosition = lift.get_position();
 
     //theta = 32.26
@@ -141,7 +140,7 @@ void autonomous() {
     chassis.moveToPose(11.29, -17.44, 76.95, 2000); 
     intakeFirst.move_velocity(-600);
     //pros::delay(250;0); //could be less IF  ERROR UNCOMMENT THIS
-    ;// LINE <---------------------
+    // LINE <---------------------
    
     
 
@@ -152,6 +151,7 @@ void autonomous() {
     
 
     //go to point and release mogo
+    pros::delay(250);
     intake.move_voltage(0);
     chassis.moveToPoint(-5.83, -3.54, 2000, {.forwards = false});
     chassis.waitUntilDone();
@@ -165,40 +165,104 @@ void autonomous() {
 
     //move to alliance
     intakeFirst.move_velocity(0);
+    //chassis.moveToPose(-24.5, -15.7, 243.33, 3000, {.earlyExitRange = 5});
     chassis.moveToPose(-27.5, -13.5, 243.33, 3000, {.earlyExitRange = 5});
     chassis.turnToHeading(153, 1000);
     mogoClamp.set_value(false);
-    chassis.moveToPoint(-29, -3, 2000,{.forwards = false});
+    chassis.moveToPose(-29.12, -4.96, 153, 2000,{.forwards = false});
     intake.move_voltage(-12000);
-    lift.move_absolute(143, 40);
+    lift.move_absolute(183, 40);
     pros::delay(1500);
     intake.move_voltage(0);
     lift.move_absolute(liftPosition, -60);
 
     intakeFirst.move_voltage(12000);
     chassis.moveToPose(-19.98, -31.39, 164, 3000, {.minSpeed = 75});
+}
+
+void redSoloWPMogo() {
+    
+    double liftPosition = lift.get_position();
+
+    //MOGO RUSH MOGO RUSH
+    mogoClamp.set_value(true);
+    chassis.moveToPoint(0, 0, 0, {.forwards=false});
+    chassis.moveToPoint(0, 0, 0, {.forwards = false, .maxSpeed = 50});
+    chassis.waitUntilDone();
+    mogoClamp.set_value(false);
+}
+
+void blueSoloWP() {
+    double liftPosition = lift.get_position();
+
+    //theta = 32.26
+    //go to mogo and clamp
+    mogoClamp.set_value(true);
+    chassis.moveToPoint(0, -16, 2000, {.forwards = false});
+    chassis.moveToPoint(0, -21, 3000, {.forwards = false, .maxSpeed = 50});
+    chassis.waitUntilDone();
+    
+    mogoClamp.set_value(false); 
+    intake.move_voltage(-12000);
+    pros::delay(150);
+    
+    
+    //go to first ring
+    //chassis.turnToHeading(78.2, 800);
+    //chassis.moveToPose(11.04, -18.63, 82.26, 2000);
+    chassis.moveToPose(-11.29, -17.44, -76.95, 2000); 
+    intakeFirst.move_velocity(-600);
+    //pros::delay(250;0); //could be less IF  ERROR UNCOMMENT THIS
+    // LINE <---------------------
+   
     
 
+    chassis.moveToPose(-16.3, -31.6, -132.89, 2000);
+     
+    chassis.waitUntilDone(); //could be less 
     
+    
+
+    //go to point and release mogo
+    pros::delay(250);
+    intake.move_voltage(0);
+    chassis.moveToPoint(13.2, -10.96, 2000, {.forwards = false});
+    chassis.waitUntilDone();
+    chassis.turnToHeading(-238.5,800);
+    
+    chassis.waitUntilDone();
+    mogoClamp.set_value(true);
+    
+    chassis.waitUntilDone();
+    pros::delay(500);
 
     //move to alliance
-    /*
-    chassis.moveToPoint(5.32, -9.88, 2000, {.forwards = false});
-    chassis.moveToPose(-32.6, -2.23, 153.06, 2000, {.forwards = false}); //doesnt push one ring away enough
-    lift.move_absolute(265, 100);//lift encoder: 265
+    intakeFirst.move_velocity(0);
+    //chassis.moveToPose(-24.5, -15.7, 243.33, 3000, {.earlyExitRange = 5});
+    chassis.moveToPose(35.96, -13.65, -240.5, 3000, {.earlyExitRange = 5});
+    chassis.turnToHeading(-150.6, 1000);
     mogoClamp.set_value(false);
-*/
-    
-    /*chassis.moveToPose(-32.1, 0.51, 113.93, 2000);    /*
+    chassis.moveToPose(39, -14.4, -150.6, 2000,{.forwards = false});
+    intake.move_voltage(-12000);
+    lift.move_absolute(183, 40);
+    pros::delay(1500);
     intake.move_voltage(0);
-    chassis.moveToPose(-33, -16, 59.89, 2000, {.forwards = false});
-    chassis.turnToHeading(154, 2000);
-    */
+    lift.move_absolute(liftPosition, -60);
 
-    //chassis.moveToPose()
+    intakeFirst.move_voltage(12000);
+    chassis.moveToPose(22.27, -32.37, -136.4, 3000, {.minSpeed = 75});
     
-    //81.80
-    //19, -18.397
+
+}
+
+
+
+void autonomous() {
+
+    redSoloWP(); //red alliance solo AWP
+
+    //blueSoloWP(); //blue alliance solo AWP
+
 } 
 
 
@@ -223,7 +287,7 @@ void opcontrol() {
         // get joystick positions
         pros::lcd::set_text(0,  std::to_string(chassis.getPose().x)); 
         pros::lcd::set_text(1,  std::to_string(chassis.getPose().y));
-         pros::lcd::set_text(2, std::to_string(chassis.getPose().theta));
+        pros::lcd::set_text(2, std::to_string(chassis.getPose().theta));
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
         // move the chassis with curvature drive
