@@ -242,7 +242,7 @@ void blueSoloWP() {
     mogoClamp.set_value(true);
     chassis.waitUntilDone();
     pros::delay(500);
-    chassis.moveToPoint(38.3, -13.8, 1000); //stupid coords
+    chassis.moveToPoint(38.3, -13.8, 1000); // stupid coords
 
     // face alliance stake
     chassis.turnToHeading(-149.37, 800);
@@ -250,29 +250,28 @@ void blueSoloWP() {
     mogoClamp.set_value(false);
 
     // going back into alliance stake
-    chassis.moveToPoint(44, -13.3, 800, {.forwards = false}); //old:46.3, -15.3, -148.6 new theta:148.4 these stupid stupid coords
-/*
-    // scoring on alliance
-    intake.move_voltage(-12000);
-    intakeFirst.move_voltage(-600);
-    lift.move_absolute(183, 40);
-    pros::delay(1500);
-    intake.move_voltage(0);
-    intakeFirst.move_voltage(0);
-    lift.move_absolute(liftPosition, -60);
+    chassis.moveToPose(44, -13.3, -149.37, 2000,
+                       {.forwards = false}); // old:46.3, -15.3, -148.6 new theta:148.4 these stupid stupid coords
+    /*
+        // scoring on alliance
+        intake.move_voltage(-12000);
+        intakeFirst.move_voltage(-600);
+        lift.move_absolute(183, 40);
+        pros::delay(1500);
+        intake.move_voltage(0);
+        intakeFirst.move_voltage(0);
+        lift.move_absolute(liftPosition, -60);
 
-    // moving to ladder + outtake
-    intakeFirst.move_velocity(-600);
-    intake.move_voltage(-12000);
-    chassis.moveToPose(22.27, -32.37, -136.4, 3000, {.minSpeed = 75}); 
-    intakeFirst.move_velocity(0);
-    intake.move_voltage(0);*/
+        // moving to ladder + outtake
+        intakeFirst.move_velocity(-600);
+        intake.move_voltage(-12000);
+        chassis.moveToPose(22.27, -32.37, -136.4, 3000, {.minSpeed = 75});
+        intakeFirst.move_velocity(0);
+        intake.move_voltage(0);*/
 }
 
 void autonomous() {
-
-
-    //redSoloWP(); // red alliance solo AWP
+    // redSoloWP(); // red alliance solo AWP
 
     blueSoloWP(); // blue alliance solo AWP
 
