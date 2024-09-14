@@ -136,6 +136,7 @@ void redSoloWP() {
     // chassis.moveToPose(11.04, -18.63, 82.26, 2000);
     chassis.moveToPose(11.29, -17.44, 76.95, 2000);
     intakeFirst.move_velocity(-600);
+
     // pros::delay(250;0); //could be less IF  ERROR UNCOMMENT THIS
     //  LINE <---------------------
 
@@ -162,8 +163,12 @@ void redSoloWP() {
     chassis.moveToPose(-27.5, -13.5, 243.33, 3000, {.earlyExitRange = 5});
     chassis.turnToHeading(153, 1000);
     mogoClamp.set_value(false);
+
+
     chassis.moveToPose(-29.12, -4.96, 153, 2000, {.forwards = false});
     intake.move_voltage(-12000);
+
+    
     lift.move_absolute(183, 40);
     pros::delay(1500);
     intake.move_voltage(0);
@@ -172,6 +177,8 @@ void redSoloWP() {
     intakeFirst.move_voltage(12000);
     chassis.moveToPose(-19.98, -31.39, 164, 3000, {.minSpeed = 75});
 }
+
+
 
 void redSoloWPMogo() {
     double liftPosition = lift.get_position();
@@ -203,75 +210,70 @@ void redSoloWPMogo() {
 }
 
 void blueSoloWP() {
-    double liftPosition = lift.get_position();
+     double liftPosition = lift.get_position();
 
-    // theta = 32.26
-    // go to mogo and clamp
+    //theta = 32.26
+    
+    //go to mogo
     mogoClamp.set_value(true);
     chassis.moveToPoint(0, -16, 2000, {.forwards = false});
     chassis.moveToPoint(0, -21, 3000, {.forwards = false, .maxSpeed = 50});
     chassis.waitUntilDone();
 
-    mogoClamp.set_value(false);
+    //clamp
+    mogoClamp.set_value(false); 
     intake.move_voltage(-12000);
-
     pros::delay(150);
 
-    chassis.turnToHeading(-76.82, 800);
-
-    chassis.moveToPoint(-9.47, -22.93, 1000);
-
+    //go to first ring
+    chassis.moveToPose(-11.29, -17.44, -80.95, 2000); 
     intakeFirst.move_velocity(-600);
-    pros::delay(150);
-    // // pros::delay(250;0); //could be less IF  ERROR UNCOMMENT THIS
-    // //  LINE <---------------------
+    pros::delay(250);
 
-    chassis.moveToPose(-20.96, -30.96, -136.5, 2000);
+    //go away from first ring
+    chassis.moveToPose(-16.3, -31.6, -142.89, 2000);
+    chassis.waitUntilDone(); //could be less
 
-    chassis.waitUntilDone(); // could be less
-
-    // go to point and release mogo
+    //release mogo
     pros::delay(250);
     intake.move_voltage(0);
-    chassis.moveToPoint(13.2, -10.96, 2000, {.forwards = false});
+    chassis.moveToPoint(13.2, -10.96, 2000, {.forwards = false, .maxSpeed = 100});
     chassis.waitUntilDone();
-
-    // turning to alliance
-    chassis.turnToHeading(-238.5, 800);
+    chassis.turnToHeading(-238.5,800);
     chassis.waitUntilDone();
     mogoClamp.set_value(true);
     chassis.waitUntilDone();
     pros::delay(500);
-    chassis.moveToPoint(38.3, -13.8, 1000); // stupid coords
-
-    // face alliance stake
-    chassis.turnToHeading(-149.37, 800);
     intakeFirst.move_velocity(0);
+    //chassis.moveToPose(-24.5, -15.7, 243.33, 3000, {.earlyExitRange = 5});
+    
+    //move to alliance stake
+    //chassis.moveToPose(39.3, -14.4, -240.5, 3000);
+    chassis.moveToPose(37.5, -18.2, -240.5, 3000);
+    chassis.turnToHeading(207, 1000);
     mogoClamp.set_value(false);
+    
+    //score alliance stake
+    
+    chassis.moveToPoint(44.2, -13.1, 2000,{.forwards = false});
+    chassis.waitUntilDone();
+    intake.move_voltage(-12000);
+    lift.move_absolute(183, 40);
+    pros::delay(1500);
+    intake.move_voltage(0);
+    lift.move_absolute(liftPosition, -60);
 
-    // going back into alliance stake
-    chassis.moveToPose(44, -13.3, -149.37, 2000,
-                       {.forwards = false}); // old:46.3, -15.3, -148.6 new theta:148.4 these stupid stupid coords
-    /*
-        // scoring on alliance
-        intake.move_voltage(-12000);
-        intakeFirst.move_voltage(-600);
-        lift.move_absolute(183, 40);
-        pros::delay(1500);
-        intake.move_voltage(0);
-        intakeFirst.move_voltage(0);
-        lift.move_absolute(liftPosition, -60);
-
-        // moving to ladder + outtake
-        intakeFirst.move_velocity(-600);
-        intake.move_voltage(-12000);
-        chassis.moveToPose(22.27, -32.37, -136.4, 3000, {.minSpeed = 75});
-        intakeFirst.move_velocity(0);
-        intake.move_voltage(0);*/
+    //move to ladder
+    
+    intakeFirst.move_voltage(12000); //outtake to repel rings in the way of ladder
+    chassis.moveToPose(28.1, -31.9, 220.6, 3000, {.maxSpeed = 38});
+    
 }
 
+
+
 void autonomous() {
-    // redSoloWP(); // red alliance solo AWP
+    //redSoloWP(); // red alliance solo AWP
 
     blueSoloWP(); // blue alliance solo AWP
 
@@ -306,7 +308,7 @@ void opcontrol() {
         updateIntakeClamp();
         updateLift();
         resetIntake();
-        stepIntake();
+        //stepIntake();
         // allianceStake();
         pros::delay(10);
     }

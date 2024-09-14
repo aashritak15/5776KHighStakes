@@ -57,9 +57,8 @@ void resetIntake(){
         }
     }
 }
-
+/*
 void stepIntake(){
-    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT)) {
-        intake.move_relative(120, 200);
-    }
+    intake.
 }
+*/
