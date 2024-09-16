@@ -313,7 +313,7 @@ void blueMogo() {
 void autonomous() {
     // redSoloWP(); // red alliance solo AWP
 
-    blueSoloWP(); // blue alliance solo AWP
+    redSoloWP(); // blue alliance solo AWP
 
     // redSoloWPMogo();
 
