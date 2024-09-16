@@ -310,14 +310,64 @@ void blueMogo() {
     mogoClamp.set_value(true);
 }
 
+void skills() {
+    double liftPosition = lift.get_position();
+
+    //score alliance
+    lift.move_absolute(183, 40);
+    intake.move_voltage(-12000);
+    pros::delay(750);
+
+    //ring 1
+    lift.move_absolute(liftPosition, -60);
+    intakeFirst.move_velocity(-600);
+    intake.move_voltage(0);
+    chassis.moveToPose(24.2, 36.14, 43.47, 2000); //chassis.moveToPose(22.71, 37.45, 47.67, 2000);
+    chassis.waitUntilDone();
+
+    //mogo
+    mogoClamp.set_value(true);
+    chassis.turnToHeading(-54.73, 800);
+    chassis.moveToPoint(31.94, 29.51, 1000);
+    chassis.turnToHeading(31.04, 800);
+    //chassis.moveToPoint();
+
+    //chassis.turnToHeading(0, 800, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE});
+    //chassis.moveToPose(25.8, 23.97, 28.8, 1000, {.forwards = false, .maxSpeed = 50});
+    chassis.waitUntilDone();
+    pros::delay(50);
+    mogoClamp.set_value(false);
+    pros::delay(50);
+    intake.move_voltage(-12000);
+/*
+    //rings 2, 3, 4 - good
+    chassis.moveToPose(42.97, 37.85, 52.25, 2000); //theta: 416.28
+    chassis.turnToHeading(180, 800);
+    chassis.moveToPoint(46.8, 12.08, 2000, {.maxSpeed = 35});
+    chassis.waitUntilDone();
+
+    //ring 5 - not good
+    chassis.moveToPoint(46.8, 41, 1000, {.forwards = false});
+    //chassis.turnToHeading(143.59, 800); //503.59
+    chassis.moveToPose(60.66, 27.83, 180, 1000, {.forwards = false});
+
+    chassis.turnToHeading(0, 800, {.direction = AngularDirection::CW_CLOCKWISE});
+    /*chassis.moveToPose(50, 0, 180, 1000, {.forwards = false});
+    chassis.waitUntilDone();
+    */
+   //mogoClamp.set_value(true);
+}
+
 void autonomous() {
     // redSoloWP(); // red alliance solo AWP
 
-    blueSoloWP(); // blue alliance solo AWP
+    //blueSoloWP(); // blue alliance solo AWP
 
     // redSoloWPMogo();
 
     //;blueMogo();
+
+    skills();
 }
 
 /**
