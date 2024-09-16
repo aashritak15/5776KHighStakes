@@ -19,19 +19,13 @@ void updateLift() {
     }
 
     initialLeft = currentLeft;
-
-    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
-        lift.move_velocity(-100);
-    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
-       // if(lift.get_position()<=0)
-            //lift.move_velocity(0);
-        //else
+    if(!toggle) { //lock
+        if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) { //lift up/down
+            lift.move_velocity(-100);
+        } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) { //lift up/down
             lift.move_velocity(100);
-    } else if(toggle){
+        } else {lift.move_velocity(0);}
+    } else { //toggle to height
         lift.move_absolute(143, 40);
-    }
-    
-    else {
-        lift.move_velocity(0);
     }
 }

@@ -10,23 +10,24 @@ void intakeInnit() { intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST); }
 int intakeState = 0;
 
 void updateIntake() {
-    static bool buttonl1Pressed = false;
+    // static bool buttonl1Pressed = false;
     static bool buttonxPressed = false;
+    // bool buttonaPressed = false;
 
-    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
-        if (!buttonl1Pressed) {
-            buttonl1Pressed = true;
-            if (intakeState == 0 || intakeState == 2) {
-                intake.move_voltage(-12000);
-                intakeState = 1;
-            } else if (intakeState == 1) {
-                intake.move_voltage(0);
-                intakeState = 0;
-            }
-        }
-    } else {
-        buttonl1Pressed = false;
-    }
+    // if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
+    //     if (!buttonl1Pressed) {
+    //         buttonl1Pressed = true;
+    //         if (intakeState == 0 || intakeState == 2) {
+    //             intake.move_voltage(-12000);
+    //             intakeState = 1;
+    //         } else if (intakeState == 1) {
+    //             intake.move_voltage(0);
+    //             intakeState = 0;
+    //         }
+    //     }
+    // } else {
+    //     buttonl1Pressed = false;
+    // }
 
     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) {
         if (!buttonxPressed) {
@@ -42,9 +43,35 @@ void updateIntake() {
     } else {
         buttonxPressed = false;
     }
-}
 
+    // if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
+    //     if (!buttonaPressed) {
+    //         buttonaPressed = true;
+    //         if (intakeState == 0 || intakeState == 1) {
+    //             intake.move_voltage(-12000);
+    //             intakeState = 2;
+    //         } else if (intakeState == 2) {
+    //             intake.move_voltage(0);
+    //             intakeState = 0;
+    //         }
+    //     }
+    // } else {
+    //     buttonaPressed = false;
+    // }
+}
 void resetIntake(){
+    // if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) {
+    //     //intake loop value:
+    //     int onethird;
+    //     if(intake.get_position()/onethird == 0) {
+    //         intake.move_absolute(0, 200);
+    //     } else if(intake.get_position()/onethird == 1) {
+    //         intake.move_absolute(onethird, 200);
+    //     } else if(intake.get_position()/onethird == 2) {
+    //         intake.move_absolute(2*onethird, 200);
+    //     }
+    // }
+    
     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) {
         if(intake.get_position()/120 == 0) {
         intake.move_absolute(0, 200);
@@ -57,8 +84,10 @@ void resetIntake(){
         }
     }
 }
-/*
+
 void stepIntake(){
-    intake.
+    int onethird;
+    if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
+        intake.move_absolute(onethird, 200);
+    }
 }
-*/

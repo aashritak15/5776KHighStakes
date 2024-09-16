@@ -28,7 +28,7 @@ void updateIntakeFirst() {
         buttonl2Pressed = false;
     }
 
-    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
+    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) { //TODO: why is this vel and not voltage and why is rpm 600
         if (!buttonaPressed) {
             buttonaPressed = true;
             if (intakingFirstState == 0 || intakingFirstState == 1) {
