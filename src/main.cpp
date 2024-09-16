@@ -157,26 +157,29 @@ void redSoloWP() {
     chassis.waitUntilDone();
     pros::delay(500);
 
-    // move to alliance
+    // move to alliance (push rings) and turn to allign with alliance
     intakeFirst.move_velocity(0);
     // chassis.moveToPose(-24.5, -15.7, 243.33, 3000, {.earlyExitRange = 5});
     chassis.moveToPose(-27.5, -13.5, 243.33, 3000, {.earlyExitRange = 5});
     chassis.turnToHeading(153, 1000);
     mogoClamp.set_value(false);
 
+    //move backwards to alliance stake
     chassis.moveToPose(-29.12, -4.96, 153, 2000, {.forwards = false});
     intake.move_voltage(-12000);
 
+    //score on alliance stake with lift
     lift.move_absolute(183, 40);
     pros::delay(1500);
     intake.move_voltage(0);
     lift.move_absolute(liftPosition, -60);
-
+    
+    //go to ladder
     intakeFirst.move_voltage(12000);
-    chassis.moveToPose(-19.98, -31.39, 164, 3000, {.minSpeed = 75});
+    chassis.moveToPose(-19.98, -31.39, 164, 3000, {.maxSpeed = 50});
 }
 
-void redSoloWPMogo() {
+void redMogo() {
     double liftPosition = lift.get_position();
 
     mogoClamp.set_value(true);
@@ -363,11 +366,11 @@ void autonomous() {
 
     //blueSoloWP(); // blue alliance solo AWP
 
-    // redSoloWPMogo();
+    // redMogo();  //red alliance mogo rush
 
-    //;blueMogo();
+    //blueMogo();  //blue alliance mogo rush
 
-    skills();
+    skills();  //prog skills
 }
 
 /**
