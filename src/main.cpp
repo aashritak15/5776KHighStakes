@@ -325,40 +325,40 @@ void skills() {
     lift.move_absolute(liftPosition, -60);
     intakeFirst.move_velocity(-600);
     intake.move_voltage(0);
-    chassis.moveToPose(24.2, 36.14, 43.47, 2000); //chassis.moveToPose(22.71, 37.45, 47.67, 2000);
+    chassis.moveToPose(30.19, 43.45, 42.34, 2000); //chassis.moveToPose(24.2, 36.14, 43.47, 2000);
     chassis.waitUntilDone();
 
     //mogo
     mogoClamp.set_value(true);
-    chassis.turnToHeading(-54.73, 800);
-    chassis.moveToPoint(31.94, 29.51, 1000);
-    chassis.turnToHeading(31.04, 800);
-    //chassis.moveToPoint();
 
-    //chassis.turnToHeading(0, 800, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE});
-    //chassis.moveToPose(25.8, 23.97, 28.8, 1000, {.forwards = false, .maxSpeed = 50});
+    //chassis.moveToPose(31.3, 27.8, 32.6, 2000, {.forwards = false});
+    //chassis.moveToPoint(24.14, 18.7, 1000, {.forwards = false, .maxSpeed = 50});
+
+    chassis.moveToPose(24.14, 18.7, 34.5, 2000, {.forwards = false, .maxSpeed = 50});
+
     chassis.waitUntilDone();
     pros::delay(50);
     mogoClamp.set_value(false);
     pros::delay(50);
     intake.move_voltage(-12000);
-/*
-    //rings 2, 3, 4 - good
-    chassis.moveToPose(42.97, 37.85, 52.25, 2000); //theta: 416.28
+
+    //rings 2, 3, 4
+    chassis.moveToPose(44.4, 37.1, 50.97, 2000); //theta: 416.28
     chassis.turnToHeading(180, 800);
-    chassis.moveToPoint(46.8, 12.08, 2000, {.maxSpeed = 35});
+    chassis.moveToPoint(47.23, 12.5, 2000, {.maxSpeed = 35});
     chassis.waitUntilDone();
 
-    //ring 5 - not good
-    chassis.moveToPoint(46.8, 41, 1000, {.forwards = false});
-    //chassis.turnToHeading(143.59, 800); //503.59
-    chassis.moveToPose(60.66, 27.83, 180, 1000, {.forwards = false});
-
-    chassis.turnToHeading(0, 800, {.direction = AngularDirection::CW_CLOCKWISE});
-    /*chassis.moveToPose(50, 0, 180, 1000, {.forwards = false});
+    //ring 5
+    chassis.moveToPoint(47.23, 21.5, 1000, {.forwards = false});
+    chassis.turnToHeading(90, 800);
+    chassis.moveToPoint(55, 21.5, 1000);
+    pros::delay(1000);
+    intake.move_voltage(0);
+    intakeFirst.move_velocity(0);
+    chassis.turnToHeading(-27, 800, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE});
+    chassis.moveToPoint(56.7, 16.97, 1000, {.forwards = false});
     chassis.waitUntilDone();
-    */
-   //mogoClamp.set_value(true);
+    mogoClamp.set_value(true);
 }
 
 void autonomous() {
