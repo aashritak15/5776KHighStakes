@@ -6,3 +6,5 @@ void intakeInnit();
 void updateIntake();
 void resetIntake();
 void stepIntake();
+
+extern int intakeState;

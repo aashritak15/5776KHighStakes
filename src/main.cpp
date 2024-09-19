@@ -93,6 +93,7 @@ void initialize() {
             pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
             pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
             pros::lcd::print(3, "Lift: %f", lift.get_position()); // lift encoder
+            pros::lcd::print(4, "Hooks: %f", intakeState);
             // log position telemetry
             lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
             // delay to save resources
@@ -330,11 +331,7 @@ void skills() {
 
     //mogo
     mogoClamp.set_value(true);
-
-    //chassis.moveToPose(31.3, 27.8, 32.6, 2000, {.forwards = false});
-    //chassis.moveToPoint(24.14, 18.7, 1000, {.forwards = false, .maxSpeed = 50});
-
-    chassis.moveToPose(24.14, 18.7, 34.5, 2000, {.forwards = false, .maxSpeed = 50});
+    chassis.moveToPose(27.4, 25.1, 28.67, 2000, {.forwards = false, .maxSpeed = 50});
 
     chassis.waitUntilDone();
     pros::delay(50);
@@ -352,40 +349,44 @@ void skills() {
 
     //ring 5
     chassis.moveToPoint(46.66, 33.87, 1000, {.forwards = false});
-    chassis.turnToHeading(141, 800);
-    chassis.moveToPoint(55.22, 24, 1000);
+    chassis.turnToHeading(135.8, 800);
+    chassis.moveToPoint(54.18, 26.94, 1000);
     pros::delay(2000);
-    chassis.turnToHeading(-27, 800, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE});
-    chassis.moveToPoint(56.7, 16.97, 1000, {.forwards = false});
+
+    //mogo to corner
+    chassis.turnToHeading(-18.57, 800, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE});
+    chassis.moveToPoint(58.14, 17.1, 1000, {.forwards = false});
     chassis.waitUntilDone();
     pros::delay(300);
     mogoClamp.set_value(true);
 
 
     //position forward
-    chassis.moveToPoint(55, 21.5, 1000);
-    chassis.turnToHeading(90, 2000);
+    chassis.moveToPoint(54.64, 21.55, 1000);
+    chassis.turnToHeading(90, 800);
 
     //move to second mogo
-    chassis.moveToPose(-10.19, 26.36, 90, 3000, {.forwards = false, .maxSpeed = 95});
-    chassis.moveToPose(-15.19, 26.36, 90, 3000, {.forwards = false, .maxSpeed = 15});
+    /*chassis.moveToPoint(-11.19, 21.55, 3000, {.forwards = false, .maxSpeed = 95}); //chassis.moveToPose(-11.19, 21.55, 90, 3000, {.forwards = false, .maxSpeed = 95});
+    chassis.moveToPoint(-16.6, 21.55, 2000, {.forwards = false, .maxSpeed = 15}); //chassis.moveToPose(-16.6, 21.55, 90, 2000, {.forwards = false, .maxSpeed = 15});
     chassis.waitUntilDone();
 
     //clamp onto second mogo
     mogoClamp.set_value(false);
 
 
-    chassis.moveToPoint(-24.69, 26.18, 3000);
+    //chassis.moveToPoint(-24.69, 26.18, 3000);
 
-    chassis.turnToHeading(0, 2000);
-    chassis.moveToPoint(-24, 46, 3000);
+    /*chassis.turnToHeading(-18, 2000, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE});
+    chassis.moveToPoint(-29, 48.5, 3000);
 
     chassis.turnToHeading(270, 2000, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE} );
-    chassis.moveToPoint(-42.6, 47.99, 3000);
+    chassis.moveToPoint(-50, 49, 3000);
     
     chassis.turnToHeading(180, 2000);
-    chassis.moveToPoint(-44.76, 22.24, 3000, {.maxSpeed = 25});
+    chassis.moveToPoint(-50, 12.5, 3000, {.maxSpeed = 35});
     
+    chassis.moveToPoint(-50, 33.87, 1000, {.forwards = false});
+    chassis.turnToHeading(219, 800);*/
     
 }
 
@@ -421,16 +422,16 @@ void opcontrol() {
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
         // move the chassis with curvature drive
-        chassis.arcade(leftY, rightX);
+        chassis.arcade(leftY, rightX*0.8);
         // chassis.arcade(leftY, rightX, false, 1);
         updateIntake();
         updateIntakeFirst();
         updateClamp();
         updateIntakeClamp();
         updateLift();
-        resetIntake();
+        // resetIntake();
         // stepIntake();
-        //  allianceStake();
+        // allianceStake();
         pros::delay(10);
     }
 }

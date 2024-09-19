@@ -10,13 +10,9 @@ void intakeInnit() { intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST); }
 
 int intakeState = 0;
 
- static bool buttonl1Pressed = false;
- static bool buttonxPressed = false;
-
 void updateIntake() {
-
-    buttonl1Pressed = false;
-    buttonxPressed = false;
+    static bool buttonl1Pressed = false;
+    static bool buttonxPressed = false;
    
     // bool buttonaPressed = false;
 
@@ -51,31 +47,31 @@ void updateIntake() {
     }
 }
 
-void resetIntake() {
-    // if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) {
-    //     //intake loop value:
-    //     int onethird;
-    //     if(intake.get_position()/onethird == 0) {
-    //         intake.move_absolute(0, 200);
-    //     } else if(intake.get_position()/onethird == 1) {
-    //         intake.move_absolute(onethird, 200);
-    //     } else if(intake.get_position()/onethird == 2) {
-    //         intake.move_absolute(2*onethird, 200);
-    //     }
-    // }
+// void resetIntake() {
+//     // if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) {
+//     //     //intake loop value:
+//     //     int onethird;
+//     //     if(intake.get_position()/onethird == 0) {
+//     //         intake.move_absolute(0, 200);
+//     //     } else if(intake.get_position()/onethird == 1) {
+//     //         intake.move_absolute(onethird, 200);
+//     //     } else if(intake.get_position()/onethird == 2) {
+//     //         intake.move_absolute(2*onethird, 200);
+//     //     }
+//     // }
 
-    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) {
-        if (intake.get_position() / 120 == 0) {
-            intake.move_absolute(0, 200);
-        } else if (intake.get_position() / 120 == 1) {
-            intake.move_absolute(120, 200);
-        } else if (intake.get_position() / 120 == 2) {
-            intake.move_absolute(240, 200);
-        }
-    }
-}
+//     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) {
+//         if (intake.get_position() / 120 == 0) {
+//             intake.move_absolute(0, 200);
+//         } else if (intake.get_position() / 120 == 1) {
+//             intake.move_absolute(120, 200);
+//         } else if (intake.get_position() / 120 == 2) {
+//             intake.move_absolute(240, 200);
+//         }
+//     }
+// }
 
-void stepIntake() {
-    int onethird;
-    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) { intake.move_absolute(onethird, 200); }
-}
+// void stepIntake() {
+//     int onethird;
+//     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) { intake.move_absolute(onethird, 200); }
+// }
