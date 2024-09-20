@@ -8,6 +8,8 @@
 #include "intakeFirst.hpp"
 #include "intakePiston.hpp"
 
+#include "autoSelect/selection.h"
+
 pros::MotorGroup leftMotors({-3, -1, -16}, pros::MotorGearset::blue);
 pros::MotorGroup rightMotors({19, 20, 18}, pros::MotorGearset::blue);
 
@@ -76,6 +78,8 @@ void initialize() {
     intakeInnit();
     liftInit();
     intakeClampInit();
+
+    selector::init();
 
     // the default rate is 50. however, if you need to change the rate, you
     // can do the following.
@@ -161,7 +165,7 @@ void redSoloWP() {
     // move to alliance (push rings) and turn to allign with alliance
     intakeFirst.move_velocity(0);
     // chassis.moveToPose(-24.5, -15.7, 243.33, 3000, {.earlyExitRange = 5});
-    
+
     chassis.moveToPose(-25.6, -11, 243.33, 3000, {.earlyExitRange = 5});
     chassis.turnToHeading(153, 1000);
     mogoClamp.set_value(false);
@@ -179,7 +183,6 @@ void redSoloWP() {
     // go to ladder
     intakeFirst.move_voltage(12000);
     chassis.moveToPose(-19.98, -31.39, 164, 3000, {.maxSpeed = 50});
-    
 }
 
 void redMogo() {
@@ -332,15 +335,14 @@ void skills() {
     chassis.waitUntilDone();
 
     // mogo
-    
+
     mogoClamp.set_value(true);
-    
+
     chassis.moveToPose(27.1, 23.4, 27.95, 2000, {.forwards = false, .maxSpeed = 50});
-    
 
     chassis.waitUntilDone();
     mogoClamp.set_value(false);
-    
+
     pros::delay(50);
     intake.move_voltage(-12000);
 
@@ -360,7 +362,7 @@ void skills() {
 
     // mogo to corner
     chassis.turnToHeading(-18.57, 800, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE});
-    
+
     chassis.moveToPoint(57.97, 19.98, 1000, {.forwards = false});
     chassis.waitUntilDone();
     pros::delay(300);
@@ -387,47 +389,56 @@ void skills() {
 
     chassis.moveToPoint(-23.6, 28.2, 3000, {.forwards = false});
 
-        // first ring on second side
+    // first ring on second side
 
-        intakeFirst.move_velocity(-600);
-        intake.move_voltage(-12000);
+    intakeFirst.move_velocity(-600);
+    intake.move_voltage(-12000);
 
-        chassis.turnToHeading(0, 2000);
-        chassis.moveToPose(-23.6, 46.8,0, 3000);
+    chassis.turnToHeading(0, 2000);
+    chassis.moveToPose(-23.6, 46.8, 0, 3000);
 
-       // 2nd ring on second side
-        pros::delay(300);
-        chassis.turnToHeading(-83, 2000);
-        chassis.moveToPoint(-45.5, 53, 3000);
+    // 2nd ring on second side
+    pros::delay(300);
+    chassis.turnToHeading(-83, 2000);
+    chassis.moveToPoint(-45.5, 53, 3000);
 
-        pros::delay(1000);
+    pros::delay(1000);
 
-        //3rd + 4th ring
-        chassis.turnToHeading(-176, 2000);
-        chassis.moveToPoint(-46.2, 18, 4000, {.maxSpeed = 25});
-        pros::delay(2000);
+    // 3rd + 4th ring
+    chassis.turnToHeading(-176, 2000);
+    chassis.moveToPoint(-46.2, 18, 4000, {.maxSpeed = 25});
+    pros::delay(2000);
 
-        chassis.moveToPoint(-46.2, 35.2, 1000, {.forwards = false});
-        pros::delay(300);
-        chassis.turnToHeading(-130.3, 1000);
+    chassis.moveToPoint(-46.2, 35.2, 1000, {.forwards = false});
+    pros::delay(300);
+    chassis.turnToHeading(-130.3, 1000);
 
-        //5th ring
+    // 5th ring
 
-        chassis.moveToPoint(-52.4, 30.2, 3000, {.forwards = true});
-        chassis.waitUntilDone();
-        pros::delay(1300);
+    chassis.moveToPoint(-52.4, 30.2, 3000, {.forwards = true});
+    chassis.waitUntilDone();
+    pros::delay(1300);
 
-        chassis.turnToHeading(29.4, 1000);
-        pros::delay(3000);
+    chassis.turnToHeading(29.4, 1000);
+    pros::delay(3000);
 
-        chassis.moveToPose(-62.7, 13.3, 29.4, 3000, {.forwards = false});
+    chassis.moveToPose(-62.7, 13.3, 29.4, 3000, {.forwards = false});
 
-        mogoClamp.set_value(true);
-      
+    mogoClamp.set_value(true);
 }
 
 void autonomous() {
-     redSoloWP(); // red alliance solo AWP
+    // with selector
+
+    if (selector::auton == 1) { redSoloWP(); }
+    if (selector::auton == 2) { blueSoloWP(); }
+    if (selector::auton == 3) { redMogo(); }
+    if (selector::auton == -1) { blueMogo(); }
+    if (selector::auton == 0) { skills(); }
+
+    // without selector
+
+    redSoloWP(); // red alliance solo AWP
 
     // blueSoloWP(); // blue alliance solo AWP
 
@@ -435,7 +446,7 @@ void autonomous() {
 
     // blueMogo();  //blue alliance mogo rush
 
-    //skills(); // prog skills
+    // skills(); // prog skills
 }
 
 /**
