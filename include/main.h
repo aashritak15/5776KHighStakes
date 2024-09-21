@@ -41,6 +41,9 @@
  */
 
 #include "lemlib/api.hpp"
+#include "liblvgl/lvgl.h"
+
+
 
 // #include "pros/api_legacy.h"
 
