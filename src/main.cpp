@@ -306,8 +306,11 @@ void blueMogo() {
     mogoClamp.set_value(true);
 
     // mogo rush
-    chassis.moveToPoint(0, -28, 1000, {.forwards = false});
-    chassis.moveToPose(-6.3, -44.4, 29.27, 2000, {.forwards = false, .maxSpeed = 35});
+    chassis.moveToPoint(0, -30, 3000, {.forwards = false});
+
+    
+    
+    chassis.moveToPose(-5, -43.9, 30, 2000, {.forwards = false, .maxSpeed = 35});
 
     chassis.waitUntilDone();
 
@@ -333,11 +336,12 @@ void blueMogo() {
     pros::delay(600);
 
     //chassis.turnToHeading(-110.3, 500);
-    chassis.moveToPoint(-27, -47, 3000, {.maxSpeed = 30});
+    chassis.moveToPoint(-27, -47, 3000, {.maxSpeed = 35});
 
     intakeFirst.move_velocity(0);
 
     //mogoClamp.set_value(true);
+    
 
     /*
     double liftPosition = lift.get_position();
@@ -501,9 +505,9 @@ void autonomous() {
 
     // redMogo();  //red alliance mogo rush
 
-     blueMogo();  //blue alliance mogo rush
+    // blueMogo();  //blue alliance mogo rush
 
-    // skills(); // prog skills
+    skills(); // prog skills
 }
 
 /**
