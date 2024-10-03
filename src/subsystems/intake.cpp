@@ -10,6 +10,8 @@ void intakeInnit() { intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST); }
 
 int intakeState = 0;
 
+bool colorSort = false;
+
 void updateIntake() {
     static bool buttonl1Pressed = false;
     static bool buttonxPressed = false;
@@ -44,6 +46,24 @@ void updateIntake() {
         }
     } else {
         buttonxPressed = false;
+    }
+}
+
+void updateColorSortRed() {
+    static bool colorDetected = false;
+
+    if(optical.get_hue() < 100 && optical.get_hue() > 100) { //TUNE
+        if(!colorDetected){
+            colorDetected = true;
+            intakeState = 3;
+            pros::delay(200); //TUNE
+            intake.move_voltage(0);
+            pros::delay(200); //TUNE
+            intake.move_voltage(12000);
+        }
+    } else {
+            colorDetected = false;
+            intakeState = 0;
     }
 }
 
