@@ -155,9 +155,9 @@ void redSoloWP() {
     // pros::delay(250;0); //could be less IF  ERROR UNCOMMENT THIS
     //  LINE <---------------------
 
-    
-    chassis.turnToHeading(135, 2000);
-    chassis.moveToPoint(17.84, -23.74, 3000);
+    //second ring
+    chassis.turnToHeading(143, 1000);
+    chassis.moveToPoint(20.8, -26.01, 3000);
     
 
     chassis.waitUntilDone(); // could be less
@@ -181,7 +181,7 @@ void redSoloWP() {
 
     chassis.moveToPose(-29.4, -11.6, 244.33, 3000, {.earlyExitRange = 5});
     
-    chassis.turnToHeading(154.3, 1000);
+    chassis.turnToHeading(153, 1000);
     mogoClamp.set_value(false);
 
     // move backwards to alliance stake
@@ -234,7 +234,8 @@ void redMogo() {
     pros::delay(600);
 
     chassis.turnToHeading(99.1, 500);
-    chassis.moveToPoint(22.8, -35.57, 3000, {.maxSpeed = 30});
+    //chassis.moveToPoint(22.8, -35.57, 3000, {.maxSpeed = 30});
+    chassis.moveToPoint(24.3, -37.5, 3000, {.maxSpeed = 30});
 
     intakeFirst.move_velocity(0);
     //mogoClamp.set_value(true);
@@ -280,13 +281,13 @@ void blueSoloWP() {
 
     // move to alliance stake
     // chassis.moveToPose(39.3, -14.4, -240.5, 3000);
-    chassis.moveToPose(37.5, -18.2, -240.5, 3000);
-    chassis.turnToHeading(207, 1000);
+    chassis.moveToPose(34.77, -15.74, -244, 3000);
+    chassis.turnToHeading(203.66, 1000, {.direction = AngularDirection::CW_CLOCKWISE});
     mogoClamp.set_value(false);
 
     // score alliance stake
 
-    chassis.moveToPoint(44.2, -13.1, 2000, {.forwards = false});
+    chassis.moveToPoint(40.51, -7.93, 2000, {.forwards = false});
     chassis.waitUntilDone();
     intake.move_voltage(-12000);
     lift.move_absolute(183, 40);
@@ -501,13 +502,13 @@ void autonomous() {
 
     //redSoloWP(); // red alliance solo AWP
 
-    // blueSoloWP(); // blue alliance solo AWP
+     blueSoloWP(); // blue alliance solo AWP
 
     // redMogo();  //red alliance mogo rush
 
     // blueMogo();  //blue alliance mogo rush
 
-    skills(); // prog skills
+    //skills(); // prog skills
 }
 
 /**
