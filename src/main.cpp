@@ -23,7 +23,7 @@
 pros::MotorGroup leftMotors({-3, -1, -16}, pros::MotorGearset::blue);
 pros::MotorGroup rightMotors({19, 20, 18}, pros::MotorGearset::blue);
 
-pros::Imu imu(2);
+pros::Imu imu(4);
 
 // drivetrain settings
 lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 10, lemlib::Omniwheel::NEW_325, 425,
@@ -31,7 +31,7 @@ lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 10, lemlib::Omniwheel::
 );
 
 // lateral motion controller
-lemlib::ControllerSettings linearController(0, // proportional gain (kP)
+lemlib::ControllerSettings linearController(20, // proportional gain (kP)
                                             0, // integral gain (kI)
                                             0, // derivative gain (kD)
                                             3, // anti windup
@@ -43,9 +43,9 @@ lemlib::ControllerSettings linearController(0, // proportional gain (kP)
 );
 
 // angular motion controller
-lemlib::ControllerSettings angularController(2.4, // proportional gain (kP)
+lemlib::ControllerSettings angularController(3.6, // proportional gain (kP)
                                              0, // integral gain (kI)
-                                             0, // derivative gain (kD)
+                                             32.92, //40.5, // derivative gain (kD)
                                              0, // anti windup
                                              1, // small error range, in degrees
                                              100, // small error range timeout, in milliseconds
@@ -156,7 +156,7 @@ void autonomous() {
     //skills(); // prog skills
 
     chassis.turnToHeading(90, 1000);
-    //chassis.moveToPose(0, 24, 0, 1000);
+    //chassis.moveToPoint(0, 24, 1000);
 }
 
 /**
