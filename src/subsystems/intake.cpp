@@ -81,9 +81,9 @@ void updateColorToggle() {
         if(!leftPressed) {
             leftPressed = true;
             if(sortState == 0 || sortState == 2) {
-                sortState == 1;
+                sortState = 1;
             } else if (sortState == 1) {
-                sortState == 0;
+                sortState = 0;
             }
         }
     } else {
@@ -94,9 +94,9 @@ void updateColorToggle() {
         if(!rightPressed) {
             rightPressed = true;
             if(sortState == 0 || sortState == 1) {
-                sortState == 2;
+                sortState = 2;
             } else if (sortState == 2) {
-                sortState == 0;
+                sortState = 0;
             }
         }
     } else {
@@ -107,11 +107,12 @@ void updateColorToggle() {
 void colorSort() {
     static bool colorDetected = false;
 
-    if(sortState = 1) {
-        if(optical.get_hue() < 18 && optical.get_hue() > 12) { //TUNE
+    if(sortState == 1) {
+        if(optical.get_hue() < 18 && optical.get_hue() > 12) { //red!
             if(!colorDetected) {
                 colorDetected = true;
                 intakeState = 3;
+                pros::Task::delay(50);
                 intake.move_voltage(0);
                 pros::Task::delay(200);
                 intake.move_voltage(-12000);
@@ -120,11 +121,12 @@ void colorSort() {
         } else {
             colorDetected = false;
         }
-    } else if(sortState = 2) {
-        if(optical.get_hue() < 216 && optical.get_hue() > 210) { //TUNE
+    } else if(sortState == 2) {
+        if(optical.get_hue() < 216 && optical.get_hue() > 210) { //blue!
             if(!colorDetected) {
                 colorDetected = true;
                 intakeState = 3;
+                pros::Task::delay(50); //TODO: is the task delay working
                 intake.move_voltage(0);
                 pros::Task::delay(200);
                 intake.move_voltage(-12000);

@@ -200,6 +200,17 @@ void opcontrol() {
         updateColorToggle();
         colorSort();
 
+        if(sortState == 0) {
+            controller.clear_line(0);
+            controller.set_text(0, 0, "no sort");
+        } else if(sortState == 1) {
+            controller.clear_line(0);
+            controller.set_text(0, 0, "scores blue");
+        } else if(sortState == 2) {
+            controller.clear_line(0);
+            controller.set_text(0, 0, "scores red");
+        }
+
         // resetIntake();
         // stepIntake();
         // allianceStake();
