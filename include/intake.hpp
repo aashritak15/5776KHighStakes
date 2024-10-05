@@ -7,6 +7,10 @@ void intakeInnit();
 void updateIntake();
 void resetIntake();
 void stepIntake();
-void updateColorSortRed();
+void opticalInit();
+
+void colorSort();
+void updateColorToggle();
 
 extern int intakeState;
+extern int sortState;

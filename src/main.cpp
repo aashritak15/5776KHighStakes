@@ -88,6 +88,7 @@ void initialize() {
     intakeInnit();
     liftInit();
     intakeClampInit();
+    opticalInit();
 
     //lv_init();
     //selector::init();
@@ -101,20 +102,22 @@ void initialize() {
     // works, refer to the fmtlib docs
 
     // thread to for brain screen and position logging
-    pros::Task screenTask([&]() {
-        while (true) {
-            // print robot location to the brain screen
-            pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
-            pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
-            pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
-            pros::lcd::print(3, "Lift: %f", lift.get_position()); // lift encoder
-            // pros::lcd::print(4, "Color: %f", optical.get_hue());
-            // log position telemetry
-            lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
-            // delay to save resources
-            pros::delay(50);
-        }
-    });
+
+
+    // pros::Task screenTask([&]() {
+    //     while (true) {
+    //         // print robot location to the brain screen
+    //         pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
+    //         pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
+    //         pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
+    //         pros::lcd::print(3, "Lift: %f", lift.get_position()); // lift encoder
+    //         pros::lcd::print(4, "Color: %f", optical.get_hue());
+    //         // log position telemetry
+    //         lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
+    //         // delay to save resources
+    //         pros::delay(50);
+    //     }
+    // });
 }
 
 /**
@@ -176,13 +179,27 @@ void opcontrol() {
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
         // move the chassis with curvature drive
+
         chassis.arcade(leftY, rightX * 0.8);
         // chassis.arcade(leftY, rightX, false, 1);
+
+        pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
+        pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
+        pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
+        pros::lcd::print(3, "Lift: %f", lift.get_position()); // lift encoder
+        pros::lcd::print(4, "Color: %f", optical.get_hue());
+        // log position telemetry
+        lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
+
         updateIntake();
         updateIntakeFirst();
         updateClamp();
         updateIntakeClamp();
         updateLift();
+        // sortTest();
+        updateColorToggle();
+        colorSort();
+
         // resetIntake();
         // stepIntake();
         // allianceStake();
