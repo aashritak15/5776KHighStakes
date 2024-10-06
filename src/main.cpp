@@ -9,8 +9,7 @@
 #include "intakePiston.hpp"
 #include "autons.hpp"
 
-
-//#include "autoSelect/selection.h"
+// #include "autoSelect/selection.h"
 
 // rd::Selector selector({
 //    {"Blue AWP", &auton0},
@@ -23,7 +22,7 @@
 pros::MotorGroup leftMotors({-3, -1, -16}, pros::MotorGearset::blue);
 pros::MotorGroup rightMotors({19, 20, 18}, pros::MotorGearset::blue);
 
-pros::Imu imu(4);
+pros::Imu imu(13);
 
 // drivetrain settings
 lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 10, lemlib::Omniwheel::NEW_325, 425,
@@ -31,9 +30,9 @@ lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 10, lemlib::Omniwheel::
 );
 
 // lateral motion controller
-lemlib::ControllerSettings linearController(20, // proportional gain (kP)
+lemlib::ControllerSettings linearController(13.856, // proportional gain (kP)
                                             0, // integral gain (kI)
-                                            0, // derivative gain (kD)
+                                            46.86273, // derivative gain (kD)
                                             3, // anti windup
                                             1, // small error range, in inches
                                             100, // small error range timeout, in milliseconds
@@ -43,9 +42,9 @@ lemlib::ControllerSettings linearController(20, // proportional gain (kP)
 );
 
 // angular motion controller
-lemlib::ControllerSettings angularController(3.6, // proportional gain (kP)
+lemlib::ControllerSettings angularController(4.05, // proportional gain (kP)
                                              0, // integral gain (kI)
-                                             32.92, //40.5, // derivative gain (kD)
+                                             34.85768, // 32.92, //40.5, // derivative gain (kD)
                                              0, // anti windup
                                              1, // small error range, in degrees
                                              100, // small error range timeout, in milliseconds
@@ -55,7 +54,10 @@ lemlib::ControllerSettings angularController(3.6, // proportional gain (kP)
 );
 
 // sensors for odometry
-lemlib::OdomSensors sensors(nullptr, nullptr, nullptr, nullptr,
+lemlib::OdomSensors sensors(nullptr, // vertical tracking wheel 1, set to null
+                            nullptr, // vertical tracking wheel 2, set to nullptr as we are using IMEs
+                            nullptr, // horizontal tracking wheel 1
+                            nullptr, // horizontal tracking wheel 2, set to nullptr as we don't have a second one
                             &imu // inertial sensor
 );
 
@@ -84,14 +86,15 @@ lemlib::Chassis chassis(drivetrain, linearController, angularController, sensors
 void initialize() {
     pros::lcd::initialize(); // initialize brain screen
     chassis.calibrate(); // calibrate sensors
+
     clampInit();
     intakeInnit();
     liftInit();
     intakeClampInit();
     opticalInit();
 
-    //lv_init();
-    //selector::init();
+    // lv_init();
+    // selector::init();
 
     // the default rate is 50. however, if you need to change the rate, you
     // can do the following.
@@ -103,21 +106,20 @@ void initialize() {
 
     // thread to for brain screen and position logging
 
-
-    // pros::Task screenTask([&]() {
-    //     while (true) {
-    //         // print robot location to the brain screen
-    //         pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
-    //         pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
-    //         pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
-    //         pros::lcd::print(3, "Lift: %f", lift.get_position()); // lift encoder
-    //         pros::lcd::print(4, "Color: %f", optical.get_hue());
-    //         // log position telemetry
-    //         lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
-    //         // delay to save resources
-    //         pros::delay(50);
-    //     }
-    // });
+    pros::Task screenTask([&]() {
+        while (true) {
+            // print robot location to the brain screen
+            pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
+            pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
+            pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
+            pros::lcd::print(3, "Lift: %f", lift.get_position()); // lift encoder
+            pros::lcd::print(4, "Color: %f", optical.get_hue());
+            // log position telemetry
+            lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
+            // delay to save resources
+            pros::delay(50);
+        }
+    });
 }
 
 /**
@@ -136,7 +138,6 @@ void competition_initialize() {}
  * This is an example autonomous routine which demonstrates a lot of the features LemLib has to offer
  */
 
-
 void autonomous() {
     // with selector
 
@@ -148,7 +149,7 @@ void autonomous() {
 
     // without selector
 
-    //redSoloWP(); // red alliance solo AWP
+    // redSoloWP(); // red alliance solo AWP
 
     // blueSoloWP(); // blue alliance solo AWP
 
@@ -156,10 +157,11 @@ void autonomous() {
 
     // blueMogo();  //blue alliance mogo rush
 
-    //skills(); // prog skills
+    // skills(); // prog skills
 
-    chassis.turnToHeading(90, 1000);
-    //chassis.moveToPoint(0, 24, 1000);
+    chassis.setPose(0, 0, 0);
+    chassis.moveToPoint(0, 24, 10000);
+    // chassis.turnToHeading(90, 10000);
 }
 
 /**
@@ -170,12 +172,12 @@ void opcontrol() {
     // controller
     // loop to continuously update motors
     while (true) {
-        //pros::lcd::set_text(0, "X: %f", chassis.getPose().x); // x
-        //pros::lcd::set_text(1, "Y: %f", chassis.getPose().y); // y
-        //pros::lcd::set_text(2, "Theta: %f", chassis.getPose().theta); // heading
-        // // log position telemetry
-        // lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
-        // get joystick positions;
+        // pros::lcd::set_text(0, "X: %f", chassis.getPose().x); // x
+        // pros::lcd::set_text(1, "Y: %f", chassis.getPose().y); // y
+        // pros::lcd::set_text(2, "Theta: %f", chassis.getPose().theta); // heading
+        //  // log position telemetry
+        //  lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
+        //  get joystick positions;
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
         // move the chassis with curvature drive
@@ -200,13 +202,13 @@ void opcontrol() {
         updateColorToggle();
         colorSort();
 
-        if(sortState == 0) {
+        if (sortState == 0) {
             controller.clear_line(0);
             controller.set_text(0, 0, "no sort");
-        } else if(sortState == 1) {
+        } else if (sortState == 1) {
             controller.clear_line(0);
             controller.set_text(0, 0, "scores blue");
-        } else if(sortState == 2) {
+        } else if (sortState == 2) {
             controller.clear_line(0);
             controller.set_text(0, 0, "scores red");
         }
