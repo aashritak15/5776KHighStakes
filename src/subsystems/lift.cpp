@@ -14,7 +14,8 @@ void updateLift() {
         lift.move_velocity(-100);
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) { //lift up/down
         lift.move_velocity(100);
-    } else {lift.move_velocity(0);}
+    } else {
+        lift.move_velocity(0);}
 
 
    /*if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) { //lift up/down

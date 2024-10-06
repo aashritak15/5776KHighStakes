@@ -25,34 +25,35 @@ pros::MotorGroup rightMotors({19, 20, 18}, pros::MotorGearset::blue);
 pros::Imu imu(13);
 
 // drivetrain settings
-lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 10, lemlib::Omniwheel::NEW_325, 425,
+lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 10, lemlib::Omniwheel::NEW_325, 450,
                               6 // 2 w/o traction
 );
 
 // lateral motion controller
-lemlib::ControllerSettings linearController(13.856, // proportional gain (kP)
+lemlib::ControllerSettings linearController(18.8, // proportional gain (kP)
                                             0, // integral gain (kI)
-                                            46.86273, // derivative gain (kD)
+                                            40, //48.905, //46.86273, // derivative gain (kD)
                                             3, // anti windup
                                             1, // small error range, in inches
                                             100, // small error range timeout, in milliseconds
-                                            3, // large error range, in inches
+                                            2, // large error range, in inches
                                             500, // large error range timeout, in milliseconds
                                             0 // slew
 );
 
 // angular motion controller
-lemlib::ControllerSettings angularController(4.05, // proportional gain (kP)
-                                             0, // integral gain (kI)
-                                             34.85768, // 32.92, //40.5, // derivative gain (kD)
+lemlib::ControllerSettings angularController(5.15, // proportional gain (kP)
+                                             1, // integral gain (kI)
+                                             0, //38,//37.88, // 32.92, //40.5, // derivative gain (kD)
                                              0, // anti windup
                                              1, // small error range, in degrees
                                              100, // small error range timeout, in milliseconds
                                              2, // large error range, in degrees
                                              500, // large error range timeout, in milliseconds
                                              0 // slew
-);
 
+                                             //OLD VALUES OCT 6: P 4.05, D 34.86768
+);
 // sensors for odometry
 lemlib::OdomSensors sensors(nullptr, // vertical tracking wheel 1, set to null
                             nullptr, // vertical tracking wheel 2, set to nullptr as we are using IMEs
@@ -114,6 +115,7 @@ void initialize() {
             pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
             pros::lcd::print(3, "Lift: %f", lift.get_position()); // lift encoder
             pros::lcd::print(4, "Color: %f", optical.get_hue());
+
             // log position telemetry
             lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
             // delay to save resources
@@ -160,8 +162,8 @@ void autonomous() {
     // skills(); // prog skills
 
     chassis.setPose(0, 0, 0);
-    chassis.moveToPoint(0, 24, 10000);
-    // chassis.turnToHeading(90, 10000);
+    //chassis.moveToPoint(0, 24, 10000);
+     chassis.turnToHeading(90, 10000);
 }
 
 /**
@@ -190,6 +192,17 @@ void opcontrol() {
         pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
         pros::lcd::print(3, "Lift: %f", lift.get_position()); // lift encoder
         pros::lcd::print(4, "Color: %f", optical.get_hue());
+
+        /*std::vector<double> left = leftMotors.get_position_all();
+        std::vector<double> right = rightMotors.get_position_all();
+
+        pros::lcd::print(5, "LeftF Encoders: %f", left[0]);
+        pros::lcd::print(6, "LeftM Encoders: %f", left[1]);
+        pros::lcd::print(7, "LeftB Encoders: %f", left[2]);
+        pros::lcd::print(2, "RightF Encoders: %f", right[0]);
+        pros::lcd::print(3, "RightM Encoders: %f", right[1]);
+        pros::lcd::print(4, "RightB Encoders: %f", right[2]);*/
+
         // log position telemetry
         lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
 
@@ -203,14 +216,11 @@ void opcontrol() {
         colorSort();
 
         if (sortState == 0) {
-            controller.clear_line(0);
-            controller.set_text(0, 0, "no sort");
+            controller.set_text(0, 0, "no sort   ");
         } else if (sortState == 1) {
-            controller.clear_line(0);
             controller.set_text(0, 0, "scores blue");
         } else if (sortState == 2) {
-            controller.clear_line(0);
-            controller.set_text(0, 0, "scores red");
+            controller.set_text(0, 0, "scores red ");
         }
 
         // resetIntake();
