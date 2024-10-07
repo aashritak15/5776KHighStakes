@@ -30,9 +30,9 @@ lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 10, lemlib::Omniwheel::
 );
 
 // lateral motion controller
-lemlib::ControllerSettings linearController(18.8, // proportional gain (kP)
+lemlib::ControllerSettings linearController(15, // proportional gain (kP)
                                             0, // integral gain (kI)
-                                            40, //48.905, //46.86273, // derivative gain (kD)
+                                            53, //48.905, //46.86273, // derivative gain (kD)
                                             3, // anti windup
                                             1, // small error range, in inches
                                             100, // small error range timeout, in milliseconds
@@ -42,9 +42,9 @@ lemlib::ControllerSettings linearController(18.8, // proportional gain (kP)
 );
 
 // angular motion controller
-lemlib::ControllerSettings angularController(5.15, // proportional gain (kP)
-                                             1, // integral gain (kI)
-                                             0, //38,//37.88, // 32.92, //40.5, // derivative gain (kD)
+lemlib::ControllerSettings angularController(3.8, // proportional gain (kP)
+                                             0, // integral gain (kI)
+                                             25, //38,//37.88, // 32.92, //40.5, // derivative gain (kD)
                                              0, // anti windup
                                              1, // small error range, in degrees
                                              100, // small error range timeout, in milliseconds
@@ -162,8 +162,8 @@ void autonomous() {
     // skills(); // prog skills
 
     chassis.setPose(0, 0, 0);
-    //chassis.moveToPoint(0, 24, 10000);
-     chassis.turnToHeading(90, 10000);
+    chassis.moveToPoint(0, 24, 10000);
+    //  chassis.turnToHeading(90, 10000);
 }
 
 /**
