@@ -32,7 +32,7 @@ lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 10, lemlib::Omniwheel::
 // lateral motion controller
 lemlib::ControllerSettings linearController(15, // proportional gain (kP)
                                             0, // integral gain (kI)
-                                            53.1, //48.905, //46.86273, // derivative gain (kD)
+                                            53.1, // 48.905, //46.86273, // derivative gain (kD)
                                             3, // anti windup
                                             1, // small error range, in inches
                                             100, // small error range timeout, in milliseconds
@@ -44,7 +44,7 @@ lemlib::ControllerSettings linearController(15, // proportional gain (kP)
 // angular motion controller
 lemlib::ControllerSettings angularController(3.8, // proportional gain (kP)
                                              0, // integral gain (kI)
-                                             25, //38,//37.88, // 32.92, //40.5, // derivative gain (kD)
+                                             25, // 38,//37.88, // 32.92, //40.5, // derivative gain (kD)
                                              0, // anti windup
                                              1, // small error range, in degrees
                                              100, // small error range timeout, in milliseconds
@@ -52,7 +52,7 @@ lemlib::ControllerSettings angularController(3.8, // proportional gain (kP)
                                              500, // large error range timeout, in milliseconds
                                              0 // slew
 
-                                             //OLD VALUES OCT 6: P 4.05, D 34.86768
+                                             // OLD VALUES OCT 6: P 4.05, D 34.86768
 );
 // sensors for odometry
 lemlib::OdomSensors sensors(nullptr, // vertical tracking wheel 1, set to null
@@ -140,6 +140,19 @@ void competition_initialize() {}
  * This is an example autonomous routine which demonstrates a lot of the features LemLib has to offer
  */
 
+ASSET(path_jerryio_txt);
+
+void redSoloWP() {
+    chassis.setPose(0, 0, 0);
+    mogoClamp.set_value(true);
+    chassis.turnToHeading(27, 1000);
+    chassis.moveToPoint(-11.18, -21.42, 2000, {.forwards = false, .maxSpeed = 50, .earlyExitRange = 40});
+    chassis.waitUntilDone();
+    mogoClamp.set_value(false);
+    chassis.turnToHeading(149, 1000);
+    (2.34, -42.95, );
+}
+
 void autonomous() {
     // with selector
 
@@ -151,7 +164,7 @@ void autonomous() {
 
     // without selector
 
-    // redSoloWP(); // red alliance solo AWP
+    redSoloWP(); // red alliance solo AWP
 
     // blueSoloWP(); // blue alliance solo AWP
 
@@ -161,8 +174,8 @@ void autonomous() {
 
     // skills(); // prog skills
 
-    chassis.setPose(0, 0, 0);
-    chassis.moveToPoint(0, 24, 10000);
+    // chassis.follow(path_jerryio_txt, 15, 3000);
+
     //  chassis.turnToHeading(90, 10000);
 }
 
