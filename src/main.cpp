@@ -144,13 +144,49 @@ ASSET(path_jerryio_txt);
 
 void redSoloWP() {
     chassis.setPose(0, 0, 0);
+
+    //mogo
     mogoClamp.set_value(true);
     chassis.turnToHeading(27, 1000);
-    chassis.moveToPoint(-11.18, -21.42, 2000, {.forwards = false, .maxSpeed = 50, .earlyExitRange = 40});
+    chassis.moveToPoint(-11.18, -21.42, 2000, {.forwards = false, .maxSpeed = 40, .earlyExitRange = 40});
     chassis.waitUntilDone();
     mogoClamp.set_value(false);
+
+    //first ring
+    intake.move_voltage(-12000);
+    intakeFirst.move_voltage(-12000);
+    pros::delay(500);
     chassis.turnToHeading(149, 1000);
-    (2.34, -42.95, );
+    chassis.moveToPoint(1, -38.8, 1000, {.maxSpeed = 75});
+    chassis.waitUntilDone();
+    //pros::delay(500);
+
+    //second ring
+    chassis.moveToPoint(-7.9, -23.4, 1000, {.forwards = false, .earlyExitRange = 20});
+    chassis.turnToHeading(97, 1000, {.earlyExitRange = 10});
+    chassis.moveToPoint(0.15, -23.4, 1000);
+    chassis.waitUntilDone();
+    intake.move_voltage(0);
+    pros::delay(500);
+
+    //drop mogo
+    chassis.moveToPose(-0.4, 5.2, 213.8, 2000);
+    chassis.waitUntilDone();
+    mogoClamp.set_value(true);
+
+    //go to alliance stake
+    //chassis.turnToHeading(270, 1000, {.earlyExitRange = 10});
+    chassis.moveToPose(-42.2, 3.8, -90, 2000);
+    chassis.waitUntilDone();
+    chassis.turnToHeading(180, 1000);
+    chassis.moveToPoint(-40.1, 11.9, 1000, {.forwards = false});
+    chassis.waitUntilDone();
+    intake.move_voltage(-12000);
+
+    //go to ladder
+    //chassis.moveToPoint(, , 1000);
+    //intake.move_voltage(0);
+    //intake.move_voltage(0);
 }
 
 void autonomous() {
