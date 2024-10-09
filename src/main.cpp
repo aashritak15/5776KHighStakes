@@ -147,9 +147,11 @@ void redSoloWP() {
 
     //mogo
     mogoClamp.set_value(true);
-    chassis.turnToHeading(27, 1000);
-    chassis.moveToPoint(-11.18, -21.42, 2000, {.forwards = false, .maxSpeed = 40, .earlyExitRange = 40});
+    chassis.turnToHeading(27, 1000, {.earlyExitRange = 3});
+    //chassis.moveToPose(-5.69, -10.9, 27, 1000, {.forwards = false, .minSpeed = 100, .earlyExitRange = 40});
+    chassis.moveToPoint(-11.18, -21.42, 1000, {.forwards = false, .maxSpeed = 50, .earlyExitRange = 20});
     chassis.waitUntilDone();
+    pros::delay(500);
     mogoClamp.set_value(false);
 
     //first ring
@@ -176,17 +178,20 @@ void redSoloWP() {
 
     //go to alliance stake
     //chassis.turnToHeading(270, 1000, {.earlyExitRange = 10});
-    chassis.moveToPose(-42.2, 3.8, -90, 2000);
+    chassis.moveToPose(-42.3, -2.39, -90, 2000);
     chassis.waitUntilDone();
-    chassis.turnToHeading(180, 1000);
-    chassis.moveToPoint(-40.1, 11.9, 1000, {.forwards = false});
+    chassis.turnToHeading(180, 1000, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE, .earlyExitRange = 5});
+    mogoClamp.set_value(false);
+    chassis.moveToPose(-37.4, 10.42, 180, 1000, {.forwards = false});
     chassis.waitUntilDone();
     intake.move_voltage(-12000);
+    pros::delay(1000);
 
     //go to ladder
-    //chassis.moveToPoint(, , 1000);
-    //intake.move_voltage(0);
-    //intake.move_voltage(0);
+    chassis.moveToPoint(-39.89, -20.75, 1000, {. minSpeed = 75, .earlyExitRange = 20});
+    //chassis.turnToHeading(-162.1, 1000, {.earlyExitRange = 10}); //-148.7
+    intake.move_voltage(0);
+    intake.move_voltage(0);
 }
 
 void autonomous() {
