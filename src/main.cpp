@@ -149,7 +149,8 @@ void redSoloWP() {
     mogoClamp.set_value(true);
     chassis.turnToHeading(27, 1000, {.earlyExitRange = 3});
     //chassis.moveToPose(-5.69, -10.9, 27, 1000, {.forwards = false, .minSpeed = 100, .earlyExitRange = 40});
-    chassis.moveToPoint(-11.18, -21.42, 1000, {.forwards = false, .maxSpeed = 50, .earlyExitRange = 20});
+    // chassis.moveToPoint(-11.18, -21.42, 1000, {.forwards = false, .maxSpeed = 50, .earlyExitRange = 20});
+    chassis.moveToPoint(-10.63, -21.28, 1000, {.forwards = false, .maxSpeed = 50, .earlyExitRange = 20});
     chassis.waitUntilDone();
     pros::delay(500);
     mogoClamp.set_value(false);
@@ -176,21 +177,27 @@ void redSoloWP() {
     chassis.waitUntilDone();
     mogoClamp.set_value(true);
 
+    // chassis.turnToHeading(221, 1000, {.earlyExitRange = 5}); REMOVAL OF MOGO MOVEMENT
+    // chassis.waitUntilDone();
+    // mogoClamp.set_value(true);
+
     //go to alliance stake
     //chassis.turnToHeading(270, 1000, {.earlyExitRange = 10});
     chassis.moveToPose(-42.3, -2.39, -90, 2000);
     chassis.waitUntilDone();
-    chassis.turnToHeading(180, 1000, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE, .earlyExitRange = 5});
+    chassis.turnToHeading(182, 800, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE, .earlyExitRange = 5});
     mogoClamp.set_value(false);
-    chassis.moveToPose(-37.4, 10.42, 180, 1000, {.forwards = false});
+    chassis.moveToPose(-39.15, 8, 180, 1000, {.forwards = false}); //actual movement back to alliance stake BLINDCODE Y-=2, X-=1
     chassis.waitUntilDone();
     intake.move_voltage(-12000);
     pros::delay(1000);
 
-    //go to ladder
-    chassis.moveToPoint(-39.89, -20.75, 1000, {. minSpeed = 75, .earlyExitRange = 20});
-    //chassis.turnToHeading(-162.1, 1000, {.earlyExitRange = 10}); //-148.7
     intake.move_voltage(0);
+    chassis.moveToPose(-39, -14.9, -156, 2000);
+
+    //go to ladder
+    // chassis.moveToPoint(-39.89, -20.75, 1000, {. minSpeed = 75, .earlyExitRange = 20});
+    //chassis.turnToHeading(-162.1, 1000, {.earlyExitRange = 10}); //-148.7
     intake.move_voltage(0);
 }
 

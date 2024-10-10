@@ -108,11 +108,11 @@ void colorSort() {
     static bool colorDetected = false;
 
     if(sortState == 1) {
-        if(optical.get_hue() < 18 && optical.get_hue() > 12) { //red!
+        if(optical.get_hue() < 20 && optical.get_hue() > 8) { //red!
             if(!colorDetected) {
                 colorDetected = true;
                 intakeState = 3;
-                pros::Task::delay(50);
+                pros::Task::delay(70);
                 intake.move_voltage(0);
                 pros::Task::delay(200);
                 intake.move_voltage(-12000);
@@ -122,11 +122,11 @@ void colorSort() {
             colorDetected = false;
         }
     } else if(sortState == 2) {
-        if(optical.get_hue() < 216 && optical.get_hue() > 210) { //blue!
+        if(optical.get_hue() < 225 && optical.get_hue() > 210) { //blue!
             if(!colorDetected) {
                 colorDetected = true;
                 intakeState = 3;
-                pros::Task::delay(50); //TODO: is the task delay working
+                pros::Task::delay(70); //TODO: is the task delay working
                 intake.move_voltage(0);
                 pros::Task::delay(200);
                 intake.move_voltage(-12000);
