@@ -30,9 +30,9 @@ lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 10, lemlib::Omniwheel::
 );
 
 // lateral motion controller
-lemlib::ControllerSettings linearController(15, // proportional gain (kP)
+lemlib::ControllerSettings linearController(9, // proportional gain (kP)
                                             0, // integral gain (kI)
-                                            53.1, // 48.905, //46.86273, // derivative gain (kD)
+                                            6.55, // 48.905, //46.86273, // derivative gain (kD)
                                             3, // anti windup
                                             1, // small error range, in inches
                                             100, // small error range timeout, in milliseconds
@@ -42,9 +42,9 @@ lemlib::ControllerSettings linearController(15, // proportional gain (kP)
 );
 
 // angular motion controller
-lemlib::ControllerSettings angularController(3.8, // proportional gain (kP)
+lemlib::ControllerSettings angularController(1.33, // proportional gain (kP)
                                              0, // integral gain (kI)
-                                             25, // 38,//37.88, // 32.92, //40.5, // derivative gain (kD)
+                                             10.2, // 38,//37.88, // 32.92, //40.5, // derivative gain (kD)
                                              0, // anti windup
                                              1, // small error range, in degrees
                                              100, // small error range timeout, in milliseconds
@@ -145,109 +145,135 @@ ASSET(path_jerryio_txt);
 void redSoloWP() {
     chassis.setPose(0, 0, 0);
 
-    //mogo
+    // mogo
     mogoClamp.set_value(true);
     chassis.turnToHeading(27, 1000, {.earlyExitRange = 3});
-    //chassis.moveToPose(-5.69, -10.9, 27, 1000, {.forwards = false, .minSpeed = 100, .earlyExitRange = 40});
-    // chassis.moveToPoint(-11.18, -21.42, 1000, {.forwards = false, .maxSpeed = 50, .earlyExitRange = 20});
+    // chassis.moveToPose(-5.69, -10.9, 27, 1000, {.forwards = false, .minSpeed = 100, .earlyExitRange = 40});
+    //  chassis.moveToPoint(-11.18, -21.42, 1000, {.forwards = false, .maxSpeed = 50, .earlyExitRange = 20});
     chassis.moveToPoint(-10.63, -21.28, 1000, {.forwards = false, .maxSpeed = 50, .earlyExitRange = 20});
     chassis.waitUntilDone();
     pros::delay(500);
     mogoClamp.set_value(false);
 
-    //first ring
+    // first ring
     intake.move_voltage(-12000);
     intakeFirst.move_voltage(-12000);
-    pros::delay(500);
+    pros::delay(600);
     chassis.turnToHeading(149, 1000);
     chassis.moveToPoint(1, -38.8, 1000, {.maxSpeed = 75});
     chassis.waitUntilDone();
-    //pros::delay(500);
-
-    //second ring
-    chassis.moveToPoint(-7.9, -23.4, 1000, {.forwards = false, .earlyExitRange = 20});
-    chassis.turnToHeading(97, 1000, {.earlyExitRange = 10});
-    chassis.moveToPoint(0.15, -23.4, 1000);
-    chassis.waitUntilDone();
-    intake.move_voltage(0);
     pros::delay(500);
 
-    //drop mogo
-    chassis.moveToPose(-0.4, 5.2, 213.8, 2000);
+    chassis.turnToHeading(32.22, 1000);
+
+    chassis.moveToPoint(3.70, -34.95, 1000);
+    pros::delay(300);
+
+    chassis.turnToHeading(-19.26, 1000);
+    intake.move_voltage(0);
+
+    // drop mogo
+    chassis.moveToPose(-20, 5.8, -90, 2000);
     chassis.waitUntilDone();
     mogoClamp.set_value(true);
+    intakeFirst.move_voltage(0);
+
+    chassis.moveToPoint(-41.36, 5.8, 1000);
+    chassis.turnToHeading(180, 1000);
+
+    chassis.moveToPoint(-39.15, 11.68, 2000, {.forwards = false});
+    pros::delay(500);
+    intake.move_voltage(-12000);
+    pros::delay(800);
+
+    chassis.moveToPoint(-41.21, -12.39, 1000);
+
+    chassis.turnToHeading(-161.8, 1000);
+
+    chassis.moveToPoint(-38.49, -12.38, 1000);
 
     // chassis.turnToHeading(221, 1000, {.earlyExitRange = 5}); REMOVAL OF MOGO MOVEMENT
     // chassis.waitUntilDone();
     // mogoClamp.set_value(true);
 
-    //go to alliance stake
-    //chassis.turnToHeading(270, 1000, {.earlyExitRange = 10});
-    chassis.moveToPose(-42.3, -2.39, -90, 2000);
-    chassis.waitUntilDone();
-    chassis.turnToHeading(182, 800, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE, .earlyExitRange = 5});
-    mogoClamp.set_value(false);
-    chassis.moveToPose(-39.15, 8, 180, 1000, {.forwards = false}); //actual movement back to alliance stake BLINDCODE Y-=2, X-=1
-    chassis.waitUntilDone();
-    intake.move_voltage(-12000);
-    pros::delay(1000);
+    // go to alliance stake
+    // chassis.turnToHeading(270, 1000, {.earlyExitRange = 10});
+    // chassis.moveToPose(-42.3, -2.39, -90, 2000);
+    // chassis.waitUntilDone();
+    // chassis.turnToHeading(182, 800, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE, .earlyExitRange = 5});
+    // mogoClamp.set_value(false);
+    // chassis.moveToPose(-39.15, 8, 180, 1000,
+    //                    {.forwards = false}); // actual movement back to alliance stake BLINDCODE Y-=2, X-=1
+    // chassis.waitUntilDone();
+    // intake.move_voltage(-12000);
+    // pros::delay(1000);
 
-    intake.move_voltage(0);
-    chassis.moveToPose(-39, -14.9, -156, 2000);
+    // intake.move_voltage(0);
+    // chassis.moveToPose(-39, -14.9, -156, 2000);
 
-    //go to ladder
-    // chassis.moveToPoint(-39.89, -20.75, 1000, {. minSpeed = 75, .earlyExitRange = 20});
-    //chassis.turnToHeading(-162.1, 1000, {.earlyExitRange = 10}); //-148.7
-    intake.move_voltage(0);
+    // // go to ladder
+    // //  chassis.moveToPoint(-39.89, -20.75, 1000, {. minSpeed = 75, .earlyExitRange = 20});
+    // // chassis.turnToHeading(-162.1, 1000, {.earlyExitRange = 10}); //-148.7
+    // intake.move_voltage(0);
 }
 
 void blueSoloWP() {
     chassis.setPose(0, 0, 0);
 
-    //mogo
+    // mogo
     mogoClamp.set_value(true);
-    chassis.turnToHeading(-27, 1000, {.earlyExitRange = 3});
-    //chassis.moveToPose(-5.69, -10.9, 27, 1000, {.forwards = false, .minSpeed = 100, .earlyExitRange = 40});
-    // chassis.moveToPoint(-11.18, -21.42, 1000, {.forwards = false, .maxSpeed = 50, .earlyExitRange = 20});
-    chassis.moveToPoint(10.63, -21.28, 1000, {.forwards = false, .maxSpeed = 50, .earlyExitRange = 20});
+    chassis.turnToHeading(-27, 800, {.earlyExitRange = 3});
+    // chassis.moveToPose(-5.69, -10.9, 27, 1000, {.forwards = false, .minSpeed = 100, .earlyExitRange = 40});
+    //  chassis.moveToPoint(-11.18, -21.42, 1000, {.forwards = false, .maxSpeed = 50, .earlyExitRange = 20});
+    chassis.moveToPoint(10.93, -21.28, 1000, {.forwards = false, .maxSpeed = 70, .earlyExitRange = 20});
     chassis.waitUntilDone();
     pros::delay(500);
     mogoClamp.set_value(false);
 
-    //first ring
-    
+    // first ring
+
     intake.move_voltage(-12000);
     intakeFirst.move_voltage(-12000);
     pros::delay(500);
 
-    
-    chassis.turnToHeading(-156.4, 1000);
-    chassis.moveToPoint(2.09, -50.53, 1000, {.maxSpeed = 75});
+    chassis.turnToHeading(-151.3, 1000);
+    chassis.moveToPoint(2.02, -46.83, 3000, {.maxSpeed = 75});
     chassis.waitUntilDone();
     pros::delay(500);
 
-    
-    //pros::delay(500);
+    // // //pros::delay(500);
 
+    // // // //go back for second ring
+    // chassis.moveToPoint(11.28, -35.41, 1000, {.forwards = false, .earlyExitRange = 20});
+    // chassis.waitUntilDone();
 
-    //go back for second ring
-    chassis.moveToPoint(9.09, -39.57, 1000, {.forwards = false, .earlyExitRange = 20});
-    chassis.waitUntilDone();
+    // chassis.turnToHeading(-93.33, 1000, {.earlyExitRange = 10});
 
-    chassis.turnToHeading(-87.29, 1000, {.earlyExitRange = 10});
+    // // // //PROGGGGGGGGGGGGGGGGGG CHANGEEEEEEEEEEEEEEE THIS  COORDINATE FOR THE SECOND RING
+    // chassis.moveToPoint(5.036, -36.59, 1000);
 
-    //PROGGGGGGGGGGGGGGGGGG CHANGEEEEEEEEEEEEEEE THIS  COORDINATE FOR THE SECOND RING
-    chassis.moveToPoint(2.68, -39.7, 1000);
+    // chassis.waitUntilDone();
+    // intake.move_voltage(-12000);
+    // pros::delay(700);
 
-    
-    chassis.waitUntilDone();
-    intake.move_voltage(0);
-    pros::delay(500);
+    // mogoClamp.set_value(true);
+    // // drop off mogo
+    // chassis.moveToPoint(-0.75, -36.35, 1000);
+    // chassis.turnToHeading(-135.16, 1000, {.earlyExitRange = 10});
 
-    //drop mogo
-    chassis.moveToPose(11.02, -9.56, -187.84, 2000,  {.forwards = false});
-    chassis.waitUntilDone();
-    mogoClamp.set_value(true);
+    chassis.moveToPose(33.68, -8.01, -90, 2000, {.forwards = false});
+
+    chassis.moveToPoint(45.04, -8.01, 2000, {.forwards = false});
+
+    chassis.turnToHeading(-180, 1000);
+
+    chassis.moveToPoint(49.01, 0.13, 2000);
+
+    chassis.moveToPoint(49.22, -22.34, 1000);
+
+    chassis.turnToHeading(-210.16, 1000);
+
+    chassis.moveToPoint(50.37, -23.2, 1000);
 
     /*
 
@@ -261,10 +287,8 @@ void blueSoloWP() {
     chassis.waitUntilDone();
     chassis.turnToHeading(182, 800, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE, .earlyExitRange = 5});
     mogoClamp.set_value(false);
-    chassis.moveToPose(-39.15, 8, 180, 1000, {.forwards = false}); //actual movement back to alliance stake BLINDCODE Y-=2, X-=1
-    chassis.waitUntilDone();
-    intake.move_voltage(-12000);
-    pros::delay(1000);
+    chassis.moveToPose(-39.15, 8, 180, 1000, {.forwards = false}); //actual movement back to alliance stake BLINDCODE
+    Y-=2, X-=1 chassis.waitUntilDone(); intake.move_voltage(-12000); pros::delay(1000);
 
     intake.move_voltage(0);
     chassis.moveToPose(-39, -14.9, -156, 2000);
@@ -284,28 +308,25 @@ void redMogo() {
     // mogo rush
     chassis.moveToPoint(0, -28, 1000, {.forwards = false});
 
-    
     chassis.moveToPose(5.6, -46.4, -29.3, 2000, {.forwards = false, .maxSpeed = 45});
 
     chassis.waitUntilDone();
 
     mogoClamp.set_value(false);
-    
+
     pros::delay(100);
     intake.move_voltage(-12000);
     pros::delay(800);
     chassis.turnToHeading(14.3, 800);
-    //chassis.moveToPoint(6.98, -38.98, 1000);
+    // chassis.moveToPoint(6.98, -38.98, 1000);
 
     intakeFirst.move_velocity(-600);
 
     chassis.moveToPoint(8.5, -32.9, 1000);
 
     pros::delay(1000);
-    
 
-    //intakeFirst.move_velocity(600);
-    
+    // intakeFirst.move_velocity(600);
 
     chassis.turnToHeading(99.8, 1000);
 
@@ -313,17 +334,13 @@ void redMogo() {
 
     pros::delay(1000);
 
-   
     chassis.moveToPoint(26.8, -37.7, 5000, {.maxSpeed = 30});
 
     intakeFirst.move_velocity(0);
-    //mogoClamp.set_value(true);
-    
+    // mogoClamp.set_value(true);
 }
 
 void blueMogo() {
-
-    
     double liftPosition = lift.get_position();
 
     mogoClamp.set_value(true);
@@ -331,30 +348,26 @@ void blueMogo() {
     // mogo rush
     chassis.moveToPoint(0, -28, 1000, {.forwards = false});
 
-    
-
     chassis.moveToPose(-6.6, -46.4, 30, 2000, {.forwards = false, .maxSpeed = 45});
-    //chassis.moveToPose(-7.3, -45.6, 30, 2000, {.forwards = false, .maxSpeed = 45});
+    // chassis.moveToPose(-7.3, -45.6, 30, 2000, {.forwards = false, .maxSpeed = 45});
 
     chassis.waitUntilDone();
 
     mogoClamp.set_value(false);
-    
+
     pros::delay(100);
     intake.move_voltage(-12000);
     pros::delay(1100);
     chassis.turnToHeading(-14.3, 800);
-    //chassis.moveToPoint(6.98, -38.98, 1000);
+    // chassis.moveToPoint(6.98, -38.98, 1000);
 
     intakeFirst.move_velocity(-600);
 
     chassis.moveToPoint(-8.5, -32.9, 1000);
 
     pros::delay(1000);
-    
 
-    //intakeFirst.move_velocity(600);
-    
+    // intakeFirst.move_velocity(600);
 
     chassis.turnToHeading(-131.4, 1000);
 
@@ -362,13 +375,10 @@ void blueMogo() {
 
     pros::delay(1000);
 
-   
     chassis.moveToPoint(-31, -48.1, 5000, {.maxSpeed = 35});
 
     intakeFirst.move_velocity(0);
-    //mogoClamp.set_value(true);
-    
-    
+    // mogoClamp.set_value(true);
 }
 
 void autonomous() {
@@ -382,19 +392,21 @@ void autonomous() {
 
     // without selector
 
-    //redSoloWP(); // red alliance solo AWP
+    redSoloWP(); // red alliance solo AWP
 
-    blueSoloWP(); // blue alliance solo AWP
+    // blueSoloWP(); // blue alliance solo AWP
 
-    //redMogo();  //red alliance mogo rush
+    // redMogo();  //red alliance mogo rush
 
-    //blueMogo();  //blue alliance mogo rush
+    // blueMogo(); // blue alliance mogo rush
 
     // skills(); // prog skills
 
     // chassis.follow(path_jerryio_txt, 15, 3000);
 
-    //  chassis.turnToHeading(90, 10000);
+    // chassis.turnToHeading(180, 10000);
+
+    // chassis.moveToPoint(0, 24, 2000);
 }
 
 /**
