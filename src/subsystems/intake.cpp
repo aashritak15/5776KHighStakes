@@ -114,7 +114,7 @@ void colorSort() {
                 intakeState = 3;
                 pros::Task::delay(70);
                 intake.move_voltage(0);
-                pros::Task::delay(200);
+                pros::Task::delay(250);
                 intake.move_voltage(-12000);
                 intakeState = 1;
             }
@@ -128,7 +128,7 @@ void colorSort() {
                 intakeState = 3;
                 pros::Task::delay(70); //TODO: is the task delay working
                 intake.move_voltage(0);
-                pros::Task::delay(200);
+                pros::Task::delay(250);
                 intake.move_voltage(-12000);
                 intakeState = 1;
             }
