@@ -165,6 +165,7 @@ void redSoloWP() {
     chassis.waitUntilDone();
     pros::delay(500);
 
+    //second ring
     chassis.turnToHeading(32.22, 1000);
 
     chassis.moveToPoint(3.70, -34.95, 1000);
@@ -181,7 +182,7 @@ void redSoloWP() {
 
     //go to alliance
     chassis.moveToPoint(-41, 5.8, 1000);
-    chassis.turnToHeading(180, 3000);
+    chassis.turnToHeading(180, 1000);
     chassis.waitUntilDone();
     pros::delay(100);
     mogoClamp.set_value(false);
@@ -235,7 +236,74 @@ void redSoloWP() {
 }
 
 void blueSoloWP() {
+    //mirror (pls test i just blind coded it -mooncy)
     chassis.setPose(0, 0, 0);
+
+    // mogo
+    mogoClamp.set_value(true);
+    chassis.turnToHeading(-27, 1000, {.earlyExitRange = 3});
+    // chassis.moveToPose(-5.69, -10.9, 27, 1000, {.forwards = false, .minSpeed = 100, .earlyExitRange = 40});
+    //  chassis.moveToPoint(-11.18, -21.42, 1000, {.forwards = false, .maxSpeed = 50, .earlyExitRange = 20});
+    chassis.moveToPoint(10.63, -21.28, 1000, {.forwards = false, .maxSpeed = 50, .earlyExitRange = 20});
+    chassis.waitUntilDone();
+    pros::delay(500);
+    mogoClamp.set_value(false);
+
+    // first ring
+    chassis.turnToHeading(-149, 1000);
+    pros::delay(250);
+    intake.move_voltage(-12000);
+    intakeFirst.move_voltage(-12000);
+    pros::delay(600);
+    chassis.moveToPoint(-1, -38.8, 1000, {.maxSpeed = 75});
+    chassis.waitUntilDone();
+    pros::delay(500);
+
+    //second ring
+    chassis.turnToHeading(-32.22, 1000);
+
+    chassis.moveToPoint(-3.70, -34.95, 1000);
+    pros::delay(300);
+
+    chassis.turnToHeading(19.26, 1000);
+    intake.move_voltage(0);
+
+    // drop mogo
+    chassis.moveToPose(20, 5.8, -90, 2000);
+    intakeFirst.move_voltage(0);
+    chassis.waitUntilDone();
+    mogoClamp.set_value(true);
+
+    //go to alliance
+    chassis.moveToPoint(41, 5.8, 1000);
+    chassis.turnToHeading(180, 1000);
+    chassis.waitUntilDone();
+    pros::delay(100);
+    mogoClamp.set_value(false);
+    chassis.moveToPoint(37.4, 15.07, 2000, {.forwards = false}); //chassis.moveToPoint(-37.96, 12, 2000, {.forwards = false}); //moves back
+    chassis.waitUntilDone();
+
+    //score alliance
+    pros::delay(500);
+    intakeFirst.move_voltage(-12000);
+    intake.move_voltage(-12000);
+    pros::delay(150);
+    lift.move_absolute(183, 40);
+    pros::delay(1000);
+
+    //ladder
+    chassis.moveToPoint(41.21, -12.39, 1000);
+
+    chassis.turnToHeading(161.8, 1000);
+
+    chassis.moveToPoint(38.49, -12.38, 1000);
+    lift.move_absolute(0, 40);
+    intake.move_voltage(0);
+    intakeFirst.move_voltage(0);
+    
+    
+    //pls delete if mirroring works i dont wanna see all this -mooncy
+    /*chassis.setPose(0, 0, 0);
 
     // mogo
     mogoClamp.set_value(true);
