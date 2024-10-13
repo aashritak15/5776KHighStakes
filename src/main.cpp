@@ -156,10 +156,11 @@ void redSoloWP() {
     mogoClamp.set_value(false);
 
     // first ring
+    chassis.turnToHeading(149, 1000);
+    pros::delay(250);
     intake.move_voltage(-12000);
     intakeFirst.move_voltage(-12000);
     pros::delay(600);
-    chassis.turnToHeading(149, 1000);
     chassis.moveToPoint(1, -38.8, 1000, {.maxSpeed = 75});
     chassis.waitUntilDone();
     pros::delay(500);
@@ -174,23 +175,39 @@ void redSoloWP() {
 
     // drop mogo
     chassis.moveToPose(-20, 5.8, -90, 2000);
+    intakeFirst.move_voltage(0);
     chassis.waitUntilDone();
     mogoClamp.set_value(true);
-    intakeFirst.move_voltage(0);
 
-    chassis.moveToPoint(-41.36, 5.8, 1000);
-    chassis.turnToHeading(180, 1000);
+    //go to alliance
+    chassis.moveToPoint(-41, 5.8, 1000);
+    chassis.turnToHeading(180, 3000);
+    chassis.waitUntilDone();
+    pros::delay(100);
+    mogoClamp.set_value(false);
+    chassis.moveToPoint(-37.4, 15.07, 2000, {.forwards = false}); //chassis.moveToPoint(-37.96, 12, 2000, {.forwards = false}); //moves back
+    chassis.waitUntilDone();
 
-    chassis.moveToPoint(-39.15, 11.68, 2000, {.forwards = false});
+    //score alliance
     pros::delay(500);
+    intakeFirst.move_voltage(-12000);
     intake.move_voltage(-12000);
-    pros::delay(800);
+    pros::delay(150);
+    lift.move_absolute(183, 40);
+    pros::delay(1000);
 
+    //ladder
     chassis.moveToPoint(-41.21, -12.39, 1000);
 
     chassis.turnToHeading(-161.8, 1000);
 
     chassis.moveToPoint(-38.49, -12.38, 1000);
+    lift.move_absolute(0, 40);
+    intake.move_voltage(0);
+    intakeFirst.move_voltage(0);
+
+
+
 
     // chassis.turnToHeading(221, 1000, {.earlyExitRange = 5}); REMOVAL OF MOGO MOVEMENT
     // chassis.waitUntilDone();
