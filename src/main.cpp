@@ -407,17 +407,21 @@ void skills() {
     lift.move_absolute(liftPosition, -60);
     intakeFirst.move_velocity(-600);
     intake.move_voltage(0);
-    chassis.moveToPose(30.19, 43.8, 42.34, 2000); // chassis.moveToPose(24.2, 36.14, 43.47, 2000);
+    
+    chassis.moveToPose(30.4, 43.8, 42.5, 2000); // chassis.moveToPose(24.2, 36.14, 43.47, 2000);
     chassis.waitUntilDone();
 
     // mogo
 
     mogoClamp.set_value(true);
+    
 
-    chassis.moveToPose(24.3, 23.16, 28.72, 2000, {.forwards = false, .lead = 0.4, .maxSpeed = 50});
+    chassis.moveToPose(24.3, 23.16, 28.72, 2000, {.forwards = false, .lead = 0.5, .maxSpeed = 50});
 
     chassis.waitUntilDone();
     mogoClamp.set_value(false);
+
+    
 
     pros::delay(50);
     intake.move_voltage(-12000);
@@ -426,7 +430,7 @@ void skills() {
     chassis.moveToPose(44.4, 39.8, 50.97, 2000); // theta: 416.28
     pros::delay(1550);
     chassis.turnToHeading(180, 800);
-    chassis.moveToPoint(49.23, 12.5, 4000, {.maxSpeed = 20});
+    chassis.moveToPoint(49.23, 12.5, 4000, {.maxSpeed = 30});
     chassis.waitUntilDone();
 
     // ring 5
@@ -434,7 +438,7 @@ void skills() {
     pros::delay(1000);
     chassis.turnToHeading(128.8, 800);
     chassis.moveToPoint(58.9, 24.2, 1000);
-    pros::delay(2500);
+    pros::delay(2300);
 
     // mogo to corner
     chassis.turnToHeading(-18.57, 800, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE});
@@ -450,20 +454,20 @@ void skills() {
 
     // move to second mogo
     chassis.moveToPose(
-        -10, 23.13, 90, 3000,
+        -10.8, 25.8, 90, 3000,
         {.forwards = false,
          .maxSpeed = 85}); // chassis.moveToPose(-11.19, 21.55, 90, 3000, {.forwards = false, .maxSpeed = 95});
     chassis.moveToPose(
-        -15.93, 23.13, 90, 2000,
+        -14.6, 25.8, 90, 2000,
         {.forwards = false,
          .maxSpeed = 10}); // chassis.moveToPose(-16.6, 21.55, 90, 2000, {.forwards = false, .maxSpeed = 15});
     chassis.waitUntilDone();
-    pros::delay(1000);
+    pros::delay(500);
 
     // clamp onto second mogo
     mogoClamp.set_value(false);
 
-    chassis.moveToPoint(-23.6, 28.6, 3000, {.forwards = false});
+    chassis.moveToPoint(-19.2, 28.6, 3000, {.forwards = false});
 
     // first ring on second side
 
@@ -471,38 +475,40 @@ void skills() {
     intake.move_voltage(-12000);
 
     chassis.turnToHeading(0, 2000);
-    chassis.moveToPoint(-27.3, 41.7, 3000); //change coord to be faster
+    chassis.moveToPoint(-25.4, 45.5, 3000); //change coord to be faster
+    pros::delay(500);
 
-    // // 2nd ring on second side
-    // pros::delay(300);
-    // chassis.turnToHeading(-90, 2000);
-    // chassis.moveToPoint(-45.5, 52.4, 3000); //change, slow down
+    //2nd ring on second side
+    chassis.turnToHeading(-90, 2000);
+    chassis.moveToPoint(-46, 45.5, 3000, {.maxSpeed = 50}); //change, slow down
 
-    // pros::delay(1000);
+    pros::delay(1000);
 
-    // // 3rd + 4th ring
-    // chassis.turnToHeading(-180, 2000);
-    // chassis.moveToPoint(-46.2, 18.4, 4000, {.maxSpeed = 25}); //possibly faster?
-    // chassis.waitUntilDone();
-    // pros::delay(2000);
+    // 3rd + 4th ring
+    chassis.turnToHeading(-180, 2000);
+    chassis.moveToPoint(-45.5, 15.3, 4000, {.maxSpeed = 25}); //possibly faster?
+    chassis.waitUntilDone();
+    pros::delay(2000);
+/*
+//GETTTTTTTTT NEWWW COORDDDDSSS FORRRRRRR THISSSSSSSSSS @PROGGGGGGGGG
+    chassis.moveToPoint(-44.8, 36.8, 1000, {.forwards = false});
+    pros::delay(300);
+    chassis.turnToHeading(-135, 1000);
 
-    // chassis.moveToPoint(-46.2, 35.6, 1000, {.forwards = false});
-    // pros::delay(300);
-    // chassis.turnToHeading(-130.7, 1000);
+    // 5th ring
 
-    // // 5th ring
+    chassis.moveToPoint(-52.7, 28, 3000, {.forwards = true});
+    chassis.waitUntilDone();
+    pros::delay(1300);
 
-    // chassis.moveToPoint(-52.4, 30.6, 3000, {.forwards = true});
-    // chassis.waitUntilDone();
-    // pros::delay(1300);
+    chassis.turnToHeading(19.6, 1000);
+    pros::delay(3000);
 
-    // chassis.turnToHeading(29.4, 1000);
-    // pros::delay(3000);
+    chassis.moveToPose(-61.8, 16.4, 29.4, 3000, {.forwards = false});
+    chassis.waitUntilDone();
 
-    // chassis.moveToPose(-62.7, 13.7, 29.4, 3000, {.forwards = false});
-
-    // mogoClamp.set_value(true);
-
+    mogoClamp.set_value(true);
+*/
     // chassis.moveToPose(-60, 63, 0, 2000);
 }
 
