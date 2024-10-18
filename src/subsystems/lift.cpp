@@ -10,6 +10,8 @@ void liftInit() { lift.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE); }
 
 void updateLift() {
 
+    lift.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+
     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) { //lift up/down
         lift.move_velocity(-100);
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) { //lift up/down
