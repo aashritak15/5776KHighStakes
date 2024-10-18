@@ -147,11 +147,11 @@ void redSoloWP() {
 
     // mogo
     mogoClamp.set_value(true);
-    chassis.turnToHeading(27, 1000, {.earlyExitRange = 3});
+    chassis.turnToHeading(30, 1000, {.earlyExitRange = 3});
     // chassis.moveToPose(-5.69, -10.9, 27, 1000, {.forwards = false, .minSpeed = 100, .earlyExitRange = 40});
     //  chassis.moveToPoint(-11.18, -21.42, 1000, {.forwards = false, .maxSpeed = 50, .earlyExitRange = 20});
     chassis.moveToPoint(-10.63, -21.28, 1000,
-                        {.forwards = false, .maxSpeed = 75, .earlyExitRange = 20}); // prev maxSpeed 50
+                        {.forwards = false, .maxSpeed = 70, .earlyExitRange = 20}); // prev maxSpeed 50
     chassis.waitUntilDone();
     pros::delay(400); // prev delay 500
     mogoClamp.set_value(false);
@@ -159,17 +159,17 @@ void redSoloWP() {
     // first ring
     intake.move_voltage(-12000);
     intakeFirst.move_voltage(-12000);
-    pros::delay(300);
+    //pros::delay(300);
     chassis.turnToHeading(149, 1000);
     chassis.moveToPoint(1, -38.8, 1000, {.maxSpeed = 75});
     chassis.waitUntilDone();
-    pros::delay(500);
+    pros::delay(800);
 
     // second ring
     chassis.turnToHeading(32.22, 1000);
 
-    chassis.moveToPoint(3.70, -34.95, 1000);
-    pros::delay(500);
+    chassis.moveToPoint(3.70, -33.55, 1000);
+    pros::delay(800);
 
     chassis.turnToHeading(-19.26, 1000);
     intake.move_voltage(0);
@@ -181,7 +181,7 @@ void redSoloWP() {
     mogoClamp.set_value(true);
 
     // go to alliance
-    chassis.moveToPoint(-41, 4.8, 1000);
+    chassis.moveToPoint(-35, 4.8, 1000);
     chassis.turnToHeading(180, 1000);
     chassis.waitUntilDone();
     pros::delay(100);
@@ -274,13 +274,13 @@ void blueSoloWP() {
     // second ring adventure
     chassis.turnToHeading(-24.5, 1000);
     chassis.moveToPoint(-2, -45.1, 3000);
-    pros::delay(500);
+    pros::delay(650);
 
     chassis.turnToHeading(35, 1000);
     intake.move_voltage(0);
 
     // drop the mogo
-    chassis.moveToPose(30, -5, 90, 2000);
+    chassis.moveToPose(25, -5, 90, 2000);
     chassis.waitUntilDone();
     intakeFirst.move_voltage(0);
     mogoClamp.set_value(true);
@@ -355,9 +355,10 @@ void blueMogo() {
     mogoClamp.set_value(true);
 
     // mogo rush
-    chassis.moveToPoint(0, -28, 1000, {.forwards = false});
+    chassis.moveToPoint(0, -28, 3000, {.forwards = false});
 
-    chassis.moveToPose(-6.6, -46.4, 30, 2000, {.forwards = false, .maxSpeed = 45});
+
+    chassis.moveToPose(-5.9, -48.4, 30, 4000, {.forwards = false, .maxSpeed = 45});
     // chassis.moveToPose(-7.3, -45.6, 30, 2000, {.forwards = false, .maxSpeed = 45});
 
     chassis.waitUntilDone();
@@ -372,22 +373,22 @@ void blueMogo() {
 
     intakeFirst.move_velocity(-600);
 
-    chassis.moveToPoint(-8.5, -32.9, 1000);
+    chassis.moveToPoint(-8.5, -32.9, 3000);
 
-    pros::delay(1000);
+    pros::delay(1500);
 
     // intakeFirst.move_velocity(600);
 
-    chassis.turnToHeading(-131.4, 1000);
+    chassis.turnToHeading(-131.4, 2000);
 
     chassis.waitUntilDone();
 
-    pros::delay(1000);
-
-    chassis.moveToPoint(-31, -48.1, 5000, {.maxSpeed = 35});
+    chassis.moveToPose(-31.1, -49.5, -138.4, 5000, {.lead = 0.1, .maxSpeed = 35});
 
     intakeFirst.move_velocity(0);
     // mogoClamp.set_value(true);
+    
+    
 }
 
 void skills() {
@@ -403,7 +404,7 @@ void skills() {
     intakeFirst.move_velocity(-600);
     intake.move_voltage(0);
 
-    chassis.moveToPose(30.4, 43.8, 42.5, 2000); // chassis.moveToPose(24.2, 36.14, 43.47, 2000);
+    chassis.moveToPose(30.4, 43.8, 42.5, 5000); // chassis.moveToPose(24.2, 36.14, 43.47, 2000);
     chassis.waitUntilDone();
 
     // mogo
@@ -451,7 +452,7 @@ void skills() {
         {.forwards = false,
          .maxSpeed = 85}); // chassis.moveToPose(-11.19, 21.55, 90, 3000, {.forwards = false, .maxSpeed = 95});
     chassis.moveToPose(
-        -14.6, 25.8, 90, 2000,
+        -15.1, 25.8, 90, 2000,
         {.forwards = false,
          .maxSpeed = 10}); // chassis.moveToPose(-16.6, 21.55, 90, 2000, {.forwards = false, .maxSpeed = 15});
     chassis.waitUntilDone();
@@ -469,13 +470,13 @@ void skills() {
 
     chassis.turnToHeading(0, 2000);
     chassis.moveToPoint(-25.4, 45.5, 3000); // change coord to be faster
-    pros::delay(700);
+    pros::delay(900);
 
     // 2nd ring on second side
     chassis.turnToHeading(-90, 2000);
     chassis.moveToPoint(-46, 45.5, 3000, {.maxSpeed = 50}); // change, slow down
 
-    pros::delay(1000);
+    pros::delay(1100);
 
     // 3rd + 4th ring
     chassis.turnToHeading(-180, 2000);
@@ -490,17 +491,18 @@ void skills() {
 
     // 5th ring
 
-    chassis.moveToPoint(-54.83, 26.32, 3000, {.forwards = true});
+    chassis.moveToPoint(-50.19, 31.74, 3000, {.forwards = true});
     chassis.waitUntilDone();
     pros::delay(1300);
 
-    chassis.turnToHeading(19.6, 1000);
-    pros::delay(3000);
+    chassis.turnToHeading(15, 1000);
+    pros::delay(2000);
 
-    chassis.moveToPose(-61.8, 16.4, 29.4, 3000, {.forwards = false});
+    chassis.moveToPoint(-58.19, 15, 3000, {.forwards = false});
     chassis.waitUntilDone();
 
     mogoClamp.set_value(true);
+    
 
     // chassis.moveToPose(-60, 63, 0, 2000);
 }
@@ -522,7 +524,7 @@ void autonomous() {
 
     // redMogo();  //red alliance mogo rush
 
-    // blueMogo(); // blue alliance mogo rush
+     //blueMogo(); // blue alliance mogo rush
 
     // lift.move_absolute(183, 40);
 

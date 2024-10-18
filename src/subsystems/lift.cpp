@@ -17,16 +17,16 @@ void updateLift() {
     } else {
         lift.move_velocity(0);}
 
-
-   /*if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) { //lift up/down
+/*
+   if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) { //lift up/down
         lift.move_velocity(-100);
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) { //lift up/down
         lift.move_velocity(100);
     } //else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT)) {
         //lift.move_absolute(143,40);
-    else {lift.move_velocity(0);}
+    else {lift.move_velocity(0);}*/
 
-
+   int leftButton = 0;
     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT)) {
         if (leftButton == 0) {
             lift.move_absolute(143,40);
@@ -41,5 +41,5 @@ void updateLift() {
         } else if (leftButton == 3) {
             leftButton = 0;
         }
-    }*/
+    }
 }
