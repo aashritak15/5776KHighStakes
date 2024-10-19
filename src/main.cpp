@@ -449,9 +449,10 @@ void skills() {
 
     // move to second mogo
     chassis.moveToPose(
-        -8, 27.2, 90, 3000,
+        -8, 25.8, 90, 3000,
         {.forwards = false,
          .maxSpeed = 85}); // chassis.moveToPose(-11.19, 21.55, 90, 3000, {.forwards = false, .maxSpeed = 95});
+    /*
     chassis.moveToPose(
         -15.3, 27.2, 90, 2000,
         {.forwards = false,
@@ -484,7 +485,7 @@ void skills() {
     chassis.turnToHeading(-180, 2000);
     chassis.moveToPoint(-47.5, 16.3, 4000, {.maxSpeed = 35}); // possibly faster?
     chassis.waitUntilDone();
-    pros::delay(2000);
+    pros::delay(1500);
 
     // GETTTTTTTTT NEWWW COORDDDDSSS FORRRRRRR THISSSSSSSSSS @PROGGGGGGGGG
     chassis.moveToPoint(-45.5, 36.6, 1000, {.forwards = false, .maxSpeed = 40});
@@ -500,7 +501,7 @@ void skills() {
     chassis.turnToHeading(20.9, 1000);
     pros::delay(2000);
 
-    chassis.moveToPoint(-63.73, 12.6, 3000, {.forwards = false});
+    chassis.moveToPoint(-63.73, 13.6, 3000, {.forwards = false});
     chassis.waitUntilDone();
 
     mogoClamp.set_value(true);
@@ -512,14 +513,16 @@ void skills() {
     chassis.moveToPose(-45.86, 63.36, 0, 2000);
     chassis.moveToPose(-29.5, 85.42, 39.6, 2000);
     chassis.turnToHeading(180, 2000);
-    chassis.moveToPose(-4.11, 112.99, 270, 2000, {.forwards = false, .lead =0.45, .maxSpeed = 50});
+    chassis.moveToPose(0, 114.57, 270, 4000, {.forwards = false, .lead =0.4, .maxSpeed = 50});
     chassis.waitUntilDone();
+    
     mogoClamp.set_value(false);
     pros::delay(500);
     intake.move_velocity(-12000);
     pros::delay(750);
 
     //move to first ring
+    
     chassis.moveToPose(-42.3, 123.7, 296.2, 1000, {.lead = 0.2});
     chassis.waitUntilDone();
     pros::delay(1000);
@@ -528,7 +531,7 @@ void skills() {
     //second and third ring
     chassis.moveToPose(-41.5, 113, 270, 1000, {.maxSpeed = 45});
     chassis.moveToPoint(-51.2, 113, 1000, {.maxSpeed = 45});
-
+*/
 
 }
 
