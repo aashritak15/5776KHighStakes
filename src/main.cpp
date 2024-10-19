@@ -416,12 +416,12 @@ void skills() {
     chassis.waitUntilDone();
     mogoClamp.set_value(false);
 
-    pros::delay(50);
+    pros::delay(150);
     intake.move_voltage(-12000);
 
     // rings 2, 3, 4
     chassis.moveToPose(44.4, 39.8, 50.97, 2000); // theta: 416.28
-    pros::delay(1550);
+    pros::delay(2000);
     chassis.turnToHeading(174, 800);
     chassis.moveToPoint(50.25, 14.34, 4000, {.maxSpeed = 45});
     chassis.waitUntilDone();
@@ -437,7 +437,7 @@ void skills() {
     // mogo to corner
     chassis.turnToHeading(-28.4, 800, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE});
 
-    chassis.moveToPoint(59, 16.9, 1000, {.forwards = false});
+    chassis.moveToPoint(58, 16.9, 1000, {.forwards = false});
     chassis.waitUntilDone();
     pros::delay(300);
     mogoClamp.set_value(true);
@@ -461,8 +461,9 @@ void skills() {
 
     // clamp onto second mogo
     mogoClamp.set_value(false);
+    pros::delay(150);
 
-    chassis.moveToPoint(-23.5, 27.2, 3000, {.forwards = false});
+    chassis.moveToPoint(-22, 27.2, 3000, {.forwards = false});
 
     // first ring on second side
 
@@ -470,42 +471,65 @@ void skills() {
     intake.move_voltage(-12000);
 
     chassis.turnToHeading(0, 2000);
-    chassis.moveToPoint(-27.9, 47, 3000, {.maxSpeed = 60}); // change coord to be faster
-    pros::delay(900);
+    chassis.moveToPoint(-26.4, 49, 3000, {.maxSpeed = 35}); // change coord to be faster
+    pros::delay(1750);
 
     // 2nd ring on second side
     chassis.turnToHeading(-90, 2000);
-    chassis.moveToPoint(-45.6, 47, 3000, {.maxSpeed = 40}); // change, slow down
+    chassis.moveToPoint(-47.6, 47, 3000, {.maxSpeed = 40}); // change, slow down
 
-    pros::delay(1100);
+    pros::delay(1750);
 
     // 3rd + 4th ring
     chassis.turnToHeading(-180, 2000);
-    chassis.moveToPoint(-45.5, 15.3, 4000, {.maxSpeed = 35}); // possibly faster?
+    chassis.moveToPoint(-47.5, 16.3, 4000, {.maxSpeed = 35}); // possibly faster?
     chassis.waitUntilDone();
     pros::delay(2000);
 
     // GETTTTTTTTT NEWWW COORDDDDSSS FORRRRRRR THISSSSSSSSSS @PROGGGGGGGGG
     chassis.moveToPoint(-45.5, 36.6, 1000, {.forwards = false, .maxSpeed = 40});
     pros::delay(300);
-    chassis.turnToHeading(-136, 1000);
+    chassis.turnToHeading(-123.83, 1000);
 
     // 5th ring
 
-    chassis.moveToPoint(-54.7, 26.2, 3000, {.forwards = true});
+    chassis.moveToPoint(-53.6, 26.6, 3000, {.forwards = true});
     chassis.waitUntilDone();
-    pros::delay(1300);
+    pros::delay(1750);
 
     chassis.turnToHeading(20.9, 1000);
     pros::delay(2000);
 
-    chassis.moveToPoint(-62.4, 16, 3000, {.forwards = false});
+    chassis.moveToPoint(-63.73, 12.6, 3000, {.forwards = false});
     chassis.waitUntilDone();
 
     mogoClamp.set_value(true);
     
+    //second half!!!
+    intake.move_voltage(0);
 
-    // // chassis.moveToPose(-60, 63, 0, 2000);
+    //mogo
+    chassis.moveToPose(-45.86, 63.36, 0, 2000);
+    chassis.moveToPose(-29.5, 85.42, 39.6, 2000);
+    chassis.turnToHeading(180, 2000);
+    chassis.moveToPose(-4.11, 112.99, 270, 2000, {.forwards = false, .lead =0.45, .maxSpeed = 50});
+    chassis.waitUntilDone();
+    mogoClamp.set_value(false);
+    pros::delay(500);
+    intake.move_velocity(-12000);
+    pros::delay(750);
+
+    //move to first ring
+    chassis.moveToPose(-42.3, 123.7, 296.2, 1000, {.lead = 0.2});
+    chassis.waitUntilDone();
+    pros::delay(1000);
+    chassis.moveToPoint(-23.87, 114.55, 1000, {.forwards = false});
+    
+    //second and third ring
+    chassis.moveToPose(-41.5, 113, 270, 1000, {.maxSpeed = 45});
+    chassis.moveToPoint(-51.2, 113, 1000, {.maxSpeed = 45});
+
+
 }
 
 void autonomous() {
