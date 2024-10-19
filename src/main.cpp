@@ -110,11 +110,22 @@ void initialize() {
     pros::Task screenTask([&]() {
         while (true) {
             // print robot location to the brain screen
+            /*
+            std::vector<double> left = leftMotors.get_position_all();
+        std::vector<double> right = rightMotors.get_position_all();
+        pros::lcd::print(5, "LeftF Encoders: %f", left[0]);
+        pros::lcd::print(6, "LeftM Encoders: %f", left[1]);
+        pros::lcd::print(7, "LeftB Encoders: %f", left[2]);
+        pros::lcd::print(2, "RightF Encoders: %f", right[0]);
+        pros::lcd::print(3, "RightM Encoders: %f", right[1]);
+        pros::lcd::print(4, "RightB Encoders: %f", right[2]);*/
+
+            
             pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
-            pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
-            pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
-            pros::lcd::print(3, "Lift: %f", lift.get_position()); // lift encoder
-            pros::lcd::print(4, "Color: %f", optical.get_hue());
+        pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
+        pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
+        pros::lcd::print(3, "Lift: %f", lift.get_position()); // lift encoder
+        pros::lcd::print(4, "Color: %f", optical.get_hue());
 
             // log position telemetry
             lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
@@ -391,11 +402,17 @@ void blueMogo() {
     
 }
 
+
+
 void skills() {
+
+
+    chassis.setPose(0,0,0);
+
     double liftPosition = lift.get_position();
 
     // score alliance
-    lift.move_absolute(183, 40);
+    lift.move_absolute(175, 40);
     intake.move_voltage(-12000);
     pros::delay(750);
 
@@ -441,6 +458,7 @@ void skills() {
     chassis.waitUntilDone();
     pros::delay(300);
     mogoClamp.set_value(true);
+    intake.move_voltage(0);
     pros::delay(300);
 
     // position forward
@@ -449,16 +467,16 @@ void skills() {
 
     // move to second mogo
     chassis.moveToPose(
-        -8, 25.8, 90, 3000,
+        -8, 26, 90, 3000,
         {.forwards = false,
          .maxSpeed = 85}); // chassis.moveToPose(-11.19, 21.55, 90, 3000, {.forwards = false, .maxSpeed = 95});
-    /*
+    
     chassis.moveToPose(
-        -15.3, 27.2, 90, 2000,
+        -15.3, 26, 90, 2000,
         {.forwards = false,
          .maxSpeed = 10}); // chassis.moveToPose(-16.6, 21.55, 90, 2000, {.forwards = false, .maxSpeed = 15});
     chassis.waitUntilDone();
-    pros::delay(500);
+    pros::delay(200);
 
     // clamp onto second mogo
     mogoClamp.set_value(false);
@@ -472,14 +490,14 @@ void skills() {
     intake.move_voltage(-12000);
 
     chassis.turnToHeading(0, 2000);
-    chassis.moveToPoint(-26.4, 49, 3000, {.maxSpeed = 35}); // change coord to be faster
-    pros::delay(1750);
+    chassis.moveToPoint(-26.4, 48, 3000, {.maxSpeed = 30}); // change coord to be faster
+    pros::delay(2000);
 
     // 2nd ring on second side
     chassis.turnToHeading(-90, 2000);
     chassis.moveToPoint(-47.6, 47, 3000, {.maxSpeed = 40}); // change, slow down
 
-    pros::delay(1750);
+    pros::delay(1550);
 
     // 3rd + 4th ring
     chassis.turnToHeading(-180, 2000);
@@ -494,7 +512,7 @@ void skills() {
 
     // 5th ring
 
-    chassis.moveToPoint(-53.6, 26.6, 3000, {.forwards = true});
+    chassis.moveToPoint(-54.1, 26.6, 3000, {.forwards = true});
     chassis.waitUntilDone();
     pros::delay(1750);
 
@@ -504,38 +522,54 @@ void skills() {
     chassis.moveToPoint(-63.73, 13.6, 3000, {.forwards = false});
     chassis.waitUntilDone();
 
+//drop mogo in second corner 
     mogoClamp.set_value(true);
     
     //second half!!!
     intake.move_voltage(0);
 
-    //mogo
-    chassis.moveToPose(-45.86, 63.36, 0, 2000);
-    chassis.moveToPose(-29.5, 85.42, 39.6, 2000);
-    chassis.turnToHeading(180, 2000);
-    chassis.moveToPose(0, 114.57, 270, 4000, {.forwards = false, .lead =0.4, .maxSpeed = 50});
-    chassis.waitUntilDone();
-    
-    mogoClamp.set_value(false);
-    pros::delay(500);
-    intake.move_velocity(-12000);
-    pros::delay(750);
-
     //move to first ring
-    
-    chassis.moveToPose(-42.3, 123.7, 296.2, 1000, {.lead = 0.2});
+    chassis.moveToPose(-45.86, 63.36, 0, 2000);
+    chassis.moveToPose(-31.5, 87, 43.6, 2000);
+    chassis.turnToHeading(180, 2000);
+    chassis.moveToPose(0, 114.57, 270, 4000, {.forwards = false, .lead =0.3, .maxSpeed = 50});//old lead was .4
     chassis.waitUntilDone();
-    pros::delay(1000);
-    chassis.moveToPoint(-23.87, 114.55, 1000, {.forwards = false});
     
-    //second and third ring
-    chassis.moveToPose(-41.5, 113, 270, 1000, {.maxSpeed = 45});
-    chassis.moveToPoint(-51.2, 113, 1000, {.maxSpeed = 45});
-*/
+    //clamp onto mogo
+    mogoClamp.set_value(false);
+    pros::delay(200);
+    intake.move_velocity(-12000);
+    //pros::delay(750);
+
+    //move to second ring
+    chassis.moveToPose(-37, 97.7, 240.44, 4000);
+    chassis.waitUntilDone();
+    //pros::delay(200);
+
+    //move to third ring
+    chassis.moveToPose(-57, 71.7, 210, 4000);
+    pros::delay(1000);
+    
+    //go to third corner
+    chassis.moveToPose(-58.3, 99.26, 157, 4000, {.forwards = false});
+    chassis.moveToPose(-60, 121.5, 160, 4000, {.forwards = false, .maxSpeed = 45});
+    chassis.waitUntilDone();
+    mogoClamp.set_value(true);
+    intakeFirst.move_velocity(0);
+    chassis.moveToPoint(-57, 105, 2000); 
+    chassis.moveToPose(4.75, 130, 83, 2000, {.earlyExitRange = 8});
+    chassis.moveToPoint(50, 136, 2000); 
+    
+    
+                         
+
 
 }
 
 void autonomous() {
+
+    
+
     // with selector
 
     /*if (selector::auton == 1) { redSoloWP(); }
@@ -548,15 +582,15 @@ void autonomous() {
 
     // redSoloWP(); // red alliance solo AWP
 
-    // blueSoloWP(); // blue alliance solo AWP
+     //blueSoloWP(); // blue alliance solo AWP
 
-    // redMogo();  //red alliance mogo rush
+     redMogo();  //red alliance mogo rush
 
-     //blueMogo(); // blue alliance mogo rush
+    // blueMogo(); // blue alliance mogo rush
 
     // lift.move_absolute(183, 40);
 
-    skills(); // prog skills
+   //skills(); // prog skills
 
     // chassis.follow(path_jerryio_txt, 15, 3000);
 
@@ -591,8 +625,9 @@ void opcontrol() {
         pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
         pros::lcd::print(3, "Lift: %f", lift.get_position()); // lift encoder
         pros::lcd::print(4, "Color: %f", optical.get_hue());
-
-        /*std::vector<double> left = leftMotors.get_position_all();
+        
+/*
+        std::vector<double> left = leftMotors.get_position_all();
         std::vector<double> right = rightMotors.get_position_all();
         pros::lcd::print(5, "LeftF Encoders: %f", left[0]);
         pros::lcd::print(6, "LeftM Encoders: %f", left[1]);

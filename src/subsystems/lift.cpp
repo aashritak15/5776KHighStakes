@@ -29,7 +29,7 @@ void updateLift() {
     else {lift.move_velocity(0);}*/
 
    int leftButton = 0;
-    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT)) {
+    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_UP)) {
         if (leftButton == 0) {
             lift.move_absolute(143,40);
             leftButton++;
@@ -37,7 +37,7 @@ void updateLift() {
             lift.move_absolute(0,40);
             leftButton++;
         }
-    } else if (!controller.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT)) {
+    } else if (!controller.get_digital(pros::E_CONTROLLER_DIGITAL_UP)) {
         if (leftButton == 1) {
             leftButton++;
         } else if (leftButton == 3) {
