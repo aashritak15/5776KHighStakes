@@ -5,10 +5,10 @@
 #include "lift.hpp"
 #include "globals.hpp"
 
-void liftInit() { lift.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE); }
+void liftInit() { lift.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD); }
 
 void updateLift() {
-    lift.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+    lift.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 
     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) { // lift up/down
         lift.move_velocity(-100);
