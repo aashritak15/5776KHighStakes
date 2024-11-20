@@ -3,6 +3,7 @@
 // Here is a link to the original document
 // https://www.chiefdelphi.com/uploads/default/original/3X/b/e/be0e06de00e07db66f97686505c3f4dde2e332dc.pdf
 
+#include <iostream>
 #include <cmath>
 #include <vector>
 #include <string>
@@ -87,6 +88,31 @@ std::vector<lemlib::Pose> getData(const asset& path) {
     }
 
     return robotPath;
+}
+
+std::vector<std::string> getSubData(const asset& sub) {
+    // format data from the asset
+    const std::string data(reinterpret_cast<char*>(path.buf), path.size);
+    const std::vector<std::string> dataLines = readElement(data, "\n");
+    const std::vector<std::vector<std::string>> pointInput;
+
+    int i = 0;
+
+    // read the points until 'endData' is read
+    for (std::string line : dataLines) {
+        lemlib::infoSink()->debug("read raw line {}", stringToHex(line));
+        if (line == "endData" || line == "endData\r") break;
+    `   pointInput[i] = readElement(line, ", "); // parse line
+        i++;
+    }
+
+    for(int j=0; j<pointInput.size(); j++){
+        for(int k=0; k<pointInput[j].size(); k++)
+            std::cout<<pointInput[j][k] + ", ";
+        std::cout<<"\n";
+    }
+
+    return pointInput;
 }
 
 /**
@@ -201,7 +227,7 @@ float findLookaheadCurvature(lemlib::Pose pose, float heading, lemlib::Pose look
     return side * ((2 * x) / (d * d));
 }
 
-void lemlib::Chassis::follow(const asset& path, float lookahead, int timeout, bool forwards, bool async) {
+void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahead, int timeout, bool forwards, bool async) {
     this->requestMotionStart();
     // were all motions cancelled?
     if (!this->motionRunning) return;
@@ -214,6 +240,9 @@ void lemlib::Chassis::follow(const asset& path, float lookahead, int timeout, bo
     }
 
     std::vector<lemlib::Pose> pathPoints = getData(path); // get list of path points
+    std::vector<std::string> subValues = getSubData(sub); //get subsystem values
+
+
     if (pathPoints.size() == 0) {
         infoSink()->error("No points in path! Do you have the right format? Skipping motion");
         // set distTraveled to -1 to indicate that the function has finished
@@ -282,7 +311,7 @@ void lemlib::Chassis::follow(const asset& path, float lookahead, int timeout, bo
         prevRightVel = targetRightVel;
 
         // move the drivetrain
-        if (forwards) {
+        if (subValues[0] == 1) {
             drivetrain.leftMotors->move(targetLeftVel);
             drivetrain.rightMotors->move(targetRightVel);
         } else {
