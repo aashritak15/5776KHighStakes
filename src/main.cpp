@@ -150,7 +150,8 @@ void competition_initialize() {}
  * This is an example autonomous routine which demonstrates a lot of the features LemLib has to offer
  */
 
-ASSET(path_jerryio_txt);
+ASSET(/usd/autonomous_txt); //TODO: if asset thing returns an error remove usd and move files to static manually
+ASSET(/usd/extra_txt);
 
 void redSoloWP() {
     chassis.setPose(0, 0, 0);
@@ -248,7 +249,6 @@ void redSoloWP() {
     // // chassis.turnToHeading(-162.1, 1000, {.earlyExitRange = 10}); //-148.7
     // intake.move_voltage(0);
 }
-
 void blueSoloWP() {
     chassis.setPose(0, 0, 0);
     mogoClamp.set_value(true);
@@ -320,7 +320,6 @@ void blueSoloWP() {
     intake.move_voltage(0);
     intakeFirst.move_voltage(0);
 }
-
 void redMogo() {
     double liftPosition = lift.get_position();
 
@@ -375,7 +374,6 @@ void redMogo() {
     //mogoClamp.set_value(false);
 
 }
-
 void blueMogo() {
     double liftPosition = lift.get_position();
 
@@ -426,7 +424,6 @@ void blueMogo() {
     chassis.moveToPose(-25.7, -29.4, -270, 2000, {.forwards = false, .lead = 0.4});
     chassis.waitUntilDone();
 }
-
 void skills() {
     chassis.setPose(0, 0, 0);
 
@@ -619,21 +616,17 @@ void autonomous() {
  */
 
 void opcontrol() {
+    getSubData(extra_txt);
     // controller
     // loop to continuously update motors
     while (true) {
-        // pros::lcd::set_text(0, "X: %f", chassis.getPose().x); // x
-        // pros::lcd::set_text(1, "Y: %f", chassis.getPose().y); // y
-        // pros::lcd::set_text(2, "Theta: %f", chassis.getPose().theta); // heading
-        //  // log position telemetry
-        //  lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
-        //  get joystick positions;
-        int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
+        //chassis.follow("/usd/autonomous_txt", "/usd/extra_txt", 1, 400000000, true, false);
+        
+        /* int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
-        // move the chassis with curvature drive
 
         chassis.arcade(leftY, rightX * 0.8);
-        // chassis.arcade(leftY, rightX, false, 1);
+
 
         pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
         pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
@@ -641,17 +634,6 @@ void opcontrol() {
         pros::lcd::print(3, "Lift: %f", lift.get_position()); // lift encoder
         pros::lcd::print(4, "Color: %f", optical.get_hue());
 
-        /*
-                std::vector<double> left = leftMotors.get_position_all();
-                std::vector<double> right = rightMotors.get_position_all();
-                pros::lcd::print(5, "LeftF Encoders: %f", left[0]);
-                pros::lcd::print(6, "LeftM Encoders: %f", left[1]);
-                pros::lcd::print(7, "LeftB Encoders: %f", left[2]);
-                pros::lcd::print(2, "RightF Encoders: %f", right[0]);
-                pros::lcd::print(3, "RightM Encoders: %f", right[1]);
-                pros::lcd::print(4, "RightB Encoders: %f", right[2]);*/
-
-        // log position telemetry
         lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
 
         updateIntake();
@@ -659,7 +641,6 @@ void opcontrol() {
         updateClamp();
         updateIntakeClamp();
         updateLift();
-        // sortTest();
         updateColorToggle();
         colorSort();
 
@@ -679,9 +660,6 @@ void opcontrol() {
             controller.set_text(0, 0, "scores red ");
         }
 
-        // resetIntake();
-        // stepIntake();
-        // allianceStake();
-        pros::delay(10);
+        pros::delay(10); */
     }
 }
