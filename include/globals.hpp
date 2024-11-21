@@ -2,4 +2,3 @@
 
 extern pros::Controller controller;
 
-extern lemlib::Chassis chassis;

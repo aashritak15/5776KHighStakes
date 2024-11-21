@@ -34,4 +34,4 @@ void writeControllerData();
 void readControllerData();
 
 void writePose();
-void readPose();
+void writeAdditional();

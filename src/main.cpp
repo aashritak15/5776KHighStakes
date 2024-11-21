@@ -24,19 +24,19 @@
 // pros::MotorGroup rightMotors({19, 20, 18}, pros::MotorGearset::blue);
 
 pros::MotorGroup leftMotors({11, 12}, pros::MotorGearset::green);
-pros::MotorGroup rightMotors({-9, -4}, pros::MotorGearset::green);
+pros::MotorGroup rightMotors({-14, -4}, pros::MotorGearset::green);
 
-pros::Imu imu(7);
+pros::Imu imu(19);
 
 // drivetrain settings
-lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 10, lemlib::Omniwheel::NEW_325, 450,
-                              6 // 2 w/o traction
+lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 10, lemlib::Omniwheel::NEW_4, 200,
+                              2 // 2 w/o traction
 );
 
 // lateral motion controller
-lemlib::ControllerSettings linearController(9, // proportional gain (kP)
+lemlib::ControllerSettings linearController(10, // proportional gain (kP)
                                             0, // integral gain (kI)
-                                            6.55, // 48.905, //46.86273, // derivative gain (kD)
+                                            3, // 48.905, //46.86273, // derivative gain (kD)
                                             3, // anti windup
                                             1, // small error range, in inches
                                             100, // small error range timeout, in milliseconds
@@ -46,9 +46,9 @@ lemlib::ControllerSettings linearController(9, // proportional gain (kP)
 );
 
 // angular motion controller
-lemlib::ControllerSettings angularController(1.33, // proportional gain (kP)
+lemlib::ControllerSettings angularController(1, // proportional gain (kP)
                                              0, // integral gain (kI)
-                                             10.2, // 38,//37.88, // 32.92, //40.5, // derivative gain (kD)
+                                             0, // 38,//37.88, // 32.92, //40.5, // derivative gain (kD)
                                              0, // anti windup
                                              1, // small error range, in degrees
                                              100, // small error range timeout, in milliseconds
@@ -137,6 +137,41 @@ void initialize() {
         }
     });
 }
+
+
+void writePose() {
+   std::string dataLine = "";
+   lemlib::Pose pose = chassis.getPose();
+
+   dataLine.append(std::to_string(pose.x) + ", ");
+   dataLine.append(std::to_string(pose.y) + ", ");
+   dataLine.append(std::to_string(pose.theta) + "\n");
+
+
+   fileO << dataLine;
+        
+   fileO.flush();
+}
+
+void writeAdditional() {
+    std::string dataLine = "";
+
+    if(leftMotors.get_voltage() < 0 && rightMotors.get_voltage()<0)
+        dataLine.append(1 + ", ");
+    else
+        dataLine.append(0 + ", ");
+
+    if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) { //non toggle subsystem
+        dataLine.append(1 + "\n");
+    }
+    else
+        dataLine.append(0 + "\n");
+
+    fileO << dataLine;
+    
+    fileOTwo.flush();
+}
+
 
 /**
  * Runs while the robot is disabled
@@ -586,7 +621,7 @@ void skills() {
 }
 
 void autonomous() {
-    chassis.moveToPoint(0, 24, 1000);
+    chassis.moveToPoint(0, 24, 10000);
     
      
     // with selector
@@ -628,12 +663,12 @@ void opcontrol() {
     while (true) {
         //chassis.follow("/usd/autonomous_txt", "/usd/extra_txt", 1, 400000000, true, false);
         
-        /* int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
+        int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
 
         chassis.arcade(leftY, rightX * 0.8);
 
-
+        /*
         pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
         pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
         pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
@@ -665,7 +700,7 @@ void opcontrol() {
         } else if (sortState == 2) {
             controller.set_text(0, 0, "scores red ");
         }
-
-        pros::delay(10); */
+        */
+        pros::delay(10); 
     }
 }
