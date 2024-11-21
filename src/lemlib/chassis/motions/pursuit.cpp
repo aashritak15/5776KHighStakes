@@ -90,20 +90,18 @@ std::vector<lemlib::Pose> getData(const asset& path) {
     return robotPath;
 }
 
-std::vector<std::string> getSubData(const asset& sub) {
+std::vector<std::vector<std::string>> getSubData(const asset& sub) {
     // format data from the asset
-    const std::string data(reinterpret_cast<char*>(path.buf), path.size);
+    const std::string data(reinterpret_cast<char*>(sub.buf), sub.size);
     const std::vector<std::string> dataLines = readElement(data, "\n");
-    const std::vector<std::vector<std::string>> pointInput;
-
-    int i = 0;
+    std::vector<std::vector<std::string>> pointInput;
 
     // read the points until 'endData' is read
     for (std::string line : dataLines) {
         lemlib::infoSink()->debug("read raw line {}", stringToHex(line));
         if (line == "endData" || line == "endData\r") break;
-    `   pointInput[i] = readElement(line, ", "); // parse line
-        i++;
+        const std::vector<std::string> temp = readElement(line, ", ");
+        pointInput.push_back(temp); // parse line
     }
 
     for(int j=0; j<pointInput.size(); j++){
@@ -233,14 +231,14 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
     if (!this->motionRunning) return;
     // if the function is async, run it in a new task
     if (async) {
-        pros::Task task([&]() { follow(path, lookahead, timeout, forwards, false); });
+        pros::Task task([&]() { follow(path, sub, lookahead, timeout, forwards, false); });
         this->endMotion();
         pros::delay(10); // delay to give the task time to start
         return;
     }
 
     std::vector<lemlib::Pose> pathPoints = getData(path); // get list of path points
-    std::vector<std::string> subValues = getSubData(sub); //get subsystem values
+    std::vector<std::vector<std::string>> subValues = getSubData(sub); //get subsystem values
 
 
     if (pathPoints.size() == 0) {
@@ -311,7 +309,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         prevRightVel = targetRightVel;
 
         // move the drivetrain
-        if (subValues[0] == 1) {
+        if (subValues[i][0] == "1") {
             drivetrain.leftMotors->move(targetLeftVel);
             drivetrain.rightMotors->move(targetRightVel);
         } else {

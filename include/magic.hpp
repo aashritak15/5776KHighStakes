@@ -11,7 +11,9 @@ extern pros::MotorGroup leftMotors;
 extern pros::MotorGroup rightMotors;
 
 inline std::ofstream fileO;
+inline std::ofstream fileOTwo;
 inline std::ifstream fileI;
+inline std::ifstream fileITwo;
 
 inline std::ofstream fileOExtra;
 inline std::ifstream fileIExtra;

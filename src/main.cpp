@@ -8,6 +8,7 @@
 #include "intakeFirst.hpp"
 #include "intakePiston.hpp"
 #include "autons.hpp"
+#include "magic.hpp"
 
 // #include "autoSelect/selection.h"
 
@@ -19,10 +20,13 @@
 //    {"Skills Run", &skills}
 // });
 
-pros::MotorGroup leftMotors({-3, -2, -16}, pros::MotorGearset::blue);
-pros::MotorGroup rightMotors({19, 20, 18}, pros::MotorGearset::blue);
+// pros::MotorGroup leftMotors({-3, -2, -16}, pros::MotorGearset::blue);
+// pros::MotorGroup rightMotors({19, 20, 18}, pros::MotorGearset::blue);
 
-pros::Imu imu(13);
+pros::MotorGroup leftMotors({11, 12}, pros::MotorGearset::green);
+pros::MotorGroup rightMotors({-9, -4}, pros::MotorGearset::green);
+
+pros::Imu imu(7);
 
 // drivetrain settings
 lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 10, lemlib::Omniwheel::NEW_325, 450,
@@ -150,8 +154,8 @@ void competition_initialize() {}
  * This is an example autonomous routine which demonstrates a lot of the features LemLib has to offer
  */
 
-ASSET(/usd/autonomous_txt); //TODO: if asset thing returns an error remove usd and move files to static manually
-ASSET(/usd/extra_txt);
+ASSET(autonomous_txt); //TODO: if asset thing returns an error remove usd and move files to static manually
+ASSET(extra_txt);
 
 void redSoloWP() {
     chassis.setPose(0, 0, 0);
@@ -582,6 +586,9 @@ void skills() {
 }
 
 void autonomous() {
+    chassis.moveToPoint(0, 24, 1000);
+    
+     
     // with selector
 
     /*if (selector::auton == 1) { redSoloWP(); }
@@ -596,7 +603,7 @@ void autonomous() {
 
     //blueSoloWP(); // blue alliance solo AWP
 
-    redMogo();  //red alliance mogo rush
+    //redMogo();  //red alliance mogo rush
 
     //blueMogo(); // blue alliance mogo rush
 
@@ -616,7 +623,6 @@ void autonomous() {
  */
 
 void opcontrol() {
-    getSubData(extra_txt);
     // controller
     // loop to continuously update motors
     while (true) {

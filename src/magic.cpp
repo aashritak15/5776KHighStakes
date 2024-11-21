@@ -48,18 +48,6 @@ void initI() {
     }
 }
 
-void initI() {
-    fileI.open("/usd/autonomous.txt");
-
-    if(!fileI) {
-        controller.set_text(0, 0, "failed to open");
-        active = false;
-    }
-    else{
-        controller.set_text(0, 0, "opened");
-        active = true;
-    }
-}
 
 void closeO() {
     if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_A) && active) {
@@ -199,7 +187,7 @@ void writePose() {
 void writeAdditional() {
     std::string dataLine = "";
 
-    if(leftMotors.get_voltage() < 0 && rightMotors.get_voltage<0)
+    if(leftMotors.get_voltage() < 0 && rightMotors.get_voltage()<0)
         dataLine.append(1 + ", ");
     else
         dataLine.append(0 + ", ");
