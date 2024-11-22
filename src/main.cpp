@@ -9,6 +9,7 @@
 #include "intakePiston.hpp"
 #include "autons.hpp"
 #include "magic.hpp"
+#include <iostream>
 
 // #include "autoSelect/selection.h"
 
@@ -34,9 +35,9 @@ lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 10, lemlib::Omniwheel::
 );
 
 // lateral motion controller
-lemlib::ControllerSettings linearController(10, // proportional gain (kP)
+lemlib::ControllerSettings linearController(14, // proportional gain (kP)
                                             0, // integral gain (kI)
-                                            3, // 48.905, //46.86273, // derivative gain (kD)
+                                            0, // 48.905, //46.86273, // derivative gain (kD)
                                             3, // anti windup
                                             1, // small error range, in inches
                                             100, // small error range timeout, in milliseconds
@@ -46,9 +47,9 @@ lemlib::ControllerSettings linearController(10, // proportional gain (kP)
 );
 
 // angular motion controller
-lemlib::ControllerSettings angularController(1, // proportional gain (kP)
+lemlib::ControllerSettings angularController(2.3, // proportional gain (kP)
                                              0, // integral gain (kI)
-                                             0, // 38,//37.88, // 32.92, //40.5, // derivative gain (kD)
+                                             15.5, // 38,//37.88, // 32.92, //40.5, // derivative gain (kD)
                                              0, // anti windup
                                              1, // small error range, in degrees
                                              100, // small error range timeout, in milliseconds
@@ -97,6 +98,7 @@ void initialize() {
     liftInit();
     intakeClampInit();
     opticalInit();
+    // initO();
 
     // lv_init();
     // selector::init();
@@ -127,8 +129,8 @@ void initialize() {
             pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
             pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
             pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
-            pros::lcd::print(3, "Lift: %f", lift.get_position()); // lift encoder
-            pros::lcd::print(4, "Color: %f", optical.get_hue());
+            //pros::lcd::print(3, "Lift: %f", lift.get_position()); // lift encoder
+            //pros::lcd::print(4, "Color: %f", optical.get_hue());
 
             // log position telemetry
             lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
@@ -151,24 +153,25 @@ void writePose() {
    fileO << dataLine;
         
    fileO.flush();
+
+   //writeAdditional();
 }
 
 void writeAdditional() {
     std::string dataLine = "";
 
     if(leftMotors.get_voltage() < 0 && rightMotors.get_voltage()<0)
-        dataLine.append(1 + ", ");
+        dataLine.append("1, ");
     else
-        dataLine.append(0 + ", ");
+        dataLine.append("0, ");
 
     if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) { //non toggle subsystem
-        dataLine.append(1 + "\n");
+        dataLine.append("1\n");
     }
     else
-        dataLine.append(0 + "\n");
+        dataLine.append("0\n");
 
-    fileO << dataLine;
-    
+    fileOTwo << dataLine;
     fileOTwo.flush();
 }
 
@@ -621,7 +624,15 @@ void skills() {
 }
 
 void autonomous() {
-    chassis.moveToPoint(0, 24, 10000);
+    // const asset& path = autonomous_txt;
+    // const std::string data(reinterpret_cast<char*>(path.buf), path.size);
+    // if(data.size()!=0)
+    //     controller.set_text(0, 0, "data");
+    // else
+    //     controller.set_text(0, 0, "no data");
+    chassis.follow(autonomous_txt, extra_txt, 1, 40000);
+    //chassis.moveToPoint(0, 24, 10000);
+    //chassis.turnToHeading(90, 10000);
     
      
     // with selector
@@ -660,13 +671,20 @@ void autonomous() {
 void opcontrol() {
     // controller
     // loop to continuously update motors
+    
+
     while (true) {
-        //chassis.follow("/usd/autonomous_txt", "/usd/extra_txt", 1, 400000000, true, false);
+        
         
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
 
         chassis.arcade(leftY, rightX * 0.8);
+
+        writePose();
+        writeAdditional();
+
+        closeO();
 
         /*
         pros::lcd::print(0, "X: %f", chassis.getPose().x); // x

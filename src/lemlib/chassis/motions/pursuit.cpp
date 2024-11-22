@@ -11,6 +11,7 @@
 #include "lemlib/logger/logger.hpp"
 #include "lemlib/chassis/chassis.hpp"
 #include "lemlib/util.hpp"
+#include "globals.hpp"
 
 /**
  * @brief function that returns elements in a file line, separated by a delimeter
@@ -61,7 +62,7 @@ std::string stringToHex(const std::string& input) {
  * @param filePath The file to read from
  * @return std::vector<lemlib::Pose> vector of points on the path
  */
-std::vector<lemlib::Pose> getData(const asset& path) {
+std::vector<lemlib::Pose> getData(const asset& path) {    
     std::vector<lemlib::Pose> robotPath;
 
     // format data from the asset
@@ -104,11 +105,11 @@ std::vector<std::vector<std::string>> getSubData(const asset& sub) {
         pointInput.push_back(temp); // parse line
     }
 
-    for(int j=0; j<pointInput.size(); j++){
-        for(int k=0; k<pointInput[j].size(); k++)
-            std::cout<<pointInput[j][k] + ", ";
-        std::cout<<"\n";
-    }
+    // for(int j=0; j<pointInput.size(); j++){
+    //     for(int k=0; k<pointInput[j].size(); k++)
+    //         std::cout<<pointInput[j][k] + ", ";
+    //     std::cout<<"\n";
+    // }
 
     return pointInput;
 }
@@ -240,7 +241,6 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
     std::vector<lemlib::Pose> pathPoints = getData(path); // get list of path points
     std::vector<std::vector<std::string>> subValues = getSubData(sub); //get subsystem values
 
-
     if (pathPoints.size() == 0) {
         infoSink()->error("No points in path! Do you have the right format? Skipping motion");
         // set distTraveled to -1 to indicate that the function has finished
@@ -318,6 +318,8 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         }
 
         pros::delay(10);
+
+        // controller.set_text(0, 0, "test");
     }
 
     // stop the robot

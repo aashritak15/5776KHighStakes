@@ -50,7 +50,7 @@ void initI() {
 
 
 void closeO() {
-    if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_A) && active) {
+    if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_X) && active) {
         std::string dataLine = "\nendData";
 
         fileO << dataLine;
