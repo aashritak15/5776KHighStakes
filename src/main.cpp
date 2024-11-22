@@ -126,9 +126,9 @@ void initialize() {
         pros::lcd::print(3, "RightM Encoders: %f", right[1]);
         pros::lcd::print(4, "RightB Encoders: %f", right[2]);*/
 
-            pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
-            pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
-            pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
+            // pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
+            // pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
+            // pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
             //pros::lcd::print(3, "Lift: %f", lift.get_position()); // lift encoder
             //pros::lcd::print(4, "Color: %f", optical.get_hue());
 
@@ -630,11 +630,14 @@ void autonomous() {
     //     controller.set_text(0, 0, "data");
     // else
     //     controller.set_text(0, 0, "no data");
+
     chassis.follow(autonomous_txt, extra_txt, 1, 40000);
     //chassis.moveToPoint(0, 24, 10000);
     //chassis.turnToHeading(90, 10000);
     
-     
+    // std::vector<std::vector<std::string>> subValues = getSubData(extra_txt);
+    // pros::lcd::print(0, "pls: %f", subValues[1][0]);
+    
     // with selector
 
     /*if (selector::auton == 1) { redSoloWP(); }

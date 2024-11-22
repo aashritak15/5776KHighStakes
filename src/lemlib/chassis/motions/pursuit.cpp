@@ -309,7 +309,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         prevRightVel = targetRightVel;
 
         // move the drivetrain
-        if (subValues[i][0] == "1") {
+        if (i < subValues.size() && subValues[i][0] == "1") {
             drivetrain.leftMotors->move(targetLeftVel);
             drivetrain.rightMotors->move(targetRightVel);
         } else {
@@ -330,3 +330,4 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
     // give the mutex back
     this->endMotion();
 }
+

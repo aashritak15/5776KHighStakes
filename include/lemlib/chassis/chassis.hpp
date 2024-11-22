@@ -940,3 +940,5 @@ class Chassis {
         pros::Mutex mutex;
 };
 } // namespace lemlib
+
+std::vector<std::vector<std::string>> getSubData(const asset& sub);
