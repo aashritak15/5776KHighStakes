@@ -226,7 +226,7 @@ float findLookaheadCurvature(lemlib::Pose pose, float heading, lemlib::Pose look
     return side * ((2 * x) / (d * d));
 }
 
-void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahead, int timeout, bool forwards, bool async) {
+void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahead, int timeout, bool forwards, bool async) { //TODO: maybe remove timeout
     this->requestMotionStart();
     // were all motions cancelled?
     if (!this->motionRunning) return;
@@ -266,7 +266,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
     distTraveled = 0;
 
     // loop until the robot is within the end tolerance
-    for (int i = 0; i < timeout / 10 && pros::competition::get_status() == compState && this->motionRunning; i++) {
+    for (int i = 0; i < subValues.size() && pros::competition::get_status() == compState && this->motionRunning; i++) { //TODO: try this?
         // get the current position of the robot
         pose = this->getPose(true);
         if (!forwards) pose.theta -= M_PI;
@@ -309,7 +309,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         prevRightVel = targetRightVel;
 
         // move the drivetrain
-        if (i < subValues.size() && subValues[i][0] == "1") {
+        if (subValues[i][0] == "1") {
             drivetrain.leftMotors->move(targetLeftVel);
             drivetrain.rightMotors->move(targetRightVel);
         } else {
