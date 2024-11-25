@@ -76,6 +76,10 @@ std::vector<lemlib::Pose> getData(const asset& path) {
         const std::vector<std::string> pointInput = readElement(line, ", "); // parse line
         // check if the line was read correctly
         if (pointInput.size() != 3) {
+            std::cout<<"path size: "<<pointInput.size()<<"\n";
+            for(int i=0; i<pointInput.size(); i++){
+                std::cout<<pointInput[i]<<", ";
+            }
             lemlib::infoSink()->error("Failed to read path file! Are you using the right format? Raw line: {}",
                                       stringToHex(line));
             break;
@@ -103,6 +107,13 @@ std::vector<std::vector<std::string>> getSubData(const asset& sub) {
         if (line == "endData" || line == "endData\r") break;
         const std::vector<std::string> temp = readElement(line, ", ");
         pointInput.push_back(temp); // parse line
+
+        if (pointInput[0].size() != 2) {
+            std::cout<<"sub size: "<<pointInput.size()<<"\n";
+            lemlib::infoSink()->error("Failed to read sub file! Are you using the right format? Raw line: {}",
+                                      stringToHex(line));
+            break;
+        }
     }
 
     // for(int j=0; j<pointInput.size(); j++){
@@ -241,6 +252,16 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
     std::vector<lemlib::Pose> pathPoints = getData(path); // get list of path points
     std::vector<std::vector<std::string>> subValues = getSubData(sub); //get subsystem values
 
+    //prints vectors
+    for(int i=0; i<pathPoints.size(); i++){
+        std::cout<<pathPoints[i].x<<", "<<pathPoints[i].y<<", "<<pathPoints[i].theta<<", \n";
+    }
+    // for(int i=0; i<subValues.size(); i++){
+    //     for(int j=0; j<subValues[i].size(); j++)
+    //         std::cout<<subValues[i][j]<<", ";
+    //     std::cout<<"\n";
+    // }
+
     if (pathPoints.size() == 0) {
         infoSink()->error("No points in path! Do you have the right format? Skipping motion");
         // set distTraveled to -1 to indicate that the function has finished
@@ -309,17 +330,21 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         prevRightVel = targetRightVel;
 
         // move the drivetrain
-        if (subValues[i][0] == "1") {
+        if (subValues[i][0] == "0") {
             drivetrain.leftMotors->move(targetLeftVel);
             drivetrain.rightMotors->move(targetRightVel);
+            //controller.set_text(0, 0, "forward");
+            //std::cout<<"forwards: "<<targetLeftVel<<", "<<targetRightVel;
         } else {
             drivetrain.leftMotors->move(-targetRightVel);
             drivetrain.rightMotors->move(-targetLeftVel);
+            //controller.set_text(0, 0, "backward");
+            //std::cout<<"backwards: "<<-1*targetLeftVel<<", "<<-1*targetRightVel;
+
         }
 
         pros::delay(10);
 
-        // controller.set_text(0, 0, "test");
     }
 
     // stop the robot

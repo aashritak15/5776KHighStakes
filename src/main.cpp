@@ -10,6 +10,7 @@
 #include "autons.hpp"
 #include "magic.hpp"
 #include <iostream>
+#include <cmath>
 
 // #include "autoSelect/selection.h"
 
@@ -145,9 +146,14 @@ void writePose() {
    std::string dataLine = "";
    lemlib::Pose pose = chassis.getPose();
 
-   dataLine.append(std::to_string(pose.x) + ", ");
-   dataLine.append(std::to_string(pose.y) + ", ");
-   dataLine.append(std::to_string(pose.theta) + "\n");
+//rounds to 3 decimal places (idk if that helps)
+   dataLine.append(std::to_string((round(pose.x*1000))/1000) + ", ");
+   dataLine.append(std::to_string((round(pose.y*1000))/1000) + ", ");
+   dataLine.append(std::to_string((round(pose.theta*1000))/1000) + "\n");
+
+//     dataLine.append(std::to_string(pose.x) + ", ");
+//    dataLine.append(std::to_string(pose.y) + ", ");
+//    dataLine.append(std::to_string(pose.theta) + "\n");
 
 
    fileO << dataLine;
@@ -675,19 +681,20 @@ void opcontrol() {
     // controller
     // loop to continuously update motors
     
+    chassis.follow(autonomous_txt, extra_txt, 1, 40000);
 
     while (true) {
         
         
-        int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
-        int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+        // int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
+        // int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
 
-        chassis.arcade(leftY, rightX * 0.8);
+        // chassis.arcade(leftY, rightX * 0.8);
 
-        writePose();
-        writeAdditional();
+        // writePose();
+        // writeAdditional();
 
-        closeO();
+        // closeO();
 
         /*
         pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
