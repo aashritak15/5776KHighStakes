@@ -99,7 +99,7 @@ void initialize() {
     liftInit();
     intakeClampInit();
     opticalInit();
-    // initO();
+    initO();
 
     // lv_init();
     // selector::init();
@@ -127,9 +127,9 @@ void initialize() {
         pros::lcd::print(3, "RightM Encoders: %f", right[1]);
         pros::lcd::print(4, "RightB Encoders: %f", right[2]);*/
 
-            // pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
-            // pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
-            // pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
+            pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
+            pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
+            pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
             //pros::lcd::print(3, "Lift: %f", lift.get_position()); // lift encoder
             //pros::lcd::print(4, "Color: %f", optical.get_hue());
 
@@ -681,20 +681,26 @@ void opcontrol() {
     // controller
     // loop to continuously update motors
     
-    chassis.follow(autonomous_txt, extra_txt, 1, 40000);
+    //chassis.follow(example_txt, extra_txt, 1, 40000);
 
     while (true) {
         
         
-        // int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
-        // int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+        int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
+        int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
 
-        // chassis.arcade(leftY, rightX * 0.8);
+        chassis.arcade(leftY, rightX * 0.8);
 
-        // writePose();
-        // writeAdditional();
+        static unsigned long lastWriteTime = 0; // Tracks the last time writePose was called
+        unsigned long currentTime = pros::millis(); // Get the current time in milliseconds
 
-        // closeO();
+        if (currentTime - lastWriteTime >= 1000) {
+            writePose();
+            writeAdditional();
+            lastWriteTime = currentTime; // Update the last write time
+        }
+
+        closeO();
 
         /*
         pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
