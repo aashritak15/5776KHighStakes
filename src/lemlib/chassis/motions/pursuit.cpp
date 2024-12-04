@@ -35,6 +35,11 @@ std::vector<std::string> readElement(const std::string& input, const std::string
 
     output.push_back(s); // add the last element to the returned string
 
+    // for(int i=0; i<output.size(); i++){
+    //     std::cout<<output[i]<<"\n";
+    // }
+    // std::cout<<output.size()<<"\n";
+
     return output;
 }
 
@@ -314,6 +319,8 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         targetVel = slew(targetVel, prevVel, lateralSettings.slew);
         prevVel = targetVel;
 
+        std::cout<<targetVel<<"\n";
+
         // calculate target left and right velocities
         float targetLeftVel = targetVel * (2 + curvature * drivetrain.trackWidth) / 2;
         float targetRightVel = targetVel * (2 - curvature * drivetrain.trackWidth) / 2;
@@ -328,6 +335,8 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         // update previous velocities
         prevLeftVel = targetLeftVel;
         prevRightVel = targetRightVel;
+
+        //std::cout<<"velocities: "<<targetLeftVel<<", "<<targetRightVel<<"\n";
 
         // move the drivetrain
         if (subValues[i][0] == "0") {
