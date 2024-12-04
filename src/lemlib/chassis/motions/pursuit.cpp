@@ -253,9 +253,9 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
     std::vector<std::vector<std::string>> subValues = getSubData(sub); //get subsystem values
 
     //prints vectors
-    for(int i=0; i<pathPoints.size(); i++){
-        std::cout<<pathPoints[i].x<<", "<<pathPoints[i].y<<", "<<pathPoints[i].theta<<", \n";
-    }
+    // for(int i=0; i<pathPoints.size(); i++){
+    //     std::cout<<pathPoints[i].x<<", "<<pathPoints[i].y<<", "<<pathPoints[i].theta<<", \n";
+    // }
     // for(int i=0; i<subValues.size(); i++){
     //     for(int j=0; j<subValues[i].size(); j++)
     //         std::cout<<subValues[i][j]<<", ";
@@ -344,7 +344,8 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         }
 
         pros::delay(10);
-
+        pros::lcd::print(0, "X: %f", pathPoints[i].x); // x
+        pros::lcd::print(1, "Y: %f", pathPoints[i].y); // y
     }
 
     // stop the robot

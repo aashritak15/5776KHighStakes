@@ -31,30 +31,30 @@ pros::MotorGroup rightMotors({-14, -4}, pros::MotorGearset::green);
 pros::Imu imu(19);
 
 // drivetrain settings
-lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 10, lemlib::Omniwheel::NEW_4, 200,
+lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 8.5, lemlib::Omniwheel::NEW_4, 200,
                               2 // 2 w/o traction
 );
 
 // lateral motion controller
-lemlib::ControllerSettings linearController(14, // proportional gain (kP)
+lemlib::ControllerSettings linearController(12, // proportional gain (kP)
                                             0, // integral gain (kI)
-                                            0, // 48.905, //46.86273, // derivative gain (kD)
+                                            4, // 48.905, //46.86273, // derivative gain (kD)
                                             3, // anti windup
                                             1, // small error range, in inches
                                             100, // small error range timeout, in milliseconds
                                             2, // large error range, in inches
                                             500, // large error range timeout, in milliseconds
-                                            0 // slew
+                                            20 // slew
 );
 
 // angular motion controller
-lemlib::ControllerSettings angularController(2.3, // proportional gain (kP)
+lemlib::ControllerSettings angularController(1.5, // proportional gain (kP)
                                              0, // integral gain (kI)
-                                             15.5, // 38,//37.88, // 32.92, //40.5, // derivative gain (kD)
+                                             7, // 38,//37.88, // 32.92, //40.5, // derivative gain (kD)
                                              0, // anti windup
                                              1, // small error range, in degrees
                                              100, // small error range timeout, in milliseconds
-                                             2, // large error range, in degrees
+                                             3, // large error range, in degrees
                                              500, // large error range timeout, in milliseconds
                                              0 // slew
 
@@ -99,7 +99,7 @@ void initialize() {
     liftInit();
     intakeClampInit();
     opticalInit();
-    // initO();
+    initO();
 
     // lv_init();
     // selector::init();
@@ -151,14 +151,14 @@ void writePose() {
    dataLine.append(std::to_string((round(pose.y*1000))/1000) + ", ");
    dataLine.append(std::to_string((round(pose.theta*1000))/1000) + "\n");
 
-//     dataLine.append(std::to_string(pose.x) + ", ");
+//    dataLine.append(std::to_string(pose.x) + ", ");
 //    dataLine.append(std::to_string(pose.y) + ", ");
 //    dataLine.append(std::to_string(pose.theta) + "\n");
 
 
    fileO << dataLine;
         
-   fileO.flush();
+//    fileO.flush();
 
    //writeAdditional();
 }
@@ -178,8 +178,14 @@ void writeAdditional() {
         dataLine.append("0\n");
 
     fileOTwo << dataLine;
-    fileOTwo.flush();
+    // fileOTwo.flush();
 }
+
+// void writeDebug() {
+
+//     fileOTwo << lemlib::
+//     // fileOTwo.flush();
+// }
 
 
 /**
@@ -201,434 +207,6 @@ void competition_initialize() {}
 ASSET(autonomous_txt); //TODO: if asset thing returns an error remove usd and move files to static manually
 ASSET(extra_txt);
 
-void redSoloWP() {
-    chassis.setPose(0, 0, 0);
-    lift.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-    // mogo
-
-    chassis.turnToHeading(30, 1000, {.earlyExitRange = 3});
-    // chassis.moveToPose(-5.69, -10.9, 27, 1000, {.forwards = false, .minSpeed = 100, .earlyExitRange = 40});
-    //  chassis.moveToPoint(-11.18, -21.42, 1000, {.forwards = false, .maxSpeed = 50, .earlyExitRange = 20});
-    mogoClamp.set_value(true);
-    chassis.moveToPoint(-11.63, -21.28, 1000,
-                        {.forwards = false, .maxSpeed = 70, .earlyExitRange = 20}); // prev maxSpeed 50
-    chassis.waitUntilDone();
-    pros::delay(400); // prev delay 500
-    mogoClamp.set_value(false);
-
-    // first ring
-    intake.move_voltage(-12000);
-    intakeFirst.move_voltage(-12000);
-    // pros::delay(300);
-    chassis.turnToHeading(149, 1000);
-    chassis.moveToPoint(1, -39, 1000, {.maxSpeed = 75});
-    chassis.waitUntilDone();
-    pros::delay(1000);
-
-    // second ring
-    chassis.turnToHeading(38.22, 1000);
-
-    chassis.moveToPoint(4.7, -32.5, 1000);
-    pros::delay(900);
-
-    chassis.turnToHeading(-19.26, 1000);
-    intake.move_voltage(0);
-
-    // drop mogo
-    chassis.moveToPose(-30, 4.8, -90, 2000);
-    chassis.waitUntilDone();
-    mogoClamp.set_value(true);
-    intakeFirst.move_voltage(0);
-
-
-    // go to alliance
-    chassis.moveToPoint(-37.5, 4.8, 2000);
-    chassis.turnToHeading(180, 1000);
-    chassis.waitUntilDone();
-    pros::delay(100);
-    mogoClamp.set_value(false);
-    chassis.moveToPoint(
-        -39.75, 16.07, 3000,
-        {.forwards = false}); // chassis.moveToPoint(-37.96, 12, 2000, {.forwards = false}); //moves back
-    // chassis.waitUntilDone();
-
-    // score alliance
-    pros::delay(200);
-    intakeFirst.move_voltage(-12000);
-    intake.move_voltage(-12000);
-    pros::delay(150);
-    lift.move_absolute(183, 40);
-    pros::delay(1000); // TODO prev delay 1000
-
-    // ladder
-    intakeFirst.move_voltage(12000);
-    intake.move_voltage(12000);
-    chassis.moveToPose(-43.8, -18.5, -141.5, 7000);
-    // chassis.moveToPoint(-41.21, -12.39, 1000);
-
-    // chassis.turnToHeading(-173.2, 1000);
-
-    // chassis.moveToPoint(-42.8, -16.6, 1000); //-38.49, -12.38, 1000
-    lift.move_absolute(0, 40);
-    intake.move_voltage(0);
-    intakeFirst.move_voltage(0);
-
-    // chassis.turnToHeading(221, 1000, {.earlyExitRange = 5}); REMOVAL OF MOGO MOVEMENT
-    // chassis.waitUntilDone();
-    // mogoClamp.set_value(true);
-
-    // go to alliance stake
-    // chassis.turnToHeading(270, 1000, {.earlyExitRange = 10});
-    // chassis.moveToPose(-42.3, -2.39, -90, 2000);
-    // chassis.waitUntilDone();
-    // chassis.turnToHeading(182, 800, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE, .earlyExitRange = 5});
-    // mogoClamp.set_value(false);
-    // chassis.moveToPose(-39.15, 8, 180, 1000,
-    //                    {.forwards = false}); // actual movement back to alliance stake BLINDCODE Y-=2, X-=1
-    // chassis.waitUntilDone();
-    // intake.move_voltage(-12000);
-    // pros::delay(1000);
-
-    // intake.move_voltage(0);
-    // chassis.moveToPose(-39, -14.9, -156, 2000);
-
-    // // go to ladder
-    // //  chassis.moveToPoint(-39.89, -20.75, 1000, {. minSpeed = 75, .earlyExitRange = 20});
-    // // chassis.turnToHeading(-162.1, 1000, {.earlyExitRange = 10}); //-148.7
-    // intake.move_voltage(0);
-}
-void blueSoloWP() {
-    chassis.setPose(0, 0, 0);
-    mogoClamp.set_value(true);
-
-    // mogo
-
-    chassis.turnToHeading(-30, 800, {.earlyExitRange = 3});
-
-    // chassis.moveToPose(-5.69, -10.9, 27, 1000, {.forwards = false, .minSpeed = 100, .earlyExitRange = 40});
-    //  chassis.moveToPoint(-11.18, -21.42, 1000, {.forwards = false, .maxSpeed = 50, .earlyExitRange = 20});
-
-    // chassis.moveToPose(10.94, -22.85, -30, 3000, {.forwards = false, .maxSpeed = 100, .earlyExitRange = 20});
-    chassis.moveToPoint(12.3, -25.2, 1000, {.forwards = false, .maxSpeed = 75, .earlyExitRange = 20});
-
-    chassis.waitUntilDone();
-    pros::delay(400);
-    mogoClamp.set_value(false);
-
-    // first ring
-    intake.move_voltage(-12000);
-    intakeFirst.move_voltage(-12000);
-    pros::delay(300);
-
-    chassis.turnToHeading(-150, 1000);
-
-    chassis.moveToPoint(2.5, -46, 3000, {.maxSpeed = 75});
-
-    chassis.waitUntilDone();
-    pros::delay(750);
-
-    // // //pros::delay(500);
-
-    // //go back for second ring
-
-    // second ring adventure
-    chassis.turnToHeading(-24.5, 1000);
-    chassis.moveToPoint(-3.6, -40.1, 3000);
-    pros::delay(800);
-
-    chassis.turnToHeading(35, 1000);
-    intake.move_voltage(0);
-
-    // drop the mogo
-    chassis.moveToPose(25, -5, 90, 2000);
-    chassis.waitUntilDone();
-    intakeFirst.move_voltage(0);
-    mogoClamp.set_value(true);
-
-    // go to alliance
-    chassis.moveToPoint(40.25, -5, 1000); // BLINDCODED FROM HERE ON
-    chassis.turnToHeading(188, 1000);
-    chassis.waitUntilDone();
-    pros::delay(100);
-    mogoClamp.set_value(false);
-
-    chassis.moveToPoint(43.5, 4.5, 3000, {.forwards = false});
-
-    pros::delay(200);
-    intakeFirst.move_voltage(-12000);
-    intake.move_voltage(-12000);
-    pros::delay(150);
-    lift.move_absolute(183, 40);
-    pros::delay(1000); // TODO prev delay 1000
-
-    intakeFirst.move_voltage(12000);
-    intake.move_voltage(12000);
-    chassis.moveToPose(44.3, -27, 142, 7000);
-    lift.move_absolute(0, 40);
-    intake.move_voltage(0);
-    intakeFirst.move_voltage(0);
-}
-void redMogo() {
-    double liftPosition = lift.get_position();
-
-    mogoClamp.set_value(true);
-
-    // mogo rush
-    chassis.moveToPoint(0, -28, 1000, {.forwards = false, .earlyExitRange = 20});
-
-    chassis.moveToPose(6.5, -47.4, -29.3, 2000, {.forwards = false});
-
-    chassis.waitUntilDone();
-
-    mogoClamp.set_value(false);
-
-    pros::delay(100);
-    intake.move_voltage(-12000);
-    pros::delay(800);
-    chassis.turnToHeading(18.3, 800);
-    // chassis.moveToPoint(6.98, -38.98, 1000);
-
-    intakeFirst.move_velocity(-600);
-
-    chassis.moveToPoint(14, -33.9, 1000);
-
-    pros::delay(2000);
-
-    // intakeFirst.move_velocity(600);
-
-    //ladder
-    /*chassis.turnToHeading(120, 1000);
-
-    chassis.waitUntilDone();
-
-    pros::delay(1000);
-
-    //chassis.moveToPoint(26.8, -44.7, 5000);
-    chassis.moveToPose(31.1, -46, 120, 5000, {.lead = 0.1, .maxSpeed = 35});
-
-
-    intakeFirst.move_velocity(0);*/
-    // mogoClamp.set_value(true);
-
-    chassis.turnToHeading(155, 1000);
-    chassis.moveToPoint(4.14, -11.52, 2000, {.forwards = false});
-    chassis.waitUntilDone();
-    mogoClamp.set_value(true);
-    pros::delay(500);
-    chassis.moveToPoint(4.14, -23.5, 1000);
-    chassis.turnToHeading(270, 1000);
-    chassis.moveToPose(25.7, -29.4, 270, 2000, {.forwards = false, .lead = 0.4});
-    chassis.waitUntilDone();
-    //mogoClamp.set_value(false);
-
-}
-void blueMogo() {
-    double liftPosition = lift.get_position();
-
-    mogoClamp.set_value(true);
-
-    // mogo rush
-    chassis.moveToPoint(0, -28, 1000, {.forwards = false, .earlyExitRange = 20});
-
-    chassis.moveToPose(-6.9, -48, 30, 4000, {.forwards = false});
-    // chassis.moveToPose(-7.3, -45.6, 30, 2000, {.forwards = false, .maxSpeed = 45});
-
-    chassis.waitUntilDone();
-
-    mogoClamp.set_value(false);
-
-    pros::delay(100);
-    intake.move_voltage(-12000);
-    pros::delay(1100);
-    chassis.turnToHeading(-18.3, 800);
-    // chassis.moveToPoint(6.98, -38.98, 1000);
-
-    intakeFirst.move_velocity(-600);
-    //ring
-    chassis.moveToPoint(-11.5, -32.9, 3000);
-
-    pros::delay(1500);
-
-    // intakeFirst.move_velocity(600);
-
-    //ladder
-    /*chassis.turnToHeading(-131.4, 2000);
-
-    chassis.waitUntilDone();
-
-    chassis.moveToPose(-31.1, -49.5, -138.4, 5000, {.lead = 0.1, .maxSpeed = 35});
-
-    intakeFirst.move_velocity(0);*/
-    // mogoClamp.set_value(true);
-
-
-    chassis.turnToHeading(-155, 1000);
-    chassis.moveToPoint(-4.14, -11.52, 2000, {.forwards = false});
-    chassis.waitUntilDone();
-    mogoClamp.set_value(true);
-    pros::delay(500);
-    chassis.moveToPoint(-4.14, -23.5, 1000);
-    chassis.turnToHeading(-270, 1000);
-    chassis.moveToPose(-25.7, -29.4, -270, 2000, {.forwards = false, .lead = 0.4});
-    chassis.waitUntilDone();
-}
-void skills() {
-    chassis.setPose(0, 0, 0);
-
-    double liftPosition = lift.get_position();
-
-    // score alliance
-    lift.move_absolute(175, 40);
-    pros::delay(500);
-    intake.move_voltage(-12000);
-    pros::delay(650);
-
-    // ring 1
-    intake.move_voltage(0);
-    lift.move_absolute(liftPosition, -60);
-    intakeFirst.move_velocity(-600);
-
-    chassis.moveToPose(29.8, 43.8, 42.5, 5000); // chassis.moveToPose(24.2, 36.14, 43.47, 2000);
-    chassis.waitUntilDone();
-
-    // mogo
-
-    mogoClamp.set_value(true);
-
-    chassis.moveToPose(28, 26.4, 30, 2000, {.forwards = false, .lead = 0.5, .maxSpeed = 50});
-
-    chassis.waitUntilDone();
-    mogoClamp.set_value(false);
-
-    pros::delay(150);
-    intake.move_voltage(-12000);
-
-    // rings 2, 3, 4
-    chassis.moveToPose(44.4, 39.8, 50.97, 2000); // theta: 416.28
-    pros::delay(2000);
-    chassis.turnToHeading(174, 800);
-    chassis.moveToPoint(50.25, 14.34, 4000, {.maxSpeed = 45});
-    chassis.waitUntilDone();
-    pros::delay(500);
-
-    // ring 5
-    chassis.moveToPoint(46.66, 34.3, 1000, {.forwards = false, .maxSpeed = 70});
-    pros::delay(1000);
-    chassis.turnToHeading(133.5, 800);
-    chassis.moveToPoint(59.7, 26.1, 1000, {.maxSpeed = 70});
-    pros::delay(2300);
-
-    // mogo to corner
-    chassis.turnToHeading(-28.4, 800, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE});
-
-    chassis.moveToPoint(58, 16.9, 1000, {.forwards = false});
-    chassis.waitUntilDone();
-    pros::delay(300);
-    mogoClamp.set_value(true);
-    intake.move_voltage(0);
-    pros::delay(300);
-
-    // position forward
-    chassis.moveToPoint(55, 24.2, 1000);
-    chassis.turnToHeading(90, 800);
-
-    // move to second mogo
-    chassis.moveToPose(
-        -8, 25, 90, 3000,
-        {.forwards = false,
-         .maxSpeed = 85}); // chassis.moveToPose(-11.19, 21.55, 90, 3000, {.forwards = false, .maxSpeed = 95});
-
-    chassis.moveToPose(
-        -15.3, 25, 90, 2000,
-        {.forwards = false,
-         .maxSpeed = 10}); // chassis.moveToPose(-16.6, 21.55, 90, 2000, {.forwards = false, .maxSpeed = 15});
-    chassis.waitUntilDone();
-    pros::delay(200);
-
-    // clamp onto second mogo
-    mogoClamp.set_value(false);
-    pros::delay(150);
-
-    chassis.moveToPoint(-22, 27.2, 3000, {.forwards = false});
-
-    // first ring on second side
-
-    intakeFirst.move_velocity(-600);
-    intake.move_voltage(-12000);
-
-    chassis.turnToHeading(0, 800);
-    chassis.moveToPoint(-26.4, 48, 3000, {.maxSpeed = 70}); // change coord to be faster
-    chassis.waitUntilDone();
-    pros::delay(1000);
-
-    // 2nd ring on second side
-    chassis.turnToHeading(-90, 2000);
-    chassis.moveToPoint(-47.6, 47, 3000, {.maxSpeed = 70}); // change, slow down
-
-    pros::delay(1550);
-
-    // 3rd + 4th ring
-    chassis.turnToHeading(-180, 2000);
-    chassis.moveToPoint(-47.5, 16.3, 4000, {.maxSpeed = 50}); // possibly faster?
-    chassis.waitUntilDone();
-    pros::delay(1500);
-
-    // GETTTTTTTTT NEWWW COORDDDDSSS FORRRRRRR THISSSSSSSSSS @PROGGGGGGGGG
-    chassis.moveToPoint(-45.5, 36.6, 1000, {.forwards = false, .maxSpeed = 60});
-    pros::delay(300);
-    chassis.turnToHeading(-123.83, 1000);
-
-    // 5th ring
-
-    chassis.moveToPoint(-54.1, 26.6, 3000, {.forwards = true});
-    chassis.waitUntilDone();
-    pros::delay(1050);
-
-    chassis.turnToHeading(20.9, 1000);
-    pros::delay(1200);
-
-    chassis.moveToPoint(-63.73, 13.6, 3000, {.forwards = false});
-    chassis.waitUntilDone();
-
-    // drop mogo in second corner
-    mogoClamp.set_value(true);
-
-    // second half!!!
-    intake.move_voltage(0);
-
-    // move to first ring
-    chassis.moveToPose(-45.86, 63.36, 0, 2000);
-    chassis.moveToPose(-31.5, 87, 43.6, 2000);
-    chassis.turnToHeading(180, 2000);
-    chassis.moveToPose(0, 114.57, 270, 2000, {.forwards = false, .lead = 0.3, .maxSpeed = 50}); // old lead was .4
-    chassis.waitUntilDone();
-
-    // clamp onto mogo
-    mogoClamp.set_value(false);
-    pros::delay(200);
-    intake.move_velocity(-12000);
-    // pros::delay(750);
-
-    // move to second ring
-    chassis.moveToPose(-37, 97.7, 240.44, 2000);
-    chassis.waitUntilDone();
-    // pros::delay(200);
-
-    // move to third ring
-    chassis.moveToPose(-57, 71.7, 210, 4000);
-    pros::delay(1000);
-
-    // go to third corner
-    // chassis.moveToPose(-58.3, 99.26, 157, 4000, {.forwards = false});
-    chassis.moveToPose(-60, 125.5, 160, 2000, {.forwards = false, .maxSpeed = 90});
-    chassis.waitUntilDone();
-    mogoClamp.set_value(true);
-    intakeFirst.move_velocity(0);
-    chassis.moveToPoint(-57, 105, 2000);
-    chassis.moveToPose(4.75, 130, 83, 2000, {.earlyExitRange = 8});
-    chassis.moveToPoint(50, 136, 2000);
-}
-
 void autonomous() {
     // const asset& path = autonomous_txt;
     // const std::string data(reinterpret_cast<char*>(path.buf), path.size);
@@ -637,9 +215,19 @@ void autonomous() {
     // else
     //     controller.set_text(0, 0, "no data");
 
-    chassis.follow(autonomous_txt, extra_txt, 1, 40000);
-    //chassis.moveToPoint(0, 24, 10000);
-    //chassis.turnToHeading(90, 10000);
+   
+    // chassis.moveToPoint(0, 24, 3000);
+    // chassis.turnToHeading(180, 2500);
+
+    // chassis.moveToPoint(0, 0, 2000);
+    // chassis.turnToHeading(0, 2500);
+    
+    // chassis.moveToPoint(0, 24, 2000);
+    // chassis.turnToHeading(180, 2500);
+
+     chassis.moveToPose(12, 24, 90, 5000, {.minSpeed = 20});
+    
+    // chassis.follow(autonomous_txt, extra_txt, 1, 40000); TODO: use this later lol
     
     // std::vector<std::vector<std::string>> subValues = getSubData(extra_txt);
     // pros::lcd::print(0, "pls: %f", subValues[1][0]);
@@ -680,10 +268,28 @@ void autonomous() {
 void opcontrol() {
     // controller
     // loop to continuously update motors
-    
-    chassis.follow(autonomous_txt, extra_txt, 1, 40000);
 
-    while (true) {
+   
+
+    
+    while(true) {
+        int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
+        int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+
+        chassis.arcade(leftY, rightX * 0.8);
+
+        writePose();
+        writeAdditional();
+
+        pros::delay(10);
+    }
+
+
+
+ //TODO: WORKING LOOP!
+    // chassis.follow(autonomous_txt, extra_txt, 1, 40000);
+
+    // while (true) {
         
         
         // int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
@@ -729,6 +335,6 @@ void opcontrol() {
             controller.set_text(0, 0, "scores red ");
         }
         */
-        pros::delay(10); 
-    }
+        // pros::delay(10); 
+    // }
 }
