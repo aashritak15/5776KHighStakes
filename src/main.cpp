@@ -225,9 +225,10 @@ void autonomous() {
     // chassis.moveToPoint(0, 24, 2000);
     // chassis.turnToHeading(180, 2500);
 
-     chassis.moveToPose(12, 24, 90, 5000, {.minSpeed = 20});
+     //chassis.moveToPose(12, 24, 90, 5000, {.minSpeed = 20});
     
-    // chassis.follow(autonomous_txt, extra_txt, 1, 40000); TODO: use this later lol
+    chassis.follow(autonomous_txt, extra_txt,
+     1, 40000); //TODO: use this later lol
     
     // std::vector<std::vector<std::string>> subValues = getSubData(extra_txt);
     // pros::lcd::print(0, "pls: %f", subValues[1][0]);
@@ -280,6 +281,9 @@ void opcontrol() {
 
         writePose();
         writeAdditional();
+
+        closeO();
+
 
         pros::delay(10);
     }

@@ -292,7 +292,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
     distTraveled = 0;
 
     // loop until the robot is within the end tolerance
-    for (int i = 0; i < subValues.size() && pros::competition::get_status() == compState && this->motionRunning; i++) { //TODO: try this?
+    for (int i = 0; i < timeout / 10 && pros::competition::get_status() == compState && this->motionRunning; i++) { //TODO: try this?
         // get the current position of the robot
         pose = this->getPose(true);
         if (!forwards) pose.theta -= M_PI;
@@ -319,7 +319,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         targetVel = slew(targetVel, prevVel, lateralSettings.slew);
         prevVel = targetVel;
 
-        std::cout<<targetVel<<"\n";
+        std::cout<<curvature<<"\n";
 
         // calculate target left and right velocities
         float targetLeftVel = targetVel * (2 + curvature * drivetrain.trackWidth) / 2;
@@ -339,15 +339,15 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         //std::cout<<"velocities: "<<targetLeftVel<<", "<<targetRightVel<<"\n";
 
         // move the drivetrain
-        if (subValues[i][0] == "0") {
+        if (subValues[0].at(closestPoint) == "0") {
             drivetrain.leftMotors->move(targetLeftVel);
             drivetrain.rightMotors->move(targetRightVel);
-            //controller.set_text(0, 0, "forward");
+            controller.set_text(0, 0, "forward");
             //std::cout<<"forwards: "<<targetLeftVel<<", "<<targetRightVel;
         } else {
             drivetrain.leftMotors->move(-targetRightVel);
             drivetrain.rightMotors->move(-targetLeftVel);
-            //controller.set_text(0, 0, "backward");
+            controller.set_text(0, 0, "backward");
             //std::cout<<"backwards: "<<-1*targetLeftVel<<", "<<-1*targetRightVel;
 
         }
