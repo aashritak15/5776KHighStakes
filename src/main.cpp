@@ -117,19 +117,19 @@ void initialize() {
     pros::Task screenTask([&]() {
         while (true) {
             // print robot location to the brain screen
-            /*
-            std::vector<double> left = leftMotors.get_position_all();
-        std::vector<double> right = rightMotors.get_position_all();
-        pros::lcd::print(5, "LeftF Encoders: %f", left[0]);
-        pros::lcd::print(6, "LeftM Encoders: %f", left[1]);
-        pros::lcd::print(7, "LeftB Encoders: %f", left[2]);
-        pros::lcd::print(2, "RightF Encoders: %f", right[0]);
-        pros::lcd::print(3, "RightM Encoders: %f", right[1]);
-        pros::lcd::print(4, "RightB Encoders: %f", right[2]);*/
+            
+        //     std::vector<double> left = leftMotors.get_position_all();
+        // std::vector<double> right = rightMotors.get_position_all();
+        // pros::lcd::print(5, "LeftF Encoders: %f", left[0]);
+        // pros::lcd::print(6, "LeftM Encoders: %f", left[1]);
+        // //pros::lcd::print(7, "LeftB Encoders: %f", left[2]);
+        // pros::lcd::print(2, "RightF Encoders: %f", right[0]);
+        // pros::lcd::print(3, "RightM Encoders: %f", right[1]);
+        //pros::lcd::print(4, "RightB Encoders: %f", right[2]);
 
-            // pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
-            // pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
-            // pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
+            pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
+            pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
+            pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
             //pros::lcd::print(3, "Lift: %f", lift.get_position()); // lift encoder
             //pros::lcd::print(4, "Color: %f", optical.get_hue());
 
@@ -206,6 +206,8 @@ void competition_initialize() {}
 
 ASSET(autonomous_txt); //TODO: if asset thing returns an error remove usd and move files to static manually
 ASSET(extra_txt);
+ASSET(example_txt); //TODO: if asset thing returns an error remove usd and move files to static manually
+ASSET(extra1_txt);
 
 void autonomous() {
     // const asset& path = autonomous_txt;
@@ -227,8 +229,9 @@ void autonomous() {
 
      //chassis.moveToPose(12, 24, 90, 5000, {.minSpeed = 20});
     
-    chassis.follow(autonomous_txt, extra_txt,
-     1, 40000); //TODO: use this later lol
+    //chassis.follow(autonomous_txt, extra_txt, 10, 40000); //TODO: use this later lol
+    chassis.follow(example_txt, extra1_txt, 10, 40000); //TODO: use this later lol
+
     
     // std::vector<std::vector<std::string>> subValues = getSubData(extra_txt);
     // pros::lcd::print(0, "pls: %f", subValues[1][0]);
@@ -279,8 +282,14 @@ void opcontrol() {
 
         chassis.arcade(leftY, rightX * 0.8);
 
-        writePose();
-        writeAdditional();
+        static unsigned long lastWriteTime = 0; // Tracks the last time writePose was called
+        unsigned long currentTime = pros::millis(); // Get the current time in milliseconds
+
+        if (currentTime - lastWriteTime >= 1000) {
+            writePose();
+            writeAdditional();
+            lastWriteTime = currentTime; // Update the last write time
+        }
 
         closeO();
 

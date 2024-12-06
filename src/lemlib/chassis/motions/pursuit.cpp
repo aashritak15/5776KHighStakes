@@ -319,7 +319,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         targetVel = slew(targetVel, prevVel, lateralSettings.slew);
         prevVel = targetVel;
 
-        std::cout<<curvature<<"\n";
+        //std::cout<<curvature<<"\n";
 
         // calculate target left and right velocities
         float targetLeftVel = targetVel * (2 + curvature * drivetrain.trackWidth) / 2;
@@ -336,10 +336,10 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         prevLeftVel = targetLeftVel;
         prevRightVel = targetRightVel;
 
-        //std::cout<<"velocities: "<<targetLeftVel<<", "<<targetRightVel<<"\n";
+        std::cout<<"velocities: "<<targetLeftVel<<", "<<targetRightVel<<"\n";
 
         // move the drivetrain
-        if (subValues[0].at(closestPoint) == "0") {
+        if (subValues.at(closestPoint)[0] == "0") {
             drivetrain.leftMotors->move(targetLeftVel);
             drivetrain.rightMotors->move(targetRightVel);
             controller.set_text(0, 0, "forward");
