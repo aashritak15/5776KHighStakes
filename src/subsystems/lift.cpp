@@ -27,19 +27,32 @@ void updateLift() {
             //lift.move_absolute(143,40);
         else {lift.move_velocity(0);}*/
 
+    //lb macros
     int leftButton = 0;
     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) {
         if (leftButton == 0) {
-            lift.move_absolute(143, 40);
+            while(rotationSensor.get_position()!=25.83)
+                lift.move_voltage(12000);
+            lift.move_voltage(0);
+            //lift.move_absolute(25.83, 100);
             leftButton++;
         } else if (leftButton == 2) {
-            lift.move_absolute(0, 40);
+            while(rotationSensor.get_position()!=150)
+                lift.move_voltage(12000);
+            lift.move_voltage(0);
+            //lift.move_absolute(150, 100);
+            leftButton++;
+        } else if (leftButton == 4) {
+            while(rotationSensor.get_position()!=0)
+                lift.move_voltage(-12000);
+            lift.move_voltage(0);
+            //lift.move_absolute(0, 100);
             leftButton++;
         }
     } else if (!controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) {
-        if (leftButton == 1) {
+        if (leftButton == 1 || leftButton == 3) {
             leftButton++;
-        } else if (leftButton == 3) {
+        } else if (leftButton == 5) {
             leftButton = 0;
         }
     }
