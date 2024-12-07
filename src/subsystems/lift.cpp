@@ -31,19 +31,19 @@ void updateLift() {
     int leftButton = 0;
     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) {
         if (leftButton == 0) {
-            while(rotationSensor.get_position()!=25.83)
+            while(rotationSensor.get_angle()!=25.83)
                 lift.move_voltage(-12000);
             lift.move_voltage(0);
             //lift.move_absolute(25.83, 100);
             leftButton++;
         } else if (leftButton == 2) {
-            while(rotationSensor.get_position()!=150)
+            while(rotationSensor.get_angle()!=150)
                 lift.move_voltage(-12000);
             lift.move_voltage(0);
             //lift.move_absolute(150, 100);
             leftButton++;
         } else if (leftButton == 4) {
-            while(rotationSensor.get_position()!=0)
+            while(rotationSensor.get_angle()!=0)
                 lift.move_voltage(12000);
             lift.move_voltage(0);
             //lift.move_absolute(0, 100);
