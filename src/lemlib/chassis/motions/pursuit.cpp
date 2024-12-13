@@ -304,7 +304,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         // find the closest point on the path to the robot
         closestPoint = findClosest(pose, pathPoints);
         // if the robot is at the end of the path, then stop
-        if (pathPoints.at(closestPoint).theta == 0) break;
+        if (pathPoints.at(closestPoint).theta == 0) break; //theta = 0 at end indicates end
 
         // find the lookahead point
         lookaheadPose = lookaheadPoint(lastLookahead, pose, pathPoints, closestPoint, lookahead);
@@ -331,6 +331,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
             targetLeftVel /= ratio;
             targetRightVel /= ratio;
         }
+
 
         // update previous velocities
         prevLeftVel = targetLeftVel;

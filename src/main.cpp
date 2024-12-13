@@ -4,7 +4,7 @@
 #include "piston.hpp"
 #include "intake.hpp"
 #include "globals.hpp"
-#include "lift.hpp"
+#include "ladybrown.hpp"
 #include "intakeFirst.hpp"
 #include "intakePiston.hpp"
 #include "autons.hpp"
@@ -22,8 +22,8 @@
 //    {"Skills Run", &skills}
 // });
 
-// pros::MotorGroup leftMotors({-3, -2, -16}, pros::MotorGearset::blue);
-// pros::MotorGroup rightMotors({19, 20, 18}, pros::MotorGearset::blue);
+//pros::MotorGroup leftMotors({-3, -2, -16}, pros::MotorGearset::blue);
+//pros::MotorGroup rightMotors({19, 20, 18}, pros::MotorGearset::blue);
 
 pros::MotorGroup leftMotors({11, 12}, pros::MotorGearset::green);
 pros::MotorGroup rightMotors({-14, -4}, pros::MotorGearset::green);
@@ -44,7 +44,7 @@ lemlib::ControllerSettings linearController(12, // proportional gain (kP)
                                             100, // small error range timeout, in milliseconds
                                             2, // large error range, in inches
                                             500, // large error range timeout, in milliseconds
-                                            20 // slew
+                                            0 // slew
 );
 
 // angular motion controller
@@ -99,6 +99,7 @@ void initialize() {
     liftInit();
     intakeClampInit();
     opticalInit();
+    rotationInit();
     initO();
 
     // lv_init();
@@ -130,7 +131,8 @@ void initialize() {
             pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
             pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
             pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
-            //pros::lcd::print(3, "Lift: %f", lift.get_position()); // lift encoder
+            pros::lcd::print(3, "Rotation: %f", rotationSensor.get_position()); // lift encoder
+            pros::lcd::print(4, "Encoder: %f", lift.get_position());
             //pros::lcd::print(4, "Color: %f", optical.get_hue());
 
             // log position telemetry
@@ -145,11 +147,13 @@ void initialize() {
 void writePose() {
    std::string dataLine = "";
    lemlib::Pose pose = chassis.getPose();
+   std::uint32_t left = leftMotors.get_voltage();
+   std::uint32_t right = rightMotors.get_voltage();   
 
 //rounds to 3 decimal places (idk if that helps)
    dataLine.append(std::to_string((round(pose.x*1000))/1000) + ", ");
    dataLine.append(std::to_string((round(pose.y*1000))/1000) + ", ");
-   dataLine.append(std::to_string((round(pose.theta*1000))/1000) + "\n");
+   dataLine.append(std::to_string((right+left)/2.0*127.0/12000.0) + "\n");
 
 //    dataLine.append(std::to_string(pose.x) + ", ");
 //    dataLine.append(std::to_string(pose.y) + ", ");
@@ -204,10 +208,9 @@ void competition_initialize() {}
  * This is an example autonomous routine which demonstrates a lot of the features LemLib has to offer
  */
 
-ASSET(autonomous_txt); //TODO: if asset thing returns an error remove usd and move files to static manually
+ASSET(autonomous_txt);
 ASSET(extra_txt);
-ASSET(example_txt); //TODO: if asset thing returns an error remove usd and move files to static manually
-ASSET(extra1_txt);
+
 
 void autonomous() {
     // const asset& path = autonomous_txt;
@@ -229,8 +232,10 @@ void autonomous() {
 
      //chassis.moveToPose(12, 24, 90, 5000, {.minSpeed = 20});
     
-    //chassis.follow(autonomous_txt, extra_txt, 10, 40000); //TODO: use this later lol
-    chassis.follow(example_txt, extra1_txt, 10, 40000); //TODO: use this later lol
+    std::cout<<"rerun\n";
+    chassis.follow(autonomous_txt, extra_txt, 10, 40000); //TODO: use this later lol
+    //std::cout<<"jerry\n";
+    //chassis.follow(example_txt, extra1_txt, 10, 40000); //TODO: use this later lol
 
     
     // std::vector<std::vector<std::string>> subValues = getSubData(extra_txt);
@@ -246,18 +251,6 @@ void autonomous() {
 
     // without selector
 
-    //redSoloWP(); // red alliance solo AWP
-
-    //blueSoloWP(); // blue alliance solo AWP
-
-    //redMogo();  //red alliance mogo rush
-
-    //blueMogo(); // blue alliance mogo rush
-
-    // lift.move_absolute(183, 40);
-
-    //skills(); // prog skills
-
     // chassis.follow(path_jerryio_txt, 15, 3000);
 
     // chassis.turnToHeading(180, 10000);
@@ -272,15 +265,12 @@ void autonomous() {
 void opcontrol() {
     // controller
     // loop to continuously update motors
-
-   
-
     
     while(true) {
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
 
-        chassis.arcade(leftY, rightX * 0.8);
+        chassis.arcade(leftY, rightX);
 
         static unsigned long lastWriteTime = 0; // Tracks the last time writePose was called
         unsigned long currentTime = pros::millis(); // Get the current time in milliseconds
@@ -293,7 +283,6 @@ void opcontrol() {
 
         closeO();
 
-
         pros::delay(10);
     }
 
@@ -301,53 +290,51 @@ void opcontrol() {
 
  //TODO: WORKING LOOP!
     // chassis.follow(autonomous_txt, extra_txt, 1, 40000);
-
+    // lift.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+    // rotationSensor.reset_position();
     // while (true) {
         
         
-        // int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
-        // int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+    //     int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
+    //     int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
 
-        // chassis.arcade(leftY, rightX * 0.8);
+    //     chassis.arcade(leftY, rightX * 0.8);
 
-        // writePose();
-        // writeAdditional();
+        
+        
+    //     // pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
+    //     // pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
+    //     // pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
+    //     // pros::lcd::print(3, "Rotation: %f", rotationSensor.get_position()); // lift encoder
+    //     // pros::lcd::print(4, "Encoder: %f", lift.get_position());
+    //     // //pros::lcd::print(4, "Color: %f", optical.get_hue());
 
-        // closeO();
+    //     // lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
 
-        /*
-        pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
-        pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
-        pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
-        pros::lcd::print(3, "Lift: %f", lift.get_position()); // lift encoder
-        pros::lcd::print(4, "Color: %f", optical.get_hue());
+    //     updateIntake();
+    //     updateIntakeFirst();
+    //     updateClamp();
+    //     updateIntakeClamp();
+    //     updateLift();
+    //     updateColorToggle();
+    //     colorSort();
 
-        lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
+    //     if (sortState == 0) {
+    //         controller.set_text(0, 0, "no sort   ");
+    //     } else if (sortState == 1) {
+    //         controller.set_text(0, 0, "scores blue");
+    //     } else if (sortState == 2) {
+    //         controller.set_text(0, 0, "scores red ");
+    //     }
 
-        updateIntake();
-        updateIntakeFirst();
-        updateClamp();
-        updateIntakeClamp();
-        updateLift();
-        updateColorToggle();
-        colorSort();
-
-        // if (sortState == 0) {
-        //     controller.set_text(0, 0, "no sort   ");
-        // } else if (sortState == 1) {
-        //     controller.set_text(0, 0, "scores blue");
-        // } else if (sortState == 2) {
-        //     controller.set_text(0, 0, "scores red ");
-        // }
-
-        if (sortState == 0) {
-            controller.set_text(0, 0, "no sort   ");
-        } else if (sortState == 1) {
-            controller.set_text(0, 0, "scores blue");
-        } else if (sortState == 2) {
-            controller.set_text(0, 0, "scores red ");
-        }
-        */
-        // pros::delay(10); 
+    //     if (sortState == 0) {
+    //         controller.set_text(0, 0, "no sort   ");
+    //     } else if (sortState == 1) {
+    //         controller.set_text(0, 0, "scores blue");
+    //     } else if (sortState == 2) {
+    //         controller.set_text(0, 0, "scores red ");
+    //     }
+        
+    //     pros::delay(10); 
     // }
 }
