@@ -155,6 +155,9 @@ void writePose() {
    dataLine.append(std::to_string((round(pose.y*1000))/1000) + ", ");
    dataLine.append(std::to_string((right+left)/2.0*127.0/12000.0) + "\n");
 
+    std::cout<<std::to_string((round(pose.x*1000))/1000) + ", ";
+    std::cout<<std::to_string((round(pose.y*1000))/1000) + ", ";
+    std::cout<<std::to_string((right+left)/2.0*127.0/12000.0) + "\n";
 //    dataLine.append(std::to_string(pose.x) + ", ");
 //    dataLine.append(std::to_string(pose.y) + ", ");
 //    dataLine.append(std::to_string(pose.theta) + "\n");
@@ -265,7 +268,8 @@ void autonomous() {
 void opcontrol() {
     // controller
     // loop to continuously update motors
-    
+    initO();
+
     while(true) {
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
