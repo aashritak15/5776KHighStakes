@@ -353,20 +353,6 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
 
         }
 
-        // if(subValues[1] == 0) {
-            // intake.move_voltage(0);
-        // } else if (subValues[1] == 1) {
-            // intake.move_voltage(-12000);
-        // }
-
-        // if(subValues[2] == 0) {
-            // intake.move_voltage(0);
-        // } else if (subValues[2] == 1) {
-            // intake.move_voltage(-12000);
-        // } else if (subValues[2] == 2) {
-            // intake.move_voltage(12000);
-        // }
-
         pros::delay(10);
         pros::lcd::print(0, "X: %f", pathPoints[i].x); // x
         pros::lcd::print(1, "Y: %f", pathPoints[i].y); // y

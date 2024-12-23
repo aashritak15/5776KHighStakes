@@ -13,14 +13,18 @@ void initO() {
     fileOTwo.open("/usd/extra.txt");
     if(!fileO && !fileOTwo) {
         controller.set_text(0, 0, "failed to open both");
+        active = false;
     } else if (!fileO) {
         controller.set_text(0, 0, "pose failed to open");
+        active = false;
     } else if (!fileOTwo) {
         controller.set_text(0, 0, "extra failed to open");
+        active = false;
     }
     
     else {
         controller.set_text(0, 0, "opened");
+        active = true;
     }
 }
 
@@ -46,7 +50,7 @@ void initI() {
 
 
 void closeO() {
-    if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) {
+    if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_X) && active) {
         std::string dataLine = "endData";
 
         fileO << dataLine;
@@ -60,6 +64,8 @@ void closeO() {
 
         fileO.close();
         fileOTwo.close();
+
+        active = false;
 
         controller.set_text(0, 0, "file closed");
     }

@@ -34,7 +34,7 @@ void updateIntake() {
     } else {
         buttonl1Pressed = false;
     }
-    //0 inactive, 1  active, 2 outtake
+
     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) {
         if (!buttonxPressed) {
             buttonxPressed = true;

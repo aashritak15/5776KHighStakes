@@ -28,7 +28,7 @@
 pros::MotorGroup leftMotors({11, 12}, pros::MotorGearset::green);
 pros::MotorGroup rightMotors({-14, -4}, pros::MotorGearset::green);
 
-pros::Imu imu(20);
+pros::Imu imu(19);
 
 // drivetrain settings
 lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 8.5, lemlib::Omniwheel::NEW_4, 200,
@@ -184,8 +184,6 @@ void writeAdditional() {
     else
         dataLine.append("0\n");
 
-    //dataLine.append(intakeState + "\n");
-
     fileOTwo << dataLine;
     // fileOTwo.flush();
 }
@@ -281,7 +279,7 @@ void opcontrol() {
         static unsigned long lastWriteTime = 0; // Tracks the last time writePose was called
         unsigned long currentTime = pros::millis(); // Get the current time in milliseconds
 
-        if (currentTime - lastWriteTime >= 500) {
+        if (currentTime - lastWriteTime >= 1000) {
             writePose();
             writeAdditional();
             lastWriteTime = currentTime; // Update the last write time
