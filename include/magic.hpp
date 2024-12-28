@@ -1,3 +1,6 @@
+#ifndef MAGIC_HPP
+#define MAGIC_HPP
+
 #include "main.h"
 #include "globals.hpp"
 #include <iostream>
@@ -35,3 +38,12 @@ void readControllerData();
 
 void writePose();
 void writeAdditional();
+
+//jerry
+
+extern std::vector<Waypoint> route; 
+
+void followRoute(const std::vector<Waypoint>& route);
+void readRouteFile; 
+
+#endif
