@@ -6,7 +6,7 @@
 #include <string>
 
 bool active = true;
-std::vector<Waypoint> route;
+// std::vector<Waypoint> route;
 // int count = 1;
 
 void initO() {
@@ -48,7 +48,7 @@ void initI() {
         active = true;
     }
 
-    readRouteFile(); 
+    // readRouteFile(); 
 }
 
 
@@ -85,17 +85,17 @@ void closeI() {
     }
 }
 
-void write() {
-    if(active) {
-        std::string dataLine = "";
-        dataLine.append(std::to_string(leftMotors.get_voltage()) + " ");
-        dataLine.append(std::to_string(rightMotors.get_voltage()) + "\n");
+// void write() {
+//     if(active) {
+//         std::string dataLine = "";
+//         dataLine.append(std::to_string(leftMotors.get_voltage()) + " ");
+//         dataLine.append(std::to_string(rightMotors.get_voltage()) + "\n");
         
-        fileO << dataLine; //<< std::endl;
+//         fileO << dataLine; //<< std::endl;
         
-        fileO.flush();
-    }
-}
+//         fileO.flush();
+//     }
+// }
 
 void writeControllerData() {
     if(active) {
@@ -109,19 +109,19 @@ void writeControllerData() {
     }
 }
 
-void read() {
-    if(active) {
-        int voltages[2];
+// void read() {
+//     if(active) {
+//         int voltages[2];
         
-        for (int i=0; i<2; i++) {
-            fileI >> voltages[i];
-        }
+//         for (int i=0; i<2; i++) {
+//             fileI >> voltages[i];
+//         }
 
-        leftMotors.move_voltage(voltages[0]);
-        rightMotors.move_voltage(voltages[1]);
+//         leftMotors.move_voltage(voltages[0]);
+//         rightMotors.move_voltage(voltages[1]);
 
-        // driveTwo.move_voltage(voltages[1]);
-    }
+//         // driveTwo.move_voltage(voltages[1]);
+//     }
     
     /* if(active) {
         int voltage;
@@ -136,20 +136,20 @@ void read() {
 
         // driveTwo.move_voltage(voltages[1]);
     } */
-}
+// }
 
-void readControllerData() {
-    if(active) {
-        double leftInput;
-        double rightInput;
+// void readControllerData() {
+//     if(active) {
+//         double leftInput;
+//         double rightInput;
 
-        fileI >> leftInput;
-        fileI >> rightInput;
+//         fileI >> leftInput;
+//         fileI >> rightInput;
 
-        leftMotors.move_velocity((leftInput));
-        rightMotors.move_velocity((leftInput));
-    }
-}
+//         leftMotors.move_velocity((leftInput));
+//         rightMotors.move_velocity((leftInput));
+//     }
+// }
 
 void runMotors() {
     if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
@@ -165,71 +165,71 @@ void runMotors() {
     }
 }
 
-void driveBasic() {
-    leftMotors.move_velocity(
-        (controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y)));
-    rightMotors.move_velocity(
-        (controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y)));
-}
+// void driveBasic() {
+//     leftMotors.move_velocity(
+//         (controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y)));
+//     rightMotors.move_velocity(
+//         (controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y)));
+// }
 
 
-void writePose() {
-   std::string dataLine = "";
-   lemlib::Pose pose = chassis.getPose();
+// void writePose() { TODO: can't have chassis here bc chassis declared in main
+//    std::string dataLine = "";
+//    lemlib::Pose pose = chassis.getPose();
 
-   dataLine.append(std::to_string(pose.x) + ", ");
-   dataLine.append(std::to_string(pose.y) + ", ");
-   dataLine.append(std::to_string(pose.theta) + "\n");
+//    dataLine.append(std::to_string(pose.x) + ", ");
+//    dataLine.append(std::to_string(pose.y) + ", ");
+//    dataLine.append(std::to_string(pose.theta) + "\n");
 
 
-   fileO << dataLine;
+//    fileO << dataLine;
         
-   fileO.flush();
-}
+//    fileO.flush();
+// }
 
-void writeAdditional() {
-    std::string dataLine = "";
+// void writeAdditional() {
+//     std::string dataLine = "";
 
-    if(leftMotors.get_voltage() < 0 && rightMotors.get_voltage()<0)
-        dataLine.append(1 + ", ");
-    else
-        dataLine.append(0 + ", ");
+//     if(leftMotors.get_voltage() < 0 && rightMotors.get_voltage()<0)
+//         dataLine.append(1 + ", ");
+//     else
+//         dataLine.append(0 + ", ");
 
-    if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) { //non toggle subsystem
-        dataLine.append(1 + "\n");
-    }
-    else
-        dataLine.append(0 + "\n");
+//     if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) { //non toggle subsystem
+//         dataLine.append(1 + "\n");
+//     }
+//     else
+//         dataLine.append(0 + "\n");
 
-    fileO << dataLine;
+//     fileO << dataLine;
     
-    fileOTwo.flush();
-}
+//     fileOTwo.flush();
+// }
 
 //jerry stuff 
 
-void readRouteFile() {
-    std::ifstream pathFile("/usd/path.txt");
-    if (!pathFile.is_open()) {
-        std::cerr << "Failed to open path file" << std::endl;
-        return;
-    }
+// void readRouteFile() {
+//     std::ifstream pathFile("/usd/path.txt");
+//     if (!pathFile.is_open()) {
+//         std::cerr << "Failed to open path file" << std::endl;
+//         return;
+//     }
 
-    Waypoint waypoint;
-    while (pathFile >> waypoint.x >> waypoint.y >> waypoint.theta) {
-        path.push_back(waypoint);
-    }
-    pathFile.close();
-}
+//     Waypoint waypoint;
+//     while (pathFile >> waypoint.x >> waypoint.y >> waypoint.theta) {
+//         path.push_back(waypoint);
+//     }
+//     pathFile.close();
+// }
 
-void followRoute(const std::vector<Waypoint>& path) {
-    for (const auto& waypoint : path) {
-        moveToWaypoint(waypoint);
-    }
-}
+// void followRoute(const std::vector<Waypoint>& path) {
+//     for (const auto& waypoint : path) {
+//         moveToWaypoint(waypoint);
+//     }
+// }
 
-//not right i need to fix 
-void moveToWaypoint(const Waypoint& waypoint) {
-    leftMotors.move_velocity(waypoint.x);  
-    rightMotors.move_velocity(waypoint.y);  
-}
+// //not right i need to fix 
+// void moveToWaypoint(const Waypoint& waypoint) {
+//     leftMotors.move_velocity(waypoint.x);  
+//     rightMotors.move_velocity(waypoint.y);  
+// }

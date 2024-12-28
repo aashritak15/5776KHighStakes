@@ -41,9 +41,9 @@ void writeAdditional();
 
 //jerry
 
-extern std::vector<Waypoint> route; 
+// extern std::vector<Waypoint> route; 
 
-void followRoute(const std::vector<Waypoint>& route);
-void readRouteFile; 
+// void followRoute(const std::vector<Waypoint>& route);
+// void readRouteFile; 
 
 #endif
