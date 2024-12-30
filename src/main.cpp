@@ -6,7 +6,6 @@
 #include "globals.hpp"
 #include "ladybrown.hpp"
 #include "intakeFirst.hpp"
-#include "intakePiston.hpp"
 #include "autons.hpp"
 #include "magic.hpp"
 #include <iostream>
@@ -291,6 +290,14 @@ void opcontrol() {
     }
 
 
+       updateIntake();
+        updateIntakeFirst();
+        updateClamp();
+        updateIntakeClamp();
+        updateLift();
+        updateColorToggle();
+        colorSort();
+        updateDoinker();
 
  //TODO: WORKING LOOP!
     // chassis.follow(autonomous_txt, extra_txt, 1, 40000);
@@ -315,13 +322,7 @@ void opcontrol() {
 
     //     // lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
 
-    //     updateIntake();
-    //     updateIntakeFirst();
-    //     updateClamp();
-    //     updateIntakeClamp();
-    //     updateLift();
-    //     updateColorToggle();
-    //     colorSort();
+ 
 
     //     if (sortState == 0) {
     //         controller.set_text(0, 0, "no sort   ");

@@ -62,7 +62,7 @@ void closeO() {
         fileO.flush();
         fileOTwo.flush();
 
-        controller.set_text(0, 0, "wait                          ");
+        controller.set_text(0, 0, "wait");
         pros::delay(2500);
 
         fileO.close();
