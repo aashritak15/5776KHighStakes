@@ -120,6 +120,7 @@ void opcontrol() {
         chassis.arcade(leftY, rightX);
 
         updateIntake();
+        updateClamp();
 
         // static unsigned long lastWriteTime = 0; // Tracks the last time writePose was called
         // unsigned long currentTime = pros::millis(); // Get the current time in milliseconds

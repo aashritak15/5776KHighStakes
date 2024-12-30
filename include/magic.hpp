@@ -13,7 +13,7 @@ inline std::ofstream fileOTwo;
 inline std::ifstream fileI;
 inline std::ifstream fileITwo;
 
-// inline std::ofstream fileOExtra; TODO: we don't use these anywehere right
+// inline std::ofstream fileOExtra; TODO: we don't use these anywhere right
 // inline std::ifstream fileIExtra;
 
 extern bool active;

@@ -1,6 +1,6 @@
 #include "main.h"
 
-inline pros::adi::DigitalOut mogoClamp('H');
+inline pros::adi::DigitalOut mogoClamp('A');
 
 void updateClamp();
 void clampInit();

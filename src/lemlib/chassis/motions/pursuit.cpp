@@ -344,12 +344,12 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         if (subValues.at(closestPoint)[0] == "0") {
             drivetrain.leftMotors->move(targetLeftVel);
             drivetrain.rightMotors->move(targetRightVel);
-            controller.set_text(0, 0, "forward");
+            // controller.set_text(0, 0, "forward");
             //std::cout<<"forwards: "<<targetLeftVel<<", "<<targetRightVel;
         } else {
             drivetrain.leftMotors->move(-targetRightVel);
             drivetrain.rightMotors->move(-targetLeftVel);
-            controller.set_text(0, 0, "backward");
+            // controller.set_text(0, 0, "backward");
             //std::cout<<"backwards: "<<-1*targetLeftVel<<", "<<-1*targetRightVel;
 
         }
@@ -369,8 +369,8 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         }        
 
         pros::delay(10);
-        pros::lcd::print(0, "X: %f", pathPoints[i].x); // x
-        pros::lcd::print(1, "Y: %f", pathPoints[i].y); // y
+        // pros::lcd::print(0, "X: %f", pathPoints[i].x); // x
+        // pros::lcd::print(1, "Y: %f", pathPoints[i].y); // y
     }
 
     // stop the robot

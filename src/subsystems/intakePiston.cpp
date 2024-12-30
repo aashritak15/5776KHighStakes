@@ -9,7 +9,7 @@ void intakeClampInit() { intakeClamp.set_value(false); }
 int intakeClampState = 0;
 
 void updateIntakeClamp() {
-    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) {
+    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
         if (intakeClampState == 0) {
             intakeClamp.set_value(true);
             intakeClampState++;
@@ -17,7 +17,7 @@ void updateIntakeClamp() {
             intakeClamp.set_value(false);
             intakeClampState++;
         }
-    } else if (!controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) {
+    } else if (!controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
         if (intakeClampState == 1) {
             intakeClampState++;
         } else if (intakeClampState == 3) {
