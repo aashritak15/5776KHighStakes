@@ -5,6 +5,8 @@
 #include "ladybrown.hpp"
 #include "globals.hpp"
 
+pros::Rotation rotationSensor(17);
+
 void liftInit() { lift.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD); }
 void rotationInit() { }
 

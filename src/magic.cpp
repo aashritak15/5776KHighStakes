@@ -53,7 +53,7 @@ void initI() {
 
 
 void closeO() {
-    if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_X) && active) {
+    if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_B) && active) {
         std::string dataLine = "endData";
 
         fileO << dataLine;
@@ -85,126 +85,51 @@ void closeI() {
     }
 }
 
-// void write() {
-//     if(active) {
-//         std::string dataLine = "";
-//         dataLine.append(std::to_string(leftMotors.get_voltage()) + " ");
-//         dataLine.append(std::to_string(rightMotors.get_voltage()) + "\n");
-        
-//         fileO << dataLine; //<< std::endl;
-        
-//         fileO.flush();
-//     }
-// }
+void writePose() {
+    std::string dataLine = "";
+    lemlib::Pose pose = chassis.getPose();
+    std::uint32_t left = leftMotors.get_voltage();
+    std::uint32_t right = rightMotors.get_voltage();   
 
-void writeControllerData() {
-    if(active) {
-        std::string dataLine = "";
-        dataLine.append(std::to_string(controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y)) + " ");
-        dataLine.append(std::to_string(controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y)) + "\n");
+    //rounds to 3 decimal places (idk if that helps)
+    dataLine.append(std::to_string((round(pose.x*1000))/1000) + ", ");
+    dataLine.append(std::to_string((round(pose.y*1000))/1000) + ", ");
+    dataLine.append(std::to_string((right+left)/2.0*127.0/12000.0) + "\n");
 
-        fileO << dataLine;
+    std::cout<<std::to_string((round(pose.x*1000))/1000) + ", ";
+    std::cout<<std::to_string((round(pose.y*1000))/1000) + ", ";
+    std::cout<<std::to_string((right+left)/2.0*127.0/12000.0) + "\n";
+    //dataLine.append(std::to_string(pose.x) + ", ");
+    //dataLine.append(std::to_string(pose.y) + ", ");
+    //dataLine.append(std::to_string(pose.theta) + "\n");
+
+
+    fileO << dataLine;
         
-        fileO.flush();
-    }
+    //fileO.flush();
 }
 
-// void read() {
-//     if(active) {
-//         int voltages[2];
-        
-//         for (int i=0; i<2; i++) {
-//             fileI >> voltages[i];
-//         }
+void writeAdditional() {
+    std::string dataLine = "";
 
-//         leftMotors.move_voltage(voltages[0]);
-//         rightMotors.move_voltage(voltages[1]);
+    if(leftMotors.get_voltage() < 0 && rightMotors.get_voltage() < 0)
+        dataLine.append("1, ");
+    else
+        dataLine.append("0, ");
 
-//         // driveTwo.move_voltage(voltages[1]);
-//     }
-    
-    /* if(active) {
-        int voltage;
-        fileI >> voltage;
-        
-        // double voltages[2];
-        // for (int i=0; i<2; i++) {
-        //     file >> voltages[i];
-        // }
+    // if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) { //non toggle subsystem
+    //     dataLine.append("1, ");
+    // }
+    // else {
+    //     dataLine.append("0, ");
+    // }
 
-        driveOne.move_voltage(voltage);
+    dataLine.append(intakeState + "\n");
 
-        // driveTwo.move_voltage(voltages[1]);
-    } */
-// }
+    fileOTwo << dataLine;
 
-// void readControllerData() {
-//     if(active) {
-//         double leftInput;
-//         double rightInput;
-
-//         fileI >> leftInput;
-//         fileI >> rightInput;
-
-//         leftMotors.move_velocity((leftInput));
-//         rightMotors.move_velocity((leftInput));
-//     }
-// }
-
-void runMotors() {
-    if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
-		driveOne.move_voltage(12000);
-    } else {
-		driveOne.move_voltage(0);
-    }
-
-    if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT)) {
-        driveTwo.move_voltage(12000);
-    } else {
-        driveTwo.move_voltage(0);
-    }
+    // fileOTwo.flush();
 }
-
-// void driveBasic() {
-//     leftMotors.move_velocity(
-//         (controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y)));
-//     rightMotors.move_velocity(
-//         (controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y)));
-// }
-
-
-// void writePose() { TODO: can't have chassis here bc chassis declared in main
-//    std::string dataLine = "";
-//    lemlib::Pose pose = chassis.getPose();
-
-//    dataLine.append(std::to_string(pose.x) + ", ");
-//    dataLine.append(std::to_string(pose.y) + ", ");
-//    dataLine.append(std::to_string(pose.theta) + "\n");
-
-
-//    fileO << dataLine;
-        
-//    fileO.flush();
-// }
-
-// void writeAdditional() {
-//     std::string dataLine = "";
-
-//     if(leftMotors.get_voltage() < 0 && rightMotors.get_voltage()<0)
-//         dataLine.append(1 + ", ");
-//     else
-//         dataLine.append(0 + ", ");
-
-//     if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) { //non toggle subsystem
-//         dataLine.append(1 + "\n");
-//     }
-//     else
-//         dataLine.append(0 + "\n");
-
-//     fileO << dataLine;
-    
-//     fileOTwo.flush();
-// }
 
 //jerry stuff 
 

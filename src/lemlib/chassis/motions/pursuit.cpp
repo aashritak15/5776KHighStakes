@@ -12,6 +12,7 @@
 #include "lemlib/chassis/chassis.hpp"
 #include "lemlib/util.hpp"
 #include "globals.hpp"
+#include "intake.hpp"
 
 /**
  * @brief function that returns elements in a file line, separated by a delimeter
@@ -352,6 +353,20 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
             //std::cout<<"backwards: "<<-1*targetLeftVel<<", "<<-1*targetRightVel;
 
         }
+
+        // if(subValues[1] == 0) { TODO: get this working!!!!
+        // intake.move_voltage(0);
+        // } else if (subValues[1] == 1) {
+            // intake.move_voltage(-12000);
+        // }
+
+        if (subValues.at(closestPoint)[1] == "0") {
+            intake.move_voltage(0);
+        } else if (subValues.at(closestPoint)[1] == "1") {
+            intake.move_voltage(-12000);
+        } else if (subValues.at(closestPoint)[1] == "2") {
+            intake.move_voltage(12000);
+        }        
 
         pros::delay(10);
         pros::lcd::print(0, "X: %f", pathPoints[i].x); // x

@@ -1,3 +1,7 @@
+#ifndef INTAKE_HPP
+#define INTAKE_HPP
+
+
 #include "main.h"
 
 inline pros::Motor intake(9, pros::MotorGearset::green); //changed from blue to green
@@ -14,3 +18,5 @@ void updateColorToggle();
 
 extern int intakeState;
 extern int sortState;
+
+#endif`
