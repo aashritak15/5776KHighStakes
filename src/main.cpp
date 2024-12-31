@@ -64,7 +64,7 @@ void initialize() {
             pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
             pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
             pros::lcd::print(3, "Rotation (Lift): %i", rotationSensor.get_position()); // lift encoder
-            pros::lcd::print(4, "Encoder (Lift): %f", lift.get_position());
+            pros::lcd::print(4, "Intake State: %f", intakeState);
             pros::lcd::print(5, "Vert: %i", vertical.get_position());
             pros::lcd::print(6, "Horiz: %i", horizontal.get_position());
             //pros::lcd::print(7 "Color: %f", optical.get_hue());
@@ -122,10 +122,17 @@ void opcontrol() {
         updateIntake();
         updateClamp();
 
+        // lemlib::Pose pose = chassis.getPose();
+        // std::int32_t left = leftMotors.get_voltage();
+        // std::int32_t right = rightMotors.get_voltage();  
+
+        // std::cout<<std::to_string(left) + "\n";
+        // std::cout<<std::to_string(right) + "\n";
+
         static unsigned long lastWriteTime = 0; // Tracks the last time writePose was called
         unsigned long currentTime = pros::millis(); // Get the current time in milliseconds
 
-        if (currentTime - lastWriteTime >= 1000) {
+        if (currentTime - lastWriteTime >= 250) {
             writePose();
             writeAdditional();
             lastWriteTime = currentTime; // Update the last write time

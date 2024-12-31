@@ -60,3 +60,93 @@ void updateLift() {
         }
     }
 }
+
+
+// void rotationInit() { }
+
+//     /* 
+//         4 stage toggle:
+
+//         1. 20 
+//         2. 29
+//         3. 143
+//         4. 0
+
+//     */
+
+// bool checkIfRotation(){
+//     return abs(lift.get_actual_velocity() > 5);
+// }
+
+// double kp = 0;
+
+// double kd = 0;
+
+// double ki = 0; //dont need this i think 
+
+
+// // void rotationPID(double degrees){
+// //     while(true){
+
+// //     }
+// // }
+
+    
+
+
+
+//    int ladyState = 0;
+
+
+//    //temporary function until I finish the pid 
+
+//    void ladyBrown() {
+
+//         double rotation_value = rotationSensor.get_angle();
+//         if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)){
+//             if( ladyState == 0){
+
+//                 lift.move_velocity(10);
+                
+//                 pros::delay(10);
+//                 lift.move_voltage(0);
+
+//                 while(rotation_value != 20){
+//                     lift.move_velocity(-30);
+//                 }z
+
+//                 lift.move_velocity(0);
+
+//                 ladyState++;
+                
+//             }
+
+//             else if( ladyState == 1){
+
+                
+//                 while(rotation_value != 29){
+//                     lift.move_velocity(-30);
+//                 }
+
+//                 lift.move_velocity(0);
+
+//                 ladyState++;
+                
+
+//             }
+
+
+//         }
+    
+//     else if(!controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)){
+//             if(ladyState == 1){
+//                 ladyState++;
+//             }
+//              if(ladyState == 3){
+//                 ladyState == 0;
+//             }
+
+            
+//     }
+
+//    }

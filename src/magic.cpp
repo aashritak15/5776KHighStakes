@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <cmath>
 
 bool active = true;
 // std::vector<Waypoint> route;
@@ -15,21 +16,21 @@ void initO() {
     fileOTwo.open("/usd/extra.txt");
     if(!fileO && !fileOTwo) {
         pros::lcd::print(7, "both are cooked");
-        // controller.set_text(0, 0, "failed to open both");
+        controller.set_text(0, 0, "failed to open both");
         active = false;
     } else if (!fileO) {
         pros::lcd::print(7, "pose is cooked");
-        // controller.set_text(0, 0, "pose failed to open");
+        controller.set_text(0, 0, "pose failed to open");
         active = false;
     } else if (!fileOTwo) {
         pros::lcd::print(7, "extra is cooked");
-        // controller.set_text(0, 0, "extra failed to open");
+        controller.set_text(0, 0, "extra failed to open");
         active = false;
     }
     
     else {
         pros::lcd::print(7, "goated");
-        // controller.set_text(0, 0, "opened");
+        controller.set_text(0, 0, "goated");
         active = true;
     }
 }
@@ -93,8 +94,8 @@ void closeI() {
 void writePose() {
     std::string dataLine = "";
     lemlib::Pose pose = chassis.getPose();
-    std::uint32_t left = leftMotors.get_voltage();
-    std::uint32_t right = rightMotors.get_voltage();   
+    std::int32_t left = leftMotors.get_voltage();
+    std::int32_t right = rightMotors.get_voltage();   
 
     //rounds to 3 decimal places (idk if that helps)
     dataLine.append(std::to_string((round(pose.x*1000))/1000) + ", ");
@@ -103,7 +104,7 @@ void writePose() {
 
     std::cout<<std::to_string((round(pose.x*1000))/1000) + ", ";
     std::cout<<std::to_string((round(pose.y*1000))/1000) + ", ";
-    std::cout<<std::to_string((right+left)/2.0*127.0/12000.0) + "\n";
+    std::cout<<std::to_string((left+right)/2.0*127.0/12000.0) + "\n";
     //dataLine.append(std::to_string(pose.x) + ", ");
     //dataLine.append(std::to_string(pose.y) + ", ");
     //dataLine.append(std::to_string(pose.theta) + "\n");
@@ -129,7 +130,7 @@ void writeAdditional() {
     //     dataLine.append("0, ");
     // }
 
-    dataLine.append(intakeState + "\n");
+    dataLine.append(std::to_string(intakeState) + "\n");
 
     fileOTwo << dataLine;
 
