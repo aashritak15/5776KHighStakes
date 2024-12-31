@@ -111,7 +111,7 @@ void autonomous() {
  */
 
 void opcontrol() {
-    // initO();
+    initO();
 
     while(true) {
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
@@ -122,16 +122,16 @@ void opcontrol() {
         updateIntake();
         updateClamp();
 
-        // static unsigned long lastWriteTime = 0; // Tracks the last time writePose was called
-        // unsigned long currentTime = pros::millis(); // Get the current time in milliseconds
+        static unsigned long lastWriteTime = 0; // Tracks the last time writePose was called
+        unsigned long currentTime = pros::millis(); // Get the current time in milliseconds
 
-        // if (currentTime - lastWriteTime >= 1000) {
-        //     writePose();
-        //     writeAdditional();
-        //     lastWriteTime = currentTime; // Update the last write time
-        // }
+        if (currentTime - lastWriteTime >= 1000) {
+            writePose();
+            writeAdditional();
+            lastWriteTime = currentTime; // Update the last write time
+        }
 
-        // closeO();
+        closeO();
         
         pros::delay(10);
     }

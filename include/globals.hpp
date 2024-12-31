@@ -9,6 +9,9 @@ extern pros::Imu imu;
 extern pros::Rotation vertical;
 extern pros::Rotation horizontal;
 
+extern lemlib::TrackingWheel verticalTracker;
+extern lemlib::TrackingWheel horizontalTracker;
+
 extern lemlib::Drivetrain drivetrain;
 extern lemlib::ControllerSettings linearController;
 extern lemlib::ControllerSettings angularController;

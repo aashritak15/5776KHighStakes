@@ -10,21 +10,26 @@ bool active = true;
 // int count = 1;
 
 void initO() {
+    pros::lcd::print(7, "?????");
     fileO.open("/usd/autonomous.txt");
     fileOTwo.open("/usd/extra.txt");
     if(!fileO && !fileOTwo) {
-        controller.set_text(0, 0, "failed to open both");
+        pros::lcd::print(7, "both are cooked");
+        // controller.set_text(0, 0, "failed to open both");
         active = false;
     } else if (!fileO) {
-        controller.set_text(0, 0, "pose failed to open");
+        pros::lcd::print(7, "pose is cooked");
+        // controller.set_text(0, 0, "pose failed to open");
         active = false;
     } else if (!fileOTwo) {
-        controller.set_text(0, 0, "extra failed to open");
+        pros::lcd::print(7, "extra is cooked");
+        // controller.set_text(0, 0, "extra failed to open");
         active = false;
     }
     
     else {
-        controller.set_text(0, 0, "opened");
+        pros::lcd::print(7, "goated");
+        // controller.set_text(0, 0, "opened");
         active = true;
     }
 }

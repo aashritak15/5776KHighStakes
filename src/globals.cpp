@@ -2,20 +2,23 @@
 
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
-pros::MotorGroup leftMotors({-3, -2, -16}, pros::MotorGearset::blue);
-pros::MotorGroup rightMotors({19, 20, 18}, pros::MotorGearset::blue);
+pros::MotorGroup leftMotors({-6, -3, -4}, pros::MotorGearset::blue);
+pros::MotorGroup rightMotors({20, 19, 18}, pros::MotorGearset::blue);
 
 pros::Imu imu(19);
 pros::Rotation vertical(-1); 
 pros::Rotation horizontal(-10);
 
+lemlib::TrackingWheel verticalTracker(&vertical, lemlib::Omniwheel::NEW_275, -2.75);
+lemlib::TrackingWheel horizontalTracker(&horizontal, lemlib::Omniwheel::NEW_275, 0.125);
+
 // drivetrain settings
-lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 12.5, lemlib::Omniwheel::NEW_275, 480, //TODO: make sure rpm is right
-                              2 //TODO: what the heck does horizontal drift do 2 w/o traction 
+lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 12.5, lemlib::Omniwheel::NEW_275, 450, //TODO: make sure rpm is right
+                              8 //TODO: is this 0? aashrita said 8
 );
 
 // lateral motion controller
-lemlib::ControllerSettings linearController(12, // proportional gain (kP)
+lemlib::ControllerSettings linearController(12, // proportional gain (kP) //TODO: tune pids!!!
                                             0, // integral gain (kI)
                                             4, // 48.905, //46.86273, // derivative gain (kD)
                                             3, // anti windup
@@ -40,9 +43,9 @@ lemlib::ControllerSettings angularController(1.5, // proportional gain (kP)
                                              // OLD VALUES OCT 6: P 4.05, D 34.86768
 );
 // sensors for odometry
-lemlib::OdomSensors sensors(nullptr, // vertical tracking wheel 1, set to null
+lemlib::OdomSensors sensors(&verticalTracker, // vertical tracking wheel 1, set to null
                             nullptr, // vertical tracking wheel 2, set to nullptr as we are using IMEs
-                            nullptr, // horizontal tracking wheel 1
+                            &horizontalTracker, // horizontal tracking wheel 1
                             nullptr, // horizontal tracking wheel 2, set to nullptr as we don't have a second one
                             &imu // inertial sensor
 );
