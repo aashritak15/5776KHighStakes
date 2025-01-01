@@ -92,19 +92,15 @@ void closeI() {
 }
 
 void writePose() {
-    std::string dataLine = "";
-    lemlib::Pose pose = chassis.getPose();
+    std::string dataLine = ""; //TODO: CHANGE GETPOSE BACK
     std::int32_t left = leftMotors.get_voltage();
     std::int32_t right = rightMotors.get_voltage();   
 
     //rounds to 3 decimal places (idk if that helps)
-    dataLine.append(std::to_string((round(pose.x*1000))/1000) + ", ");
-    dataLine.append(std::to_string((round(pose.y*1000))/1000) + ", ");
+    dataLine.append(std::to_string((round(chassis.getPose().x*1000))/1000) + ", ");
+    dataLine.append(std::to_string((round(chassis.getPose().y*1000))/1000) + ", ");
     dataLine.append(std::to_string((right+left)/2.0*127.0/12000.0) + "\n");
 
-    std::cout<<std::to_string((round(pose.x*1000))/1000) + ", ";
-    std::cout<<std::to_string((round(pose.y*1000))/1000) + ", ";
-    std::cout<<std::to_string((left+right)/2.0*127.0/12000.0) + "\n";
     //dataLine.append(std::to_string(pose.x) + ", ");
     //dataLine.append(std::to_string(pose.y) + ", ");
     //dataLine.append(std::to_string(pose.theta) + "\n");

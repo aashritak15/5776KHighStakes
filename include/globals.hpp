@@ -5,7 +5,7 @@ extern pros::Controller controller;
 extern pros::MotorGroup leftMotors;
 extern pros::MotorGroup rightMotors;
 
-extern pros::Imu imu;
+
 extern pros::Rotation vertical;
 extern pros::Rotation horizontal;
 

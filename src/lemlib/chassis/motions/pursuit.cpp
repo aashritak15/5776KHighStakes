@@ -244,16 +244,18 @@ float findLookaheadCurvature(lemlib::Pose pose, float heading, lemlib::Pose look
 }
 
 void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahead, int timeout, bool forwards, bool async) { //TODO: maybe remove timeout
+    std::cout<<"rerun started\n";
+    
     this->requestMotionStart();
-    // were all motions cancelled?
-    if (!this->motionRunning) return;
-    // if the function is async, run it in a new task
-    if (async) {
-        pros::Task task([&]() { follow(path, sub, lookahead, timeout, forwards, false); });
-        this->endMotion();
-        pros::delay(10); // delay to give the task time to start
-        return;
-    }
+    // were all motions cancelled? //TODO: we commented this out but it'll probably break something lol
+    // if (!this->motionRunning) return;
+    // // if the function is async, run it in a new task
+    // if (async) {
+    //     pros::Task task([&]() { follow(path, sub, lookahead, timeout, forwards, false); });
+    //     this->endMotion();
+    //     pros::delay(10); // delay to give the task time to start
+    //     return;
+    // }
 
     std::vector<lemlib::Pose> pathPoints = getData(path); // get list of path points
     std::vector<std::vector<std::string>> subValues = getSubData(sub); //get subsystem values
@@ -297,100 +299,99 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
     // loop until the robot is within the end tolerance
     for (int i = 0; i < timeout / 10 && pros::competition::get_status() == compState && this->motionRunning; i++) {
 
-        targetVel = pathPoints.at(closestPoint).theta;
+        // targetVel = pathPoints.at(closestPoint).theta; //TODO: moved back to below
 
+        // float targetLeftVel = targetVel * (2 + curvature * drivetrain.trackWidth) / 2;
+        // float targetRightVel = targetVel * (2 - curvature * drivetrain.trackWidth) / 2;
+
+        // get the current position of the robot
+        pose = this->getPose(true);
+        if (!forwards) pose.theta -= M_PI;
+
+        // update completion vars
+        distTraveled += pose.distance(lastPose);
+        lastPose = pose;
+
+        // find the closest point on the path to the robot
+        closestPoint = findClosest(pose, pathPoints);
+        // if the robot is at the end of the path, then stop
+        if (pathPoints.at(closestPoint).theta == 0) break; //theta = 0 at end indicates end
+
+        std::cout<<std::to_string(pathPoints.at(closestPoint).x)<<"\n";
+        std::cout<<std::to_string(pathPoints.at(closestPoint).y)<<"\n";
+
+        // find the lookahead point
+        lookaheadPose = lookaheadPoint(lastLookahead, pose, pathPoints, closestPoint, lookahead);
+        lastLookahead = lookaheadPose; // update last lookahead position
+
+        // get the curvature of the arc between the robot and the lookahead point
+        float curvatureHeading = M_PI / 2 - pose.theta;
+        curvature = findLookaheadCurvature(pose, curvatureHeading, lookaheadPose);
+
+        std::cout<<std::to_string(curvature)<<"\n";
+
+        // get the target velocity of the robot
+        targetVel = pathPoints.at(closestPoint).theta;
+        // targetVel = slew(targetVel, prevVel, lateralSettings.slew); //TODO: WHAT THE FLIP DOES THIS DO
+        prevVel = targetVel;
+
+        // calculate target left and right velocities
         float targetLeftVel = targetVel * (2 + curvature * drivetrain.trackWidth) / 2;
         float targetRightVel = targetVel * (2 - curvature * drivetrain.trackWidth) / 2;
 
-        for (int j = 0; j < 25; j++) {
-             // get the current position of the robot
-            pose = this->getPose(true);
-            if (!forwards) pose.theta -= M_PI;
-
-            // update completion vars
-            distTraveled += pose.distance(lastPose);
-            lastPose = pose;
-
-            // find the closest point on the path to the robot
-            closestPoint = findClosest(pose, pathPoints);
-            // if the robot is at the end of the path, then stop
-            if (pathPoints.at(closestPoint).theta == 0) break; //theta = 0 at end indicates end
-
-            std::cout<<std::to_string(pathPoints.at(closestPoint).x)<<"\n";
-            std::cout<<std::to_string(pathPoints.at(closestPoint).y)<<"\n";
-
-            // find the lookahead point
-            lookaheadPose = lookaheadPoint(lastLookahead, pose, pathPoints, closestPoint, lookahead);
-            lastLookahead = lookaheadPose; // update last lookahead position
-
-            // get the curvature of the arc between the robot and the lookahead point
-            float curvatureHeading = M_PI / 2 - pose.theta;
-            curvature = findLookaheadCurvature(pose, curvatureHeading, lookaheadPose);
-
-            std::cout<<std::to_string(curvature)<<"\n";
-
-            // get the target velocity of the robot
-            // targetVel = pathPoints.at(closestPoint).theta; //TODO: moved out of funct
-            // targetVel = slew(targetVel, prevVel, lateralSettings.slew); //TODO: WHAT THE FLIP DOES THIS DO
-            // prevVel = targetVel;
-
-            // calculate target left and right velocities
-            // float targetLeftVel = targetVel * (2 + curvature * drivetrain.trackWidth) / 2;
-            // float targetRightVel = targetVel * (2 - curvature * drivetrain.trackWidth) / 2;
-
-            // ratio the speeds to respect the max speed
-            float ratio = std::max(std::fabs(targetLeftVel), std::fabs(targetRightVel)) / 127;
-            if (ratio > 1) {
-                targetLeftVel /= ratio;
-                targetRightVel /= ratio;
-            }
-
-
-            // update previous velocities
-            prevLeftVel = targetLeftVel;
-            prevRightVel = targetRightVel;
-
-            std::cout<<"velocities: "<<targetLeftVel<<", "<<targetRightVel<<"\n\n"; //\n
-
-            // move the drivetrain
-            if (subValues.at(closestPoint)[0] == "0") {
-                drivetrain.leftMotors->move(targetLeftVel);
-                drivetrain.rightMotors->move(targetRightVel);
-                // controller.set_text(0, 0, "forward");
-                //std::cout<<"forwards: "<<targetLeftVel<<", "<<targetRightVel;
-            } else {
-                drivetrain.leftMotors->move(-targetRightVel);
-                drivetrain.rightMotors->move(-targetLeftVel);
-                // controller.set_text(0, 0, "backward");
-                //std::cout<<"backwards: "<<-1*targetLeftVel<<", "<<-1*targetRightVel;
-
-            }
-
-            // if(subValues[1] == 0) { 
-            // intake.move_voltage(0);
-            // } else if (subValues[1] == 1) {
-                // intake.move_voltage(-12000);
-            // }
-
-            if (subValues.at(closestPoint)[1] == "0") { //TODO: optimize
-                intake.move_voltage(0);
-            } else if (subValues.at(closestPoint)[1] == "1") {
-                intake.move_voltage(-12000);
-            } else if (subValues.at(closestPoint)[1] == "2") {
-                intake.move_voltage(12000);
-            }        
-
-            pros::delay(10);
+        // ratio the speeds to respect the max speed
+        float ratio = std::max(std::fabs(targetLeftVel), std::fabs(targetRightVel)) / 127;
+        if (ratio > 1) {
+            targetLeftVel /= ratio;
+            targetRightVel /= ratio;
         }
 
+        // update previous velocities
+        prevLeftVel = targetLeftVel;
+        prevRightVel = targetRightVel;
+
+        std::cout<<"velocities: "<<targetLeftVel<<", "<<targetRightVel<<"\n\n"; //\n
+
+        // move the drivetrain
+        if (subValues.at(closestPoint)[0] == "0") {
+            drivetrain.leftMotors->move(targetLeftVel);
+            drivetrain.rightMotors->move(targetRightVel);
+            // controller.set_text(0, 0, "forward");
+            //std::cout<<"forwards: "<<targetLeftVel<<", "<<targetRightVel;
+        } else {
+            drivetrain.leftMotors->move(-targetRightVel);
+            drivetrain.rightMotors->move(-targetLeftVel);
+            // controller.set_text(0, 0, "backward");
+            //std::cout<<"backwards: "<<-1*targetLeftVel<<", "<<-1*targetRightVel;
+        }
+
+        // if(subValues[1] == 0) { 
+        // intake.move_voltage(0);
+        // } else if (subValues[1] == 1) {
+            // intake.move_voltage(-12000);
+        // }
+
+        if (subValues.at(closestPoint)[1] == "0") {
+            intake.move_voltage(0);
+        } else if (subValues.at(closestPoint)[1] == "1") {
+            intake.move_voltage(-12000);
+        } else if (subValues.at(closestPoint)[1] == "2") {
+            intake.move_voltage(12000);
+        }        
+
+        // if (i > subValues.size()) { //TODO: does this logic work? bc time might not match up perfectly? idk anymore
+        //     return;
+        // }
+
+        pros::delay(10);
+
+        }
+
+        // stop the robot
+        drivetrain.leftMotors->move(0);
+        drivetrain.rightMotors->move(0);
+        // set distTraveled to -1 to indicate that the function has finished
+        distTraveled = -1;
+        // give the mutex back
+        this->endMotion();
     }
-
-    // stop the robot
-    drivetrain.leftMotors->move(0);
-    drivetrain.rightMotors->move(0);
-    // set distTraveled to -1 to indicate that the function has finished
-    distTraveled = -1;
-    // give the mutex back
-    this->endMotion();
-}
-

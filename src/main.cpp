@@ -33,9 +33,11 @@
  * All other competition modes are blocked by initialize; it is recommended
  * to keep execution time for this mode under a few seconds.
  */
+
 void initialize() {
     pros::lcd::initialize(); // initialize brain screen
     chassis.calibrate(); // calibrate sensors
+    chassis.setPose(0, 0, 0); //TODO: see if this fixed it
 
     clampInit();
     intakeInnit();
@@ -60,6 +62,7 @@ void initialize() {
 
     pros::Task screenTask([&]() { 
         while (true) {
+
             pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
             pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
             pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
@@ -99,9 +102,7 @@ ASSET(extra_txt);
 
 
 void autonomous() {
-    
-    std::cout<<"rerun\n";
-    chassis.follow(autonomous_txt, extra_txt, 10, 40000); //TODO: use this later lol
+    chassis.follow(autonomous_txt, extra_txt, 10, 40000, true, false); //TODO: use this later lol
 
     // chassis.follow(path_jerryio_txt, 15, 3000);
 }
@@ -112,6 +113,8 @@ void autonomous() {
 
 void opcontrol() {
     initO();
+    chassis.calibrate(); // calibrate sensors
+    chassis.setPose(0, 0, 0); //TODO: see if this fixed it
 
     while(true) {
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
@@ -132,14 +135,14 @@ void opcontrol() {
         static unsigned long lastWriteTime = 0; // Tracks the last time writePose was called
         unsigned long currentTime = pros::millis(); // Get the current time in milliseconds
 
-        if (currentTime - lastWriteTime >= 250) {
+        if (currentTime - lastWriteTime >= 200) {
             writePose();
             writeAdditional();
             lastWriteTime = currentTime; // Update the last write time
         }
 
         closeO();
-        
+
         pros::delay(10);
     }
 

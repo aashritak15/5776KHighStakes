@@ -5,16 +5,15 @@ pros::Controller controller(pros::E_CONTROLLER_MASTER);
 pros::MotorGroup leftMotors({-6, -3, -4}, pros::MotorGearset::blue);
 pros::MotorGroup rightMotors({20, 19, 18}, pros::MotorGearset::blue);
 
-pros::Imu imu(19);
 pros::Rotation vertical(-1); 
-pros::Rotation horizontal(-10);
+pros::Rotation horizontal(10); //TODO: check later
 
-lemlib::TrackingWheel verticalTracker(&vertical, lemlib::Omniwheel::NEW_275, -2.75);
-lemlib::TrackingWheel horizontalTracker(&horizontal, lemlib::Omniwheel::NEW_275, 0.125);
+lemlib::TrackingWheel verticalTracker(&vertical, lemlib::Omniwheel::NEW_275, 0.125);
+lemlib::TrackingWheel horizontalTracker(&horizontal, lemlib::Omniwheel::NEW_275, -2.5);
 
 // drivetrain settings
-lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 12.5, lemlib::Omniwheel::NEW_275, 450, //TODO: make sure rpm is right
-                              8 //TODO: is this 0? aashrita said 8
+lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 12.5, lemlib::Omniwheel::NEW_275, 450, 
+                              8 //TODO: 
 );
 
 // lateral motion controller
@@ -43,11 +42,11 @@ lemlib::ControllerSettings angularController(1.5, // proportional gain (kP)
                                              // OLD VALUES OCT 6: P 4.05, D 34.86768
 );
 // sensors for odometry
-lemlib::OdomSensors sensors(&verticalTracker, // vertical tracking wheel 1, set to null
+lemlib::OdomSensors sensors(&horizontalTracker, // vertical tracking wheel 1, set to null //TODO: what the actual flip
                             nullptr, // vertical tracking wheel 2, set to nullptr as we are using IMEs
-                            &horizontalTracker, // horizontal tracking wheel 1
+                            &verticalTracker, // horizontal tracking wheel 1
                             nullptr, // horizontal tracking wheel 2, set to nullptr as we don't have a second one
-                            &imu // inertial sensor
+                            nullptr // inertial sensor
 );
 
 // tanish driver functions:
