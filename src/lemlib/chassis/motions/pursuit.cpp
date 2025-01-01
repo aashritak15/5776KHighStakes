@@ -83,16 +83,16 @@ std::vector<lemlib::Pose> getData(const asset& path) {
 
         const std::vector<std::string> pointInput = readElement(line, ", "); // parse line
 
-        // check if the line was read correctly
-        if (pointInput.size() != 3) {
-            std::cout<<"path size: "<<pointInput.size()<<"\n";
-            for(int i=0; i<pointInput.size(); i++){
-                std::cout<<pointInput[i]<<", ";
-            }
-            lemlib::infoSink()->error("Failed to read path file! Are you using the right format? Raw line: {}",
-                                      stringToHex(line));
-            break;
-        }
+        // // check if the line was read correctly
+        // if (pointInput.size() != 3) {
+        //     std::cout<<"path size: "<<pointInput.size()<<"\n";
+        //     for(int i=0; i<pointInput.size(); i++){
+        //         std::cout<<pointInput[i]<<", ";
+        //     }
+        //     lemlib::infoSink()->error("Failed to read path file! Are you using the right format? Raw line: {}",
+        //                               stringToHex(line));
+        //     break;
+        // }
 
         lemlib::Pose pathPoint(0, 0);
         pathPoint.x = std::stof(pointInput.at(0)); // x position
@@ -312,6 +312,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
 
         // find the closest point on the path to the robot
         closestPoint = findClosest(pose, pathPoints, skips); //TODO: optimize slightly vile
+
         // if the robot is at the end of the path, then stop
         if (pathPoints.at(closestPoint).theta == 0) break; //theta = 0 at end indicates end
 
@@ -326,6 +327,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         if (subValues.at(closestPoint)[2] == "STOPPED\n") { //TODO: string comparison? also will this work
             drivetrain.leftMotors->move(0);
             drivetrain.rightMotors->move(0);
+            std::cout<<"Delayed\n\n";
             pros::delay(100); //TODO: CHANGE TO TICK SPEED
             skips++;
             continue;
@@ -333,8 +335,8 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
             skips = 0;
         }
 
-        std::cout<<std::to_string(pathPoints.at(closestPoint).x)<<"\n";
-        std::cout<<std::to_string(pathPoints.at(closestPoint).y)<<"\n";
+        std::cout<<"target x: "<<std::to_string(pathPoints.at(closestPoint).x)<<"\n";
+        std::cout<<"target y: "<<std::to_string(pathPoints.at(closestPoint).y)<<"\n";
 
         // find the lookahead point
         lookaheadPose = lookaheadPoint(lastLookahead, pose, pathPoints, closestPoint, lookahead);
@@ -344,7 +346,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         float curvatureHeading = M_PI / 2 - pose.theta; //TODO: WHY PI
         curvature = findLookaheadCurvature(pose, curvatureHeading, lookaheadPose);
 
-        std::cout<<std::to_string(curvature)<<"\n";
+        std::cout<<"curvature: "<<std::to_string(curvature)<<"\n";
 
         // get the target velocity of the robot
         targetVel = pathPoints.at(closestPoint).theta;

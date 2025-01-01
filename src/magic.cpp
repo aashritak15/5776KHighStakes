@@ -95,7 +95,7 @@ void writePose() {
     std::string dataLine = ""; //TODO: CHANGE GETPOSE BACK
     std::int32_t left = leftMotors.get_voltage();
     std::int32_t right = rightMotors.get_voltage(); 
-    std::int32_t adjusted = (right+left)/2.0*127.0/12000.0;
+    double adjusted = round((right+left) / 2.0 * 127.0 / 12000.0 * 1000) / 1000;
 
     dataLine.append(std::to_string((round(chassis.getPose().x*1000))/1000) + ", ");
     dataLine.append(std::to_string((round(chassis.getPose().y*1000))/1000) + ", ");
