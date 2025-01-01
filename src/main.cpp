@@ -68,8 +68,8 @@ void initialize() {
             pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
             pros::lcd::print(3, "Rotation (Lift): %i", rotationSensor.get_position()); // lift encoder
             pros::lcd::print(4, "Intake State: %f", intakeState);
-            pros::lcd::print(5, "Vert: %i", vertical.get_position());
-            pros::lcd::print(6, "Horiz: %i", horizontal.get_position());
+            // pros::lcd::print(5, "Vert: %i", vertical.get_position());
+            // pros::lcd::print(6, "Horiz: %i", horizontal.get_position());
             //pros::lcd::print(7 "Color: %f", optical.get_hue());
 
             lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
@@ -135,7 +135,7 @@ void opcontrol() {
         static unsigned long lastWriteTime = 0; // Tracks the last time writePose was called
         unsigned long currentTime = pros::millis(); // Get the current time in milliseconds
 
-        if (currentTime - lastWriteTime >= 200) {
+        if (currentTime - lastWriteTime >= 250) {
             writePose();
             writeAdditional();
             lastWriteTime = currentTime; // Update the last write time
