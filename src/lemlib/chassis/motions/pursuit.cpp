@@ -78,8 +78,11 @@ std::vector<lemlib::Pose> getData(const asset& path) {
     // read the points until 'endData' is read
     for (std::string line : dataLines) {
         lemlib::infoSink()->debug("read raw line {}", stringToHex(line));
+        
         if (line == "endData" || line == "endData\r") break;
+
         const std::vector<std::string> pointInput = readElement(line, ", "); // parse line
+
         // check if the line was read correctly
         if (pointInput.size() != 3) {
             std::cout<<"path size: "<<pointInput.size()<<"\n";
@@ -90,6 +93,7 @@ std::vector<lemlib::Pose> getData(const asset& path) {
                                       stringToHex(line));
             break;
         }
+
         lemlib::Pose pathPoint(0, 0);
         pathPoint.x = std::stof(pointInput.at(0)); // x position
         pathPoint.y = std::stof(pointInput.at(1)); // y position
@@ -114,12 +118,12 @@ std::vector<std::vector<std::string>> getSubData(const asset& sub) {
         const std::vector<std::string> temp = readElement(line, ", ");
         pointInput.push_back(temp); // parse line
 
-        if (pointInput[0].size() != 2) {
-            std::cout<<"sub size: "<<pointInput.size()<<"\n";
-            lemlib::infoSink()->error("Failed to read sub file! Are you using the right format? Raw line: {}",
-                                      stringToHex(line));
-            break;
-        }
+        // if (pointInput[0].size() != 2) { TODO: possibly add back later when we aren't playing w this function
+        //     std::cout<<"sub size: "<<pointInput.size()<<"\n";
+        //     lemlib::infoSink()->error("Failed to read sub file! Are you using the right format? Raw line: {}",
+        //                               stringToHex(line));
+        //     break;
+        // }
     }
 
     // for(int j=0; j<pointInput.size(); j++){
@@ -138,17 +142,22 @@ std::vector<std::vector<std::string>> getSubData(const asset& sub) {
  * @param path the path to follow
  * @return int index to the closest point
  */
-int findClosest(lemlib::Pose pose, std::vector<lemlib::Pose> path) {
+int findClosest(lemlib::Pose pose, std::vector<lemlib::Pose> path, int skips) { //TODO: this could be optimized i think this is vile
     int closestPoint;
+    int skipsLeft = skips;
     float closestDist = infinity();
 
     // loop through all path points
-    for (int i = 0; i < path.size(); i++) {
+    for (int i = 0; i < path.size(); i++) { //TODO: check
         const float dist = pose.distance(path.at(i));
-        if (dist < closestDist) { // new closest point
-            closestDist = dist;
-            closestPoint = i;
-        }
+        if (dist < closestDist) { // new closest point TODO: does this stop exclusion work
+            if (skipsLeft == 0) {
+                closestDist = dist;
+                closestPoint = i;
+            } else {
+                skipsLeft--;
+            }
+        } 
     }
 
     return closestPoint;
@@ -243,19 +252,11 @@ float findLookaheadCurvature(lemlib::Pose pose, float heading, lemlib::Pose look
     return side * ((2 * x) / (d * d));
 }
 
-void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahead, int timeout, bool forwards, bool async) { //TODO: maybe remove timeout
+void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahead, int timeout, bool forwards, bool async) { //TODO: forwards and async unused
+    
     std::cout<<"rerun started\n";
     
     this->requestMotionStart();
-    // were all motions cancelled? //TODO: we commented this out but it'll probably break something lol
-    // if (!this->motionRunning) return;
-    // // if the function is async, run it in a new task
-    // if (async) {
-    //     pros::Task task([&]() { follow(path, sub, lookahead, timeout, forwards, false); });
-    //     this->endMotion();
-    //     pros::delay(10); // delay to give the task time to start
-    //     return;
-    // }
 
     std::vector<lemlib::Pose> pathPoints = getData(path); // get list of path points
     std::vector<std::vector<std::string>> subValues = getSubData(sub); //get subsystem values
@@ -280,6 +281,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         this->endMotion();
         return;
     }
+
     Pose pose = this->getPose(true);
     Pose lastPose = pose;
     Pose lookaheadPose(0, 0, 0);
@@ -294,28 +296,40 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
     float rightInput = 0;
     float prevVel = 0;
     int compState = pros::competition::get_status();
+    int skips = 0;
     distTraveled = 0;
 
     // loop until the robot is within the end tolerance
-    for (int i = 0; i < timeout / 10 && pros::competition::get_status() == compState && this->motionRunning; i++) {
-
-        // targetVel = pathPoints.at(closestPoint).theta; //TODO: moved back to below
-
-        // float targetLeftVel = targetVel * (2 + curvature * drivetrain.trackWidth) / 2;
-        // float targetRightVel = targetVel * (2 - curvature * drivetrain.trackWidth) / 2;
+    for (int i = 0; i < timeout / 10 && pros::competition::get_status() == compState && this->motionRunning; i++) { //TODO: compState and motionRunning??? remove
 
         // get the current position of the robot
         pose = this->getPose(true);
-        if (!forwards) pose.theta -= M_PI;
+        // if (!forwards) pose.theta -= M_PI; //TODO: so actually why are we subtracting by pi especially if this is velocity idt it's important
 
         // update completion vars
         distTraveled += pose.distance(lastPose);
         lastPose = pose;
 
         // find the closest point on the path to the robot
-        closestPoint = findClosest(pose, pathPoints);
+        closestPoint = findClosest(pose, pathPoints, skips); //TODO: optimize slightly vile
         // if the robot is at the end of the path, then stop
         if (pathPoints.at(closestPoint).theta == 0) break; //theta = 0 at end indicates end
+
+        if (subValues.at(closestPoint)[1] == "0") { //TODO: moved from the bottom to here
+            intake.move_voltage(0);
+        } else if (subValues.at(closestPoint)[1] == "1") {
+            intake.move_voltage(-12000);
+        } else if (subValues.at(closestPoint)[1] == "2") {
+            intake.move_voltage(12000);
+        }        
+
+        if (subValues.at(closestPoint)[2] == "STOPPED\n") { //TODO: string comparison? also will this work
+            pros::delay(100); //TODO: CHANGE TO TICK SPEED
+            skips++;
+            continue;
+        } else {
+            skips = 0;
+        }
 
         std::cout<<std::to_string(pathPoints.at(closestPoint).x)<<"\n";
         std::cout<<std::to_string(pathPoints.at(closestPoint).y)<<"\n";
@@ -325,18 +339,18 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         lastLookahead = lookaheadPose; // update last lookahead position
 
         // get the curvature of the arc between the robot and the lookahead point
-        float curvatureHeading = M_PI / 2 - pose.theta;
+        float curvatureHeading = M_PI / 2 - pose.theta; //TODO: WHY PI
         curvature = findLookaheadCurvature(pose, curvatureHeading, lookaheadPose);
 
         std::cout<<std::to_string(curvature)<<"\n";
 
         // get the target velocity of the robot
         targetVel = pathPoints.at(closestPoint).theta;
-        // targetVel = slew(targetVel, prevVel, lateralSettings.slew); //TODO: WHAT THE FLIP DOES THIS DO
+        // targetVel = slew(targetVel, prevVel, lateralSettings.slew); //TODO: i got rid of slew lol
         prevVel = targetVel;
 
         // calculate target left and right velocities
-        float targetLeftVel = targetVel * (2 + curvature * drivetrain.trackWidth) / 2;
+        float targetLeftVel = targetVel * (2 + curvature * drivetrain.trackWidth) / 2; //TODO: what does this do
         float targetRightVel = targetVel * (2 - curvature * drivetrain.trackWidth) / 2;
 
         // ratio the speeds to respect the max speed
@@ -346,9 +360,9 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
             targetRightVel /= ratio;
         }
 
-        // update previous velocities
-        prevLeftVel = targetLeftVel;
-        prevRightVel = targetRightVel;
+        // update previous velocities TODO: not important right
+        // prevLeftVel = targetLeftVel;
+        // prevRightVel = targetRightVel;
 
         std::cout<<"velocities: "<<targetLeftVel<<", "<<targetRightVel<<"\n\n"; //\n
 
@@ -356,13 +370,9 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         if (subValues.at(closestPoint)[0] == "0") {
             drivetrain.leftMotors->move(targetLeftVel);
             drivetrain.rightMotors->move(targetRightVel);
-            // controller.set_text(0, 0, "forward");
-            //std::cout<<"forwards: "<<targetLeftVel<<", "<<targetRightVel;
         } else {
             drivetrain.leftMotors->move(-targetRightVel);
             drivetrain.rightMotors->move(-targetLeftVel);
-            // controller.set_text(0, 0, "backward");
-            //std::cout<<"backwards: "<<-1*targetLeftVel<<", "<<-1*targetRightVel;
         }
 
         // if(subValues[1] == 0) { 
@@ -371,27 +381,15 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
             // intake.move_voltage(-12000);
         // }
 
-        if (subValues.at(closestPoint)[1] == "0") {
-            intake.move_voltage(0);
-        } else if (subValues.at(closestPoint)[1] == "1") {
-            intake.move_voltage(-12000);
-        } else if (subValues.at(closestPoint)[1] == "2") {
-            intake.move_voltage(12000);
-        }        
-
-        // if (i > subValues.size()) { //TODO: does this logic work? bc time might not match up perfectly? idk anymore
-        //     return;
-        // }
-
         pros::delay(10);
 
-        }
-
-        // stop the robot
-        drivetrain.leftMotors->move(0);
-        drivetrain.rightMotors->move(0);
-        // set distTraveled to -1 to indicate that the function has finished
-        distTraveled = -1;
-        // give the mutex back
-        this->endMotion();
     }
+
+    // stop the robot
+    drivetrain.leftMotors->move(0);
+    drivetrain.rightMotors->move(0);
+    // set distTraveled to -1 to indicate that the function has finished
+    distTraveled = -1;
+    // give the mutex back
+    this->endMotion();
+}

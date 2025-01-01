@@ -77,6 +77,7 @@ void initialize() {
             pros::delay(50); 
         }
     });
+
 }
 
 
@@ -97,14 +98,12 @@ void competition_initialize() {}
  * This is an example autonomous routine which demonstrates a lot of the features LemLib has to offer
  */
 
-ASSET(autonomous_txt);
+ASSET(autonomous_txt); //TODO: add std functionality
 ASSET(extra_txt);
 
 
 void autonomous() {
-    chassis.follow(autonomous_txt, extra_txt, 10, 40000, true, false); //TODO: use this later lol
-
-    // chassis.follow(path_jerryio_txt, 15, 3000);
+    chassis.follow(autonomous_txt, extra_txt, 10, 40000, true, false); 
 }
 
 /**
@@ -114,7 +113,7 @@ void autonomous() {
 void opcontrol() {
     initO();
     chassis.calibrate(); // calibrate sensors
-    chassis.setPose(0, 0, 0); //TODO: see if this fixed it
+    chassis.setPose(0, 0, 0);
 
     while(true) {
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
@@ -135,7 +134,7 @@ void opcontrol() {
         static unsigned long lastWriteTime = 0; // Tracks the last time writePose was called
         unsigned long currentTime = pros::millis(); // Get the current time in milliseconds
 
-        if (currentTime - lastWriteTime >= 250) {
+        if (currentTime - lastWriteTime >= 100) { //TODO: tune this value
             writePose();
             writeAdditional();
             lastWriteTime = currentTime; // Update the last write time

@@ -94,39 +94,36 @@ void closeI() {
 void writePose() {
     std::string dataLine = ""; //TODO: CHANGE GETPOSE BACK
     std::int32_t left = leftMotors.get_voltage();
-    std::int32_t right = rightMotors.get_voltage();   
+    std::int32_t right = rightMotors.get_voltage(); 
+    std::int32_t adjusted = (right+left)/2.0*127.0/12000.0;
 
-    //rounds to 3 decimal places (idk if that helps)
     dataLine.append(std::to_string((round(chassis.getPose().x*1000))/1000) + ", ");
     dataLine.append(std::to_string((round(chassis.getPose().y*1000))/1000) + ", ");
-    dataLine.append(std::to_string((right+left)/2.0*127.0/12000.0) + "\n");
-
-    //dataLine.append(std::to_string(pose.x) + ", ");
-    //dataLine.append(std::to_string(pose.y) + ", ");
-    //dataLine.append(std::to_string(pose.theta) + "\n");
-
+    dataLine.append(std::to_string(adjusted));
 
     fileO << dataLine;
-        
-    //fileO.flush();
+
 }
 
-void writeAdditional() {
+void writeAdditional() { //TODO: OPTIMIZE
     std::string dataLine = "";
+
+    std::int32_t left = leftMotors.get_voltage();
+    std::int32_t right = rightMotors.get_voltage(); 
+    std::int32_t adjusted = (right+left)/2.0*127.0/12000.0;
 
     if(leftMotors.get_voltage() < 0 && rightMotors.get_voltage() < 0)
         dataLine.append("1, ");
     else
         dataLine.append("0, ");
 
-    // if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) { //non toggle subsystem
-    //     dataLine.append("1, ");
-    // }
-    // else {
-    //     dataLine.append("0, ");
-    // }
+    dataLine.append(std::to_string(intakeState) + ", ");
 
-    dataLine.append(std::to_string(intakeState) + "\n");
+    if(adjusted < 3) { //TODO: TUNE THIS VALUE
+        dataLine.append("STOPPED\n");
+    } else {
+        dataLine.append("GOING\n");
+    }
 
     fileOTwo << dataLine;
 
