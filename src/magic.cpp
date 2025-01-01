@@ -99,7 +99,7 @@ void writePose() {
 
     dataLine.append(std::to_string((round(chassis.getPose().x*1000))/1000) + ", ");
     dataLine.append(std::to_string((round(chassis.getPose().y*1000))/1000) + ", ");
-    dataLine.append(std::to_string(adjusted));
+    dataLine.append(std::to_string(adjusted) + "\n");
 
     fileO << dataLine;
 
