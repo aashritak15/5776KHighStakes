@@ -324,6 +324,8 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         }        
 
         if (subValues.at(closestPoint)[2] == "STOPPED\n") { //TODO: string comparison? also will this work
+            drivetrain.leftMotors->move(0);
+            drivetrain.rightMotors->move(0);
             pros::delay(100); //TODO: CHANGE TO TICK SPEED
             skips++;
             continue;
