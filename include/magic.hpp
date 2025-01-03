@@ -20,7 +20,9 @@ inline std::ifstream fileITwo;
 // inline std::ifstream fileIExtra;
 
 extern bool active;
-extern int count;
+
+extern int prevIntakeState;
+extern int prevClampState;
 
 void initO();
 void initI();

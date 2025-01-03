@@ -286,16 +286,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
 
     std::vector<lemlib::Pose> pathPoints = getData(path); // get list of path points
     std::vector<std::vector<std::string>> subValues = getSubData(sub); //get subsystem values
-    std::vector<std::string> velocities = getVelocities(path); //get velocities???
-    
-    if (pathPoints.size() == 0) {
-        infoSink()->error("No points in path! Do you have the right format? Skipping motion");
-        // set distTraveled to -1 to indicate that the function has finished
-        distTraveled = -1;
-        // give the mutex back
-        this->endMotion();
-        return;
-    }
+    std::vector<std::string> velocities = getVelocities(path); //get velocities
 
     Pose pose = this->getPose(true);
     Pose lastPose = pose;
@@ -321,30 +312,67 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         closestPoint = findClosest(pose, pathPoints, skips, closestPoint); //TODO: optimize quite vile
 
         dataLine.append("target index: " + std::to_string(closestPoint) + "\n");
-
         dataLine.append("skips: " + std::to_string(skips) + "\n");
         dataLine.append("x: " + std::to_string(pose.x) + "\n");
         dataLine.append("y: " + std::to_string(pose.y) + "\n");
         dataLine.append("theta: " + std::to_string(pose.theta) + "\n");
 
-        // std::cout<<"skips: "<<std::to_string(skips)<<"\n";
-        // std::cout<<"x: " <<std::to_string(pose.x)<<"\n";
-        // std::cout<<"y: " <<std::to_string(pose.y)<<"\n";
-        // std::cout<<"theta: " <<std::to_string(pose.theta)<<"\n";
-
         // get the current position of the robot
         pose = this->getPose(true);
 
-        if (subValues.at(closestPoint)[2] == "STOPPED\n") { //*primary exclusion for delays
+        if (subValues.at(closestPoint)[2] == "STOPPED") { //*primary exclusion for delays
             drivetrain.leftMotors->move(0);                 
             drivetrain.rightMotors->move(0);
             dataLine.append("DELAYED\n\n");
+            fileOThree<<dataLine;
+            fileOThree.flush();
             // std::cout<<"Delayed\n\n";
             pros::delay(100); //*change to tick speed always
             skips++;
             continue;
-        } else {
-            skips = 0;
+
+        } else if(subValues.at(closestPoint)[2] == "TURNING CW" || subValues.at(closestPoint)[2] == "TURNING CCW" ) { //*exclusion for turns (pids are back)
+            chassis.setPose(pose.x, pose.y, 0);
+
+            closestPoint++;
+            while(subValues.at(closestPoint)[2] == "TURNING CW" || subValues.at(closestPoint)[2] == "TURNING CCW") {closestPoint++;}
+            closestPoint--; //TODO: check if this logic works
+            
+            float turnDist = pathPoints.at(closestPoint).theta-pose.theta; //TODO: WON'T WORK WITH VALUES PAST 2PI
+            
+            if (subValues.at(closestPoint)[2] == "TURNING CW") {
+                chassis.turnToHeading(turnDist, 2000, {.direction = AngularDirection::CW_CLOCKWISE}); //TODO: tune timeout
+            } else {
+                chassis.turnToHeading(turnDist, 2000, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE});
+            }
+
+            chassis.setPose(pose.x, pose.y, pathPoints.at(closestPoint).theta);
+
+            closestPoint++;
+
+            continue;
+
+        } else if(subValues.at(closestPoint)[2] == "SUBSYS") {
+            
+            if (subValues.at(closestPoint)[1] == "0") {
+            intake.move_voltage(0);
+            } else if (subValues.at(closestPoint)[1] == "1") {
+                intake.move_voltage(-12000);
+            } else if (subValues.at(closestPoint)[1] == "2") {
+                intake.move_voltage(12000);
+            }
+
+            if (subValues.at(closestPoint)[3] == "0") {
+                mogoClamp.set_value(true);
+            } else if (subValues.at(closestPoint)[3] == "2") {
+                mogoClamp.set_value(false);
+            }
+
+            closestPoint++;
+
+            pros::delay(100);
+
+            continue;
         }
 
         // update completion vars
@@ -364,9 +392,9 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         }
 
 
-        if (subValues.at(closestPoint)[4] == "0") {
+        if (subValues.at(closestPoint)[3] == "0") {
             mogoClamp.set_value(true);
-        } else if (subValues.at(closestPoint)[4] == "2") {
+        } else if (subValues.at(closestPoint)[3] == "2") {
             mogoClamp.set_value(false);
         }        
 

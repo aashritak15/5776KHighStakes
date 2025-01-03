@@ -1,12 +1,17 @@
 #include "main.h"
 #include "globals.hpp"
 #include "magic.hpp"
+#include "intake.hpp"
+#include "piston.hpp"
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <cmath>
 
 bool active = true;
+int prevIntakeState = 0;
+int prevClampState = 0;
+
 // std::vector<Waypoint> route;
 // int count = 1;
 
@@ -108,7 +113,7 @@ void writePose() {
     dataLine.append(std::to_string((round(chassis.getPose().x*1000))/1000) + ", "); //*all rounded to 3 decimal places
     dataLine.append(std::to_string((round(chassis.getPose().y*1000))/1000) + ", ");
     dataLine.append(std::to_string((round(chassis.getPose().theta*1000))/1000) + ", "); //*changed from speed to angle
-    dataLine.append(std::to_string((round(adjusted*1000)/1000)) + "\n");
+    dataLine.append(std::to_string(adjusted) + "\n");
 
     fileO << dataLine;
 }
@@ -118,7 +123,9 @@ void writeAdditional() { //TODO: OPTIMIZE
 
     std::int32_t left = leftMotors.get_voltage();
     std::int32_t right = rightMotors.get_voltage(); 
-    std::int32_t adjusted = (right+left)/2.0*127.0/12000.0;
+    float adjLeft = right/2.0*127.0/12000.0;
+    float adjRight = left/2.0*127.0/12000.0;
+    float adjTotal = right+left;
 
     if(leftMotors.get_voltage() < 0 && rightMotors.get_voltage() < 0)
         dataLine.append("1, ");
@@ -127,13 +134,26 @@ void writeAdditional() { //TODO: OPTIMIZE
 
     dataLine.append(std::to_string(intakeState) + ", ");
 
-    if(std::abs(adjusted) < 3) { //TODO: TUNE THIS VALUE
-        dataLine.append("STOPPED, ");
+    if(std::abs(adjTotal) < 5) { //TODO: TUNE THIS VALUE
+        if(std::abs(adjRight) > 5 && std::abs(adjLeft) > 5) {
+            if(adjRight > 0)  {//TODO: CHECK {
+                dataLine.append("TURNING CW, ");
+            } else if (adjRight < 0) {
+                dataLine.append("TURNING CCW, ");
+            }
+        } else if(!(prevIntakeState == intakeState) || !(prevClampState == clampState)) {
+            dataLine.append("SUBSYS, ");
+        } 
+        else {dataLine.append("STOPPED, ");}
+
     } else {
         dataLine.append("GOING, ");
     }
 
     dataLine.append(std::to_string(clampState) + "\n");
+
+    prevIntakeState = intakeState;
+    prevClampState = clampState;
 
     fileOTwo << dataLine;
 }
