@@ -70,7 +70,6 @@ std::string stringToHex(const std::string& input) {
  */
 std::vector<lemlib::Pose> getData(const asset& path) {    
     std::vector<lemlib::Pose> robotPath;
-
     // format data from the asset
     const std::string data(reinterpret_cast<char*>(path.buf), path.size);
     const std::vector<std::string> dataLines = readElement(data, "\n");
@@ -83,26 +82,39 @@ std::vector<lemlib::Pose> getData(const asset& path) {
 
         const std::vector<std::string> pointInput = readElement(line, ", "); // parse line
 
-        // // check if the line was read correctly
-        // if (pointInput.size() != 3) {
-        //     std::cout<<"path size: "<<pointInput.size()<<"\n";
-        //     for(int i=0; i<pointInput.size(); i++){
-        //         std::cout<<pointInput[i]<<", ";
-        //     }
-        //     lemlib::infoSink()->error("Failed to read path file! Are you using the right format? Raw line: {}",
-        //                               stringToHex(line));
-        //     break;
-        // }
-
         lemlib::Pose pathPoint(0, 0);
         pathPoint.x = std::stof(pointInput.at(0)); // x position
         pathPoint.y = std::stof(pointInput.at(1)); // y position
-        pathPoint.theta = std::stof(pointInput.at(2)); // velocity
+        pathPoint.theta = std::stof(pointInput.at(2)); // ANGLE???? what a jumpscare
         robotPath.push_back(pathPoint); // save data
-        lemlib::infoSink()->debug("read point {}", pathPoint);
+        // lemlib::infoSink()->debug("read point {}", pathPoint);
+
+        // std::cout<<"x: "<<pathPoint.x<<"\n"; //* This works!!
+        // std::cout<<"y: "<<pathPoint.y<<"\n";
+        // std::cout<<"vel: "<<pathPoint.theta<<"\n\n";
     }
 
     return robotPath;
+}
+
+std::vector<std::string> getVelocities(const asset& path) { //TODO: could be optimized
+    std::vector<std::string> robotVelocities;
+
+    const std::string data(reinterpret_cast<char*>(path.buf), path.size);
+    const std::vector<std::string> dataLines = readElement(data, "\n");
+
+    for (std::string line : dataLines) {
+        // lemlib::infoSink()->debug("read raw line {}", stringToHex(line));
+        
+        if (line == "endData" || line == "endData\r") break;
+
+        const std::vector<std::string> pointInput = readElement(line, ", "); // parse line
+
+        robotVelocities.push_back(pointInput.at(3));
+        // lemlib::infoSink()->debug("read point {}", pathPoint);
+    }
+
+    return robotVelocities;
 }
 
 std::vector<std::vector<std::string>> getSubData(const asset& sub) {
@@ -113,7 +125,7 @@ std::vector<std::vector<std::string>> getSubData(const asset& sub) {
 
     // read the points until 'endData' is read
     for (std::string line : dataLines) {
-        lemlib::infoSink()->debug("read raw line {}", stringToHex(line));
+        // lemlib::infoSink()->debug("read raw line {}", stringToHex(line));
         if (line == "endData" || line == "endData\r") break;
         const std::vector<std::string> temp = readElement(line, ", ");
         pointInput.push_back(temp); // parse line
@@ -124,6 +136,11 @@ std::vector<std::vector<std::string>> getSubData(const asset& sub) {
         //                               stringToHex(line));
         //     break;
         // }
+        
+        // std::cout<<"reverse: "<<temp.at(0)<<"\n"; //* This works!!
+        // std::cout<<"intake: "<<temp.at(1)<<"\n";
+        // std::cout<<temp.at(2)<<"\n\n";
+
     }
 
     // for(int j=0; j<pointInput.size(); j++){
@@ -142,7 +159,7 @@ std::vector<std::vector<std::string>> getSubData(const asset& sub) {
  * @param path the path to follow
  * @return int index to the closest point
  */
-int findClosest(lemlib::Pose pose, std::vector<lemlib::Pose> path, int skips) { //TODO: this could be optimized i think this is vile
+int findClosest(lemlib::Pose pose, std::vector<lemlib::Pose> path, int skips) { //TODO: check if optimization worked
     int closestPoint;
     int skipsLeft = skips;
     float closestDist = infinity();
@@ -156,6 +173,7 @@ int findClosest(lemlib::Pose pose, std::vector<lemlib::Pose> path, int skips) { 
                 closestPoint = i;
             } else {
                 skipsLeft--;
+                std::cout<<"skips left: "<<std::to_string(skipsLeft)<<"\n";
             }
         } 
     }
@@ -255,11 +273,12 @@ float findLookaheadCurvature(lemlib::Pose pose, float heading, lemlib::Pose look
 void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahead, int timeout, bool forwards, bool async) { //TODO: forwards and async unused
     
     std::cout<<"rerun started\n";
-    
+
     this->requestMotionStart();
 
     std::vector<lemlib::Pose> pathPoints = getData(path); // get list of path points
     std::vector<std::vector<std::string>> subValues = getSubData(sub); //get subsystem values
+    std::vector<std::string> velocities = getVelocities(path); //get velocities???
 
     // outputs path points
     // for(int i=0; i<pathPoints.size(); i++){
@@ -272,7 +291,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
     // }
     
     // return;
-
+    
     if (pathPoints.size() == 0) {
         infoSink()->error("No points in path! Do you have the right format? Skipping motion");
         // set distTraveled to -1 to indicate that the function has finished
@@ -284,14 +303,14 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
 
     Pose pose = this->getPose(true);
     Pose lastPose = pose;
-    Pose lookaheadPose(0, 0, 0);
+    Pose lookaheadPose(0, 0, 0, true); //TODO: radians???
     Pose lastLookahead = pathPoints.at(0);
     lastLookahead.theta = 0;
     float curvature;
     float targetVel;
     float prevLeftVel = 0;
     float prevRightVel = 0;
-    int closestPoint;
+    int closestPoint = 0; //*does this work
     float leftInput = 0;
     float rightInput = 0;
     float prevVel = 0;
@@ -302,38 +321,39 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
     // loop until the robot is within the end tolerance
     for (int i = 0; i < timeout / 10 && pros::competition::get_status() == compState && this->motionRunning; i++) { //TODO: compState and motionRunning??? remove
 
+        std::cout<<"skips: "<<std::to_string(skips)<<"\n";
+
         // get the current position of the robot
         pose = this->getPose(true);
         // if (!forwards) pose.theta -= M_PI; //TODO: so actually why are we subtracting by pi especially if this is velocity idt it's important
+
+        if (subValues.at(closestPoint)[2] == "STOPPED\n") { //*primary exclusion for delays
+            drivetrain.leftMotors->move(0);                 
+            drivetrain.rightMotors->move(0);
+            std::cout<<"Delayed\n\n";
+            pros::delay(100); //*change to tick speed always
+            skips++;
+            continue;
+        } else {
+            skips = 0;
+        }
 
         // update completion vars
         distTraveled += pose.distance(lastPose);
         lastPose = pose;
 
         // find the closest point on the path to the robot
-        closestPoint = findClosest(pose, pathPoints, skips); //TODO: optimize slightly vile
+        closestPoint = findClosest(pose, pathPoints, skips); //TODO: optimize quite vile
 
-        // if the robot is at the end of the path, then stop
-        if (pathPoints.at(closestPoint).theta == 0) break; //theta = 0 at end indicates end
+        std::cout<<"target index: "<<std::to_string(closestPoint)<<"\n";
 
-        if (subValues.at(closestPoint)[1] == "0") { //TODO: moved from the bottom to here
+        if (subValues.at(closestPoint)[1] == "0") {
             intake.move_voltage(0);
         } else if (subValues.at(closestPoint)[1] == "1") {
             intake.move_voltage(-12000);
         } else if (subValues.at(closestPoint)[1] == "2") {
             intake.move_voltage(12000);
         }        
-
-        if (subValues.at(closestPoint)[2] == "STOPPED\n") { //TODO: string comparison? also will this work
-            drivetrain.leftMotors->move(0);
-            drivetrain.rightMotors->move(0);
-            std::cout<<"Delayed\n\n";
-            pros::delay(100); //TODO: CHANGE TO TICK SPEED
-            skips++;
-            continue;
-        } else {
-            skips = 0;
-        }
 
         std::cout<<"target x: "<<std::to_string(pathPoints.at(closestPoint).x)<<"\n";
         std::cout<<"target y: "<<std::to_string(pathPoints.at(closestPoint).y)<<"\n";
@@ -343,19 +363,31 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         lastLookahead = lookaheadPose; // update last lookahead position
 
         // get the curvature of the arc between the robot and the lookahead point
-        float curvatureHeading = M_PI / 2 - pose.theta; //TODO: WHY PI
+        std::cout<<"target vel: "<<std::to_string(targetVel)<<"\n";
+        float curvatureHeading = M_PI / 2 - pose.theta; 
         curvature = findLookaheadCurvature(pose, curvatureHeading, lookaheadPose);
 
         std::cout<<"curvature: "<<std::to_string(curvature)<<"\n";
 
         // get the target velocity of the robot
-        targetVel = pathPoints.at(closestPoint).theta;
-        // targetVel = slew(targetVel, prevVel, lateralSettings.slew); //TODO: i got rid of slew lol
+        targetVel = std::stof(velocities.at(closestPoint));
+        std::cout<<"target vel: "<<std::to_string(targetVel)<<"\n";
+
+        // targetVel = slew(targetVel, prevVel, lateralSettings.slew); //*i got rid of slew lol
         prevVel = targetVel;
 
         // calculate target left and right velocities
-        float targetLeftVel = targetVel * (2 + curvature * drivetrain.trackWidth) / 2; //TODO: what does this do
+        float targetLeftVel = targetVel * (2 + curvature * drivetrain.trackWidth) / 2; 
         float targetRightVel = targetVel * (2 - curvature * drivetrain.trackWidth) / 2;
+
+        if ((std::abs(targetLeftVel) < 3.0) && (std::abs(targetRightVel) < 3.0)) { //*secondary exclusion for if bot feels cute
+            std::cout<<"tiny vel\n\n";
+            pros::delay(10); //*change to tick speed always
+            skips++;
+            continue;
+        } else {
+            skips = 0;
+        }
 
         // ratio the speeds to respect the max speed
         float ratio = std::max(std::fabs(targetLeftVel), std::fabs(targetRightVel)) / 127;

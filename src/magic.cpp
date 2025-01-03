@@ -95,14 +95,14 @@ void writePose() {
     std::string dataLine = ""; //TODO: CHANGE GETPOSE BACK
     std::int32_t left = leftMotors.get_voltage();
     std::int32_t right = rightMotors.get_voltage(); 
-    double adjusted = round((right+left) / 2.0 * 127.0 / 12000.0 * 1000) / 1000;
+    float adjusted = round((right+left) / 2.0 * 127.0 / 12000.0 * 1000) / 1000;
 
-    dataLine.append(std::to_string((round(chassis.getPose().x*1000))/1000) + ", ");
+    dataLine.append(std::to_string((round(chassis.getPose().x*1000))/1000) + ", "); //*all rounded to 3 decimal places
     dataLine.append(std::to_string((round(chassis.getPose().y*1000))/1000) + ", ");
-    dataLine.append(std::to_string(adjusted) + "\n");
+    dataLine.append(std::to_string((round(chassis.getPose().theta*1000))/1000) + ", "); //*changed from speed to angle
+    dataLine.append(std::to_string((round(adjusted*1000)/1000)) + "\n");
 
     fileO << dataLine;
-
 }
 
 void writeAdditional() { //TODO: OPTIMIZE
@@ -119,16 +119,15 @@ void writeAdditional() { //TODO: OPTIMIZE
 
     dataLine.append(std::to_string(intakeState) + ", ");
 
-    if(adjusted < 3) { //TODO: TUNE THIS VALUE
+    if(std::abs(adjusted) < 3) { //TODO: TUNE THIS VALUE
         dataLine.append("STOPPED\n");
     } else {
         dataLine.append("GOING\n");
     }
 
     fileOTwo << dataLine;
-
-    // fileOTwo.flush();
 }
+
 
 //jerry stuff 
 

@@ -113,7 +113,7 @@ void autonomous() {
 void opcontrol() {
     initO();
     chassis.calibrate(); // calibrate sensors
-    chassis.setPose(0, 0, 0);
+    chassis.setPose(0, 0, 0, true);
 
     while(true) {
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
