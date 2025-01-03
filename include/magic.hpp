@@ -10,6 +10,7 @@
 
 inline std::ofstream fileO;
 inline std::ofstream fileOTwo;
+inline std::ofstream fileOThree;
 
 inline std::ifstream fileI;
 inline std::ifstream fileITwo;
@@ -22,6 +23,8 @@ extern int count;
 
 void initO();
 void initI();
+void initDebug();
+
 void closeO();
 void closeI();
 

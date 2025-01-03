@@ -103,7 +103,9 @@ ASSET(extra_txt);
 
 
 void autonomous() {
-    chassis.follow(autonomous_txt, extra_txt, 10, 40000, true, false); 
+    initDebug();
+    chassis.setPose(0, 0, 0, true);
+    chassis.follow(autonomous_txt, extra_txt, 4, 40000, true, false); 
 }
 
 /**

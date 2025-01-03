@@ -11,7 +11,6 @@ bool active = true;
 // int count = 1;
 
 void initO() {
-    pros::lcd::print(7, "?????");
     fileO.open("/usd/autonomous.txt");
     fileOTwo.open("/usd/extra.txt");
     if(!fileO && !fileOTwo) {
@@ -32,6 +31,15 @@ void initO() {
         pros::lcd::print(7, "goated");
         controller.set_text(0, 0, "goated");
         active = true;
+    }
+}
+
+void initDebug() {
+    fileOThree.open("/usd/debug.txt");
+    if(!fileOThree) {
+        controller.set_text(0, 0, "failed to open");
+    } else {
+        controller.set_text(0, 0, "opened");
     }
 }
 
