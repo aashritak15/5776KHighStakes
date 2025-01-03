@@ -128,10 +128,12 @@ void writeAdditional() { //TODO: OPTIMIZE
     dataLine.append(std::to_string(intakeState) + ", ");
 
     if(std::abs(adjusted) < 3) { //TODO: TUNE THIS VALUE
-        dataLine.append("STOPPED\n");
+        dataLine.append("STOPPED, ");
     } else {
-        dataLine.append("GOING\n");
+        dataLine.append("GOING, ");
     }
+
+    dataLine.append(std::to_string(clampState) + "\n");
 
     fileOTwo << dataLine;
 }

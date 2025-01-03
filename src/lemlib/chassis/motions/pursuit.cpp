@@ -14,6 +14,7 @@
 #include "globals.hpp"
 #include "intake.hpp"
 #include "magic.hpp"
+#include "piston.hpp"
 
 /**
  * @brief function that returns elements in a file line, separated by a delimeter
@@ -286,18 +287,6 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
     std::vector<lemlib::Pose> pathPoints = getData(path); // get list of path points
     std::vector<std::vector<std::string>> subValues = getSubData(sub); //get subsystem values
     std::vector<std::string> velocities = getVelocities(path); //get velocities???
-
-    // outputs path points
-    // for(int i=0; i<pathPoints.size(); i++){
-    //     std::cout<<pathPoints[i].x<<", "<<pathPoints[i].y<<", "<<pathPoints[i].theta<<", \n";
-    // }
-    // for(int i=0; i<subValues.size(); i++){
-    //     for(int j=0; j<subValues[i].size(); j++)
-    //         std::cout<<subValues[i][j]<<", ";
-    //     std::cout<<"\n";
-    // }
-    
-    // return;
     
     if (pathPoints.size() == 0) {
         infoSink()->error("No points in path! Do you have the right format? Skipping motion");
@@ -326,7 +315,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
     distTraveled = 0;
 
     // loop until the robot is within the end tolerance
-    for (int i = 0; i < timeout / 10 && pros::competition::get_status() == compState && this->motionRunning; i++) { //TODO: compState and motionRunning??? remove
+    for (int i = 0; i < timeout / 10 && pros::competition::get_status() == compState && this->motionRunning; i++) { //* compState and motionRunning??? remove
         std::string dataLine = "";
 
         closestPoint = findClosest(pose, pathPoints, skips, closestPoint); //TODO: optimize quite vile
@@ -345,7 +334,6 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
 
         // get the current position of the robot
         pose = this->getPose(true);
-        // if (!forwards) pose.theta -= M_PI; //TODO: so actually why are we subtracting by pi especially if this is velocity idt it's important
 
         if (subValues.at(closestPoint)[2] == "STOPPED\n") { //*primary exclusion for delays
             drivetrain.leftMotors->move(0);                 
@@ -373,6 +361,13 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
             intake.move_voltage(-12000);
         } else if (subValues.at(closestPoint)[1] == "2") {
             intake.move_voltage(12000);
+        }
+
+
+        if (subValues.at(closestPoint)[4] == "0") {
+            mogoClamp.set_value(true);
+        } else if (subValues.at(closestPoint)[4] == "2") {
+            mogoClamp.set_value(false);
         }        
 
         dataLine.append("target x: " + std::to_string(pathPoints.at(closestPoint).x) + "\n");
@@ -421,7 +416,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
             targetRightVel /= ratio;
         }
 
-        // update previous velocities TODO: not important right
+        // update previous velocities //* not important right
         // prevLeftVel = targetLeftVel;
         // prevRightVel = targetRightVel;
 
@@ -444,6 +439,10 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
             distTraveled = -1;
             // give the mutex back
             this->endMotion();
+
+            fileOThree << dataLine;
+            fileOThree.flush();
+
             return;
         }
         

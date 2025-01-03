@@ -4,6 +4,7 @@
 #include "main.h"
 #include "globals.hpp"
 #include "intake.hpp"
+#include "piston.hpp"
 #include <iostream>
 #include <fstream>
 #include <string>
