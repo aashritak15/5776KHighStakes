@@ -11,13 +11,6 @@
 
 inline std::ofstream fileO;
 inline std::ofstream fileOTwo;
-inline std::ofstream fileOThree;
-
-inline std::ifstream fileI;
-inline std::ifstream fileITwo;
-
-// inline std::ofstream fileOExtra; TODO: we don't use these anywhere right
-// inline std::ifstream fileIExtra;
 
 extern bool active;
 
@@ -25,11 +18,9 @@ extern int prevIntakeState;
 extern int prevClampState;
 
 void initO();
-void initI();
 void initDebug();
 
 void closeO();
-void closeI();
 
 void writePose();
 void writeAdditional();

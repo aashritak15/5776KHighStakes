@@ -48,28 +48,6 @@ void initDebug() {
     }
 }
 
-void initI() {
-    fileI.open("/usd/autonomous.txt");
-    fileITwo.open("/usd/extra.txt");
-    if(!fileI && !fileITwo) {
-        controller.set_text(0, 0, "failed to open both");
-        active = false;
-    } else if (!fileI) {
-        controller.set_text(0, 0, "pose failed to open");
-        active = false;
-    } else if (!fileITwo) {
-        controller.set_text(0, 0, "extra failed to open");
-        active = false;
-    }
-    
-    else {
-        controller.set_text(0, 0, "opened");
-        active = true;
-    }
-
-    // readRouteFile(); 
-}
-
 
 void closeO() {
     if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_B) && active) {
@@ -86,17 +64,6 @@ void closeO() {
 
         fileO.close();
         fileOTwo.close();
-
-        active = false;
-
-        controller.set_text(0, 0, "file closed");
-    }
-}
-
-void closeI() {
-    if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_A) && active) {
-        fileI.close();
-        fileITwo.close();
 
         active = false;
 
