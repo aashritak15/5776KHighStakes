@@ -37,7 +37,7 @@
 void initialize() {
     pros::lcd::initialize(); // initialize brain screen
     chassis.calibrate(); // calibrate sensors
-    chassis.setPose(0, 0, 0); //TODO: see if this fixed it
+    chassis.setPose(0, 0, 0); // TODO: see if this fixed it
 
     clampInit();
     intakeInnit();
@@ -60,9 +60,8 @@ void initialize() {
 
     // thread to for brain screen and position logging
 
-    pros::Task screenTask([&]() { 
+    pros::Task screenTask([&]() {
         while (true) {
-
             pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
             pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
             pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
@@ -70,17 +69,14 @@ void initialize() {
             pros::lcd::print(4, "Intake State: %f", intakeState);
             // pros::lcd::print(5, "Vert: %i", vertical.get_position());
             // pros::lcd::print(6, "Horiz: %i", horizontal.get_position());
-            //pros::lcd::print(7 "Color: %f", optical.get_hue());
+            // pros::lcd::print(7 "Color: %f", optical.get_hue());
 
             lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
 
-            pros::delay(50); 
+            pros::delay(50);
         }
     });
-
 }
-
-
 
 /**
  * Runs while the robot is disabled
@@ -98,14 +94,16 @@ void competition_initialize() {}
  * This is an example autonomous routine which demonstrates a lot of the features LemLib has to offer
  */
 
-ASSET(autonomous_txt); //TODO: add std functionality
+ASSET(autonomous_txt); // TODO: add std functionality
 ASSET(extra_txt);
 
-
 void autonomous() {
-    initDebug();
+    // initDebug();
     chassis.setPose(0, 0, 0, true);
-    chassis.follow(autonomous_txt, extra_txt, 15, 40000, true, false); 
+
+    chassis.turnToHeading(90, 2500);
+
+    // chassis.follow(autonomous_txt, extra_txt, 15, 40000, true, false);
 }
 
 /**
@@ -117,7 +115,7 @@ void opcontrol() {
     chassis.calibrate(); // calibrate sensors
     chassis.setPose(0, 0, 0, true);
 
-    while(true) {
+    while (true) {
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
 
@@ -128,7 +126,7 @@ void opcontrol() {
 
         // lemlib::Pose pose = chassis.getPose();
         // std::int32_t left = leftMotors.get_voltage();
-        // std::int32_t right = rightMotors.get_voltage();  
+        // std::int32_t right = rightMotors.get_voltage();
 
         // std::cout<<std::to_string(left) + "\n";
         // std::cout<<std::to_string(right) + "\n";
@@ -136,7 +134,7 @@ void opcontrol() {
         static unsigned long lastWriteTime = 0; // Tracks the last time writePose was called
         unsigned long currentTime = pros::millis(); // Get the current time in milliseconds
 
-        if (currentTime - lastWriteTime >= 100) { //TODO: tune this value
+        if (currentTime - lastWriteTime >= 100) { // TODO: tune this value
             writePose();
             writeAdditional();
             lastWriteTime = currentTime; // Update the last write time
@@ -147,8 +145,6 @@ void opcontrol() {
         pros::delay(10);
     }
 
-
-    
     //     updateIntakeFirst();
     //     updateClamp();
     //     updateIntakeClamp();
@@ -171,5 +167,4 @@ void opcontrol() {
     //     } else if (sortState == 2) {
     //         controller.set_text(0, 0, "scores red ");
     //     }
-    
 }
