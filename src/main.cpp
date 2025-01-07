@@ -37,13 +37,14 @@
 void initialize() {
     pros::lcd::initialize(); // initialize brain screen
     chassis.calibrate(); // calibrate sensors
-    chassis.setPose(0, 0, 0); // TODO: see if this fixed it
+    chassis.setPose(0, 0, 0);
 
     clampInit();
     intakeInnit();
     liftInit();
     intakeClampInit();
     opticalInit();
+
     // rotationInit();
     // initO(); TODO: in main so commented out
 
@@ -111,8 +112,6 @@ void autonomous() {
 
 void opcontrol() {
     initO();
-    chassis.calibrate(); // calibrate sensors
-    chassis.setPose(0, 0, 0, false);
 
     while (true) {
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
@@ -122,13 +121,6 @@ void opcontrol() {
 
         updateIntake();
         updateClamp();
-
-        // lemlib::Pose pose = chassis.getPose();
-        // std::int32_t left = leftMotors.get_voltage();
-        // std::int32_t right = rightMotors.get_voltage();
-
-        // std::cout<<std::to_string(left) + "\n";
-        // std::cout<<std::to_string(right) + "\n";
 
         static unsigned long lastWriteTime = 0; // Tracks the last time writePose was called
         unsigned long currentTime = pros::millis(); // Get the current time in milliseconds

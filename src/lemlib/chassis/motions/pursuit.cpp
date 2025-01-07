@@ -333,6 +333,8 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
 
         } else if(subValues.at(closestPoint)[2] == "TURNING CW" || subValues.at(closestPoint)[2] == "TURNING CCW" ) { //*exclusion for turns (pids are back)
             this->endMotion();
+
+            pros::delay(10); //TODO: see if the delay fixes it
             
             int prevClosestPoint = closestPoint;
             chassis.setPose(pose.x, pose.y, 0);
@@ -351,11 +353,11 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
 
             if (subValues.at(prevClosestPoint)[2] == "TURNING CW") {
                 dataLine.append("begin theta cw: " + std::to_string(pose.theta) + "\n");
-                chassis.turnToHeading(turnDist, 10000, {.direction = AngularDirection::CW_CLOCKWISE}); //TODO: tune timeout
+                chassis.turnToHeading(turnDist, 10000, {.direction = AngularDirection::CW_CLOCKWISE});
                 dataLine.append("end theta cw: " + std::to_string(pose.theta) + "\n");
             } else {
                 dataLine.append("begin theta ccw: " + std::to_string(pose.theta) + "\n");
-                chassis.turnToHeading(turnDist, 10000, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE}, false);
+                chassis.turnToHeading(turnDist, 10000, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE});
                 dataLine.append("end theta ccw: " + std::to_string(pose.theta) + "\n");
             }
 

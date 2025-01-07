@@ -9,9 +9,9 @@ void lemlib::Chassis::turnToHeading(float theta, int timeout, TurnToHeadingParam
     params.minSpeed = std::abs(params.minSpeed);
 
     this->requestMotionStart(); //TODO: did commenting this block out break anything
-    // // were all motions cancelled?
-    // if (!this->motionRunning) return;
-
+    // were all motions cancelled?
+    if (!this->motionRunning) return;
+ 
     // if the function is async, run it in a new task
     if (async) {
         pros::Task task([&]() { turnToHeading(theta, timeout, params, false); });
