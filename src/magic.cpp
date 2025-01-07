@@ -92,7 +92,7 @@ void writeAdditional() { //TODO: OPTIMIZE
     std::int32_t right = rightMotors.get_voltage(); 
     float adjLeft = right/2.0*127.0/12000.0;
     float adjRight = left/2.0*127.0/12000.0;
-    float adjTotal = right+left;
+    float adjTotal = adjLeft + adjRight;
 
     if(leftMotors.get_voltage() < 0 && rightMotors.get_voltage() < 0)
         dataLine.append("1, ");
@@ -102,6 +102,7 @@ void writeAdditional() { //TODO: OPTIMIZE
     dataLine.append(std::to_string(intakeState) + ", ");
 
     if(std::abs(adjTotal) < 5) { //TODO: TUNE THIS VALUE
+
         if(std::abs(adjRight) > 5 && std::abs(adjLeft) > 5) {
             if(adjRight > 0)  {//TODO: CHECK {
                 dataLine.append("TURNING CW, ");

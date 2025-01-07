@@ -44,7 +44,7 @@ void initialize() {
     liftInit();
     intakeClampInit();
     opticalInit();
-    rotationInit();
+    // rotationInit();
     // initO(); TODO: in main so commented out
 
     // lv_init();
@@ -98,12 +98,11 @@ ASSET(autonomous_txt); // TODO: add std functionality
 ASSET(extra_txt);
 
 void autonomous() {
-    // initDebug();
-    chassis.setPose(0, 0, 0, true);
+    initDebug();
 
-    chassis.turnToHeading(90, 2500);
+    // chassis.turnToHeading(90, 2500);
 
-    // chassis.follow(autonomous_txt, extra_txt, 15, 40000, true, false);
+    chassis.follow(autonomous_txt, extra_txt, 15, 40000, true, false);
 }
 
 /**
@@ -113,7 +112,7 @@ void autonomous() {
 void opcontrol() {
     initO();
     chassis.calibrate(); // calibrate sensors
-    chassis.setPose(0, 0, 0, true);
+    chassis.setPose(0, 0, 0, false);
 
     while (true) {
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);

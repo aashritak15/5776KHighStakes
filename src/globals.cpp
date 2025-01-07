@@ -14,7 +14,7 @@ pros::Rotation verticalEnc(1);
 
 lemlib::TrackingWheel vertical(&verticalEnc, lemlib::Omniwheel::NEW_275, 0.125);
 
-pros::Rotation horiztonalEnc(10);
+pros::Rotation horizontalEnc(10);
 
 lemlib::TrackingWheel horizontal(&horizontalEnc, lemlib::Omniwheel::NEW_275, -2.5);
 

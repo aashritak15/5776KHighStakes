@@ -11,6 +11,7 @@
 
 inline std::ofstream fileO;
 inline std::ofstream fileOTwo;
+inline std::ofstream fileOThree;
 
 extern bool active;
 
