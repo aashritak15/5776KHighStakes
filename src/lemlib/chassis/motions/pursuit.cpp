@@ -7,6 +7,7 @@
 #include <cmath>
 #include <vector>
 #include <string>
+#include <fstream>
 #include "pros/misc.hpp"
 #include "lemlib/logger/logger.hpp"
 #include "lemlib/chassis/chassis.hpp"
@@ -307,6 +308,16 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
 
     // loop until the robot is within the end tolerance
     for (int i = 0; i < timeout / 10 && pros::competition::get_status() == compState && this->motionRunning; i++) { //* compState and motionRunning??? remove
+        // if(pros::E_CONTROLLER_DIGITAL_X){
+        //     //fileO.open("/usd/autonomous.txt");
+        //     std::ofstream file0("/usd/autonomous.txt", std::ios::app);
+        //     std::ofstream file0Two("/usd/extra.txt", std::ios::app);
+        //     //fileOTwo.open("/usd/extra.txt");
+        //     while(){
+        //     }
+        //     break;
+        // }
+        
         std::string dataLine = "";
 
         closestPoint = findClosest(pose, pathPoints, skips, closestPoint); //TODO: optimize quite vile
@@ -328,7 +339,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
             fileOThree.flush();
             // std::cout<<"Delayed\n\n";
             pros::delay(100); //*change to tick speed always
-            skips++; //TODO: RECODE TO CLOSESTVALUE++
+            closestPoint++;
             continue;
 
         } else if(subValues.at(closestPoint)[2] == "TURNING CW" || subValues.at(closestPoint)[2] == "TURNING CCW" ) { //*exclusion for turns (pids are back)
@@ -353,11 +364,14 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
 
             if (subValues.at(prevClosestPoint)[2] == "TURNING CW") {
                 dataLine.append("begin theta cw: " + std::to_string(pose.theta) + "\n");
+                std::cout<<"BEGIN THETA CW";
                 chassis.turnToHeading(turnDist, 10000, {.direction = AngularDirection::CW_CLOCKWISE});
-                dataLine.append("end theta cw: " + std::to_string(pose.theta) + "\n\n");
+                std::cout<<"END THETA CW";
             } else {
                 dataLine.append("begin theta ccw: " + std::to_string(pose.theta) + "\n");
+                std::cout<<"BEGIN THETA CCW";
                 chassis.turnToHeading(turnDist, 10000, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE});
+                std::cout<<"END THETA CCW";
                 dataLine.append("end theta ccw: " + std::to_string(pose.theta) + "\n\n");
             }
 
@@ -456,10 +470,8 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
             // std::cout<<"tiny vel\n\n";
             dataLine.append("small vel\n\n");
             pros::delay(10); //*change to tick speed always
-            skips++;
+            closestPoint++;
             continue;
-        } else {
-            skips = 0;
         }
 
         // ratio the speeds to respect the max speed
