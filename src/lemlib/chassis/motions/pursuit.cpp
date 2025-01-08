@@ -99,7 +99,7 @@ std::vector<lemlib::Pose> getData(const asset& path) {
     return robotPath;
 }
 
-std::vector<std::string> getVelocities(const asset& path) { //TODO: could be optimized
+std::vector<std::string> getVelocities(const asset& path) {
     std::vector<std::string> robotVelocities;
 
     const std::string data(reinterpret_cast<char*>(path.buf), path.size);
@@ -132,7 +132,7 @@ std::vector<std::vector<std::string>> getSubData(const asset& sub) {
         const std::vector<std::string> temp = readElement(line, ", ");
         pointInput.push_back(temp); // parse line
 
-        // if (pointInput[0].size() != 2) { TODO: possibly add back later when we aren't playing w this function
+        // if (pointInput[0].size() != 2) { possibly add back later when we aren't playing w this function
         //     std::cout<<"sub size: "<<pointInput.size()<<"\n";
         //     lemlib::infoSink()->error("Failed to read sub file! Are you using the right format? Raw line: {}",
         //                               stringToHex(line));
@@ -161,7 +161,7 @@ std::vector<std::vector<std::string>> getSubData(const asset& sub) {
  * @param path the path to follow
  * @return int index to the closest point
  */
-int findClosest(lemlib::Pose pose, std::vector<lemlib::Pose> path, int skips, int prevIndex) { //TODO: check if optimization worked
+int findClosest(lemlib::Pose pose, std::vector<lemlib::Pose> path, int skips, int prevIndex) {
     int closestPoint;
     int skipsLeft = skips;
     float closestDist = infinity();
@@ -173,9 +173,9 @@ int findClosest(lemlib::Pose pose, std::vector<lemlib::Pose> path, int skips, in
     }
 
     // loop through all path points
-    for (int i = prevIndex; i < maxIndex; i++) { //TODO: check
+    for (int i = prevIndex; i < maxIndex; i++) { 
         const float dist = pose.distance(path.at(i));
-        if (dist < closestDist) { // new closest point TODO: does this stop exclusion work
+        if (dist < closestDist) { // new closest point
             if (skipsLeft == 0) {
                 closestDist = dist;
                 closestPoint = i;
@@ -278,7 +278,7 @@ float findLookaheadCurvature(lemlib::Pose pose, float heading, lemlib::Pose look
     return side * ((2 * x) / (d * d));
 }
 
-void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahead, int timeout, bool forwards, bool async) { //TODO: forwards and async unused
+void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahead, int timeout, bool forwards, bool async) { //* forwards and async unused
     
     std::cout<<"rerun started\n";
 
@@ -311,7 +311,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
 
         closestPoint = findClosest(pose, pathPoints, skips, closestPoint); //TODO: optimize quite vile
 
-        dataLine.append("target index: " + std::to_string(closestPoint) + "\n");
+        dataLine.append("NEW TICK\ntarget index: " + std::to_string(closestPoint) + "\n");
         dataLine.append("skips: " + std::to_string(skips) + "\n");
         dataLine.append("x: " + std::to_string(pose.x) + "\n");
         dataLine.append("y: " + std::to_string(pose.y) + "\n");
@@ -328,25 +328,25 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
             fileOThree.flush();
             // std::cout<<"Delayed\n\n";
             pros::delay(100); //*change to tick speed always
-            skips++;
+            skips++; //TODO: RECODE TO CLOSESTVALUE++
             continue;
 
         } else if(subValues.at(closestPoint)[2] == "TURNING CW" || subValues.at(closestPoint)[2] == "TURNING CCW" ) { //*exclusion for turns (pids are back)
             this->endMotion();
 
-            pros::delay(10); //TODO: see if the delay fixes it
+            pros::delay(10); //TODO: see if this fixes it
             
             int prevClosestPoint = closestPoint;
             chassis.setPose(pose.x, pose.y, 0);
 
-            closestPoint++;
+            closestPoint++; //TODO: single cw exclusion
             while(subValues.at(closestPoint)[2] == "TURNING CW" || subValues.at(closestPoint)[2] == "TURNING CCW") {closestPoint++;}
-            closestPoint--; //TODO: check if this logic works
+            closestPoint--; 
 
             dataLine.append("turn end index: " + std::to_string(closestPoint) + "\n");
             std::cout<<"turn end index: "<<std::to_string(closestPoint)<<"\n";
 
-            float turnDist = pathPoints.at(closestPoint).theta-pose.theta; //TODO: WON'T WORK WITH VALUES PAST 2PI
+            float turnDist = pathPoints.at(closestPoint).theta-pose.theta;
             
             dataLine.append("turn distance: " + std::to_string(turnDist) + "\n");
             std::cout<<"turn distance: "<<std::to_string(turnDist)<<"\n";
@@ -354,11 +354,11 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
             if (subValues.at(prevClosestPoint)[2] == "TURNING CW") {
                 dataLine.append("begin theta cw: " + std::to_string(pose.theta) + "\n");
                 chassis.turnToHeading(turnDist, 10000, {.direction = AngularDirection::CW_CLOCKWISE});
-                dataLine.append("end theta cw: " + std::to_string(pose.theta) + "\n");
+                dataLine.append("end theta cw: " + std::to_string(pose.theta) + "\n\n");
             } else {
                 dataLine.append("begin theta ccw: " + std::to_string(pose.theta) + "\n");
                 chassis.turnToHeading(turnDist, 10000, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE});
-                dataLine.append("end theta ccw: " + std::to_string(pose.theta) + "\n");
+                dataLine.append("end theta ccw: " + std::to_string(pose.theta) + "\n\n");
             }
 
             chassis.setPose(pose.x, pose.y, pathPoints.at(closestPoint).theta);

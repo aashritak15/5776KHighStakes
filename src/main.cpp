@@ -113,6 +113,9 @@ void autonomous() {
 void opcontrol() {
     initO();
 
+    chassis.calibrate(); // calibrate sensors
+    chassis.setPose(0, 0, 0);
+
     while (true) {
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
@@ -121,6 +124,7 @@ void opcontrol() {
 
         updateIntake();
         updateClamp();
+        updateLB();
 
         static unsigned long lastWriteTime = 0; // Tracks the last time writePose was called
         unsigned long currentTime = pros::millis(); // Get the current time in milliseconds

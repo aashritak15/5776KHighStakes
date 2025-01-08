@@ -8,6 +8,7 @@ inline pros::Motor lift(16, pros::MotorGearset::red);
 extern pros::Rotation rotationSensor;
 
 void liftInit();
+void updateLB();
 void rotationInit();
 void updateLift();
 void allianceStake();

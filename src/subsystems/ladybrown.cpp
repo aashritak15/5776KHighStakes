@@ -24,48 +24,60 @@ bool pidControl = false;
 
 bool ladyState = 0;
 
-void updateLadyPID() {
-    if (pidControl) {
-        int current = rotationSensor.get_position();
+void updateLB() {
+    lift.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 
-        double error = target - current;
-
-        double derivative = error - prevError;
-
-        prevError = error;
-
-        double power = ((kp * error) + (kd * derivative)) * 100;
-
-        lift.move_voltage(power);
-    }
-
-    else {
-        lift.move_voltage(0);
+    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) { // lift up/down
+        lift.move_velocity(-100);
+    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) { // lift up/down
+        lift.move_velocity(100);
+    } else {
+        lift.move_velocity(0);
     }
 }
 
-void updateLadyTask() {
-    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
-        target = position1;
-        pidControl = true;
-    }
+// void updateLadyPID() {
+//     if (pidControl) {
+//         int current = rotationSensor.get_position();
 
-    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
-        if (target == position1) {
-            target = position2;
-            ladyState = true;
-        }
+//         double error = target - current;
 
-        else if (ladyState) {
-            target = position3;
-            ladyState = false;
-        }
+//         double derivative = error - prevError;
 
-        else {
-            target = position2;
-            ladyState = true;
-        }
+//         prevError = error;
 
-        pidControl = true;
-    }
-}
+//         double power = ((kp * error) + (kd * derivative)) * 100;
+
+//         lift.move_voltage(power);
+//     }
+
+//     else {
+//         lift.move_voltage(0);
+//     }
+// }
+
+// void updateLadyTask() {
+//     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
+//         target = position1;
+//         pidControl = true;
+//     }
+
+//     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
+//         if (target == position1) {
+//             target = position2;
+//             ladyState = true;
+//         }
+
+//         else if (ladyState) {
+//             target = position3;
+//             ladyState = false;
+//         }
+
+//         else {
+//             target = position2;
+//             ladyState = true;
+//         }
+
+//         pidControl = true;
+//     }
+// }
