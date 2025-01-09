@@ -308,12 +308,18 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
 
     // loop until the robot is within the end tolerance
     for (int i = 0; i < timeout / 10 && pros::competition::get_status() == compState && this->motionRunning; i++) { //* compState and motionRunning??? remove
-        // if(pros::E_CONTROLLER_DIGITAL_X){
-        //     //fileO.open("/usd/autonomous.txt");
-        //     std::ofstream file0("/usd/autonomous.txt", std::ios::app);
-        //     std::ofstream file0Two("/usd/extra.txt", std::ios::app);
-        //     //fileOTwo.open("/usd/extra.txt");
-        //     while(){
+        // if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)){ 
+        // // logic: copy file until stop point (copy number of lines from closestPoint) for both files
+        // //       copy coords and heading to separate file (i dont wanna break stuff by switching to driver in the middle of auton)
+        // //       in main: start writing new file but initialize bot position with coords and heading
+        // //                combine files when done
+        //     std::ifstream file0("/usd/autonomous.txt", std::ios::app);
+        //     std::ifstream file0Two("/usd/extra.txt", std::ios::app);
+        //     std::ofstream newFile0("static/newAuton");
+        //     std::ofstream newFile0Two("static/newExtra");
+        //     std::string temp;
+        //     for(int kiwi=0; kiwi<closestPoint; kiwi++){
+        //         std::getline(std::cin, temp);
         //     }
         //     break;
         // }
@@ -348,7 +354,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
             pros::delay(10); //TODO: see if this fixes it
             
             int prevClosestPoint = closestPoint;
-            chassis.setPose(pose.x, pose.y, 0);
+            //chassis.setPose(pose.x, pose.y, 0);
 
             closestPoint++; //TODO: single cw exclusion
             while(subValues.at(closestPoint)[2] == "TURNING CW" || subValues.at(closestPoint)[2] == "TURNING CCW") {closestPoint++;}
@@ -357,7 +363,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
             dataLine.append("turn end index: " + std::to_string(closestPoint) + "\n");
             std::cout<<"turn end index: "<<std::to_string(closestPoint)<<"\n";
 
-            float turnDist = pathPoints.at(closestPoint).theta-pose.theta;
+            float turnDist = pathPoints.at(closestPoint).theta;//-pose.theta;
             
             dataLine.append("turn distance: " + std::to_string(turnDist) + "\n");
             std::cout<<"turn distance: "<<std::to_string(turnDist)<<"\n";
@@ -365,17 +371,17 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
             if (subValues.at(prevClosestPoint)[2] == "TURNING CW") {
                 dataLine.append("begin theta cw: " + std::to_string(pose.theta) + "\n");
                 std::cout<<"BEGIN THETA CW";
-                chassis.turnToHeading(turnDist, 10000, {.direction = AngularDirection::CW_CLOCKWISE});
+                chassis.turnToHeading(turnDist, 10000, {.direction = AngularDirection::CW_CLOCKWISE}, true);
                 std::cout<<"END THETA CW";
             } else {
                 dataLine.append("begin theta ccw: " + std::to_string(pose.theta) + "\n");
                 std::cout<<"BEGIN THETA CCW";
-                chassis.turnToHeading(turnDist, 10000, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE});
+                chassis.turnToHeading(turnDist, 10000, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE}, true);
                 std::cout<<"END THETA CCW";
                 dataLine.append("end theta ccw: " + std::to_string(pose.theta) + "\n\n");
             }
 
-            chassis.setPose(pose.x, pose.y, pathPoints.at(closestPoint).theta);
+            //chassis.setPose(pose.x, pose.y, pathPoints.at(closestPoint).theta);
 
             closestPoint++;
 
@@ -492,9 +498,11 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         if (subValues.at(closestPoint)[0] == "0") {
             drivetrain.leftMotors->move(targetLeftVel);
             drivetrain.rightMotors->move(targetRightVel);
-        } else {
+            std::cout<<"forward ";
+        } else if(subValues.at(closestPoint)[0] == "1") {
             drivetrain.leftMotors->move(-targetRightVel);
             drivetrain.rightMotors->move(-targetLeftVel);
+            std::cout<<"backward ";
         }
 
         if (closestPoint == subValues.size() - 2) {
@@ -502,6 +510,8 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
             drivetrain.rightMotors->move(0);
             // set distTraveled to -1 to indicate that the function has finished
             distTraveled = -1;
+                std::cout<<"stopped\n";
+
             // give the mutex back
             this->endMotion();
 
@@ -513,6 +523,8 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         
         fileOThree << dataLine;
         fileOThree.flush();
+
+        std::cout<<"closest point: "<<closestPoint<<"\n";
 
         pros::delay(10);
 

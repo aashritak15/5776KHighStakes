@@ -36,7 +36,7 @@ void updateLB() {
     }
 }
 
-// void updateLadyPID() {
+// void updateLadyPID(target) {
 //     if (pidControl) {
 //         int current = rotationSensor.get_position();
 
@@ -56,7 +56,7 @@ void updateLB() {
 //     }
 // }
 
-// void updateLadyTask() {
+// void updateLadyTask(target) {
 //     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
 //         target = position1;
 //         pidControl = true;
