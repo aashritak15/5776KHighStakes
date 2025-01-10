@@ -7,8 +7,32 @@
 
 pros::Rotation rotationSensor(13);
 
-void liftInit() { lift.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD); }
+void liftInit() { lift.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE); }
 
+void updateLB() {
+    lift.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+
+    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) { // lift up/down
+        lift.move_velocity(-100);
+    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) { // lift up/down
+        lift.move_velocity(100);
+    } else {
+        lift.move_velocity(0);
+    }
+}
+
+
+/*
+
+if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2))) {
+setLiftTarget(target: 24);
+// pid that runs constantly
+float liftOutput = liftPID.update(error: liftTarget - lift get_position());
+lift.move(voltage: liftOutput) ;
+}
+
+
+*/
 // const int position1 = 24;
 // const int position2 = 100; // Adjust as per your desired positions
 // const int position3 = 0;
@@ -64,7 +88,7 @@ void liftInit() { lift.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD); }
 
 
 
-
+//----------> PID 1
 
 // lemlib::PID  (
 //     0,
@@ -84,4 +108,8 @@ void liftInit() { lift.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD); }
 //         lift.move(error);
         
 // }
+
+
+
+// ---------> PID 2
 

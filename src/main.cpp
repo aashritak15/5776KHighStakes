@@ -37,16 +37,14 @@
 void initialize() {
     pros::lcd::initialize(); // initialize brain screen
     chassis.calibrate(); // calibrate sensors
-    chassis.setPose(0, 0, 0);
+    chassis.setPose(0, 0, 0, false);
 
     clampInit();
     intakeInnit();
     liftInit();
     intakeClampInit();
     opticalInit();
-
-    // rotationInit();
-    // initO(); TODO: in main so commented out
+    initO();
 
     // lv_init();
     // selector::init();
@@ -68,8 +66,6 @@ void initialize() {
             pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
             pros::lcd::print(3, "Rotation (Lift): %i", rotationSensor.get_position()); // lift encoder
             pros::lcd::print(4, "Intake State: %f", intakeState);
-            // pros::lcd::print(5, "Vert: %i", vertical.get_position());
-            // pros::lcd::print(6, "Horiz: %i", horizontal.get_position());
             // pros::lcd::print(7 "Color: %f", optical.get_hue());
 
             lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
@@ -100,11 +96,17 @@ ASSET(extra_txt);
 
 void autonomous() {
     initDebug();
+    mogoClamp.set_value(false); 
 
-    // chassis.turnToHeading(90, 2500);
-
-    chassis.follow(autonomous_txt, extra_txt, 5, 40000, true, false);
+    chassis.follow(autonomous_txt, extra_txt, 15, 40000, true, false);
 }
+
+// Lady Brown PID Functions 
+double liftTarget;
+float liftOutput;
+
+void setLiftTarget(double target) { liftTarget = target; }
+lemlib:: PID liftPID( 3, 10, 0, 0);
 
 /**
  * Runs in driver control
@@ -112,24 +114,35 @@ void autonomous() {
 
 void opcontrol() {
 
-    initO();
+    // chassis.setBrakeMode(pros::E_MOTOR_BRAKE_COAST);
 
-    chassis.calibrate(); // calibrate sensors
-    chassis.setPose(0, 0, 0);
+    // initO();
+
+    // chassis.calibrate(); // calibrate sensors
+    // chassis.setPose(0, 0, 0);
 
     int count = 1;
 
     while (true) {
+
+      
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
 
-        chassis.arcade(leftY, rightX);
+        chassis.arcade(leftY, rightX * 0.9);
 
         updateIntake();
         updateClamp();
         //updateLadyPID();
         //updateLadyTask();
-        //updateLB();
+        updateLB();
+
+
+        // if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
+        //     setLiftTarget(24);
+        //     liftOutput = liftPID.update(liftTarget - lift.get_position());
+        //     lift.move(liftOutput);
+        // }
 
         if(count == 10) {
             writePose();

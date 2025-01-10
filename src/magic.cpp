@@ -48,6 +48,29 @@ void initDebug() {
     }
 }
 
+// void initReplace() {
+//     newPoseFile.open("/usd/newAutonomous.txt");
+//     newExtraFile.open("/usd/newExtra.txt");
+//     if(!newPoseFile && !newExtraFile) {
+//         pros::lcd::print(7, "both are cooked");
+//         controller.set_text(0, 0, "failed to open both");
+//         active = false;
+//     } else if (!newPoseFile) {
+//         pros::lcd::print(7, "pose is cooked");
+//         controller.set_text(0, 0, "pose failed to open");
+//         active = false;
+//     } else if (!newExtraFile) {
+//         pros::lcd::print(7, "extra is cooked");
+//         controller.set_text(0, 0, "extra failed to open");
+//         active = false;
+//     }
+    
+//     else {
+//         pros::lcd::print(7, "goated");
+//         controller.set_text(0, 0, "goated");
+//         active = true;
+//     }
+// }
 
 void closeO() {
     if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_B) && active) {

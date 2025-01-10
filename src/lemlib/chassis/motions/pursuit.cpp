@@ -299,11 +299,12 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
 
     // loop until the robot is within the end tolerance
     for (int i = 0; i < timeout / 10 && pros::competition::get_status() == compState && this->motionRunning; i++) {
-        // if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)){ 
-        // // logic: copy file until stop point (copy number of lines from closestPoint) for both files
-        // //       copy coords and heading to separate file (i dont wanna break stuff by switching to driver in the middle of auton)
-        // //       in main: start writing new file but initialize bot position with coords and heading
-        // //                combine files when done
+        // if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) { //TODO: CHANGE THE BUTTON!
+        //     // logic: copy file until stop point (copy number of lines from closestPoint) for both files
+        //     // copy coords and heading to separate file (i dont wanna break stuff by switching to driver in the middle of auton)
+        //     // in main: start writing new file but initialize bot position with coords and heading
+        //     // combine files when done
+
         //     std::ifstream file0("/usd/autonomous.txt", std::ios::app);
         //     std::ifstream file0Two("/usd/extra.txt", std::ios::app);
         //     std::ofstream newFile0("static/newAuton");
@@ -337,7 +338,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         } else if(subValues.at(closestPoint)[2] == "TURNING CW" || subValues.at(closestPoint)[2] == "TURNING CCW" ) { //*exclusion for turns (pids are back)
             this->endMotion();
 
-            pros::delay(10); //TODO: see if this fixes it
+            pros::delay(10);
             
             if(subValues.at(closestPoint)[2] == "TURNING CW") {
                 dataLine.append("TURN CLOCKWISE");
@@ -384,9 +385,9 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
             }
 
             if (subValues.at(closestPoint)[1] == "0") {
-                mogoClamp.set_value(true);
-            } else if (subValues.at(closestPoint)[1] == "2") {
                 mogoClamp.set_value(false);
+            } else if (subValues.at(closestPoint)[1] == "1") {
+                mogoClamp.set_value(true);
             }
 
             closestPoint++;
@@ -422,9 +423,9 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         }
 
         if (subValues.at(closestPoint)[1] == "0") {
-            mogoClamp.set_value(true);
-        } else if (subValues.at(closestPoint)[1] == "2") {
             mogoClamp.set_value(false);
+        } else if (subValues.at(closestPoint)[1] == "1") {
+            mogoClamp.set_value(true);
         }        
 
         dataLine.append("target x: " + std::to_string(pathPoints.at(closestPoint).x) + "\n");
@@ -436,13 +437,13 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
 
         // get the curvature of the arc between the robot and the lookahead point
         dataLine.append("target vel: " + std::to_string(targetVel) + "\n");
-        float curvatureHeading = M_PI / 2 - pose.theta; 
+        float curvatureHeading = M_PI / 2 - (pose.theta * M_PI / 180); //TODO: RADIANS FIX?
         curvature = findLookaheadCurvature(pose, curvatureHeading, lookaheadPose);
 
         dataLine.append("curvature: " + std::to_string(curvature) + "\n");
 
         // get the target velocity of the robot //*SLEW REMOVED, ADD BACK IF NECESSARY
-        targetVel = std::stof(velocities.at(closestPoint));
+        targetVel = std::stof(velocities.at(closestPoint)) * 1.00; //TODO: TUNE THE MULTIPLIER!
 
         // calculate target left and right velocities
         float targetLeftVel = targetVel * (2 + curvature * drivetrain.trackWidth) / 2; 

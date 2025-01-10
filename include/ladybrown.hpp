@@ -12,6 +12,7 @@ void updateLB();
 void rotationInit();
 void updateLift();
 void allianceStake();
+void updateLB();
 
 
 void updateLadyTask(double target);

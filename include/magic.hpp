@@ -13,6 +13,9 @@ inline std::ofstream fileO;
 inline std::ofstream fileOTwo;
 inline std::ofstream fileOThree;
 
+// inline std::ofstream newPoseFile;
+// inline std::ofstream newExtraFile;
+
 extern bool active;
 
 extern int prevIntakeState;
