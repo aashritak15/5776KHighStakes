@@ -103,7 +103,7 @@ void autonomous() {
 
     // chassis.turnToHeading(90, 2500);
 
-    chassis.follow(autonomous_txt, extra_txt, 15, 40000, true, false);
+    chassis.follow(autonomous_txt, extra_txt, 5, 40000, true, false);
 }
 
 /**
@@ -111,10 +111,13 @@ void autonomous() {
  */
 
 void opcontrol() {
+
     initO();
 
     chassis.calibrate(); // calibrate sensors
     chassis.setPose(0, 0, 0);
+
+    int count = 1;
 
     while (true) {
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
@@ -124,42 +127,20 @@ void opcontrol() {
 
         updateIntake();
         updateClamp();
-        updateLB();
+        //updateLadyPID();
+        //updateLadyTask();
+        //updateLB();
 
-        static unsigned long lastWriteTime = 0; // Tracks the last time writePose was called
-        unsigned long currentTime = pros::millis(); // Get the current time in milliseconds
-
-        if (currentTime - lastWriteTime >= 100) { // TODO: tune this value
+        if(count == 10) {
             writePose();
             writeAdditional();
-            lastWriteTime = currentTime; // Update the last write time
+            count = 1;
         }
+
+        count++;
 
         closeO();
 
         pros::delay(10);
     }
-
-    //     updateIntakeFirst();
-    //     updateClamp();
-    //     updateIntakeClamp();
-    //     updateLift();
-    //     updateColorToggle();
-    //     colorSort();
-
-    //     if (sortState == 0) {
-    //         controller.set_text(0, 0, "no sort   ");
-    //     } else if (sortState == 1) {
-    //         controller.set_text(0, 0, "scores blue");
-    //     } else if (sortState == 2) {
-    //         controller.set_text(0, 0, "scores red ");
-    //     }
-
-    //     if (sortState == 0) {
-    //         controller.set_text(0, 0, "no sort   ");
-    //     } else if (sortState == 1) {
-    //         controller.set_text(0, 0, "scores blue");
-    //     } else if (sortState == 2) {
-    //         controller.set_text(0, 0, "scores red ");
-    //     }
 }

@@ -94,31 +94,26 @@ void writeAdditional() { //TODO: OPTIMIZE
     float adjRight = left/2.0*127.0/12000.0;
     float adjTotal = adjLeft + adjRight;
 
-    if(leftMotors.get_voltage() < 0 && rightMotors.get_voltage() < 0)
-        dataLine.append("1, ");
-    else
-        dataLine.append("0, ");
-
     dataLine.append(std::to_string(intakeState) + ", ");
 
-    if(std::abs(adjTotal) < 5) { //TODO: TUNE THIS VALUE
+    dataLine.append(std::to_string(clampState) + ", ");
+
+    if(std::abs(adjTotal) < 5) {
 
         if(std::abs(adjRight) > 5 && std::abs(adjLeft) > 5) {
             if(adjRight > 0)  {//TODO: CHECK {
-                dataLine.append("TURNING CW, ");
+                dataLine.append("TURNING CW\n");
             } else if (adjRight < 0) {
-                dataLine.append("TURNING CCW, ");
+                dataLine.append("TURNING CCW\n");
             }
         } else if(!(prevIntakeState == intakeState) || !(prevClampState == clampState)) {
-            dataLine.append("SUBSYS, ");
+            dataLine.append("SUBSYS\n");
         } 
-        else {dataLine.append("STOPPED, ");}
+        else {dataLine.append("STOPPED\n");}
 
     } else {
-        dataLine.append("GOING, ");
+        dataLine.append("GOING\n");
     }
-
-    dataLine.append(std::to_string(clampState) + "\n");
 
     prevIntakeState = intakeState;
     prevClampState = clampState;
