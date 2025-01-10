@@ -403,7 +403,8 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
  
         dataLine.append("current x: " + std::to_string(pose.x) + "\n");
         dataLine.append("current y: " + std::to_string(pose.y) + "\n");
-        dataLine.append("current theta: " + std::to_string(pose.theta) + "\n");
+        dataLine.append("current theta RAD: " + std::to_string(pose.theta) + "\n");
+        dataLine.append("current theta DEG: " + std::to_string(pose.theta * 180 / M_PI) + "\n");
 
         // get the current position of the robot
         pose = this->getPose(true);
@@ -437,7 +438,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
 
         // get the curvature of the arc between the robot and the lookahead point
         dataLine.append("target vel: " + std::to_string(targetVel) + "\n");
-        float curvatureHeading = M_PI / 2 - (pose.theta * M_PI / 180); //TODO: RADIANS FIX?
+        float curvatureHeading = M_PI / 2 - (pose.theta); //TODO: WHERE IS IT TURNED TO RAD????
         curvature = findLookaheadCurvature(pose, curvatureHeading, lookaheadPose);
 
         dataLine.append("curvature: " + std::to_string(curvature) + "\n");
