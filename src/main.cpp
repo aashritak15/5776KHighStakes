@@ -98,7 +98,7 @@ void autonomous() {
     initDebug();
     mogoClamp.set_value(false); 
 
-    chassis.follow(autonomous_txt, extra_txt, 15, 40000, true, false);
+    chassis.follow(autonomous_txt, extra_txt, 7.5, 40000, true, false);
 }
 
 // Lady Brown PID Functions 
@@ -114,7 +114,7 @@ lemlib:: PID liftPID( 3, 10, 0, 0);
 
 void opcontrol() {
 
-    // chassis.setBrakeMode(pros::E_MOTOR_BRAKE_COAST);
+    chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
 
     // initO();
 

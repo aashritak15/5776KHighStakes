@@ -235,6 +235,15 @@ lemlib::Pose lookaheadPoint(lemlib::Pose lastLookahead, lemlib::Pose pose, std::
     // to the robot
     // and intersections that have an index greater than or equal to the index of the last
     // lookahead point
+
+    float minLookahead = 6;
+    float maxLookahead = 12;
+
+    float avgVel = abs((leftMotors.get_voltage() + rightMotors.get_voltage()) / 2);
+    float pctVel = avgVel / 12000;
+    
+    lookaheadDist = minLookahead + ((maxLookahead - minLookahead) * pctVel);
+
     const int start = std::max(closest, int(lastLookahead.theta));
     for (int i = start; i < path.size() - 1; i++) {
         lemlib::Pose lastPathPose = path.at(i);
@@ -299,22 +308,33 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
 
     // loop until the robot is within the end tolerance
     for (int i = 0; i < timeout / 10 && pros::competition::get_status() == compState && this->motionRunning; i++) {
-        // if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) { //TODO: CHANGE THE BUTTON!
-        //     // logic: copy file until stop point (copy number of lines from closestPoint) for both files
-        //     // copy coords and heading to separate file (i dont wanna break stuff by switching to driver in the middle of auton)
-        //     // in main: start writing new file but initialize bot position with coords and heading
-        //     // combine files when done
+        if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) { //TODO: CHANGE THE BUTTON!
+            // logic: copy file until stop point (copy number of lines from closestPoint) for both files
+            // copy coords and heading to separate file (i dont wanna break stuff by switching to driver in the middle of auton)
+            // in main: start writing new file but initialize bot position with coords and heading
+            // combine files when done
 
-        //     std::ifstream file0("/usd/autonomous.txt", std::ios::app);
-        //     std::ifstream file0Two("/usd/extra.txt", std::ios::app);
-        //     std::ofstream newFile0("static/newAuton");
-        //     std::ofstream newFile0Two("static/newExtra");
-        //     std::string temp;
-        //     for(int kiwi=0; kiwi<closestPoint; kiwi++){
-        //         std::getline(std::cin, temp);
-        //     }
-        //     break;
-        // }
+            std::ifstream file0("/usd/autonomous.txt");
+            std::ifstream file0Two("/usd/extra.txt");
+            std::ofstream newFile0("/usd/newAuton.txt");
+            std::ofstream newFile0Two("/usd/newExtra.txt");
+            std::ofstream coords("/usd/coords.txt");
+
+            std::string temp="";
+            for(int kiwi=0; kiwi<closestPoint; kiwi++){
+                std::getline(file0, temp);
+                newFile0<<temp;
+                temp="";
+                std::getline(file0Two, temp);
+                newFile0Two<<temp;
+                temp="";
+            }
+
+            lemlib::Pose pose = chassis.getPose();
+            coords<<pose.x<<"\n"<<pose.y<<"\n"<<pose.theta;
+
+            break;
+        }
         
         std::string dataLine = "";
 

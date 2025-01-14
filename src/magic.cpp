@@ -145,6 +145,48 @@ void writeAdditional() { //TODO: OPTIMIZE
 }
 
 
+void addSegment() {
+    std::ifstream file0("static/newAuton.txt");
+    std::ifstream file0Two("static/newExtra.txt");
+    std::ifstream coords("static/coords");
+    float[3] pose;
+    string temp="";
+    for(int i=0;i<3;i++) {
+        coords>>temp;
+        pose[i] = std::stof(temp);
+        temp="";
+    }
+    chassis.setPose(pose[0], pose[1], pose[2]);
+}
+
+void mergeFiles(std::ifstream& file1, std::ifstream& file2) {
+    std::ofstream mergedFile("static/mergedFile.txt");
+
+    if (!file1.is_open() || !file2.is_open() || !mergedFile.is_open()) {
+        std::cerr << "Error opening files." << std::endl;
+        return 1;
+    }
+
+    std::string line;
+
+    // Copy contents of file1 to mergedFile
+    while (std::getline(file1, line)) {
+        mergedFile << line << std::endl;
+    }
+
+    // Copy contents of file2 to mergedFile
+    while (std::getline(file2, line)) {
+        mergedFile << line << std::endl;
+    }
+
+    file1.close();
+    file2.close();
+    mergedFile.close();
+
+    std::cout << "Files merged successfully!" << std::endl;
+}
+
+
 //jerry stuff 
 
 // void readRouteFile() {
