@@ -340,6 +340,8 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
 
         closestPoint = findClosest(pose, pathPoints, closestPoint);
 
+        //if point is behind (point in opposite direction of velocity), move to next point
+
         dataLine.append("NEW TICK\n");
         dataLine.append("target index: " + std::to_string(closestPoint) + "\n");
 
@@ -353,6 +355,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
 
             pros::delay(100); //*change to tick speed always
             closestPoint++;
+            //closestPoint++;
             continue;
 
         } else if(subValues.at(closestPoint)[2] == "TURNING CW" || subValues.at(closestPoint)[2] == "TURNING CCW" ) { //*exclusion for turns (pids are back)
@@ -467,7 +470,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
     
         float lookaheadDist = minLookahead + ((maxLookahead - minLookahead) * pctVel);
 
-        dataLine.append("lookahead dist: " + std::to_string(lookaheadDist) + :\n);
+        dataLine.append("lookahead dist: " + std::to_string(lookaheadDist) + "\n");
 
         lookaheadPose = lookaheadPoint(lastLookahead, pose, pathPoints, closestPoint, lookaheadDist);
         lastLookahead = lookaheadPose; // update last lookahead position
@@ -479,7 +482,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
 
         lookaheadDist -= (curvature * 50); //TODO: tune 50 as curvature factor
 
-/* //TODO: curvature adaptability
+ //TODO: curvature adaptability
         lookaheadPose = lookaheadPoint(lastLookahead, pose, pathPoints, closestPoint, lookaheadDist);
         lastLookahead = lookaheadPose; // update last lookahead position
 
@@ -490,7 +493,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
 
 
         dataLine.append("curvature: " + std::to_string(curvature) + "\n");
-*/
+
 
         // get the target velocity of the robot //*SLEW REMOVED, ADD BACK IF NECESSARY
         targetVel = std::stof(velocities.at(closestPoint)) * 1.00; //TODO: TUNE THE MULTIPLIER!
