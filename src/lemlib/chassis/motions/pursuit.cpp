@@ -477,7 +477,20 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         float curvatureHeading = M_PI / 2 - (pose.theta); //TODO: WHERE IS IT TURNED TO RAD????
         curvature = findLookaheadCurvature(pose, curvatureHeading, lookaheadPose);
 
+        lookaheadDist -= (curvature * 50); //TODO: tune 50 as curvature factor
+
+/* //TODO: curvature adaptability
+        lookaheadPose = lookaheadPoint(lastLookahead, pose, pathPoints, closestPoint, lookaheadDist);
+        lastLookahead = lookaheadPose; // update last lookahead position
+
+        // get the curvature of the arc between the robot and the lookahead point
+        dataLine.append("target vel: " + std::to_string(targetVel) + "\n");
+        curvatureHeading = M_PI / 2 - (pose.theta);
+        curvature = findLookaheadCurvature(pose, curvatureHeading, lookaheadPose);
+
+
         dataLine.append("curvature: " + std::to_string(curvature) + "\n");
+*/
 
         // get the target velocity of the robot //*SLEW REMOVED, ADD BACK IF NECESSARY
         targetVel = std::stof(velocities.at(closestPoint)) * 1.00; //TODO: TUNE THE MULTIPLIER!
