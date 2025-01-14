@@ -48,6 +48,29 @@ void initDebug() {
     }
 }
 
+// void initReplace() {
+//     newPoseFile.open("/usd/newAutonomous.txt");
+//     newExtraFile.open("/usd/newExtra.txt");
+//     if(!newPoseFile && !newExtraFile) {
+//         pros::lcd::print(7, "both are cooked");
+//         controller.set_text(0, 0, "failed to open both");
+//         active = false;
+//     } else if (!newPoseFile) {
+//         pros::lcd::print(7, "pose is cooked");
+//         controller.set_text(0, 0, "pose failed to open");
+//         active = false;
+//     } else if (!newExtraFile) {
+//         pros::lcd::print(7, "extra is cooked");
+//         controller.set_text(0, 0, "extra failed to open");
+//         active = false;
+//     }
+    
+//     else {
+//         pros::lcd::print(7, "goated");
+//         controller.set_text(0, 0, "goated");
+//         active = true;
+//     }
+// }
 
 void closeO() {
     if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_B) && active) {
@@ -85,8 +108,14 @@ void writePose() {
     fileO << dataLine;
 }
 
+int lineNum=0;
+lemlib::Pose lastPose1;
+lemlib::Pose currentPose1;
 void writeAdditional() { //TODO: OPTIMIZE
     std::string dataLine = "";
+
+    lastPose1 = currentPose1;
+    currentPose1 = chassis.getPose();
 
     std::int32_t left = leftMotors.get_voltage();
     std::int32_t right = rightMotors.get_voltage(); 
@@ -94,37 +123,83 @@ void writeAdditional() { //TODO: OPTIMIZE
     float adjRight = left/2.0*127.0/12000.0;
     float adjTotal = adjLeft + adjRight;
 
-    if(leftMotors.get_voltage() < 0 && rightMotors.get_voltage() < 0)
-        dataLine.append("1, ");
-    else
-        dataLine.append("0, ");
+    
+    lineNum++;
 
     dataLine.append(std::to_string(intakeState) + ", ");
 
-    if(std::abs(adjTotal) < 5) { //TODO: TUNE THIS VALUE
+    dataLine.append(std::to_string(clampState) + ", ");
+
+    if(std::abs(adjTotal) < 10 || std::abs(currentPose1.x-lastPose1.x) < 2 && std::abs(currentPose1.y-lastPose1.y) < 2) {
 
         if(std::abs(adjRight) > 5 && std::abs(adjLeft) > 5) {
             if(adjRight > 0)  {//TODO: CHECK {
-                dataLine.append("TURNING CW, ");
+                dataLine.append("TURNING CW\n");
+                std::cout<<lineNum<<"\n";
+                std::cout<<"left: "<<adjLeft<<"\n";
+                std::cout<<"right: "<<adjRight<<"\n\n";
             } else if (adjRight < 0) {
-                dataLine.append("TURNING CCW, ");
+                dataLine.append("TURNING CCW\n");
+                std::cout<<lineNum<<"\n";
+    std::cout<<"left: "<<adjLeft<<"\n";
+    std::cout<<"right: "<<adjRight<<"\n\n";
             }
         } else if(!(prevIntakeState == intakeState) || !(prevClampState == clampState)) {
-            dataLine.append("SUBSYS, ");
+            dataLine.append("SUBSYS\n");
         } 
-        else {dataLine.append("STOPPED, ");}
+        else {dataLine.append("STOPPED\n");}
 
     } else {
-        dataLine.append("GOING, ");
+        dataLine.append("GOING\n");
     }
-
-    dataLine.append(std::to_string(clampState) + "\n");
 
     prevIntakeState = intakeState;
     prevClampState = clampState;
 
     fileOTwo << dataLine;
 }
+
+
+void addSegment() {
+    std::ifstream file0("static/newAuton.txt");
+    std::ifstream file0Two("static/newExtra.txt");
+    std::ifstream coords("static/coords");
+    float pose[3];
+    std::string temp = "";
+    for(int i=0;i<3;i++) {
+        std::getline(coords, temp);
+        pose[i] = std::stof(temp);
+        temp="";
+    }
+    chassis.setPose(pose[0], pose[1], pose[2]);
+}
+
+// void mergeFiles(std::ifstream& file1, std::ifstream& file2) {
+//     std::ofstream mergedFile("static/mergedFile.txt");
+
+//     if (!file1.is_open() || !file2.is_open() || !mergedFile.is_open()) {
+//         std::cerr << "Error opening files." << std::endl;
+//         return 1;
+//     }
+
+//     std::string line;
+
+//     // Copy contents of file1 to mergedFile
+//     while (std::getline(file1, line)) {
+//         mergedFile << line << std::endl;
+//     }
+
+//     // Copy contents of file2 to mergedFile
+//     while (std::getline(file2, line)) {
+//         mergedFile << line << std::endl;
+//     }
+
+//     file1.close();
+//     file2.close();
+//     mergedFile.close();
+
+//     std::cout << "Files merged successfully!" << std::endl;
+// }
 
 
 //jerry stuff 

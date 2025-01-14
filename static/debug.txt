@@ -1,0 +1,1370 @@
+NEW TICK
+target index: 0
+DELAYED
+
+NEW TICK
+target index: 1
+DELAYED
+
+NEW TICK
+target index: 2
+DELAYED
+
+NEW TICK
+target index: 3
+DELAYED
+
+NEW TICK
+target index: 4
+DELAYED
+
+NEW TICK
+target index: 5
+DELAYED
+
+NEW TICK
+target index: 6
+DELAYED
+
+NEW TICK
+target index: 7
+DELAYED
+
+NEW TICK
+target index: 8
+DELAYED
+
+NEW TICK
+target index: 9
+DELAYED
+
+NEW TICK
+target index: 10
+DELAYED
+
+NEW TICK
+target index: 11
+DELAYED
+
+NEW TICK
+target index: 12
+DELAYED
+
+NEW TICK
+target index: 13
+DELAYED
+
+NEW TICK
+target index: 14
+DELAYED
+
+NEW TICK
+target index: 15
+DELAYED
+
+NEW TICK
+target index: 16
+DELAYED
+
+NEW TICK
+target index: 17
+DELAYED
+
+NEW TICK
+target index: 18
+DELAYED
+
+NEW TICK
+target index: 19
+DELAYED
+
+NEW TICK
+target index: 20
+DELAYED
+
+NEW TICK
+target index: 21
+DELAYED
+
+NEW TICK
+target index: 22
+current x: -0.000000
+current y: -0.000729
+current theta RAD: 0.000117
+current theta DEG: 0.006682
+target x: 0.001000
+target y: -0.829000
+lookahead dist: 7.500000
+target vel: 0.000000
+curvature: 0.000326
+target vels: -43.766033 -43.587963
+
+NEW TICK
+target index: 22
+current x: -0.000000
+current y: -0.000723
+current theta RAD: 0.000116
+current theta DEG: 0.006629
+target x: 0.001000
+target y: -0.829000
+lookahead dist: 9.904375
+target vel: -43.676998
+curvature: -0.000637
+target vels: -43.502998 -43.851002
+
+NEW TICK
+target index: 23
+current x: 0.005695
+current y: -1.451321
+current theta RAD: -0.005082
+current theta DEG: -0.291153
+target x: -0.001000
+target y: -2.056000
+lookahead dist: 9.911875
+target vel: -43.676998
+curvature: -0.001001
+target vels: -41.363590 -41.884415
+
+NEW TICK
+target index: 24
+current x: 0.014808
+current y: -2.989500
+current theta RAD: -0.006631
+current theta DEG: -0.379919
+target x: -0.008000
+target y: -3.681000
+lookahead dist: 9.863750
+target vel: -41.624001
+curvature: -0.002040
+target vels: -41.031013 -42.090984
+
+NEW TICK
+target index: 24
+current x: 0.030228
+current y: -4.756488
+current theta RAD: -0.010729
+current theta DEG: -0.614734
+target x: -0.008000
+target y: -3.681000
+lookahead dist: 9.886875
+target vel: -41.561001
+curvature: -0.002194
+target vels: -40.991211 -42.130795
+
+NEW TICK
+target index: 24
+current x: 0.032168
+current y: -4.933749
+current theta RAD: -0.011164
+current theta DEG: -0.639622
+target x: -0.008000
+target y: -3.681000
+lookahead dist: 9.885000
+target vel: -41.561001
+curvature: -0.005942
+target vels: -40.017502 -43.104504
+
+NEW TICK
+target index: 24
+current x: 0.078475
+current y: -8.413424
+current theta RAD: -0.014198
+current theta DEG: -0.813472
+target x: -0.008000
+target y: -3.681000
+lookahead dist: 9.886875
+target vel: -41.561001
+curvature: -0.010566
+target vels: -38.816425 -44.305576
+
+NEW TICK
+target index: 25
+current x: 0.107741
+current y: -10.533962
+current theta RAD: -0.013543
+current theta DEG: -0.775947
+target x: 0.038000
+target y: -14.457000
+lookahead dist: 9.846251
+target vel: -41.561001
+curvature: -0.016616
+target vels: -38.325665 -47.208332
+
+NEW TICK
+target index: 25
+current x: 0.132409
+current y: -12.428083
+current theta RAD: -0.012260
+current theta DEG: -0.702459
+target x: 0.038000
+target y: -14.457000
+lookahead dist: 9.883125
+target vel: -42.766998
+curvature: -0.017440
+target vels: -38.105400 -47.428596
+
+NEW TICK
+target index: 25
+current x: 0.134701
+current y: -12.616351
+current theta RAD: -0.012085
+current theta DEG: -0.692421
+target x: 0.038000
+target y: -14.457000
+lookahead dist: 9.952499
+target vel: -42.766998
+curvature: -0.033622
+target vels: -33.780167 -51.753830
+
+NEW TICK
+target index: 26
+current x: 0.152339
+current y: -16.373589
+current theta RAD: 0.006219
+current theta DEG: 0.356334
+target x: 0.025000
+target y: -16.226000
+lookahead dist: 9.919375
+target vel: -42.766998
+curvature: -0.043534
+target vels: -30.726665 -53.697338
+
+NEW TICK
+target index: 27
+current x: 0.125167
+current y: -18.301666
+current theta RAD: 0.023310
+current theta DEG: 1.335592
+target x: -0.057000
+target y: -18.129999
+lookahead dist: 9.911875
+target vel: -42.212002
+curvature: -0.053817
+target vels: -27.774822 -55.929180
+
+NEW TICK
+target index: 28
+current x: 0.056421
+current y: -20.250797
+current theta RAD: 0.048546
+current theta DEG: 2.781473
+target x: -0.222000
+target y: -20.030001
+lookahead dist: 9.933125
+target vel: -41.852001
+curvature: -0.054788
+target vels: -28.164576 -57.497425
+
+NEW TICK
+target index: 28
+current x: 0.046374
+current y: -20.450872
+current theta RAD: 0.051800
+current theta DEG: 2.967945
+target x: -0.222000
+target y: -20.030001
+lookahead dist: 9.944375
+target vel: -42.831001
+curvature: -0.201117
+target vels: 11.006892 -96.668892
+
+NEW TICK
+target index: 33
+current x: -1.449715
+current y: -29.425236
+current theta RAD: 0.311117
+current theta DEG: 17.825679
+target x: -2.703000
+target y: -29.002001
+lookahead dist: 9.995000
+target vel: -42.831001
+curvature: -0.199506
+target vels: 10.180849 -92.646851
+
+NEW TICK
+target index: 34
+current x: -2.628038
+current y: -31.782448
+current theta RAD: 0.654448
+current theta DEG: 37.497090
+target x: -3.677000
+target y: -30.872999
+lookahead dist: 9.915625
+target vel: -41.233002
+curvature: -0.198935
+target vels: 10.382669 -95.716667
+
+NEW TICK
+target index: 38
+DELAYED
+
+NEW TICK
+target index: 45
+TURN COUNTERCLOCKWISE
+turn end index: 54
+target theta: -43.237999
+beginning theta: 64.380394
+ending theta: -41.274994
+
+NEW TICK
+target index: 57
+DELAYED
+
+NEW TICK
+target index: 58
+DELAYED
+
+NEW TICK
+target index: 59
+DELAYED
+
+NEW TICK
+target index: 60
+current x: -3.633428
+current y: -32.815266
+current theta RAD: 0.889058
+current theta DEG: 50.939262
+target x: -5.069000
+target y: -33.039001
+lookahead dist: 7.500000
+target vel: -42.667000
+curvature: 0.053905
+target vels: 33.596443 16.663555
+
+NEW TICK
+target index: 61
+current x: -7.033885
+current y: -33.904076
+current theta RAD: -0.720387
+current theta DEG: -41.275126
+target x: -5.484000
+target y: -32.587002
+lookahead dist: 8.835625
+target vel: 25.129999
+curvature: 0.048715
+target vels: 31.166422 16.617579
+
+NEW TICK
+target index: 61
+current x: -7.208870
+current y: -33.702465
+current theta RAD: -0.706658
+current theta DEG: -40.488497
+target x: -5.484000
+target y: -32.587002
+lookahead dist: 8.818750
+target vel: 23.892000
+curvature: 0.040692
+target vels: 29.968300 17.815701
+
+NEW TICK
+target index: 63
+current x: -7.917045
+current y: -32.841366
+current theta RAD: -0.671946
+current theta DEG: -38.499687
+target x: -6.509000
+target y: -31.457001
+lookahead dist: 8.780000
+target vel: 23.892000
+curvature: 0.036154
+target vels: 35.122604 22.175396
+
+NEW TICK
+target index: 64
+current x: -8.363440
+current y: -32.268421
+current theta RAD: -0.653383
+current theta DEG: -37.436096
+target x: -7.136000
+target y: -30.756001
+lookahead dist: 9.093750
+target vel: 28.649000
+curvature: 0.028514
+target vels: 38.175240 26.626764
+
+NEW TICK
+target index: 65
+current x: -8.897201
+current y: -31.559402
+current theta RAD: -0.636416
+current theta DEG: -36.463928
+target x: -7.839000
+target y: -29.961000
+lookahead dist: 9.316875
+target vel: 32.401001
+curvature: 0.014005
+target vels: 36.226734 30.395269
+
+NEW TICK
+target index: 66
+current x: -10.085743
+current y: -29.875467
+current theta RAD: -0.594154
+current theta DEG: -34.042501
+target x: -8.651000
+target y: -29.035000
+lookahead dist: 9.351250
+target vel: 33.311001
+curvature: 0.006720
+target vels: 34.847618 32.038387
+
+NEW TICK
+target index: 67
+current x: -10.828945
+current y: -28.753246
+current theta RAD: -0.576830
+current theta DEG: -33.049927
+target x: -9.486000
+target y: -28.077999
+lookahead dist: 9.355625
+target vel: 33.443001
+curvature: 0.001091
+target vels: 33.772808 33.315189
+
+NEW TICK
+target index: 68
+current x: -11.547103
+current y: -27.636541
+current theta RAD: -0.568094
+current theta DEG: -32.549376
+target x: -10.359000
+target y: -27.073000
+lookahead dist: 9.361250
+target vel: 33.543999
+curvature: 0.000654
+target vels: 33.516541 33.243465
+
+NEW TICK
+target index: 68
+current x: -11.611698
+current y: -27.535299
+current theta RAD: -0.567726
+current theta DEG: -32.528326
+target x: -10.359000
+target y: -27.073000
+lookahead dist: 9.326250
+target vel: 33.380001
+curvature: 0.013209
+target vels: 36.135635 30.624367
+
+NEW TICK
+target index: 70
+current x: -13.023404
+current y: -25.314987
+current theta RAD: -0.564797
+current theta DEG: -32.360506
+target x: -12.058000
+target y: -25.091999
+lookahead dist: 9.376875
+target vel: 33.380001
+curvature: 0.039869
+target vels: 43.488964 26.139034
+
+NEW TICK
+target index: 71
+current x: -13.793739
+current y: -24.092096
+current theta RAD: -0.557598
+current theta DEG: -31.948021
+target x: -12.924000
+target y: -24.068001
+lookahead dist: 9.440625
+target vel: 34.813999
+curvature: 0.075341
+target vels: 50.817402 18.280598
+
+NEW TICK
+target index: 72
+current x: -15.210918
+current y: -21.713947
+current theta RAD: -0.513322
+current theta DEG: -29.411181
+target x: -16.410999
+target y: -19.881001
+lookahead dist: 9.475000
+target vel: 34.549000
+curvature: 0.100484
+target vels: 58.848309 13.445694
+
+NEW TICK
+target index: 73
+DELAYED
+
+NEW TICK
+target index: 74
+DELAYED
+
+NEW TICK
+target index: 80
+TURN CLOCKWISE
+turn end index: 86
+target theta: 9.896000
+beginning theta: -16.270658
+ending theta: 0.779602
+
+NEW TICK
+target index: 87
+DELAYED
+
+NEW TICK
+target index: 89
+DELAYED
+
+NEW TICK
+target index: 91
+DELAYED
+
+NEW TICK
+target index: 92
+DELAYED
+
+NEW TICK
+target index: 93
+DELAYED
+
+NEW TICK
+target index: 94
+current x: -16.545410
+current y: -19.179632
+current theta RAD: -0.446405
+current theta DEG: -25.577110
+target x: -17.538000
+target y: -17.237000
+lookahead dist: 7.500000
+target vel: 36.146999
+curvature: 0.056666
+target vels: 29.086004 13.871996
+
+NEW TICK
+target index: 94
+current x: -17.602604
+current y: -16.422783
+current theta RAD: 0.008551
+current theta DEG: 0.489930
+target x: -17.538000
+target y: -17.237000
+lookahead dist: 8.660625
+target vel: 21.479000
+curvature: 0.046264
+target vels: 27.689690 15.268312
+
+NEW TICK
+target index: 94
+current x: -17.590284
+current y: -15.858243
+current theta RAD: 0.032240
+current theta DEG: 1.847209
+target x: -17.538000
+target y: -17.237000
+lookahead dist: 8.664375
+target vel: 21.479000
+curvature: 0.045369
+target vels: 27.569546 15.388453
+
+NEW TICK
+target index: 94
+current x: -17.569227
+current y: -15.323734
+current theta RAD: 0.046868
+current theta DEG: 2.685358
+target x: -17.538000
+target y: -17.237000
+lookahead dist: 8.668125
+target vel: 21.479000
+curvature: 0.043999
+target vels: 27.385540 15.572460
+
+NEW TICK
+target index: 94
+current x: -17.535269
+current y: -14.713572
+current theta RAD: 0.064282
+current theta DEG: 3.683072
+target x: -17.538000
+target y: -17.237000
+lookahead dist: 8.676250
+target vel: 21.479000
+curvature: 0.040974
+target vels: 26.979519 15.978481
+
+NEW TICK
+target index: 95
+current x: -17.422958
+current y: -13.335316
+current theta RAD: 0.099896
+current theta DEG: 5.723606
+target x: -16.549999
+target y: -12.013000
+lookahead dist: 8.648750
+target vel: 21.479000
+curvature: 0.039316
+target vels: 46.737194 28.298807
+
+NEW TICK
+target index: 95
+current x: -17.351217
+current y: -12.674102
+current theta RAD: 0.116735
+current theta DEG: 6.688401
+target x: -16.549999
+target y: -12.013000
+lookahead dist: 9.613750
+target vel: 37.518002
+curvature: 0.031797
+target vels: 44.973972 30.062029
+
+NEW TICK
+target index: 95
+current x: -17.227945
+current y: -11.709495
+current theta RAD: 0.138534
+current theta DEG: 7.937424
+target x: -16.549999
+target y: -12.013000
+lookahead dist: 9.617500
+target vel: 37.518002
+curvature: 0.031485
+target vels: 44.900890 30.135113
+
+NEW TICK
+target index: 95
+current x: -17.210171
+current y: -11.583231
+current theta RAD: 0.141171
+current theta DEG: 8.088514
+target x: -16.549999
+target y: -12.013000
+lookahead dist: 9.611250
+target vel: 37.518002
+curvature: 0.024856
+target vels: 43.346531 31.689476
+
+NEW TICK
+target index: 97
+current x: -16.739304
+current y: -8.822277
+current theta RAD: 0.192924
+current theta DEG: 11.053711
+target x: -15.908000
+target y: -8.926000
+lookahead dist: 9.596251
+target vel: 37.518002
+curvature: 0.020881
+target vels: 70.237343 54.020657
+
+NEW TICK
+target index: 98
+current x: -16.390572
+current y: -7.154411
+current theta RAD: 0.218633
+current theta DEG: 12.526761
+target x: -15.407000
+target y: -6.628000
+lookahead dist: 11.082500
+target vel: 62.129002
+curvature: 0.011258
+target vels: 67.792282 58.879711
+
+NEW TICK
+target index: 98
+current x: -15.905373
+current y: -5.132320
+current theta RAD: 0.251059
+current theta DEG: 14.384604
+target x: -15.407000
+target y: -6.628000
+lookahead dist: 11.074375
+target vel: 63.335999
+curvature: 0.010649
+target vels: 67.551331 59.120670
+
+NEW TICK
+target index: 99
+current x: -15.844407
+current y: -4.896393
+current theta RAD: 0.254691
+current theta DEG: 14.592742
+target x: -14.802000
+target y: -3.956000
+lookahead dist: 11.155624
+target vel: 63.335999
+curvature: -0.008235
+target vels: 60.538212 67.107788
+
+NEW TICK
+target index: 101
+current x: -13.540932
+current y: 2.786770
+current theta RAD: 0.321163
+current theta DEG: 18.401261
+target x: -13.439000
+target y: 1.731000
+lookahead dist: 11.172501
+target vel: 63.823002
+curvature: -0.021073
+target vels: 55.559711 72.414291
+
+NEW TICK
+target index: 103
+current x: -12.558670
+current y: 5.675677
+current theta RAD: 0.331727
+current theta DEG: 19.006543
+target x: -12.127000
+target y: 6.763000
+lookahead dist: 11.209375
+target vel: 63.987000
+curvature: -0.038877
+target vels: 33.561707 55.106293
+
+NEW TICK
+target index: 104
+current x: -11.538894
+current y: 8.654250
+current theta RAD: 0.325625
+current theta DEG: 18.656957
+target x: -11.534000
+target y: 8.957000
+lookahead dist: 11.216875
+target vel: 44.334000
+curvature: -0.045030
+target vels: 31.598166 56.349831
+
+NEW TICK
+target index: 104
+current x: -11.336687
+current y: 9.255593
+current theta RAD: 0.323181
+current theta DEG: 18.516917
+target x: -11.534000
+target y: 8.957000
+lookahead dist: 10.077500
+target vel: 43.973999
+curvature: -0.253163
+target vels: -25.604752 113.552742
+
+NEW TICK
+target index: 107
+current x: -9.922157
+current y: 13.822368
+current theta RAD: 0.264266
+current theta DEG: 15.141352
+target x: -10.394000
+target y: 14.232000
+lookahead dist: 9.996875
+target vel: 43.973999
+curvature: -0.668438
+target vels: -77.943817 127.000008
+
+NEW TICK
+target index: 108
+current x: -9.608198
+current y: 15.181184
+current theta RAD: 0.145814
+current theta DEG: 8.354530
+target x: -10.233000
+target y: 15.774000
+lookahead dist: 8.373750
+target vel: 35.792999
+curvature: -1.638093
+target vels: -104.398277 127.000000
+
+NEW TICK
+target index: 108
+current x: -9.566538
+current y: 16.108101
+current theta RAD: -0.204754
+current theta DEG: -11.731534
+target x: -10.233000
+target y: 15.774000
+lookahead dist: 7.648125
+target vel: 34.384998
+curvature: 0.444311
+target vels: 127.000000 -59.749908
+
+NEW TICK
+target index: 108
+current x: -9.455058
+current y: 16.241089
+current theta RAD: -1.304442
+current theta DEG: -74.739036
+target x: -10.233000
+target y: 15.774000
+lookahead dist: 8.021250
+target vel: 34.384998
+curvature: -0.028721
+target vels: 28.212568 40.557430
+
+NEW TICK
+target index: 108
+current x: -12.483355
+current y: 15.761163
+current theta RAD: -1.954019
+current theta DEG: -111.957032
+target x: -10.233000
+target y: 15.774000
+lookahead dist: 9.407500
+target vel: 34.384998
+curvature: -0.069428
+target vels: 19.464573 49.305424
+
+NEW TICK
+target index: 108
+current x: -13.641479
+current y: 15.200327
+current theta RAD: -2.084048
+current theta DEG: -119.407152
+target x: -10.233000
+target y: 15.774000
+lookahead dist: 9.413125
+target vel: 34.384998
+curvature: -0.068246
+target vels: 19.718477 49.051517
+
+NEW TICK
+target index: 108
+current x: -13.708072
+current y: 15.162660
+current theta RAD: -2.087074
+current theta DEG: -119.580538
+target x: -10.233000
+target y: 15.774000
+lookahead dist: 9.407500
+target vel: 34.384998
+curvature: -0.054058
+target vels: 22.767504 46.002495
+
+NEW TICK
+target index: 108
+current x: -15.332616
+current y: 14.150773
+current theta RAD: -2.168758
+current theta DEG: -124.260708
+target x: -10.233000
+target y: 15.774000
+lookahead dist: 9.441875
+target vel: 34.384998
+curvature: -0.047169
+target vels: 24.248131 44.521866
+
+NEW TICK
+target index: 108
+current x: -16.515335
+current y: 13.299203
+current theta RAD: -2.219965
+current theta DEG: -127.194622
+target x: -10.233000
+target y: 15.774000
+lookahead dist: 9.424376
+target vel: 34.384998
+curvature: -0.041107
+target vels: 25.550877 43.219120
+
+NEW TICK
+target index: 108
+current x: -17.705568
+current y: 12.351086
+current theta RAD: -2.263022
+current theta DEG: -129.661591
+target x: -10.233000
+target y: 15.774000
+lookahead dist: 9.426875
+target vel: 34.384998
+curvature: -0.040470
+target vels: 25.687716 43.082279
+
+NEW TICK
+target index: 108
+current x: -17.821115
+current y: 12.254963
+current theta RAD: -2.266336
+current theta DEG: -129.851472
+target x: -10.233000
+target y: 15.774000
+lookahead dist: 9.436250
+target vel: 34.384998
+curvature: -0.024897
+target vels: 29.034449 39.735550
+
+NEW TICK
+target index: 108
+current x: -21.721807
+current y: 8.704854
+current theta RAD: -2.345569
+current theta DEG: -134.391225
+target x: -10.233000
+target y: 15.774000
+lookahead dist: 9.418750
+target vel: 34.384998
+curvature: -0.020672
+target vels: 29.942404 38.827591
+
+NEW TICK
+target index: 108
+current x: -23.740656
+current y: 6.661375
+current theta RAD: -2.377837
+current theta DEG: -136.240051
+target x: -10.233000
+target y: 15.774000
+lookahead dist: 9.428750
+target vel: 34.384998
+curvature: -0.020381
+target vels: 30.004913 38.765083
+
+NEW TICK
+target index: 108
+current x: -23.910826
+current y: 6.483218
+current theta RAD: -2.380395
+current theta DEG: -136.386597
+target x: -10.233000
+target y: 15.774000
+lookahead dist: 9.423125
+target vel: 34.384998
+curvature: -0.019925
+target vels: 30.103067 38.666927
+
+NEW TICK
+target index: 108
+current x: -24.118214
+current y: 6.265112
+current theta RAD: -2.382473
+current theta DEG: -136.505652
+target x: -10.233000
+target y: 15.774000
+lookahead dist: 9.451875
+target vel: 34.384998
+curvature: -0.016181
+target vels: 30.907576 37.862419
+
+NEW TICK
+target index: 108
+current x: -25.893753
+current y: 4.366445
+current theta RAD: -2.394074
+current theta DEG: -137.170336
+target x: -10.233000
+target y: 15.774000
+lookahead dist: 9.403749
+target vel: 34.384998
+curvature: -0.015108
+target vels: 31.138233 37.631763
+
+NEW TICK
+target index: 108
+current x: -26.829708
+current y: 3.349776
+current theta RAD: -2.404377
+current theta DEG: -137.760649
+target x: -10.233000
+target y: 15.774000
+lookahead dist: 9.440000
+target vel: 34.384998
+curvature: -0.014344
+target vels: 31.302439 37.467556
+
+NEW TICK
+target index: 108
+current x: -27.681244
+current y: 2.402661
+current theta RAD: -2.414637
+current theta DEG: -138.348504
+target x: -10.233000
+target y: 15.774000
+lookahead dist: 9.426875
+target vel: 34.384998
+curvature: -0.012410
+target vels: 31.718050 37.051945
+
+NEW TICK
+target index: 108
+current x: -29.467995
+current y: 0.368361
+current theta RAD: -2.427398
+current theta DEG: -139.079690
+target x: -10.233000
+target y: 15.774000
+lookahead dist: 9.459375
+target vel: 34.384998
+curvature: -0.011520
+target vels: 31.909258 36.860741
+
+NEW TICK
+target index: 108
+current x: -30.412336
+current y: -0.726988
+current theta RAD: -2.433019
+current theta DEG: -139.401740
+target x: -10.233000
+target y: 15.774000
+lookahead dist: 9.438125
+target vel: 34.384998
+curvature: -0.010645
+target vels: 32.097355 36.672642
+
+NEW TICK
+target index: 108
+current x: -31.353437
+current y: -1.830626
+current theta RAD: -2.437005
+current theta DEG: -139.630117
+target x: -10.233000
+target y: 15.774000
+lookahead dist: 9.430625
+target vel: 34.384998
+curvature: -0.010563
+target vels: 32.115009 36.654991
+
+NEW TICK
+target index: 108
+current x: -31.433268
+current y: -1.924539
+current theta RAD: -2.437144
+current theta DEG: -139.638063
+target x: -10.233000
+target y: 15.774000
+lookahead dist: 9.473125
+target vel: 34.384998
+curvature: -0.009112
+target vels: 32.426720 36.343277
+
+NEW TICK
+target index: 108
+current x: -33.249760
+current y: -4.077242
+current theta RAD: -2.443177
+current theta DEG: -139.983718
+target x: -10.233000
+target y: 15.774000
+lookahead dist: 9.440000
+target vel: 34.384998
+curvature: -0.008482
+target vels: 32.562187 36.207813
+
+NEW TICK
+target index: 108
+current x: -34.170872
+current y: -5.176268
+current theta RAD: -2.445687
+current theta DEG: -140.127515
+target x: -10.233000
+target y: 15.774000
+lookahead dist: 9.463125
+target vel: 34.384998
+curvature: -0.007608
+target vels: 32.750042 36.019955
+
+NEW TICK
+target index: 108
+current x: -35.087772
+current y: -6.270525
+current theta RAD: -2.442571
+current theta DEG: -139.948990
+target x: -10.233000
+target y: 15.774000
+lookahead dist: 9.461250
+target vel: 34.384998
+curvature: -0.007567
+target vels: 32.758869 36.011127
+
+NEW TICK
+target index: 108
+current x: -35.230633
+current y: -6.440622
+current theta RAD: -2.443554
+current theta DEG: -140.005312
+target x: -10.233000
+target y: 15.774000
+lookahead dist: 9.448125
+target vel: 34.384998
+curvature: -0.006692
+target vels: 32.946884 35.823112
+
+NEW TICK
+target index: 108
+current x: -38.135189
+current y: -9.965087
+current theta RAD: -2.460104
+current theta DEG: -140.953607
+target x: -10.233000
+target y: 15.774000
+lookahead dist: 9.413125
+target vel: 34.384998
+curvature: -0.006322
+target vels: 33.026283 35.743713
+
+NEW TICK
+target index: 108
+current x: -39.082428
+current y: -11.135550
+current theta RAD: -2.462575
+current theta DEG: -141.095170
+target x: -10.233000
+target y: 15.774000
+lookahead dist: 9.428750
+target vel: 34.384998
+curvature: -0.006259
+target vels: 33.039856 35.730141
+
+NEW TICK
+target index: 108
+current x: -39.878918
+current y: -12.128586
+current theta RAD: -2.469277
+current theta DEG: -141.479176
+target x: -10.233000
+target y: 15.774000
+lookahead dist: 9.436250
+target vel: 34.384998
+curvature: -0.006278
+target vels: 33.035896 35.734097
+
+NEW TICK
+target index: 108
+current x: -40.085491
+current y: -12.388752
+current theta RAD: -2.471745
+current theta DEG: -141.620554
+target x: -10.233000
+target y: 15.774000
+lookahead dist: 9.361250
+target vel: 34.384998
+curvature: -0.006656
+target vels: 32.954525 35.815472
+
+NEW TICK
+target index: 108
+current x: -40.637573
+current y: -13.089507
+current theta RAD: -2.485469
+current theta DEG: -142.406858
+target x: -10.233000
+target y: 15.774000
+lookahead dist: 9.370625
+target vel: 34.384998
+curvature: -0.006726
+target vels: 32.939507 35.830490
+
+NEW TICK
+target index: 108
+current x: -40.661865
+current y: -13.121094
+current theta RAD: -2.487237
+current theta DEG: -142.508166
+target x: -10.233000
+target y: 15.774000
+lookahead dist: 9.359375
+target vel: 34.384998
+curvature: -0.006740
+target vels: 32.936626 35.833366
+
+NEW TICK
+target index: 108
+current x: -40.667580
+current y: -13.128553
+current theta RAD: -2.487588
+current theta DEG: -142.528293
+target x: -10.233000
+target y: 15.774000
+lookahead dist: 9.368750
+target vel: 34.384998
+curvature: -0.006765
+target vels: 32.931141 35.838852
+
+NEW TICK
+target index: 108
+current x: -40.669762
+current y: -13.131398
+current theta RAD: -2.488161
+current theta DEG: -142.561127
+target x: -10.233000
+target y: 15.774000
+lookahead dist: 9.361250
+target vel: 34.384998
+curvature: -0.006757
+target vels: 32.932884 35.837112
+
+NEW TICK
+target index: 108
+current x: -40.669071
+current y: -13.130497
+current theta RAD: -2.487979
+current theta DEG: -142.550723
+target x: -10.233000
+target y: 15.774000
+lookahead dist: 9.363125
+target vel: 34.384998
+curvature: -0.006765
+target vels: 32.931259 35.838737
+
+NEW TICK
+target index: 108
+current x: -40.669716
+current y: -13.131340
+current theta RAD: -2.488149
+current theta DEG: -142.560447
+target x: -10.233000
+target y: 15.774000
+lookahead dist: 9.368750
+target vel: 34.384998
+curvature: -0.006762
+target vels: 32.931721 35.838276
+
+NEW TICK
+target index: 108
+current x: -40.669533
+current y: -13.131099
+current theta RAD: -2.488101
+current theta DEG: -142.557659
+target x: -10.233000
+target y: 15.774000
+lookahead dist: 9.371250
+target vel: 34.384998
+curvature: -0.006782
+target vels: 32.927483 35.842514
+
+NEW TICK
+target index: 108
+current x: -40.671215
+current y: -13.133298
+current theta RAD: -2.488544
+current theta DEG: -142.583051
+target x: -10.233000
+target y: 15.774000
+lookahead dist: 9.376875
+target vel: 34.384998
+curvature: -0.006791
+target vels: 32.925625 35.844372
+
+NEW TICK
+target index: 108
+current x: -40.671947
+current y: -13.134261
+current theta RAD: -2.488738
+current theta DEG: -142.594184
+target x: -10.233000
+target y: 15.774000
+lookahead dist: 9.365000
+target vel: 34.384998
+curvature: -0.006804
+target vels: 32.922718 35.847279
+
+NEW TICK
+target index: 108
+current x: -40.673100
+current y: -13.135769
+current theta RAD: -2.489042
+current theta DEG: -142.611591
+target x: -10.233000
+target y: 15.774000
+lookahead dist: 9.355625
+target vel: 34.384998
+curvature: -0.006799
+target vels: 32.923950 35.846046
+
+NEW TICK
+target index: 108
+current x: -40.672611
+current y: -13.135131
+current theta RAD: -2.488913
+current theta DEG: -142.604228
+target x: -10.233000
+target y: 15.774000
+lookahead dist: 9.390000
+target vel: 34.384998
+curvature: -0.006774
+target vels: 32.929249 35.840744
+
+NEW TICK
+target index: 108
+current x: -40.711624
+current y: -13.186110
+current theta RAD: -2.488817
+current theta DEG: -142.598720
+target x: -10.233000
+target y: 15.774000
+lookahead dist: 9.365000
+target vel: 34.384998
+curvature: -0.006732
+target vels: 32.938339 35.831657
+
+NEW TICK
+target index: 108
+current x: -40.721714
+current y: -13.199288
+current theta RAD: -2.488018
+current theta DEG: -142.552918
+target x: -10.233000
+target y: 15.774000
+lookahead dist: 9.378750
+target vel: 34.384998
+curvature: -0.006743
+target vels: 32.935970 35.834026
+
+NEW TICK
+target index: 108
+current x: -40.722656
+current y: -13.200518
+current theta RAD: -2.488266
+current theta DEG: -142.567110
+target x: -10.233000
+target y: 15.774000
+lookahead dist: 9.380625
+target vel: 34.384998
+curvature: -0.006750
+target vels: 32.934372 35.835621
+
+NEW TICK
+target index: 108
+current x: -40.723293
+current y: -13.201348
+current theta RAD: -2.488433
+current theta DEG: -142.576698
+target x: -10.233000
+target y: 15.774000
+lookahead dist: 9.372499
+target vel: 34.384998
+curvature: -0.006749
+target vels: 32.934525 35.835476
+
+NEW TICK
+target index: 108
+current x: -40.727806
+current y: -13.207243
+current theta RAD: -2.488468
+current theta DEG: -142.578709
+target x: -10.233000
+target y: 15.774000
+lookahead dist: 9.363125
+target vel: 34.384998
+curvature: -0.006755
+target vels: 32.933350 35.836647
+
+NEW TICK
+target index: 108
+current x: -40.737408
+current y: -13.219794
+current theta RAD: -2.488693
+current theta DEG: -142.591580
+target x: -10.233000
+target y: 15.774000
+lookahead dist: 9.384375
+target vel: 34.384998
+curvature: -0.006777
+target vels: 32.928532 35.841461
+
+NEW TICK
+target index: 108
+current x: -40.739319
+current y: -13.222301
+current theta RAD: -2.489197
+current theta DEG: -142.620499
+target x: -10.233000
+target y: 15.774000
+lookahead dist: 9.353750
+target vel: 34.384998
+curvature: -0.006741
+target vels: 32.936226 35.833771
+

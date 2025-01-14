@@ -12,24 +12,25 @@ int clampState = 0;
 int doinkState = 0;
 
 void updateClamp() {
+    static bool buttonYPressed = false;
+
     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_Y)) {
-        if (clampState == 0) {
-            mogoClamp.set_value(true);
-            clampState++;
-        } else if (clampState == 2) {
-            mogoClamp.set_value(false);
-            clampState++;
+        if (!buttonYPressed) {
+            buttonYPressed = true;
+            if(clampState == 0) {
+                clampState = 1;
+                mogoClamp.set_value(true);
+            } else {
+                clampState = 0;
+                mogoClamp.set_value(false);
+            }
         }
-    } else if (!controller.get_digital(pros::E_CONTROLLER_DIGITAL_Y)) {
-        if (clampState == 1) {
-            clampState++;
-        } else if (clampState == 3) {
-            clampState = 0;
-        }
+    } else {
+        buttonYPressed = false;
     }
 }
 
-void updateDoink() {
+void updateDoink() { //TODO: FIX DOINK TO MATCH CLAMP
     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
         if (doinkState == 0) {
             doink.set_value(true);

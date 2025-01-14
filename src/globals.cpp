@@ -61,13 +61,13 @@ lemlib::OdomSensors sensors(nullptr, // vertical tracking wheel 1, set to null /
 
 // tanish driver functions:
 
-lemlib::ExpoDriveCurve throttleCurve(3, // joystick deadband out of 127
+lemlib::ExpoDriveCurve throttleCurve(5, // joystick deadband out of 127
                                      10, // minimum output where drivetrain will move out of 127
                                      1.019 // expo curve gain
 );
 
 // input curve for steer input during driver control
-lemlib::ExpoDriveCurve steerCurve(3, // joystick deadband out of 127
+lemlib::ExpoDriveCurve steerCurve(5, // joystick deadband out of 127
                                   10, // minimum output where drivetrain will move out of 127
                                   1.019 // expo curve gain
 );

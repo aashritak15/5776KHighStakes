@@ -162,28 +162,23 @@ std::vector<std::vector<std::string>> getSubData(const asset& sub) {
  * @param path the path to follow
  * @return int index to the closest point
  */
-int findClosest(lemlib::Pose pose, std::vector<lemlib::Pose> path, int skips, int prevIndex) {
+int findClosest(lemlib::Pose pose, std::vector<lemlib::Pose> path, int prevIndex) {
     int closestPoint;
-    int skipsLeft = skips;
     float closestDist = infinity();
     int maxIndex;
-    if (prevIndex + 5 > path.size()) {
+
+    if (prevIndex + 7 > path.size()) {
         maxIndex = path.size();
     } else {
-        maxIndex = prevIndex + 5;
+        maxIndex = prevIndex + 7; //TODO: TUNE VALUE ONE: SKIP TOLERANCE
     }
 
     // loop through all path points
     for (int i = prevIndex; i < maxIndex; i++) { 
         const float dist = pose.distance(path.at(i));
         if (dist < closestDist) { // new closest point
-            if (skipsLeft == 0) {
-                closestDist = dist;
-                closestPoint = i;
-            } else {
-                skipsLeft--;
-                std::cout<<"skips left: "<<std::to_string(skipsLeft)<<"\n";
-            }
+            closestDist = dist;
+            closestPoint = i;
         }
     }
 
@@ -236,10 +231,19 @@ float circleIntersect(lemlib::Pose p1, lemlib::Pose p2, lemlib::Pose pose, float
 lemlib::Pose lookaheadPoint(lemlib::Pose lastLookahead, lemlib::Pose pose, std::vector<lemlib::Pose> path, int closest,
                             float lookaheadDist) {
     // optimizations applied:
-    // only consider intersections that have an index greater than or equal to the point closest
+    // only consider xintersections that have an index greater than or equal to the point closest
     // to the robot
     // and intersections that have an index greater than or equal to the index of the last
     // lookahead point
+
+    float minLookahead = 7.5;
+    float maxLookahead = 15;
+
+    float avgVel = abs((leftMotors.get_voltage() + rightMotors.get_voltage()) / 2);
+    float pctVel = avgVel / 12000;
+    
+    lookaheadDist = minLookahead + ((maxLookahead - minLookahead) * pctVel);
+
     const int start = std::max(closest, int(lastLookahead.theta));
     for (int i = start; i < path.size() - 1; i++) {
         lemlib::Pose lastPathPose = path.at(i);
@@ -296,54 +300,57 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
     lastLookahead.theta = 0;
     float curvature;
     float targetVel;
-    float prevLeftVel = 0;
-    float prevRightVel = 0;
-    int closestPoint = 0; //*does this work
+    int closestPoint = 0;
     float leftInput = 0;
     float rightInput = 0;
-    float prevVel = 0;
     int compState = pros::competition::get_status();
-    int skips = 0;
     distTraveled = 0;
 
     // loop until the robot is within the end tolerance
-    for (int i = 0; i < timeout / 10 && pros::competition::get_status() == compState && this->motionRunning; i++) { //* compState and motionRunning??? remove
-        // if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)){ 
-        // // logic: copy file until stop point (copy number of lines from closestPoint) for both files
-        // //       copy coords and heading to separate file (i dont wanna break stuff by switching to driver in the middle of auton)
-        // //       in main: start writing new file but initialize bot position with coords and heading
-        // //                combine files when done
-        //     std::ifstream file0("/usd/autonomous.txt", std::ios::app);
-        //     std::ifstream file0Two("/usd/extra.txt", std::ios::app);
-        //     std::ofstream newFile0("static/newAuton");
-        //     std::ofstream newFile0Two("static/newExtra");
-        //     std::string temp;
-        //     for(int kiwi=0; kiwi<closestPoint; kiwi++){
-        //         std::getline(std::cin, temp);
-        //     }
-        //     break;
-        // }
+    for (int i = 0; i < timeout / 10 && pros::competition::get_status() == compState && this->motionRunning; i++) {
+        if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) { //TODO: CHANGE THE BUTTON!
+            // logic: copy file until stop point (copy number of lines from closestPoint) for both files
+            // copy coords and heading to separate file (i dont wanna break stuff by switching to driver in the middle of auton)
+            // in main: start writing new file but initialize bot position with coords and heading
+            // combine files when done
+
+            std::ifstream file0("/usd/autonomous.txt");
+            std::ifstream file0Two("/usd/extra.txt");
+            std::ofstream newFile0("/usd/newAuton.txt");
+            std::ofstream newFile0Two("/usd/newExtra.txt");
+            std::ofstream coords("/usd/coords.txt");
+
+            std::string temp="";
+            for(int kiwi=0; kiwi<closestPoint; kiwi++){
+                std::getline(file0, temp);
+                newFile0<<temp;
+                temp="";
+                std::getline(file0Two, temp);
+                newFile0Two<<temp;
+                temp="";
+            }
+
+            lemlib::Pose pose = chassis.getPose();
+            coords<<pose.x<<"\n"<<pose.y<<"\n"<<pose.theta;
+
+            break;
+        }
         
         std::string dataLine = "";
 
-        closestPoint = findClosest(pose, pathPoints, skips, closestPoint); //TODO: optimize quite vile
+        closestPoint = findClosest(pose, pathPoints, closestPoint);
 
-        dataLine.append("NEW TICK\ntarget index: " + std::to_string(closestPoint) + "\n");
-        dataLine.append("skips: " + std::to_string(skips) + "\n");
-        dataLine.append("x: " + std::to_string(pose.x) + "\n");
-        dataLine.append("y: " + std::to_string(pose.y) + "\n");
-        dataLine.append("theta: " + std::to_string(pose.theta) + "\n");
-
-        // get the current position of the robot
-        pose = this->getPose(true);
+        dataLine.append("NEW TICK\n");
+        dataLine.append("target index: " + std::to_string(closestPoint) + "\n");
 
         if (subValues.at(closestPoint)[2] == "STOPPED") { //*primary exclusion for delays
             drivetrain.leftMotors->move(0);                 
             drivetrain.rightMotors->move(0);
+
             dataLine.append("DELAYED\n\n");
             fileOThree<<dataLine;
             fileOThree.flush();
-            // std::cout<<"Delayed\n\n";
+
             pros::delay(100); //*change to tick speed always
             closestPoint++;
             continue;
@@ -351,42 +358,41 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         } else if(subValues.at(closestPoint)[2] == "TURNING CW" || subValues.at(closestPoint)[2] == "TURNING CCW" ) { //*exclusion for turns (pids are back)
             this->endMotion();
 
-            pros::delay(10); //TODO: see if this fixes it
+            pros::delay(10);
             
+            if(subValues.at(closestPoint)[2] == "TURNING CW") {
+                dataLine.append("TURN CLOCKWISE\n");
+            } else {
+                dataLine.append("TURN COUNTERCLOCKWISE\n");
+            }
+
             int prevClosestPoint = closestPoint;
             //chassis.setPose(pose.x, pose.y, 0);
 
-            closestPoint++; //TODO: single cw exclusion
+            closestPoint++; 
             while(subValues.at(closestPoint)[2] == "TURNING CW" || subValues.at(closestPoint)[2] == "TURNING CCW") {closestPoint++;}
-            closestPoint--; 
+            closestPoint++;
 
             dataLine.append("turn end index: " + std::to_string(closestPoint) + "\n");
-            std::cout<<"turn end index: "<<std::to_string(closestPoint)<<"\n";
 
-            float turnDist = pathPoints.at(closestPoint).theta;//-pose.theta;
-            
-            dataLine.append("turn distance: " + std::to_string(turnDist) + "\n");
-            std::cout<<"turn distance: "<<std::to_string(turnDist)<<"\n";
+            dataLine.append("target theta: " + std::to_string(pathPoints.at(closestPoint).theta)+"\n");
 
             if (subValues.at(prevClosestPoint)[2] == "TURNING CW") {
-                dataLine.append("begin theta cw: " + std::to_string(pose.theta) + "\n");
-                std::cout<<"BEGIN THETA CW";
-                chassis.turnToHeading(turnDist, 10000, {.direction = AngularDirection::CW_CLOCKWISE}, true);
-                std::cout<<"END THETA CW";
+                dataLine.append("beginning theta: " + std::to_string(chassis.getPose().theta) + "\n");
+                chassis.turnToHeading(pathPoints.at(closestPoint).theta, 1000, {.direction = AngularDirection::CW_CLOCKWISE}, false); //TODO: TUNE turnToHeading TIMEOUT
+                pros::delay(10);
+                dataLine.append("ending theta: " + std::to_string(chassis.getPose().theta) + "\n\n"); //TODO: RADIANS??????????
             } else {
-                dataLine.append("begin theta ccw: " + std::to_string(pose.theta) + "\n");
-                std::cout<<"BEGIN THETA CCW";
-                chassis.turnToHeading(turnDist, 10000, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE}, true);
-                std::cout<<"END THETA CCW";
-                dataLine.append("end theta ccw: " + std::to_string(pose.theta) + "\n\n");
+                dataLine.append("beginning theta: " + std::to_string(chassis.getPose().theta) + "\n");
+                chassis.turnToHeading(pathPoints.at(closestPoint).theta, 1000, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE}, false);
+                pros::delay(10);
+                dataLine.append("ending theta: " + std::to_string(chassis.getPose()
+                .theta) + "\n\n");
             }
-
-            //chassis.setPose(pose.x, pose.y, pathPoints.at(closestPoint).theta);
 
             closestPoint++;
 
             fileOThree<<dataLine;
-            
             fileOThree.flush();
 
             this->requestMotionStart();
@@ -395,18 +401,18 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
 
         } else if(subValues.at(closestPoint)[2] == "SUBSYS") {
             
-            if (subValues.at(closestPoint)[1] == "0") {
+            if (subValues.at(closestPoint)[0] == "0") {
             intake.move_voltage(0);
-            } else if (subValues.at(closestPoint)[1] == "1") {
+            } else if (subValues.at(closestPoint)[0] == "1") {
                 intake.move_voltage(-12000);
-            } else if (subValues.at(closestPoint)[1] == "2") {
+            } else if (subValues.at(closestPoint)[0] == "2") {
                 intake.move_voltage(12000);
             }
 
-            if (subValues.at(closestPoint)[3] == "0") {
-                mogoClamp.set_value(true);
-            } else if (subValues.at(closestPoint)[3] == "2") {
+            if (subValues.at(closestPoint)[1] == "0") {
                 mogoClamp.set_value(false);
+            } else if (subValues.at(closestPoint)[1] == "1") {
+                mogoClamp.set_value(true);
             }
 
             closestPoint++;
@@ -419,62 +425,83 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
 
             continue;
         }
+ 
+        dataLine.append("current x: " + std::to_string(pose.x) + "\n");
+        dataLine.append("current y: " + std::to_string(pose.y) + "\n");
+        dataLine.append("current theta RAD: " + std::to_string(pose.theta) + "\n");
+        dataLine.append("current theta DEG: " + std::to_string(pose.theta * 180 / M_PI) + "\n");
+
+        // get the current position of the robot
+        pose = this->getPose(true);
 
         // update completion vars
         distTraveled += pose.distance(lastPose);
         lastPose = pose;
 
-        // find the closest point on the path to the robot
+        // run subsystems
 
-        // std::cout<<"target index: "<<std::to_string(closestPoint)<<"\n";
-
-        if (subValues.at(closestPoint)[1] == "0") {
+        if (subValues.at(closestPoint)[0] == "0") {
             intake.move_voltage(0);
-        } else if (subValues.at(closestPoint)[1] == "1") {
+        } else if (subValues.at(closestPoint)[0] == "1") {
             intake.move_voltage(-12000);
-        } else if (subValues.at(closestPoint)[1] == "2") {
+        } else if (subValues.at(closestPoint)[0] == "2") {
             intake.move_voltage(12000);
         }
 
-
-        if (subValues.at(closestPoint)[3] == "0") {
-            mogoClamp.set_value(true);
-        } else if (subValues.at(closestPoint)[3] == "2") {
+        if (subValues.at(closestPoint)[1] == "0") {
             mogoClamp.set_value(false);
+        } else if (subValues.at(closestPoint)[1] == "1") {
+            mogoClamp.set_value(true);
         }        
 
         dataLine.append("target x: " + std::to_string(pathPoints.at(closestPoint).x) + "\n");
         dataLine.append("target y: " + std::to_string(pathPoints.at(closestPoint).y) + "\n");
 
-        // std::cout<<"target x: "<<std::to_string(pathPoints.at(closestPoint).x)<<"\n";
-        // std::cout<<"target y: "<<std::to_string(pathPoints.at(closestPoint).y)<<"\n";
-
         // find the lookahead point
-        lookaheadPose = lookaheadPoint(lastLookahead, pose, pathPoints, closestPoint, lookahead);
+
+        float minLookahead = 7.5; //TODO: OPTIMIZE: dynamic lookahead
+        float maxLookahead = 15;
+
+        float avgVel = abs((leftMotors.get_voltage() + rightMotors.get_voltage()) / 2);
+        float pctVel = avgVel / 12000;
+    
+        float lookaheadDist = minLookahead + ((maxLookahead - minLookahead) * pctVel);
+
+        dataLine.append("lookahead dist: " + std::to_string(lookaheadDist) + :\n);
+
+        lookaheadPose = lookaheadPoint(lastLookahead, pose, pathPoints, closestPoint, lookaheadDist);
         lastLookahead = lookaheadPose; // update last lookahead position
 
         // get the curvature of the arc between the robot and the lookahead point
         dataLine.append("target vel: " + std::to_string(targetVel) + "\n");
-        // std::cout<<"target vel: "<<std::to_string(targetVel)<<"\n";
-        float curvatureHeading = M_PI / 2 - pose.theta; 
+        float curvatureHeading = M_PI / 2 - (pose.theta); //TODO: WHERE IS IT TURNED TO RAD????
         curvature = findLookaheadCurvature(pose, curvatureHeading, lookaheadPose);
 
+        lookaheadDist -= (curvature * 50); //TODO: tune 50 as curvature factor
+
+/* //TODO: curvature adaptability
+        lookaheadPose = lookaheadPoint(lastLookahead, pose, pathPoints, closestPoint, lookaheadDist);
+        lastLookahead = lookaheadPose; // update last lookahead position
+
+        // get the curvature of the arc between the robot and the lookahead point
+        dataLine.append("target vel: " + std::to_string(targetVel) + "\n");
+        curvatureHeading = M_PI / 2 - (pose.theta);
+        curvature = findLookaheadCurvature(pose, curvatureHeading, lookaheadPose);
+
+
         dataLine.append("curvature: " + std::to_string(curvature) + "\n");
-        // std::cout<<"curvature: "<<std::to_string(curvature)<<"\n";
+*/
 
-        // get the target velocity of the robot
-        targetVel = std::stof(velocities.at(closestPoint));
-
-        // targetVel = slew(targetVel, prevVel, lateralSettings.slew); //*i got rid of slew lol
-        prevVel = targetVel;
+        // get the target velocity of the robot //*SLEW REMOVED, ADD BACK IF NECESSARY
+        targetVel = std::stof(velocities.at(closestPoint)) * 1.00; //TODO: TUNE THE MULTIPLIER!
 
         // calculate target left and right velocities
         float targetLeftVel = targetVel * (2 + curvature * drivetrain.trackWidth) / 2; 
         float targetRightVel = targetVel * (2 - curvature * drivetrain.trackWidth) / 2;
 
-        if ((std::abs(targetLeftVel) < 3.0) && (std::abs(targetRightVel) < 3.0)) { //*secondary exclusion for if bot feels cute
-            // std::cout<<"tiny vel\n\n";
-            dataLine.append("small vel\n\n");
+        //*secondary exclusion for small vels
+        if ((std::abs(targetLeftVel) < 5.0) && (std::abs(targetRightVel) < 5.0)) { 
+            dataLine.append("SMALL VEL\n\n");
             pros::delay(10); //*change to tick speed always
             closestPoint++;
             continue;
@@ -487,23 +514,10 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
             targetRightVel /= ratio;
         }
 
-        // update previous velocities //* not important right
-        // prevLeftVel = targetLeftVel;
-        // prevRightVel = targetRightVel;
-
         dataLine.append("target vels: " + std::to_string(targetLeftVel) + " " + std::to_string(targetRightVel) + "\n\n");
-        // std::cout<<"velocities: "<<targetLeftVel<<", "<<targetRightVel<<"\n\n"; //\n
 
-        // move the drivetrain
-        if (subValues.at(closestPoint)[0] == "0") {
-            drivetrain.leftMotors->move(targetLeftVel);
-            drivetrain.rightMotors->move(targetRightVel);
-            std::cout<<"forward ";
-        } else if(subValues.at(closestPoint)[0] == "1") {
-            drivetrain.leftMotors->move(-targetRightVel);
-            drivetrain.rightMotors->move(-targetLeftVel);
-            std::cout<<"backward ";
-        }
+        drivetrain.leftMotors->move(targetLeftVel);
+        drivetrain.rightMotors->move(targetRightVel);
 
         if (closestPoint == subValues.size() - 2) {
             drivetrain.leftMotors->move(0);
@@ -530,7 +544,6 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
 
     }
 
-    // stop the robot
     drivetrain.leftMotors->move(0);
     drivetrain.rightMotors->move(0);
     // set distTraveled to -1 to indicate that the function has finished
