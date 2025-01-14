@@ -108,8 +108,14 @@ void writePose() {
     fileO << dataLine;
 }
 
+int lineNum=0;
+lemlib::Pose lastPose1;
+lemlib::Pose currentPose1;
 void writeAdditional() { //TODO: OPTIMIZE
     std::string dataLine = "";
+
+    lastPose1 = currentPose1;
+    currentPose1 = chassis.getPose();
 
     std::int32_t left = leftMotors.get_voltage();
     std::int32_t right = rightMotors.get_voltage(); 
@@ -117,17 +123,26 @@ void writeAdditional() { //TODO: OPTIMIZE
     float adjRight = left/2.0*127.0/12000.0;
     float adjTotal = adjLeft + adjRight;
 
+    
+    lineNum++;
+
     dataLine.append(std::to_string(intakeState) + ", ");
 
     dataLine.append(std::to_string(clampState) + ", ");
 
-    if(std::abs(adjTotal) < 5) {
+    if(std::abs(adjTotal) < 10 || std::abs(currentPose1.x-lastPose1.x) < 2 && std::abs(currentPose1.y-lastPose1.y) < 2) {
 
         if(std::abs(adjRight) > 5 && std::abs(adjLeft) > 5) {
             if(adjRight > 0)  {//TODO: CHECK {
                 dataLine.append("TURNING CW\n");
+                std::cout<<lineNum<<"\n";
+                std::cout<<"left: "<<adjLeft<<"\n";
+                std::cout<<"right: "<<adjRight<<"\n\n";
             } else if (adjRight < 0) {
                 dataLine.append("TURNING CCW\n");
+                std::cout<<lineNum<<"\n";
+    std::cout<<"left: "<<adjLeft<<"\n";
+    std::cout<<"right: "<<adjRight<<"\n\n";
             }
         } else if(!(prevIntakeState == intakeState) || !(prevClampState == clampState)) {
             dataLine.append("SUBSYS\n");
@@ -149,42 +164,42 @@ void addSegment() {
     std::ifstream file0("static/newAuton.txt");
     std::ifstream file0Two("static/newExtra.txt");
     std::ifstream coords("static/coords");
-    float[3] pose;
-    string temp="";
+    float pose[3];
+    std::string temp = "";
     for(int i=0;i<3;i++) {
-        coords>>temp;
+        std::getline(coords, temp);
         pose[i] = std::stof(temp);
         temp="";
     }
     chassis.setPose(pose[0], pose[1], pose[2]);
 }
 
-void mergeFiles(std::ifstream& file1, std::ifstream& file2) {
-    std::ofstream mergedFile("static/mergedFile.txt");
+// void mergeFiles(std::ifstream& file1, std::ifstream& file2) {
+//     std::ofstream mergedFile("static/mergedFile.txt");
 
-    if (!file1.is_open() || !file2.is_open() || !mergedFile.is_open()) {
-        std::cerr << "Error opening files." << std::endl;
-        return 1;
-    }
+//     if (!file1.is_open() || !file2.is_open() || !mergedFile.is_open()) {
+//         std::cerr << "Error opening files." << std::endl;
+//         return 1;
+//     }
 
-    std::string line;
+//     std::string line;
 
-    // Copy contents of file1 to mergedFile
-    while (std::getline(file1, line)) {
-        mergedFile << line << std::endl;
-    }
+//     // Copy contents of file1 to mergedFile
+//     while (std::getline(file1, line)) {
+//         mergedFile << line << std::endl;
+//     }
 
-    // Copy contents of file2 to mergedFile
-    while (std::getline(file2, line)) {
-        mergedFile << line << std::endl;
-    }
+//     // Copy contents of file2 to mergedFile
+//     while (std::getline(file2, line)) {
+//         mergedFile << line << std::endl;
+//     }
 
-    file1.close();
-    file2.close();
-    mergedFile.close();
+//     file1.close();
+//     file2.close();
+//     mergedFile.close();
 
-    std::cout << "Files merged successfully!" << std::endl;
-}
+//     std::cout << "Files merged successfully!" << std::endl;
+// }
 
 
 //jerry stuff 

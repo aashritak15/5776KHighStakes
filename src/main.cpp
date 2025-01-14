@@ -95,10 +95,13 @@ ASSET(autonomous_txt); // TODO: add std functionality
 ASSET(extra_txt);
 
 void autonomous() {
+    chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
+
+    // chassis.turnToHeading(90, 1000);
     initDebug();
     mogoClamp.set_value(false); 
 
-    chassis.follow(autonomous_txt, extra_txt, 7.5, 40000, true, false);
+    chassis.follow(autonomous_txt, extra_txt, 10, 40000, true, false);
 }
 
 // Lady Brown PID Functions 
@@ -113,6 +116,7 @@ lemlib:: PID liftPID( 3, 10, 0, 0);
  */
 
 void opcontrol() {
+    //addSegment();
 
     chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
 

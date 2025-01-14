@@ -167,10 +167,10 @@ int findClosest(lemlib::Pose pose, std::vector<lemlib::Pose> path, int prevIndex
     float closestDist = infinity();
     int maxIndex;
 
-    if (prevIndex + 3 > path.size()) {
+    if (prevIndex + 7 > path.size()) {
         maxIndex = path.size();
     } else {
-        maxIndex = prevIndex + 3; //TODO: TUNE VALUE ONE: SKIP TOLERANCE
+        maxIndex = prevIndex + 7; //TODO: TUNE VALUE ONE: SKIP TOLERANCE
     }
 
     // loop through all path points
@@ -231,13 +231,13 @@ float circleIntersect(lemlib::Pose p1, lemlib::Pose p2, lemlib::Pose pose, float
 lemlib::Pose lookaheadPoint(lemlib::Pose lastLookahead, lemlib::Pose pose, std::vector<lemlib::Pose> path, int closest,
                             float lookaheadDist) {
     // optimizations applied:
-    // only consider intersections that have an index greater than or equal to the point closest
+    // only consider xintersections that have an index greater than or equal to the point closest
     // to the robot
     // and intersections that have an index greater than or equal to the index of the last
     // lookahead point
 
-    float minLookahead = 6;
-    float maxLookahead = 12;
+    float minLookahead = 7.5;
+    float maxLookahead = 15;
 
     float avgVel = abs((leftMotors.get_voltage() + rightMotors.get_voltage()) / 2);
     float pctVel = avgVel / 12000;
@@ -361,9 +361,9 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
             pros::delay(10);
             
             if(subValues.at(closestPoint)[2] == "TURNING CW") {
-                dataLine.append("TURN CLOCKWISE");
+                dataLine.append("TURN CLOCKWISE\n");
             } else {
-                dataLine.append("TURN COUNTERCLOCKWISE");
+                dataLine.append("TURN COUNTERCLOCKWISE\n");
             }
 
             int prevClosestPoint = closestPoint;
@@ -371,18 +371,23 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
 
             closestPoint++; 
             while(subValues.at(closestPoint)[2] == "TURNING CW" || subValues.at(closestPoint)[2] == "TURNING CCW") {closestPoint++;}
-            closestPoint--;
+            closestPoint++;
 
             dataLine.append("turn end index: " + std::to_string(closestPoint) + "\n");
 
+            dataLine.append("target theta: " + std::to_string(pathPoints.at(closestPoint).theta)+"\n");
+
             if (subValues.at(prevClosestPoint)[2] == "TURNING CW") {
-                dataLine.append("beginning theta: " + std::to_string(pose.theta) + "\n");
-                chassis.turnToHeading(pathPoints.at(closestPoint).theta, 1000, {.direction = AngularDirection::CW_CLOCKWISE}, true); //TODO: TUNE turnToHeading TIMEOUT
-                dataLine.append("ending theta: " + std::to_string(pose.theta) + "\n\n");
+                dataLine.append("beginning theta: " + std::to_string(chassis.getPose().theta) + "\n");
+                chassis.turnToHeading(pathPoints.at(closestPoint).theta, 1000, {.direction = AngularDirection::CW_CLOCKWISE}, false); //TODO: TUNE turnToHeading TIMEOUT
+                pros::delay(10);
+                dataLine.append("ending theta: " + std::to_string(chassis.getPose().theta) + "\n\n"); //TODO: RADIANS??????????
             } else {
-                dataLine.append("beginning theta: " + std::to_string(pose.theta) + "\n");
-                chassis.turnToHeading(pathPoints.at(closestPoint).theta, 1000, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE}, true);
-                dataLine.append("ending theta: " + std::to_string(pose.theta) + "\n\n");
+                dataLine.append("beginning theta: " + std::to_string(chassis.getPose().theta) + "\n");
+                chassis.turnToHeading(pathPoints.at(closestPoint).theta, 1000, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE}, false);
+                pros::delay(10);
+                dataLine.append("ending theta: " + std::to_string(chassis.getPose()
+                .theta) + "\n\n");
             }
 
             closestPoint++;
@@ -453,7 +458,18 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         dataLine.append("target y: " + std::to_string(pathPoints.at(closestPoint).y) + "\n");
 
         // find the lookahead point
-        lookaheadPose = lookaheadPoint(lastLookahead, pose, pathPoints, closestPoint, lookahead);
+
+        float minLookahead = 7.5; //TODO: OPTIMIZE: dynamic lookahead
+        float maxLookahead = 15;
+
+        float avgVel = abs((leftMotors.get_voltage() + rightMotors.get_voltage()) / 2);
+        float pctVel = avgVel / 12000;
+    
+        float lookaheadDist = minLookahead + ((maxLookahead - minLookahead) * pctVel);
+
+        dataLine.append("lookahead dist: " + std::to_string(lookaheadDist) + :\n);
+
+        lookaheadPose = lookaheadPoint(lastLookahead, pose, pathPoints, closestPoint, lookaheadDist);
         lastLookahead = lookaheadPose; // update last lookahead position
 
         // get the curvature of the arc between the robot and the lookahead point

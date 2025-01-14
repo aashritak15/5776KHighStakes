@@ -29,6 +29,8 @@ void closeO();
 void writePose();
 void writeAdditional();
 
+void addSegment();
+
 //jerry
 
 // extern std::vector<Waypoint> route; 
