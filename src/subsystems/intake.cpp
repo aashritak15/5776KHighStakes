@@ -24,26 +24,26 @@ void updateIntake() {
         if (!buttonl1Pressed) {
             buttonl1Pressed = true;
             if (intakeState == 0 || intakeState == 2) {
-                intake.move_voltage(-12000);
                 intakeState = 1;
+                intake.move_voltage(-12000);
             } else if (intakeState == 1) {
-                intake.move_voltage(0);
                 intakeState = 0;
+                intake.move_voltage(0);
             }
         }
     } else {
         buttonl1Pressed = false;
     }
 
-    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) {
+    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
         if (!buttonxPressed) {
             buttonxPressed = true;
             if (intakeState == 0 || intakeState == 1) {
-                intake.move_voltage(12000);
                 intakeState = 2;
+                intake.move_voltage(12000);
             } else if (intakeState == 2) {
-                intake.move_voltage(0);
                 intakeState = 0;
+                intake.move_voltage(0);
             }
         }
     } else {

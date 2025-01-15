@@ -5,43 +5,45 @@
 #include "globals.hpp"
 
 void clampInit() { mogoClamp.set_value(false); }
+void doinkInit() { doink.set_value(false); }
+
 
 int clampState = 0;
+int doinkState = 0;
 
 void updateClamp() {
-    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
-        if (clampState == 0) {
-            mogoClamp.set_value(true);
-            clampState++;
-        } else if (clampState == 2) {
-            mogoClamp.set_value(false);
-            clampState++;
+    static bool buttonYPressed = false;
+
+    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_Y)) {
+        if (!buttonYPressed) {
+            buttonYPressed = true;
+            if(clampState == 0) {
+                clampState = 1;
+                mogoClamp.set_value(true);
+            } else {
+                clampState = 0;
+                mogoClamp.set_value(false);
+            }
         }
-    } else if (!controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
-        if (clampState == 1) {
-            clampState++;
-        } else if (clampState == 3) {
-            clampState = 0;
-        }
+    } else {
+        buttonYPressed = false;
     }
 }
 
-int doinkerState = 0; 
-
-void updateDoinker(){
-    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
-        if (doinkerState == 0) {
-            doinker.set_value(true);
-            doinkerState++;
-        } else if (doinkerState== 2) {
-            doinker.set_value(false);
-            doinkerState++;
+void updateDoink() { //TODO: FIX DOINK TO MATCH CLAMP
+    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_B)) {
+        if (doinkState == 0) {
+            doink.set_value(true);
+            doinkState++;
+        } else if (doinkState == 2) {
+            doink.set_value(false);
+            doinkState++;
         }
-    } else if (!controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
-        if (doinkerState == 1) {
-            doinkerState++;
-        } else if (doinkerState == 3) {
-            doinkerState = 0;
+    } else if (!controller.get_digital(pros::E_CONTROLLER_DIGITAL_B)) {
+        if (doinkState == 1) {
+            doinkState++;
+        } else if (doinkState == 3) {
+            doinkState = 0;
         }
     }
 }

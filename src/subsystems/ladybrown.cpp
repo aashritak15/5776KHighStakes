@@ -5,56 +5,111 @@
 #include "ladybrown.hpp"
 #include "globals.hpp"
 
-void liftInit() { lift.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD); }
-void rotationInit() { }
+pros::Rotation rotationSensor(13);
 
-void updateLift() {
-    lift.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+void liftInit() { ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE); }
+
+void updateLB() {
+    ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
 
     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) { // lift up/down
-        lift.move_voltage(-12000*0.55);
+        ladyBrown.move_velocity(-100);
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) { // lift up/down
-        lift.move_voltage(12000*0.55);
+        ladyBrown.move_velocity(100);
     } else {
-        lift.move_voltage(0);
-    }
-
-    /*
-       if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) { //lift up/down
-            lift.move_velocity(-100);
-        } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) { //lift up/down
-            lift.move_velocity(100);
-        } //else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT)) {
-            //lift.move_absolute(143,40);
-        else {lift.move_velocity(0);}*/
-
-    //lb macros
-    int leftButton = 0;
-    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) {
-        if (leftButton == 0) {
-            while(rotationSensor.get_angle()!=2583)
-                lift.move_voltage(-12000*0.55);
-            lift.move_voltage(0);
-            //lift.move_absolute(25.83, 100);
-            leftButton++;
-        } else if (leftButton == 2) {
-            while(rotationSensor.get_angle()!=15000)
-                lift.move_voltage(-12000*0.55);
-            lift.move_voltage(0);
-            //lift.move_absolute(150, 100);
-            leftButton++;
-        } else if (leftButton == 4) {
-            while(rotationSensor.get_angle()!=0)
-                lift.move_voltage(12000*0.55);
-            lift.move_voltage(0);
-            //lift.move_absolute(0, 100);
-            leftButton++;
-        }
-    } else if (!controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) {
-        if (leftButton == 1 || leftButton == 3) {
-            leftButton++;
-        } else if (leftButton == 5) {
-            leftButton = 0;
-        }
+        ladyBrown.move_velocity(0);
     }
 }
+
+
+/*
+
+if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2))) {
+setLiftTarget(target: 24);
+// pid that runs constantly
+float liftOutput = liftPID.update(error: liftTarget - lift get_position());
+lift.move(voltage: liftOutput) ;
+}
+
+
+*/
+// const int position1 = 24;
+// const int position2 = 100; // Adjust as per your desired positions
+// const int position3 = 0;
+
+// double kp = 0.0; // Set appropriate PID tuning constants
+// double kd = 0.0;
+
+// int target = position1;
+
+// double prevError = 0;
+
+// bool pidControl = false;
+
+// bool ladyState = false;
+
+// // PID Update Function
+// void updateLadyPID() {
+//     if (pidControl) {
+//         int current = rotationSensor.get_angle();
+
+//         double error = target - current;
+//         double derivative = error - prevError;
+
+//         prevError = error;
+
+//         double power = ((kp * error) + (kd * derivative)) * 100;
+
+//         lift.move_voltage(power); // Assuming move_voltage accepts values in millivolts
+//     } else {
+//         lift.move_voltage(0);
+//     }
+// }
+
+// // Task Update Function
+// void updateLadyTask() {
+//     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
+//         target = position1; // Reset to position1
+//         pidControl = true;
+//         ladyState = false; // Reset state
+//     }
+
+//     if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_R1)) {
+//         if (target == position1) {
+//             target = position2;
+//         } else if (target == position2) {
+//             target = position3;
+//         } else {
+//             target = position1; // Wrap back to position1
+//         }
+//         pidControl = true; // Enable PID control
+//     }
+// }
+
+
+
+//----------> PID 1
+
+// lemlib::PID  (
+//     0,
+//     0,
+//     0
+//     5, 
+//     false
+// );
+
+
+// void updateLadyTask(double target){
+
+//         double current = rotationSensor.get_position(); 
+
+//         double error = lift.calculate(target, current);
+
+//         lift.move(error);
+        
+// }
+
+
+
+// ---------> PID 2
+
