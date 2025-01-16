@@ -22,7 +22,7 @@
 // });
 
 pros::MotorGroup leftMotors({-6, -3, -4}, pros::MotorGearset::blue);
-pros::MotorGroup rightMotors({20, 19, 18}, pros::MotorGearset::blue);
+pros::MotorGroup rightMotors({20, 12, 18}, pros::MotorGearset::blue);
 
 pros::Imu imu(19);
 
@@ -30,7 +30,6 @@ pros::Imu imu(19);
 lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 13.3, lemlib::Omniwheel::NEW_275, 450,
                               6 // 2 w/o traction
 );
-
 
 // lateral motion controller
 lemlib::ControllerSettings linearController(7.3, // proportional gain (kP)
@@ -94,9 +93,9 @@ void initialize() {
     clampInit();
     intakeInnit();
     liftInit();
-    //intakeClampInit();
+    // intakeClampInit();
     opticalInit();
-    //rotationInit();
+    // rotationInit();
     initO();
 
     // lv_init();
@@ -115,22 +114,22 @@ void initialize() {
     pros::Task screenTask([&]() {
         while (true) {
             // print robot location to the brain screen
-            
-        //     std::vector<double> left = leftMotors.get_position_all();
-        // std::vector<double> right = rightMotors.get_position_all();
-        // pros::lcd::print(5, "LeftF Encoders: %f", left[0]);
-        // pros::lcd::print(6, "LeftM Encoders: %f", left[1]);
-        // //pros::lcd::print(7, "LeftB Encoders: %f", left[2]);
-        // pros::lcd::print(2, "RightF Encoders: %f", right[0]);
-        // pros::lcd::print(3, "RightM Encoders: %f", right[1]);
-        //pros::lcd::print(4, "RightB Encoders: %f", right[2]);
+
+            //     std::vector<double> left = leftMotors.get_position_all();
+            // std::vector<double> right = rightMotors.get_position_all();
+            // pros::lcd::print(5, "LeftF Encoders: %f", left[0]);
+            // pros::lcd::print(6, "LeftM Encoders: %f", left[1]);
+            // //pros::lcd::print(7, "LeftB Encoders: %f", left[2]);
+            // pros::lcd::print(2, "RightF Encoders: %f", right[0]);
+            // pros::lcd::print(3, "RightM Encoders: %f", right[1]);
+            // pros::lcd::print(4, "RightB Encoders: %f", right[2]);
 
             pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
             pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
             pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
             pros::lcd::print(3, "Rotation: %f", rotationSensor.get_position()); // lift encoder
             pros::lcd::print(4, "Encoder: %f", ladyBrown.get_position());
-            //pros::lcd::print(4, "Color: %f", optical.get_hue());
+            // pros::lcd::print(4, "Color: %f", optical.get_hue());
 
             // log position telemetry
             lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
@@ -140,47 +139,40 @@ void initialize() {
     });
 }
 
-
 void writePose() {
-   std::string dataLine = "";
-   lemlib::Pose pose = chassis.getPose();
-   std::uint32_t left = leftMotors.get_voltage();
-   std::uint32_t right = rightMotors.get_voltage();   
+    std::string dataLine = "";
+    lemlib::Pose pose = chassis.getPose();
+    std::uint32_t left = leftMotors.get_voltage();
+    std::uint32_t right = rightMotors.get_voltage();
 
-//rounds to 3 decimal places (idk if that helps)
-   dataLine.append(std::to_string((round(pose.x*1000))/1000) + ", ");
-   dataLine.append(std::to_string((round(pose.y*1000))/1000) + ", ");
-   dataLine.append(std::to_string((right+left)/2.0*127.0/12000.0) 
-   + "\n");
+    // rounds to 3 decimal places (idk if that helps)
+    dataLine.append(std::to_string((round(pose.x * 1000)) / 1000) + ", ");
+    dataLine.append(std::to_string((round(pose.y * 1000)) / 1000) + ", ");
+    dataLine.append(std::to_string((right + left) / 2.0 * 127.0 / 12000.0) + "\n");
 
-    std::cout<<std::to_string((round(pose.x*1000))/1000) + ", ";
-    std::cout<<std::to_string((round(pose.y*1000))/1000) + ", ";
-    std::cout<<std::to_string((right+left)/2.0*127.0/12000.0) + "\n";
-//    dataLine.append(std::to_string(pose.x) + ", ");
-//    dataLine.append(std::to_string(pose.y) + ", ");
-//    dataLine.append(std::to_string(pose.theta) + "\n");
+    std::cout << std::to_string((round(pose.x * 1000)) / 1000) + ", ";
+    std::cout << std::to_string((round(pose.y * 1000)) / 1000) + ", ";
+    std::cout << std::to_string((right + left) / 2.0 * 127.0 / 12000.0) + "\n";
+    //    dataLine.append(std::to_string(pose.x) + ", ");
+    //    dataLine.append(std::to_string(pose.y) + ", ");
+    //    dataLine.append(std::to_string(pose.theta) + "\n");
 
+    fileO << dataLine;
 
-   fileO << dataLine;
-        
-//    fileO.flush();
+    //    fileO.flush();
 
-   //writeAdditional();
+    // writeAdditional();
 }
 
 void writeAdditional() {
     std::string dataLine = "";
 
-    if(leftMotors.get_voltage() < 0 && rightMotors.get_voltage()<0)
-        dataLine.append("1, ");
-    else
-        dataLine.append("0, ");
+    if (leftMotors.get_voltage() < 0 && rightMotors.get_voltage() < 0) dataLine.append("1, ");
+    else dataLine.append("0, ");
 
-    if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) { //non toggle subsystem
+    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) { // non toggle subsystem
         dataLine.append("1\n");
-    }
-    else
-        dataLine.append("0\n");
+    } else dataLine.append("0\n");
 
     fileOTwo << dataLine;
     // fileOTwo.flush();
@@ -191,7 +183,6 @@ void writeAdditional() {
 //     fileOTwo << lemlib::
 //     // fileOTwo.flush();
 // }
-
 
 /**
  * Runs while the robot is disabled
@@ -212,60 +203,117 @@ void competition_initialize() {}
 ASSET(autonomous_txt);
 ASSET(extra_txt);
 
-void redSoloWP() {
-    ladyBrown.move_absolute(-915, 100); //change to score angle
+void blueSoloWP() {
+    ladyBrown.move_absolute(-915, 100); // change to score angle
     pros::delay(500);
     ladyBrown.move_absolute(0, 100);
     pros::delay(100);
 
-    //mogo
-    chassis.moveToPoint(-9.2, -33.2, 3000, {.forwards = false, .maxSpeed = 80});
-    //chassis.turnToHeading(5.4, 1000);
-    //chassis.moveToPose(-9.2, -33.2, 5.4, 3000, {.forwards = false, .minSpeed = 50});
+    // mogo
+    chassis.moveToPoint(5.3, -29.6, 3000, {.forwards = false, .maxSpeed = 80});
+    // chassis.turnToHeading(5.4, 1000);
+    // chassis.moveToPose(-9.2, -33.2, 5.4, 3000, {.forwards = false, .minSpeed = 50});
     chassis.waitUntilDone();
-    //pros::delay(100);
+    // pros::delay(100);
     mogoClamp.set_value(true);
     pros::delay(250);
 
-    //center rings
+    // center rings
+    intake.move_voltage(-12000);
+    chassis.turnToHeading(-205, 2000);
+
+    // //-11.4, -48.3, -168.6
+
+    chassis.moveToPoint(11.4, -40.2, 3000, {.forwards = true});
+
+    chassis.turnToHeading(-141.3, 800);
+
+    intake.move_voltage(12000);
+    chassis.moveToPoint(-2.6, -59.8, 3000, {.forwards = true});
+    pros::delay(1000);
+    chassis.waitUntilDone();
+    intake.move_voltage(-12000);
+
+    chassis.turnToHeading(227.5, 800);
+
+    chassis.moveToPoint(-8.4, -64.7, 3000, {.forwards = true});
+
+    chassis.moveToPose(-15, -61.7, -90, 3000, {.maxSpeed = 80});
+
+    pros::delay(350);
+
+    chassis.moveToPoint(12, -52.5, 2000, {.forwards = false, .maxSpeed = 80});
+
+    chassis.turnToHeading(-75, 1000);
+
+    chassis.moveToPoint(-9.8, -46.3, 1000, {.maxSpeed = 80});
+
+    // ---------------------------> auton break
+
+    // // chassis.moveToPose(-1.7, -66.7, -232.8, 3000, {.maxSpeed = 80}); //-234.4
+    // chassis.turnToHeading(-197.6, 1000);
+    // chassis.moveToPoint(-3.4, -60, 2000);
+    // chassis.turnToHeading(120, 1000);
+    // // chassis.moveToPoint(3.5, -64, 1000);
+    // chassis.moveToPose(11.6, -67.4, 111, 1000); // intakes blue sometimes
+
+    // // middle ring
+    // chassis.moveToPoint(-7.3, -48.2, 2000, {.forwards = false}); // get new point in between so it doesnt cross line
+    // chassis.turnToHeading(86.6, 1000);
+    // chassis.moveToPoint(7.9, -47.6, 2000);
+    // chassis.turnToHeading(-90, 1000);
+    // chassis.moveToPoint(-20.5, -38.6, 2000);
+    // intake.move_voltage(0);
+}
+
+void redSoloWP() {
+    ladyBrown.move_absolute(-915, 100); // change to score angle
+    pros::delay(500);
+    ladyBrown.move_absolute(0, 100);
+    pros::delay(100);
+
+    // mogo
+    chassis.moveToPoint(-9.2, -33.2, 3000, {.forwards = false, .maxSpeed = 80});
+    // chassis.turnToHeading(5.4, 1000);
+    // chassis.moveToPose(-9.2, -33.2, 5.4, 3000, {.forwards = false, .minSpeed = 50});
+    chassis.waitUntilDone();
+    // pros::delay(100);
+    mogoClamp.set_value(true);
+    pros::delay(250);
+
+    // center rings
     chassis.turnToHeading(190, 2000);
     intake.move_voltage(-12000);
 
     //-11.4, -48.3, -168.6
     chassis.moveToPose(-10.9, -45.4, -168.6, 3000, {.minSpeed = 30});
-    //chassis.moveToPose(-10.9, -55.14, -200.8, 3000);
-    //chassis.moveToPose(-1.7, -66.7, -232.8, 3000, {.maxSpeed = 80}); //-234.4
+    // chassis.moveToPose(-10.9, -55.14, -200.8, 3000);
+    // chassis.moveToPose(-1.7, -66.7, -232.8, 3000, {.maxSpeed = 80}); //-234.4
     chassis.turnToHeading(-197.6, 1000);
     chassis.moveToPoint(-3.4, -60, 2000);
     chassis.turnToHeading(120, 1000);
-    //chassis.moveToPoint(3.5, -64, 1000);
-    chassis.moveToPose(11.6, -67.4, 111, 1000); //intakes blue sometimes
+    // chassis.moveToPoint(3.5, -64, 1000);
+    chassis.moveToPose(11.6, -67.4, 111, 1000); // intakes blue sometimes
 
-    //middle ring
-    chassis.moveToPoint(-7.3, -48.2, 2000, {.forwards = false}); //get new point in between so it doesnt cross line
+    // middle ring
+    chassis.moveToPoint(-7.3, -48.2, 2000, {.forwards = false}); // get new point in between so it doesnt cross line
     chassis.turnToHeading(86.6, 1000);
     chassis.moveToPoint(7.9, -47.6, 2000);
     chassis.turnToHeading(-90, 1000);
     chassis.moveToPoint(-20.5, -38.6, 2000);
     intake.move_voltage(0);
-
-
 }
 
-
 void autonomous() {
-    chassis.setPose(0,0,0);
+    chassis.setPose(0, 0, 0);
     chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
-    
-    //chassis.turnToHeading(45, 3000);
-    //chassis.moveToPose(0, 24, 0, 10000);
 
-    redSoloWP();
-    
-    
-    
-    
-    
+    // chassis.turnToHeading(45, 3000);
+    // chassis.moveToPose(0, 24, 0, 10000);
+
+    blueSoloWP();
+    // redSoloWP();
+
     // const asset& path = autonomous_txt;
     // const std::string data(reinterpret_cast<char*>(path.buf), path.size);
     // if(data.size()!=0)
@@ -273,27 +321,25 @@ void autonomous() {
     // else
     //     controller.set_text(0, 0, "no data");
 
-   
     // chassis.moveToPoint(0, 24, 3000);
     // chassis.turnToHeading(180, 2500);
 
     // chassis.moveToPoint(0, 0, 2000);
     // chassis.turnToHeading(0, 2500);
-    
+
     // chassis.moveToPoint(0, 24, 2000);
     // chassis.turnToHeading(180, 2500);
 
-     //chassis.moveToPose(12, 24, 90, 5000, {.minSpeed = 20});
-    
+    // chassis.moveToPose(12, 24, 90, 5000, {.minSpeed = 20});
+
     // std::cout<<"rerun\n";
     // chassis.follow(autonomous_txt, extra_txt, 10, 40000); //TODO: use this later lol
-    //std::cout<<"jerry\n";
-    //chassis.follow(example_txt, extra1_txt, 10, 40000); //TODO: use this later lol
+    // std::cout<<"jerry\n";
+    // chassis.follow(example_txt, extra1_txt, 10, 40000); //TODO: use this later lol
 
-    
     // std::vector<std::vector<std::string>> subValues = getSubData(extra_txt);
     // pros::lcd::print(0, "pls: %f", subValues[1][0]);
-    
+
     // with selector
 
     /*if (selector::auton == 1) { redSoloWP(); }
@@ -320,31 +366,30 @@ void opcontrol() {
     // loop to continuously update motors
     initO();
 
-    
-
-    while(true) {
+    while (true) {
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
 
-        
-
         chassis.arcade(leftY, rightX);
 
-       updateIntake();
+        updateIntake();
         updateIntakeFirst();
         updateClamp();
-        //updateIntakeClamp();
+        // updateIntakeClamp();
         updateLB();
         updateColorToggle();
-        colorSort();  
+        colorSort();
         updateDoink();
 
+        // blue solo wp macro:   chassis.moveToPose(2.3, 4.7, 28.2, 1000);
+        // red solo wp macro: chassis.moveToPose(-3.4, 6.06, -27.6, 1000);
+
         if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT)) {
-        chassis.setPose(0,0,0);
-        chassis.moveToPose(-3.4, 6.06, -27.6, 1000);
-        std::cout<<"done";
-        //chassis.turnToHeading();
-    }
+            chassis.setPose(0, 0, 0);
+            chassis.moveToPose(2.6, 4.7, 26.5, 1000);
+            std::cout << "done";
+            // chassis.turnToHeading();
+        }
 
         // static unsigned long lastWriteTime = 0; // Tracks the last time writePose was called
         // unsigned long currentTime = pros::millis(); // Get the current time in milliseconds
@@ -360,23 +405,17 @@ void opcontrol() {
         pros::delay(10);
     }
 
+    // TODO: WORKING LOOP!
+    //  chassis.follow(autonomous_txt, extra_txt, 1, 40000);
+    //  lift.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+    //  rotationSensor.reset_position();
+    //  while (true) {
 
-
-
- //TODO: WORKING LOOP!
-    // chassis.follow(autonomous_txt, extra_txt, 1, 40000);
-    // lift.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-    // rotationSensor.reset_position();
-    // while (true) {
-        
-        
     //     int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
     //     int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
 
     //     chassis.arcade(leftY, rightX * 0.8);
 
-        
-        
     //     // pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
     //     // pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
     //     // pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
@@ -386,8 +425,6 @@ void opcontrol() {
 
     //     // lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
 
- 
-
     //     if (sortState == 0) {
     //         controller.set_text(0, 0, "no sort   ");
     //     } else if (sortState == 1) {
@@ -403,7 +440,7 @@ void opcontrol() {
     //     } else if (sortState == 2) {
     //         controller.set_text(0, 0, "scores red ");
     //     }
-        
-    //     pros::delay(10); 
+
+    //     pros::delay(10);
     // }
 }
