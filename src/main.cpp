@@ -90,6 +90,8 @@ void initialize() {
     pros::lcd::initialize(); // initialize brain screen
     chassis.calibrate(); // calibrate sensors
 
+    rotationSensor.reset_position();
+
     clampInit();
     intakeInnit();
     liftInit();
@@ -127,9 +129,9 @@ void initialize() {
             pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
             pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
             pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
-            pros::lcd::print(3, "Rotation: %f", rotationSensor.get_position()); // lift encoder
-            pros::lcd::print(4, "Encoder: %f", ladyBrown.get_position());
-            // pros::lcd::print(4, "Color: %f", optical.get_hue());
+            pros::lcd::print(3, "Rotation: %f", lift.get_position()); // lift encoder
+            // pros::lcd::print(4, "Encoder: %f", ladyBrown.get_position());
+            //  pros::lcd::print(4, "Color: %f", optical.get_hue());
 
             // log position telemetry
             lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
@@ -282,26 +284,34 @@ void redSoloWP() {
     pros::delay(250);
 
     // center rings
-    chassis.turnToHeading(190, 2000);
+    chassis.turnToHeading(166, 2000);
     intake.move_voltage(-12000);
 
-    //-11.4, -48.3, -168.6
-    chassis.moveToPose(-10.9, -45.4, -168.6, 3000, {.minSpeed = 30});
-    // chassis.moveToPose(-10.9, -55.14, -200.8, 3000);
-    // chassis.moveToPose(-1.7, -66.7, -232.8, 3000, {.maxSpeed = 80}); //-234.4
-    chassis.turnToHeading(-197.6, 1000);
-    chassis.moveToPoint(-3.4, -60, 2000);
-    chassis.turnToHeading(120, 1000);
-    // chassis.moveToPoint(3.5, -64, 1000);
-    chassis.moveToPose(11.6, -67.4, 111, 1000); // intakes blue sometimes
+    chassis.moveToPoint(-4.079, -61.039, 3000, {.forwards = true, .maxSpeed = 80});
 
-    // middle ring
-    chassis.moveToPoint(-7.3, -48.2, 2000, {.forwards = false}); // get new point in between so it doesnt cross line
-    chassis.turnToHeading(86.6, 1000);
-    chassis.moveToPoint(7.9, -47.6, 2000);
-    chassis.turnToHeading(-90, 1000);
-    chassis.moveToPoint(-20.5, -38.6, 2000);
-    intake.move_voltage(0);
+    chassis.moveToPoint(-4.079, -57.02, 3000, {.forwards = false, .maxSpeed = 80});
+
+    chassis.turnToHeading(148, 2000);
+
+    // chassis.moveToPoint(-1.3, -64.6, 3000, {.forwards = false, .maxSpeed = 80});
+
+    // going to center rings
+    //-11.4, -48.3, -168.6
+    // chassis.moveToPose(-10.9, -45.4, -168.6, 3000, {.minSpeed = 30});
+    // // chassis.moveToPose(-10.9, -55.14, -200.8, 3000);
+    // // chassis.moveToPose(-1.7, -66.7, -232.8, 3000, {.maxSpeed = 80}); //-234.4
+    // chassis.turnToHeading(-197.6, 1000);
+    // chassis.moveToPoint(-3.4, -60, 2000);
+    // chassis.turnToHeading(120, 1000);
+    // // chassis.moveToPoint(3.5, -64, 1000);
+    // chassis.moveToPose(11.6, -67.4, 111, 1000); // intakes blue sometimes
+
+    // // middle ring
+    // chassis.moveToPoint(-7.3, -48.2, 2000, {.forwards = false}); // get new point in between so it doesnt cross line
+    // chassis.turnToHeading(86.6, 1000);
+    // chassis.moveToPoint(7.9, -47.6, 2000);
+    // chassis.turnToHeading(306, 1000);
+    // chassis.moveToPoint(-25, -31.75, 2000);
 }
 
 void autonomous() {
@@ -311,8 +321,8 @@ void autonomous() {
     // chassis.turnToHeading(45, 3000);
     // chassis.moveToPose(0, 24, 0, 10000);
 
-    blueSoloWP();
-    // redSoloWP();
+    // blueSoloWP();
+    redSoloWP();
 
     // const asset& path = autonomous_txt;
     // const std::string data(reinterpret_cast<char*>(path.buf), path.size);
@@ -386,7 +396,7 @@ void opcontrol() {
 
         if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT)) {
             chassis.setPose(0, 0, 0);
-            chassis.moveToPose(2.6, 4.7, 26.5, 1000);
+            chassis.moveToPose(-3.4, 6.06, -27.6, 1000);
             std::cout << "done";
             // chassis.turnToHeading();
         }
