@@ -3,7 +3,7 @@
 
 #include "main.h"
 
-inline pros::Motor lift(16, pros::MotorGearset::red);
+inline pros::Motor ladyBrown(16, pros::MotorGearset::red);
 extern pros::Rotation rotationSensor;
 
 void liftInit();
