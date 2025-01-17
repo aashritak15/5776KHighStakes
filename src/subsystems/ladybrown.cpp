@@ -9,6 +9,36 @@ pros::Rotation rotationSensor(11);
 
 void liftInit() { ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE); }
 
+double target = 0;
+double prevDistance = 0;
+double kP = 0.03;
+double kD = 0.04;
+
+void updateLB() {
+    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
+        target = -700;
+        ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
+        target = -145;
+        ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) {
+        target = 0;
+        ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
+        target = -600;
+        ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+    } else {
+        target = 0;
+    }
+
+    double currentAngle = rotationSensor.get_angle();
+    double distance = target - currentAngle;
+    double derivative = distance - prevDistance;
+    double armMoveSpeed = (kP * distance) + (kD * derivative);
+    ladyBrown.move_velocity(armMoveSpeed);
+    prevDistance = distance;
+
+}
 // ladybrown pid
 
 // void updateLB() {
@@ -73,25 +103,28 @@ void liftInit() { ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE); }
 //     }
 // }
 
-void updateLB() {
-    ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
 
-    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) { // lift up/down
-        ladyBrown.move_absolute(-700, -100);
-        ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
-    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) { // lift up/down
-        ladyBrown.move_absolute(-145, -100);
-        ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
-    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) {
-        ladyBrown.move_absolute(-145, -100);
-        ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)){
-        ladyBrown.move_absolute(-600, -100);
-        ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
-    } else{
-        ladyBrown.move_velocity(0);
-    }
-}
+/// ---------------> Basic 
+
+// void updateLB() {
+//     ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+
+//     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) { // lift up/down
+//         ladyBrown.move_absolute(-700, -100);
+//         ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+//     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) { // lift up/down
+//         ladyBrown.move_absolute(-145, -100);
+//         ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+//     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) {
+//         ladyBrown.move_absolute(-145, -100);
+//         ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+//     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)){
+//         ladyBrown.move_absolute(-600, -100);
+//         ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+//     } else{
+//         ladyBrown.move_velocity(0);
+//     }
+// }
 
 //Down is go to -145 but coast
 //right is -600 brake
