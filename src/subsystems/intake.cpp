@@ -6,13 +6,68 @@
 #include "intakeFirst.hpp"
 #include "globals.hpp"
 
-void intakeInnit() { intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST); }
+int intakeState = 0;
+int sortState = 0;
+
+
+void intakeInnit() { 
+    intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST); 
+
+    pros::Task colorSort ([&]() {
+        static bool buttonUpPressed = false;
+        static bool colorDetected = false;
+
+        controller.set_text(0, 0, "no sort    ");
+
+        while (true) {
+            if(!buttonUpPressed) {
+                buttonUpPressed = true;
+                if(sortState == 0) {
+                    sortState = 1;
+                    controller.set_text(0, 0, "scores red ");
+                } else if(sortState == 1) {
+                    sortState = 2;
+                    controller.set_text(0, 0, "scores blue");
+                } else if(sortState == 2) {
+                    sortState = 0;
+                }
+            } else {
+                buttonUpPressed = false;
+            }
+
+            if(sortState == 1) {
+                if(optical.get_hue() < 18 && optical.get_hue() > 12) {
+                    if(!colorDetected) {
+                        colorDetected = true;
+                        pros::delay(0);
+                        intake.move_voltage(0);
+                        pros::delay(0);
+                        intake.move_voltage(-12000);
+                    }
+                } else {
+                    colorDetected = false;
+                }
+            } else if(sortState == 2) {
+                if(optical.get_hue() < 216 && optical.get_hue() > 210) {
+                    if(!colorDetected) {
+                        colorDetected = true;
+                        pros::delay(0);
+                        intake.move_voltage(0);
+                        pros::delay(0);
+                        intake.move_voltage(-12000);
+                    }
+                } else {
+                    colorDetected = false;
+                }
+            }
+
+            pros::delay(10);
+        }
+    });
+
+}
 
 void opticalInit() { optical.set_led_pwm(75); }
-
-int intakeState = 0;
-
-int sortState = 0;
 
 void updateIntake() {
     static bool buttonl1Pressed = false;
