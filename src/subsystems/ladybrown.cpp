@@ -4,49 +4,63 @@
 #include "ports.hpp"
 #include "ladybrown.hpp"
 #include "globals.hpp"
+#include <cmath>
 
 pros::Rotation rotationSensor(11);
 
-void liftInit() { ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE); }
+void ladyBrownInit() { 
+    ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE); 
+    rotationSensor.reset_position();
+}
 
-// double target = 0;
-// double prevDistance = 0;
-// double kP = 0.03;
-// double kD = 0.04;
+double target = 0;
+double prevDistance = 0;
+double kP = 0.1;
+double kD = 1;
+//bool start = false;
 
-// void updateLB() {
-//     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
-//         target = -700;
-//         ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
-//     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
-//         target = -145;
-//         ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
-//     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) {
-//         target = 0;
-//         ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-//     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
-//         target = -600;
-//         ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
-//     } else {
-//         target = 0;
-//     }
+void updateLB() {
+    //std::cout<<start<<" ";
+    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
+        //target = -700-9;
+        ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+        //start = true;
+        ladyBrown.move_velocity(-100);
+    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
+        target = -250-9;
+        ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+        //start = true;
+    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) {
+        //target = -10;
+        ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+        ladyBrown.move_absolute(0, 100);
+        //start = true;
+    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
+        target = -600-9;
+        ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+        //start = true;
+    } 
 
-//     double currentAngle = rotationSensor.get_angle();
-//     double distance = target - currentAngle;
-//     double derivative = distance - prevDistance;
-//     double armMoveSpeed = (kP * distance) + (kD * derivative);
-//     ladyBrown.move_velocity(armMoveSpeed);
-//     prevDistance = distance;
-
-// }
+    //if(start) {
+        double currentAngle = ladyBrown.get_position();
+        double distance = target - currentAngle;
+        double derivative = distance - prevDistance;
+        double armMoveSpeed = (kP * distance) + (kD * derivative);
+        ladyBrown.move_velocity(armMoveSpeed);
+        prevDistance = distance;
+        //std::cout<<target-currentAngle<<"\n";
+        //if(abs(target-currentAngle)<8)
+            //start = false;
+    //}
+}
 // ladybrown pid
 
 // void updateLB() {
 //     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
 //         setLiftTarget(24);
 //         // pid that runs constantly
-//         float liftOutput = liftPID.update(liftTarget - lift get_position());
-//         lift.move(liftOutput);
+//         float liftOutput = liftPID.update(liftTarget - ladyBrown.get_position());
+//         ladyBrown.move(liftOutput);
 //     }
 
 //     const int position1 = 24;
@@ -76,9 +90,9 @@ void liftInit() { ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE); }
 
 //             double power = ((kp * error) + (kd * derivative)) * 100;
 
-//             lift.move_voltage(power); // Assuming move_voltage accepts values in millivolts
+//             ladyBrown.move_voltage(power); // Assuming move_voltage accepts values in millivolts
 //         } else {
-//             lift.move_voltage(0);
+//             ladyBrown.move_voltage(0);
 //         }
 //     }
 
@@ -105,25 +119,25 @@ void liftInit() { ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE); }
 
 /// ---------------> Basic
 
-void updateLB() {
-    ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+// void updateLB() {
+//     ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 
-    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) { // lift up/down
-        ladyBrown.move_absolute(-700, -100);
-        ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
-    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) { // lift up/down
-        ladyBrown.move_absolute(-130, -100);
-        ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
-    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) {
-        ladyBrown.move_absolute(-15, 100);
-        ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
-        ladyBrown.move_absolute(-600, -100);
-        ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
-    } else {
-        ladyBrown.move_velocity(0);
-    }
-}
+//     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) { // lift up/down
+//         ladyBrown.move_absolute(-700, -100);
+//         ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+//     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) { // lift up/down
+//         ladyBrown.move_absolute(-130, -100);
+//         ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+//     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) {
+//         ladyBrown.move_absolute(-15, 100);
+//         ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+//     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
+//         ladyBrown.move_absolute(-600, -100);
+//         ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+//     } else {
+//         ladyBrown.move_velocity(0);
+//     }
+// }
 
 // Down is go to -145 but coast
 // right is -600 brake
@@ -153,8 +167,8 @@ void updateLB() {
 //     void updateLadyTask(double target) {
 //         double current = rotationSensor.get_position();
 
-//         double error = lift.calculate(target, current);
+//         double error = ladyBrown.calculate(target, current);
 
-//         lift.move(error);
+//         ladyBrown.move(error);
 //     }
 // }

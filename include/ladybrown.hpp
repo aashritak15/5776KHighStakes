@@ -6,7 +6,7 @@
 inline pros::Motor ladyBrown(16, pros::MotorGearset::red);
 extern pros::Rotation rotationSensor;
 
-void liftInit();
+void ladyBrownInit();
 void updateLB();
 void rotationInit();
 void updateLift();

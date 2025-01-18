@@ -94,7 +94,7 @@ void initialize() {
 
     clampInit();
     intakeInnit();
-    liftInit();
+    ladyBrownInit();
     // intakeClampInit();
     opticalInit();
     // rotationInit();
@@ -129,8 +129,8 @@ void initialize() {
             pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
             pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
             pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
-            pros::lcd::print(3, "Rotation: %f", ladyBrown.get_position()); // lift encoder
-            // pros::lcd::print(4, "Encoder: %f", ladyBrown.get_position());
+            pros::lcd::print(3, "LB: %f", ladyBrown.get_position()); // lift encoder
+            pros::lcd::print(4, "Rotation sensor: %f", rotationSensor.get_position());
             //  pros::lcd::print(4, "Color: %f", optical.get_hue());
 
             // log position telemetry
@@ -225,20 +225,20 @@ void blueSoloWP() {
     chassis.turnToHeading(-140.7, 2000);
     intake.move_voltage(-12000);
     chassis.moveToPoint(-25.6, -47.3, 2000);
-    chassis.turnToHeading(-103, 1000);
-    chassis.moveToPoint(-30.8, -48.3, 2000); //tune this
+    chassis.turnToHeading(-113.5, 1000);
+    chassis.moveToPoint(-31.7, -49.5, 2000); 
     chassis.waitUntilDone();
-    pros::delay(750);
+    pros::delay(1000);
 
     //middle ring
     chassis.moveToPoint(-10.6, -44.7, 2000, {.forwards = false});
     chassis.turnToHeading(-60, 1000);
     chassis.moveToPoint(-24.8, -34.7, 2000);
-    pros::delay(1500);
+    pros::delay(1750);
 
     //ladder
-    chassis.turnToHeading(77.8, 1000, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE});
-    chassis.moveToPoint(2.2, -28.4, 2000, {.maxSpeed = 50});
+    chassis.turnToHeading(107.5, 1000, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE});
+    chassis.moveToPoint(4.4, -37.6, 2000, {.maxSpeed = 50});
     chassis.waitUntilDone();
     intake.move_voltage(0);
 }
@@ -297,6 +297,7 @@ void redMogo() {
     //ring
     chassis.turnToHeading(-100, 1000);
     chassis.moveToPoint(-17.7, -35, 1000);
+    pros::delay(250);
 
     //ladder
     chassis.turnToHeading(-236.4, 1000);
@@ -316,6 +317,7 @@ void blueMogo() {
     // ring
     chassis.turnToHeading(100, 1000);
     chassis.moveToPoint(17.7, -35, 1000);
+    pros::delay(250);
 
     //ladder
     chassis.turnToHeading(236.4, 1000);
@@ -332,8 +334,8 @@ void autonomous() {
 
     // redSoloWP();
     // redMogo();
-    blueSoloWP();
-    // blueMogo();
+    // blueSoloWP();
+    blueMogo();
 
     // const asset& path = autonomous_txt;
     // const std::string data(reinterpret_cast<char*>(path.buf), path.size);
