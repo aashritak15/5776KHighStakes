@@ -8,7 +8,7 @@
 #include <iostream>
 
 int intakeState = 0;
-int sortState = 1;
+int sortState = 2;
 int prevSortState = 0;
 int stateState = 0;
 
@@ -70,7 +70,7 @@ void colorSort(int lol) {
             if(optical.get_hue() < 25 && optical.get_hue() > 8) {
                 // if(!colorDetected && intakeState == 1) {
                     //colorDetected = true;
-                    pros::delay(75);
+                    pros::delay(50);
                     intake.move_voltage(0);
                     pros::delay(100);
                     intake.move_voltage(-12000);

@@ -202,7 +202,6 @@ ASSET(autonomous_txt);
 ASSET(extra_txt);
 
 void blueSoloWP() {
-    sortState = 2;
     chassis.moveToPose(3.4, 5.3, 33.3, 1000, {.maxSpeed = 30});
     chassis.waitUntilDone();
     pros::delay(100);
@@ -241,7 +240,6 @@ void blueSoloWP() {
 }
 
 void redSoloWP() {
-    sortState = 1;
     ladyBrown.move_absolute(915, 100); // change to score angle
     pros::delay(500);
     ladyBrown.move_absolute(0, 100);
@@ -283,7 +281,6 @@ void redSoloWP() {
 }
 
 void redMogo() {
-    sortState = 1;
     //mogo
     chassis.moveToPoint(0, -30, 2000, {.forwards = false});
     chassis.waitUntilDone();
@@ -304,7 +301,6 @@ void redMogo() {
 }
 
 void blueMogo() {
-    sortState = 2;
     //mogo
     chassis.moveToPoint(0, -30, 2000, {.forwards = false});
     chassis.waitUntilDone();
@@ -327,7 +323,7 @@ void blueMogo() {
 void autonomous() {
     chassis.setPose(0, 0, 0);
     chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
-
+    //intake.move_velocity(-12000);
     // chassis.turnToHeading(45, 3000);
     // chassis.moveToPose(0, 24, 0, 10000);
 
