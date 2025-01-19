@@ -126,9 +126,8 @@ void initialize() {
             pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
             pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
             pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
-            pros::lcd::print(3, "LB: %f", ladyBrown.get_position()); // lift encoder
-            pros::lcd::print(4, "Rotation sensor: %i", lbRotation.get_position());
-            //  pros::lcd::print(4, "Color: %f", optical.get_hue());
+            // pros::lcd::print(3, "LB: %f", ladyBrown.get_position()); // lift encoder
+            pros::lcd::print(3, "Color: %f ", optical.get_hue());
 
             // log position telemetry
             lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
@@ -203,10 +202,11 @@ ASSET(autonomous_txt);
 ASSET(extra_txt);
 
 void blueSoloWP() {
+    sortState = 2;
     chassis.moveToPose(3.4, 5.3, 33.3, 1000, {.maxSpeed = 30});
     chassis.waitUntilDone();
     pros::delay(100);
-    ladyBrown.move_absolute(-915, 100); // change to score angle
+    ladyBrown.move_absolute(915, 100); // change to score angle
     pros::delay(500);
     ladyBrown.move_absolute(0, 100);
     pros::delay(100);
@@ -241,7 +241,8 @@ void blueSoloWP() {
 }
 
 void redSoloWP() {
-    ladyBrown.move_absolute(-915, 100); // change to score angle
+    sortState = 1;
+    ladyBrown.move_absolute(915, 100); // change to score angle
     pros::delay(500);
     ladyBrown.move_absolute(0, 100);
     pros::delay(100);
@@ -249,38 +250,40 @@ void redSoloWP() {
     // mogo
     // chassis.turnToHeading();
     // chassis.moveToPoint(-4.7, -29.9, 3000, {.forwards = false, .maxSpeed = 80});
-    // //chassis.moveToPose(-6.45, -34.1, 12.6, 2000, {.forwards = false, .maxSpeed = 80});
-    // chassis.waitUntilDone();
-    // // pros::delay(100);
-    // mogoClamp.set_value(true);
-    // pros::delay(250);
+    chassis.moveToPoint(-6.45, -34.1, 2000, {.forwards = false, .maxSpeed = 80});
+    chassis.waitUntilDone();
+    // pros::delay(100);
+    mogoClamp.set_value(true);
+    pros::delay(250);
 
-    // // center rings
-    // chassis.turnToHeading(166, 2000);
-    // intake.move_voltage(-12000);
+    // center rings
+    chassis.turnToHeading(166, 2000);
+    intake.move_voltage(-12000);
 
-    // chassis.moveToPoint(-4.079, -61.039, 3000, {.forwards = true, .maxSpeed = 80});
+    chassis.moveToPoint(-4.079, -61.039, 3000, {.forwards = true, .maxSpeed = 80});
 
-    // chassis.turnToHeading(135, 2000);
+    chassis.turnToHeading(120, 2000);
 
-    // chassis.moveToPoint(-2.2, -65.1, 3000, {.minSpeed = 80});
-    // chassis.waitUntilDone();
-    // pros::delay(750);
+    chassis.moveToPoint(-0.05, -63.8, 3000, {.minSpeed = 80});
+    chassis.waitUntilDone();
+    pros::delay(1000);
 
-    // // middle ring
-    // chassis.moveToPoint(-7.3, -48.2, 2000, {.forwards = false}); // get new point in between so it doesnt cross line
-    // chassis.turnToHeading(115, 1000);
-    // chassis.moveToPoint(3.56, -52.6, 2000);
-    // pros::delay(1000);
+    // middle ring
+    //-9.8, -53.2, 146
+    chassis.moveToPoint(-16.2, -47.9, 2000, {.forwards = false}); // get new point in between so it doesnt cross line
+    chassis.turnToHeading(90, 1000);
+    chassis.moveToPoint(2.2, -46.4, 2000);
+    pros::delay(1000);
 
-    // //ladder
-    // chassis.turnToHeading(306, 1000);
-    // chassis.moveToPoint(-17.2, -30.2, 2000);
-    // chassis.waitUntilDone();
-    // intake.move_voltage(0);
+    //ladder
+    chassis.turnToHeading(259.6, 1000);
+    chassis.moveToPoint(-20, -50.5, 2000);
+    chassis.waitUntilDone();
+    intake.move_voltage(0);
 }
 
 void redMogo() {
+    sortState = 1;
     //mogo
     chassis.moveToPoint(0, -30, 2000, {.forwards = false});
     chassis.waitUntilDone();
@@ -301,6 +304,7 @@ void redMogo() {
 }
 
 void blueMogo() {
+    sortState = 2;
     //mogo
     chassis.moveToPoint(0, -30, 2000, {.forwards = false});
     chassis.waitUntilDone();
@@ -383,6 +387,8 @@ void opcontrol() {
     // controller
     // loop to continuously update motors
 
+    //sortState = 1;
+
     while (true) {
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
@@ -394,16 +400,15 @@ void opcontrol() {
         updateClamp();
         // updateIntakeClamp();
         updateLB();
-        updateColorToggle();
-        colorSort();
+        //updateColorToggle();
         updateDoink();
 
-        // if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT)) {
-        //     chassis.setPose(0, 0, 0);
-        //     chassis.moveToPose(-3.4, 6.06, -27.6, 1000); //red solo wp - macro only for red
-        //     std::cout << "done";
-        //     // chassis.turnToHeading();
-        // }
+        if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT)) {
+            chassis.setPose(0, 0, 0);
+            chassis.moveToPose(-3.4, 6.06, -27.6, 1000); //red solo wp - macro only for red
+            std::cout << "done";
+            // chassis.turnToHeading();
+        }
 
 
         // static unsigned long lastWriteTime = 0; // Tracks the last time writePose was called

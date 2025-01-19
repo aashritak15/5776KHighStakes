@@ -5,66 +5,110 @@
 #include "intake.hpp"
 #include "intakeFirst.hpp"
 #include "globals.hpp"
+#include <iostream>
 
 int intakeState = 0;
-int sortState = 0;
+int sortState = 1;
+int prevSortState = 0;
+int stateState = 0;
 
+// bool buttonUpPressed = false;
+// bool colorDetected = false;
+
+void colorSort(int lol) {
+
+    static bool buttonUpPressed = false;
+    static bool colorDetected = false;
+
+    if(sortState == 1)
+        controller.set_text(0, 0, "scores blue  ");
+    else if(sortState == 2)
+        controller.set_text(0, 0, "scores red    ");
+
+    while (true) {
+        // if(!buttonUpPressed) {
+        //     buttonUpPressed = true;
+        //     if(sortState == 0) {
+        //         sortState = 1;
+        //         controller.set_text(0, 0, "scores red ");
+        //     } else if(sortState == 1) {
+        //         sortState = 2;
+        //         controller.set_text(0, 0, "scores blue");
+        //     } else if(sortState == 2) {
+        //         sortState = 0;
+        //     }
+        // } else {
+        //     buttonUpPressed = false;
+        // }
+
+        if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_UP)) {
+            sortState = 0;
+            controller.set_text(0, 0, "TANISH YOU SUCK   ");
+        }
+
+        //     if (!buttonUpPressed) {
+        //         buttonUpPressed = true;
+        //         if (stateState == 0 || stateState == 2) {
+        //             stateState = 1;
+        //             prevSortState = sortState;
+        //             sortState = 0;
+        //             controller.set_text(0, 0, "no sort      ");
+        //         } else if (stateState == 1) {
+        //             stateState = 0;
+        //             sortState = prevSortState;
+        //             // if(sortState == 1)
+        //             //     controller.set_text(0, 0, "scores blue  ");
+        //             // else if(sortState == 2)
+        //             //     controller.set_text(0, 0, "scores red    ");
+        //         }
+        //     } else {
+        //         buttonUpPressed = false;
+        //     }
+        // }
+
+        if(sortState == 1) {
+            if(optical.get_hue() < 18 && optical.get_hue() > 12) {
+                // if(!colorDetected && intakeState == 1) {
+                    //colorDetected = true;
+                    pros::lcd::print(4, "YAY");
+                    pros::delay(50);
+                    intake.move_voltage(0);
+                    pros::delay(50);
+                    intake.move_voltage(-12000);
+                // }
+            } // else {
+            //     colorDetected = false;
+            // }
+        } else if(sortState == 2) {
+            if(optical.get_hue() < 230 && optical.get_hue() > 210) {
+                // if(!colorDetected && intakeState == 1) {
+                    //colorDetected = true;
+                    pros::lcd::print(4, "YAY");
+                    pros::delay(50);
+                    intake.move_voltage(0);
+                    pros::delay(50);
+                    intake.move_voltage(-12000);
+                // }
+            } // else {
+            //     colorDetected = false;
+            // }
+        } else {
+            pros::lcd::print(4, "NAY");
+        }
+
+        pros::delay(10);
+    }
+
+}
 
 void intakeInnit() { 
     intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST); 
 
-    pros::Task colorSort ([&]() {
-        static bool buttonUpPressed = false;
-        static bool colorDetected = false;
+    void* colorSorted = (void*)colorSort;
 
-        controller.set_text(0, 0, "no sort    ");
+    pros::task_fn_t colorSortation = (pros::task_fn_t) colorSorted;
 
-        while (true) {
-            if(!buttonUpPressed) {
-                buttonUpPressed = true;
-                if(sortState == 0) {
-                    sortState = 1;
-                    controller.set_text(0, 0, "scores red ");
-                } else if(sortState == 1) {
-                    sortState = 2;
-                    controller.set_text(0, 0, "scores blue");
-                } else if(sortState == 2) {
-                    sortState = 0;
-                }
-            } else {
-                buttonUpPressed = false;
-            }
-
-            if(sortState == 1) {
-                if(optical.get_hue() < 18 && optical.get_hue() > 12) {
-                    if(!colorDetected) {
-                        colorDetected = true;
-                        pros::delay(0);
-                        intake.move_voltage(0);
-                        pros::delay(0);
-                        intake.move_voltage(-12000);
-                    }
-                } else {
-                    colorDetected = false;
-                }
-            } else if(sortState == 2) {
-                if(optical.get_hue() < 216 && optical.get_hue() > 210) {
-                    if(!colorDetected) {
-                        colorDetected = true;
-                        pros::delay(0);
-                        intake.move_voltage(0);
-                        pros::delay(0);
-                        intake.move_voltage(-12000);
-                    }
-                } else {
-                    colorDetected = false;
-                }
-            }
-
-            pros::delay(10);
-        }
-    });
-
+    pros::Task sortTask (colorSortation);
 }
 
 void opticalInit() { optical.set_led_pwm(75); }
@@ -106,92 +150,92 @@ void updateIntake() {
     }
 }
 
-void sortTest() {
-    static bool colorDetected = false;
+// void sortTest() {
+//     static bool colorDetected = false;
 
-    if(optical.get_hue() < 18 && optical.get_hue() > 12) { //TUNE
-        if(!colorDetected) {
-            colorDetected = true;
-            intake.move_voltage(0);
-            pros::Task::delay(200);
-            intake.move_voltage(-12000);
+//     if(optical.get_hue() < 18 && optical.get_hue() > 12) { //TUNE
+//         if(!colorDetected) {
+//             colorDetected = true;
+//             intake.move_voltage(0);
+//             pros::Task::delay(200);
+//             intake.move_voltage(-12000);
             
-            // intakeState = 3;
-            // pros::delay(200);
-            // intake.move_voltage(0);
-            // pros::delay(100);
-            // intake.move_voltage(-12000);
-            // intakeState = 1;
-        }
-    } else {
-        colorDetected = false;
-    }
-}
+//             // intakeState = 3;
+//             // pros::delay(200);
+//             // intake.move_voltage(0);
+//             // pros::delay(100);
+//             // intake.move_voltage(-12000);
+//             // intakeState = 1;
+//         }
+//     } else {
+//         colorDetected = false;
+//     }
+// }
 
-void updateColorToggle() {
-    static bool leftPressed = false;
-    static bool rightPressed = false;
+// void updateColorToggle() {
+//     static bool leftPressed = false;
+//     static bool rightPressed = false;
 
-    if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT)) {
-        if(!leftPressed) {
-            leftPressed = true;
-            if(sortState == 0 || sortState == 2) {
-                sortState = 1;
-            } else if (sortState == 1) {
-                sortState = 0;
-            }
-        }
-    } else {
-        leftPressed = false;
-    }
+//     if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT)) {
+//         if(!leftPressed) {
+//             leftPressed = true;
+//             if(sortState == 0 || sortState == 2) {
+//                 sortState = 1;
+//             } else if (sortState == 1) {
+//                 sortState = 0;
+//             }
+//         }
+//     } else {
+//         leftPressed = false;
+//     }
 
-    if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
-        if(!rightPressed) {
-            rightPressed = true;
-            if(sortState == 0 || sortState == 1) {
-                sortState = 2;
-            } else if (sortState == 2) {
-                sortState = 0;
-            }
-        }
-    } else {
-        rightPressed = false;
-    }
-}
+//     if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
+//         if(!rightPressed) {
+//             rightPressed = true;
+//             if(sortState == 0 || sortState == 1) {
+//                 sortState = 2;
+//             } else if (sortState == 2) {
+//                 sortState = 0;
+//             }
+//         }
+//     } else {
+//         rightPressed = false;
+//     }
+// }
 
-void colorSort() {
-    static bool colorDetected = false;
+// void colorSort() {
+//     static bool colorDetected = false;
 
-    if(sortState == 1) {
-        if(optical.get_hue() < 20 && optical.get_hue() > 8) { //red!
-            if(!colorDetected) {
-                colorDetected = true;
-                intakeState = 3;
-                pros::Task::delay(70);
-                intake.move_voltage(0);
-                pros::Task::delay(250);
-                intake.move_voltage(-12000);
-                intakeState = 1;
-            }
-        } else {
-            colorDetected = false;
-        }
-    } else if(sortState == 2) {
-        if(optical.get_hue() < 225 && optical.get_hue() > 210) { //blue!
-            if(!colorDetected) {
-                colorDetected = true;
-                intakeState = 3;
-                pros::Task::delay(70); //TODO: is the task delay working
-                intake.move_voltage(0);
-                pros::Task::delay(250);
-                intake.move_voltage(-12000);
-                intakeState = 1;
-            }
-        } else {
-            colorDetected = false;
-        }
-    }
-}
+//     if(sortState == 1) {
+//         if(optical.get_hue() < 20 && optical.get_hue() > 8) { //red!
+//             if(!colorDetected) {
+//                 colorDetected = true;
+//                 intakeState = 3;
+//                 pros::Task::delay(70);
+//                 intake.move_voltage(0);
+//                 pros::Task::delay(250);
+//                 intake.move_voltage(-12000);
+//                 intakeState = 1;
+//             }
+//         } else {
+//             colorDetected = false;
+//         }
+//     } else if(sortState == 2) {
+//         if(optical.get_hue() < 225 && optical.get_hue() > 210) { //blue!
+//             if(!colorDetected) {
+//                 colorDetected = true;
+//                 intakeState = 3;
+//                 pros::Task::delay(70); //TODO: is the task delay working
+//                 intake.move_voltage(0);
+//                 pros::Task::delay(250);
+//                 intake.move_voltage(-12000);
+//                 intakeState = 1;
+//             }
+//         } else {
+//             colorDetected = false;
+//         }
+//     }
+// }
 
 // void resetIntake() {
 //     // if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) {

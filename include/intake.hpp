@@ -5,7 +5,7 @@
 #include "main.h"
 
 inline pros::Motor intake(14, pros::MotorGearset::blue); //changed from blue to green
-inline pros::Optical optical(20); //TODO: ADD THE PORT
+inline pros::Optical optical(8); //TODO: ADD THE PORT
 
 void intakeInnit();
 void updateIntake();
@@ -13,10 +13,13 @@ void resetIntake();
 void stepIntake();
 void opticalInit();
 
-void colorSort();
+void colorSort(int lol);
 void updateColorToggle();
 
 extern int intakeState;
 extern int sortState;
+
+// extern bool buttonUpPressed;
+// extern bool colorDetected;
 
 #endif
