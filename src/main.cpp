@@ -250,39 +250,37 @@ void redSoloWP() {
     pros::delay(100);
 
     // mogo
-    chassis.moveToPoint(-9.2, -33.2, 3000, {.forwards = false, .maxSpeed = 80});
-    // chassis.turnToHeading(5.4, 1000);
-    // chassis.moveToPose(-9.2, -33.2, 5.4, 3000, {.forwards = false, .minSpeed = 50});
-    chassis.waitUntilDone();
-    // pros::delay(100);
-    mogoClamp.set_value(true);
-    pros::delay(250);
+    // chassis.turnToHeading();
+    // chassis.moveToPoint(-4.7, -29.9, 3000, {.forwards = false, .maxSpeed = 80});
+    // //chassis.moveToPose(-6.45, -34.1, 12.6, 2000, {.forwards = false, .maxSpeed = 80});
+    // chassis.waitUntilDone();
+    // // pros::delay(100);
+    // mogoClamp.set_value(true);
+    // pros::delay(250);
 
-    // center rings
-    chassis.turnToHeading(166, 2000);
-    intake.move_voltage(-12000);
+    // // center rings
+    // chassis.turnToHeading(166, 2000);
+    // intake.move_voltage(-12000);
 
-    chassis.moveToPoint(-4.079, -61.039, 3000, {.forwards = true, .maxSpeed = 80});
+    // chassis.moveToPoint(-4.079, -61.039, 3000, {.forwards = true, .maxSpeed = 80});
 
-    chassis.moveToPoint(-4.079, -57.02, 3000, {.forwards = false, .maxSpeed = 80});
+    // chassis.turnToHeading(135, 2000);
 
-    chassis.turnToHeading(142.2, 2000);
+    // chassis.moveToPoint(-2.2, -65.1, 3000, {.minSpeed = 80});
+    // chassis.waitUntilDone();
+    // pros::delay(750);
 
-    chassis.moveToPoint(-0.2, -62.6, 3000, {.minSpeed = 80});
-    chassis.waitUntilDone();
-    pros::delay(750);
+    // // middle ring
+    // chassis.moveToPoint(-7.3, -48.2, 2000, {.forwards = false}); // get new point in between so it doesnt cross line
+    // chassis.turnToHeading(115, 1000);
+    // chassis.moveToPoint(3.56, -52.6, 2000);
+    // pros::delay(1000);
 
-    // middle ring
-    chassis.moveToPoint(-7.3, -48.2, 2000, {.forwards = false}); // get new point in between so it doesnt cross line
-    chassis.turnToHeading(86.6, 1000);
-    chassis.moveToPoint(7.9, -47.6, 2000);
-    pros::delay(750);
-
-    //ladder
-    chassis.turnToHeading(306, 1000);
-    chassis.moveToPoint(-17.2, -30.2, 2000);
-    chassis.waitUntilDone();
-    intake.move_voltage(0);
+    // //ladder
+    // chassis.turnToHeading(306, 1000);
+    // chassis.moveToPoint(-17.2, -30.2, 2000);
+    // chassis.waitUntilDone();
+    // intake.move_voltage(0);
 }
 
 void redMogo() {
@@ -332,10 +330,10 @@ void autonomous() {
     // chassis.turnToHeading(45, 3000);
     // chassis.moveToPose(0, 24, 0, 10000);
 
-    // redSoloWP();
+    redSoloWP();
     // redMogo();
     // blueSoloWP();
-    blueMogo();
+    // blueMogo();
 
     // const asset& path = autonomous_txt;
     // const std::string data(reinterpret_cast<char*>(path.buf), path.size);
