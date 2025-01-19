@@ -4,7 +4,7 @@
 
 #include "main.h"
 
-inline pros::Motor ladyBrown(-16, pros::MotorGearset::red);
+inline pros::Motor ladyBrown(-17, pros::MotorGearset::red);
 // inline pros::Rotation rotationSensor(13);
 inline pros::Rotation lbRotation(13);
 

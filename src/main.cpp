@@ -21,7 +21,7 @@
 //    {"Skills Run", &skills}
 // });
 
-pros::MotorGroup leftMotors({-5, -3, -4}, pros::MotorGearset::blue);
+pros::MotorGroup leftMotors({-7, -9, -21}, pros::MotorGearset::blue);
 pros::MotorGroup rightMotors({20, 12, 18}, pros::MotorGearset::blue);
 
 pros::Imu imu(19);
@@ -220,9 +220,9 @@ void blueSoloWP() {
     // center rings
     chassis.turnToHeading(-140.7, 2000);
     intake.move_voltage(-12000);
-    chassis.moveToPoint(-25.6, -47.3, 2000);
-    chassis.turnToHeading(-113.5, 1000);
-    chassis.moveToPoint(-31.7, -49.5, 2000); 
+    chassis.moveToPoint(-24.6, -47.6, 2000);
+    chassis.turnToHeading(-116.9, 1000);
+    chassis.moveToPoint(-30.6, -50.1, 2000); 
     chassis.waitUntilDone();
     pros::delay(1000);
 
@@ -233,8 +233,8 @@ void blueSoloWP() {
     pros::delay(1750);
 
     //ladder
-    chassis.turnToHeading(107.5, 1000, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE});
-    chassis.moveToPoint(4.4, -37.6, 2000, {.maxSpeed = 50});
+    chassis.turnToHeading(-229.6, 1000, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE});
+    chassis.moveToPoint(-12.7, -48.3, 2000, {.maxSpeed = 50});
     chassis.waitUntilDone();
     intake.move_voltage(0);
 }
@@ -271,7 +271,7 @@ void redSoloWP() {
     chassis.moveToPoint(-16.2, -47.9, 2000, {.forwards = false}); // get new point in between so it doesnt cross line
     chassis.turnToHeading(90, 1000);
     chassis.moveToPoint(2.2, -46.4, 2000);
-    pros::delay(1000);
+    pros::delay(2000);
 
     //ladder
     chassis.turnToHeading(259.6, 1000);
@@ -327,9 +327,9 @@ void autonomous() {
     // chassis.turnToHeading(45, 3000);
     // chassis.moveToPose(0, 24, 0, 10000);
 
-    redSoloWP();
+    //redSoloWP();
     // redMogo();
-    // blueSoloWP();
+    blueSoloWP();
     // blueMogo();
 
     // const asset& path = autonomous_txt;
