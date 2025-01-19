@@ -240,44 +240,85 @@ void blueSoloWP() {
 }
 
 void redSoloWP() {
+    //inversed blue
+    chassis.moveToPose(-3.4, 5.3, -33.3, 1000, {.maxSpeed = 30});
+    chassis.waitUntilDone();
+    pros::delay(100);
     ladyBrown.move_absolute(915, 100); // change to score angle
     pros::delay(500);
     ladyBrown.move_absolute(0, 100);
     pros::delay(100);
 
     // mogo
-    // chassis.turnToHeading();
-    // chassis.moveToPoint(-4.7, -29.9, 3000, {.forwards = false, .maxSpeed = 80});
-    chassis.moveToPoint(-6.45, -34.1, 2000, {.forwards = false, .maxSpeed = 80});
+    chassis.turnToHeading(-21.7, 1000);
+    chassis.moveToPoint(7.4, -24.9, 3000, {.forwards = false, .maxSpeed = 80});
     chassis.waitUntilDone();
-    // pros::delay(100);
     mogoClamp.set_value(true);
     pros::delay(250);
 
     // center rings
-    chassis.turnToHeading(166, 2000);
+    chassis.turnToHeading(139.8, 2000);
     intake.move_voltage(-12000);
-
-    chassis.moveToPoint(-4.079, -61.039, 3000, {.forwards = true, .maxSpeed = 80});
-
-    chassis.turnToHeading(120, 2000);
-
-    chassis.moveToPoint(-0.05, -63.8, 3000, {.minSpeed = 80});
+    chassis.moveToPoint(25.4, -48.9, 2000);
+    pros::delay(500);
+    chassis.turnToHeading(115.9, 1000);
+    chassis.moveToPoint(29.7, -50.7, 2000); 
     chassis.waitUntilDone();
     pros::delay(1000);
 
-    // middle ring
-    //-9.8, -53.2, 146
-    chassis.moveToPoint(-16.2, -47.9, 2000, {.forwards = false}); // get new point in between so it doesnt cross line
-    chassis.turnToHeading(90, 1000);
-    chassis.moveToPoint(2.2, -46.4, 2000);
-    pros::delay(2000);
+    //middle ring
+    chassis.moveToPoint(10.6, -44.7, 2000, {.forwards = false});
+    chassis.turnToHeading(60, 1000);
+    chassis.moveToPoint(24.8, -34.7, 2000);
+    pros::delay(1750);
 
     //ladder
-    chassis.turnToHeading(259.6, 1000);
-    chassis.moveToPoint(-20, -50.5, 2000);
+    chassis.turnToHeading(229.6, 1000, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE});
+    chassis.moveToPoint(12.7, -48.3, 2000, {.maxSpeed = 50});
     chassis.waitUntilDone();
     intake.move_voltage(0);
+    
+    
+    
+    //old red
+    // ladyBrown.move_absolute(915, 100); // change to score angle
+    // pros::delay(500);
+    // ladyBrown.move_absolute(0, 100);
+    // pros::delay(100);
+
+    // // mogo
+    // // chassis.turnToHeading();
+    // // chassis.moveToPoint(-4.7, -29.9, 3000, {.forwards = false, .maxSpeed = 80});
+    // chassis.moveToPoint(-6.45, -34.1, 2000, {.forwards = false, .maxSpeed = 80});
+    // chassis.waitUntilDone();
+    // // pros::delay(100);
+    // mogoClamp.set_value(true);
+    // pros::delay(250);
+
+    // // center rings
+    // chassis.turnToHeading(166, 2000);
+    // intake.move_voltage(-12000);
+
+    // chassis.moveToPoint(-4.079, -61.039, 3000, {.forwards = true, .maxSpeed = 80});
+
+    // chassis.turnToHeading(135, 2000);
+
+    // chassis.moveToPoint(-0.7, -64.4, 3000, {.minSpeed = 80});
+    // chassis.waitUntilDone();
+    // pros::delay(1000);
+
+    // // middle ring
+    // //-9.8, -53.2, 146
+    // chassis.moveToPoint(-16.2, -47.9, 2000, {.forwards = false}); // get new point in between so it doesnt cross line
+    // chassis.turnToHeading(98, 1000);
+    // chassis.moveToPoint(2.2, -46.4, 2000);
+    // pros::delay(2000);
+
+    // //ladder
+    // chassis.turnToHeading(259.6, 1000);
+    // chassis.moveToPoint(-20, -50.5, 2000);
+    // chassis.waitUntilDone();
+    // intake.move_voltage(0);
 }
 
 void redMogo() {
@@ -316,8 +357,10 @@ void blueMogo() {
 
     //ladder
     chassis.turnToHeading(236.4, 1000);
-    chassis.moveToPoint(0.2, -45.8, 1000);
+    //chassis.moveToPoint(-0.8, -45.8, 1000);
+    chassis.moveToPoint(-5.4, -44.6, 1000); //238.7
     intake.move_voltage(0);
+    mogoClamp.set_value(false);
 }
 
 void autonomous() {
@@ -328,9 +371,9 @@ void autonomous() {
     // chassis.moveToPose(0, 24, 0, 10000);
 
     //redSoloWP();
-    // redMogo();
-    blueSoloWP();
-    // blueMogo();
+    //redMogo();
+    //blueSoloWP();
+    blueMogo();
 
     // const asset& path = autonomous_txt;
     // const std::string data(reinterpret_cast<char*>(path.buf), path.size);

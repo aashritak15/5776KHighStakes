@@ -21,7 +21,7 @@ double kD = 0.65;
 
 void updateLB() {
     //std::cout<<start<<" ";
-    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
+    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
         target = 166;
         // ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
         //start = true;
@@ -41,7 +41,7 @@ void updateLB() {
         target = 5;
 
         //start = true;
-    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
+    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
 
         target = 141.7;
 

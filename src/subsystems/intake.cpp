@@ -8,7 +8,7 @@
 #include <iostream>
 
 int intakeState = 0;
-int sortState = 2; //1 = score blue color sort red, 2 = score red color sort blue
+int sortState = 0; //1 = score blue color sort red, 2 = score red color sort blue
 int prevSortState = 0;
 int stateState = 0;
 
@@ -65,31 +65,35 @@ void colorSort(int lol) {
         //         buttonUpPressed = false;
         //     }
         // }
+                    std::cout<<optical.get_hue()<<"\n";
 
         if(sortState == 1) {
-            if(optical.get_hue() < 25 && optical.get_hue() > 8) {
+            if(optical.get_hue() < 30 && optical.get_hue() > 8) {
                 // if(!colorDetected && intakeState == 1) {
-                    //colorDetected = true;
-                    pros::Task::delay(75);
+                    colorDetected = true;
+                    pros::Task::delay(85);
                     intake.move_voltage(0);
-                    pros::Task::delay(1000);
+                    pros::Task::delay(250);
                     intake.move_voltage(-12000);
+                    std::cout<<optical.get_hue()<<"kjfjhgjhg\n";
                 // }
-            } // else {
-            //     colorDetected = false;
-            // }
+            } else {
+                colorDetected = false;
+            }
         } else if(sortState == 2) {
-            if(optical.get_hue() < 245 && optical.get_hue() > 195) {
+            if(optical.get_hue() < 245 && optical.get_hue() > 90
+             && colorDetected == false) {
                 // if(!colorDetected && intakeState == 1) {
-                    //colorDetected = true;
-                    pros::Task::delay(75);
+                    colorDetected = true;
+                    pros::Task::delay(85);
                     intake.move_voltage(0);
-                    pros::Task::delay(1000);
+                    pros::Task::delay(250);
                     intake.move_voltage(-12000);
+                    std::cout<<optical.get_hue()<<"kjfjhgjhg\n";
                 // }
-            } // else {
-            //     colorDetected = false;
-            // }
+            } else {
+                colorDetected = false;
+            }
         } else {
             pros::lcd::print(4, "NAY");
         }
