@@ -20,11 +20,6 @@ void colorSort(int lol) {
     static bool buttonUpPressed = false;
     static bool colorDetected = false;
 
-    if(sortState == 1)
-        controller.set_text(0, 0, "scores blue  ");
-    else if(sortState == 2)
-        controller.set_text(0, 0, "scores red    ");
-
     while (true) {
         // if(!buttonUpPressed) {
         //     buttonUpPressed = true;
@@ -45,6 +40,11 @@ void colorSort(int lol) {
             sortState = 0;
             controller.set_text(0, 0, "TANISH YOU SUCK   ");
         }
+
+        if(sortState == 1)
+            controller.set_text(0, 0, "scores blue  ");
+        else if(sortState == 2)
+            controller.set_text(0, 0, "scores red    ");
 
         //     if (!buttonUpPressed) {
         //         buttonUpPressed = true;
@@ -67,13 +67,12 @@ void colorSort(int lol) {
         // }
 
         if(sortState == 1) {
-            if(optical.get_hue() < 18 && optical.get_hue() > 12) {
+            if(optical.get_hue() < 25 && optical.get_hue() > 8) {
                 // if(!colorDetected && intakeState == 1) {
                     //colorDetected = true;
-                    pros::lcd::print(4, "YAY");
-                    pros::delay(50);
+                    pros::delay(75);
                     intake.move_voltage(0);
-                    pros::delay(50);
+                    pros::delay(100);
                     intake.move_voltage(-12000);
                 // }
             } // else {
@@ -83,10 +82,9 @@ void colorSort(int lol) {
             if(optical.get_hue() < 230 && optical.get_hue() > 210) {
                 // if(!colorDetected && intakeState == 1) {
                     //colorDetected = true;
-                    pros::lcd::print(4, "YAY");
                     pros::delay(50);
                     intake.move_voltage(0);
-                    pros::delay(50);
+                    pros::delay(100);
                     intake.move_voltage(-12000);
                 // }
             } // else {
