@@ -21,7 +21,7 @@
 //    {"Skills Run", &skills}
 // });
 
-pros::MotorGroup leftMotors({-6, -3, -4}, pros::MotorGearset::blue);
+pros::MotorGroup leftMotors({-5, -3, -4}, pros::MotorGearset::blue);
 pros::MotorGroup rightMotors({20, 12, 18}, pros::MotorGearset::blue);
 
 pros::Imu imu(19);

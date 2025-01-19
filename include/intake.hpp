@@ -19,6 +19,11 @@ void updateColorToggle();
 extern int intakeState;
 extern int sortState;
 
+extern int intakeState;
+extern int sortState;
+extern int prevSortState;
+extern int stateState;
+
 // extern bool buttonUpPressed;
 // extern bool colorDetected;
 
