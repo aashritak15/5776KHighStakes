@@ -90,15 +90,12 @@ void initialize() {
     pros::lcd::initialize(); // initialize brain screen
     chassis.calibrate(); // calibrate sensors
 
-    rotationSensor.reset_position();
-
     clampInit();
     intakeInnit();
     ladyBrownInit();
     // intakeClampInit();
     opticalInit();
     // rotationInit();
-    initO();
 
     // lv_init();
     // selector::init();
@@ -130,7 +127,7 @@ void initialize() {
             pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
             pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
             pros::lcd::print(3, "LB: %f", ladyBrown.get_position()); // lift encoder
-            pros::lcd::print(4, "Rotation sensor: %f", rotationSensor.get_position());
+            pros::lcd::print(4, "Rotation sensor: %i", lbRotation.get_position());
             //  pros::lcd::print(4, "Color: %f", optical.get_hue());
 
             // log position telemetry
@@ -385,7 +382,6 @@ void autonomous() {
 void opcontrol() {
     // controller
     // loop to continuously update motors
-    initO();
 
     while (true) {
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
@@ -402,12 +398,12 @@ void opcontrol() {
         colorSort();
         updateDoink();
 
-        if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT)) {
-            chassis.setPose(0, 0, 0);
-            chassis.moveToPose(-3.4, 6.06, -27.6, 1000); //red solo wp - macro only for red
-            std::cout << "done";
-            // chassis.turnToHeading();
-        }
+        // if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT)) {
+        //     chassis.setPose(0, 0, 0);
+        //     chassis.moveToPose(-3.4, 6.06, -27.6, 1000); //red solo wp - macro only for red
+        //     std::cout << "done";
+        //     // chassis.turnToHeading();
+        // }
 
 
         // static unsigned long lastWriteTime = 0; // Tracks the last time writePose was called

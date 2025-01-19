@@ -6,52 +6,60 @@
 #include "globals.hpp"
 #include <cmath>
 
-pros::Rotation rotationSensor(11);
-
 void ladyBrownInit() { 
-    ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE); 
-    rotationSensor.reset_position();
+    ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD); 
+    ladyBrown.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
+    lbRotation.reset_position();
+    lbRotation.set_position(0);
 }
 
 double target = 0;
 double prevDistance = 0;
-double kP = 0.1;
-double kD = 1;
+double kP = 0.65;
+double kD = 0.65;
 //bool start = false;
 
 void updateLB() {
     //std::cout<<start<<" ";
     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
-        //target = -700-9;
-        ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+        target = 166;
+        // ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
         //start = true;
-        ladyBrown.move_velocity(-100);
+
+        // ladyBrown.move_velocity(-100);
+
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
-        target = -250-9;
-        ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+
+        target = 41.4;
+
+        // ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
         //start = true;
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) {
         //target = -10;
-        ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-        ladyBrown.move_absolute(0, 100);
+        // ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+
+        target = 5;
+
         //start = true;
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
-        target = -600-9;
-        ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+
+        target = 141.7;
+
+        // ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
         //start = true;
     } 
 
-    //if(start) {
-        double currentAngle = ladyBrown.get_position();
-        double distance = target - currentAngle;
-        double derivative = distance - prevDistance;
-        double armMoveSpeed = (kP * distance) + (kD * derivative);
-        ladyBrown.move_velocity(armMoveSpeed);
-        prevDistance = distance;
-        //std::cout<<target-currentAngle<<"\n";
-        //if(abs(target-currentAngle)<8)
-            //start = false;
-    //}
+    double currentAngle = lbRotation.get_position() / 100.0;
+    pros::lcd::print(5, "Current angle: %f", currentAngle);
+    double distance = target - currentAngle;
+    double derivative = distance - prevDistance;
+    double armMoveSpeed = (kP * distance) + (kD * derivative);
+    pros::lcd::print(6, "Move speed: %f", armMoveSpeed);
+    // if (armMoveSpeed < 1) {
+    //     armMoveSpeed = 0;
+    // }
+    ladyBrown.move_velocity(armMoveSpeed);
+    prevDistance = distance;
 }
 // ladybrown pid
 
