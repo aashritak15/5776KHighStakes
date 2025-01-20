@@ -232,11 +232,11 @@ void blueSoloWP() {
     chassis.moveToPoint(-24.8, -34.7, 2000);
     pros::delay(1750);
 
-    //ladder
-    chassis.turnToHeading(-229.6, 1000, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE});
-    chassis.moveToPoint(-12.7, -48.3, 2000, {.maxSpeed = 50});
-    chassis.waitUntilDone();
-    intake.move_voltage(0);
+    // //ladder
+    // chassis.turnToHeading(-229.6, 1000, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE});
+    // chassis.moveToPoint(-12.7, -48.3, 2000, {.maxSpeed = 50});
+    // chassis.waitUntilDone();
+    // intake.move_voltage(0);
 }
 
 void redSoloWP() {
@@ -272,12 +272,17 @@ void redSoloWP() {
     chassis.moveToPoint(24.8, -34.7, 2000);
     pros::delay(1750);
 
-    //ladder
-    chassis.turnToHeading(229.6, 1000, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE});
-    chassis.moveToPoint(12.7, -48.3, 2000, {.maxSpeed = 50});
+    // //ladder
+    // chassis.turnToHeading(229.6, 1000, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE});
+    // chassis.moveToPoint(12.7, -48.3, 2000, {.maxSpeed = 50});
+    // chassis.waitUntilDone();
+    // intake.move_voltage(0);
+    
+    chassis.moveToPose(-36, -10, -90, 2000);
     chassis.waitUntilDone();
     intake.move_voltage(0);
-    
+
+
     
     
     //old red
@@ -370,10 +375,10 @@ void autonomous() {
     // chassis.turnToHeading(45, 3000);
     // chassis.moveToPose(0, 24, 0, 10000);
 
-    //redSoloWP();
+    redSoloWP();
     //redMogo();
     //blueSoloWP();
-    blueMogo();
+    //blueMogo();
 
     // const asset& path = autonomous_txt;
     // const std::string data(reinterpret_cast<char*>(path.buf), path.size);
