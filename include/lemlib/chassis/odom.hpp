@@ -4,6 +4,8 @@
 #include "lemlib/pose.hpp"
 
 namespace lemlib {
+
+static float prevImuFiltered = 0.0;
 /**
  * @brief Set the sensors to be used for odometry
  *
