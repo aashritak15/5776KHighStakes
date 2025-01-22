@@ -44,14 +44,14 @@ lemlib::ControllerSettings linearController(7.3, // proportional gain (kP)
 );
 
 // angular motion controller
-lemlib::ControllerSettings angularController(5.45, // proportional gain (kP) //5.45
+lemlib::ControllerSettings angularController(4, // proportional gain (kP) //5.45 //6.81 //7 //6.5, 42.7
                                              0, // integral gain (kI)
-                                             30.42, // 30.42,//37.88, // 32.92, //40.5, // derivative gain (kD)
+                                             20, //  46.005, // 30.42,//37.88, // 32.92, //40.5, // derivative gain (kD) //46
                                              0, // anti windup
                                              1, // small error range, in degrees
-                                             100, // small error range timeout, in milliseconds
+                                             200, // small error range timeout, in milliseconds
                                              3, // large error range, in degrees
-                                             500, // large error range timeout, in milliseconds
+                                             1250, // large error range timeout, in milliseconds
                                              0 // slew
 
                                              // OLD VALUES OCT 6: P 4.05, D 34.86768
@@ -128,6 +128,8 @@ void initialize() {
             pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
             // pros::lcd::print(3, "LB: %f", ladyBrown.get_position()); // lift encoder
             pros::lcd::print(3, "Color: %f ", optical.get_hue());
+
+            std::cout<<chassis.getPose().x<<", "<<chassis.getPose().y<<", "<<chassis.getPose().theta<<"\n";
 
             // log position telemetry
             lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
@@ -372,17 +374,17 @@ void redRush() {}
 void pidTuner() {
     imu.set_heading(0);
 
-    // chassis.turnToHeading(90, 10000);
-    chassis.moveToPoint(0, 24, 10000);
+    chassis.turnToHeading(90, 10000);
+    //chassis.moveToPoint(0, 24, 10000);
 }
 
 void autonomous() {
     chassis.setPose(0, 0, 0);
     chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
 
-    // pidTuner();
+    pidTuner();
 
-    redSoloWP();
+    //redSoloWP();
     // redMogo();
     //   blueSoloWP();
     //   blueMogo();
