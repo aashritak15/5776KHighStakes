@@ -44,14 +44,14 @@ lemlib::ControllerSettings linearController(7.3, // proportional gain (kP)
 );
 
 // angular motion controller
-lemlib::ControllerSettings angularController(4, // proportional gain (kP) //5.45 //6.81 //7 //6.5, 42.7
+lemlib::ControllerSettings angularController(6.5, // proportional gain (kP) //5.45 //6.81 //7 //6.5, 42.7 //6, 35 //2, 10 no oscilation but not accurate
                                              0, // integral gain (kI)
-                                             20, //  46.005, // 30.42,//37.88, // 32.92, //40.5, // derivative gain (kD) //46
+                                             50, //  46.005, // 30.42,//37.88, // 32.92, //40.5, // derivative gain (kD) //46
                                              0, // anti windup
                                              1, // small error range, in degrees
-                                             200, // small error range timeout, in milliseconds
-                                             3, // large error range, in degrees
-                                             1250, // large error range timeout, in milliseconds
+                                             100, // small error range timeout, in milliseconds
+                                             2, // large error range, in degrees
+                                             500, // large error range timeout, in milliseconds
                                              0 // slew
 
                                              // OLD VALUES OCT 6: P 4.05, D 34.86768
@@ -374,8 +374,9 @@ void redRush() {}
 void pidTuner() {
     imu.set_heading(0);
 
-    chassis.turnToHeading(90, 10000);
     //chassis.moveToPoint(0, 24, 10000);
+    chassis.turnToHeading(90, 10000);
+
 }
 
 void autonomous() {
