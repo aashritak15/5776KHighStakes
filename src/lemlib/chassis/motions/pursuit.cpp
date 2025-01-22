@@ -297,6 +297,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
     Pose lastPose = pose;
     Pose lookaheadPose(0, 0, 0); 
     Pose lastLookahead = pathPoints.at(0);
+
     lastLookahead.theta = 0;
     float curvature;
     float targetVel;
@@ -305,6 +306,14 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
     float rightInput = 0;
     int compState = pros::competition::get_status();
     distTraveled = 0;
+
+    float Kd = 0; //TODO: TUNE
+    float Kp = 0;
+    float prevError = 0;
+
+    float minLookahead = 7.5;
+    float maxLookahead = 15;
+
 
     // loop until the robot is within the end tolerance
     for (int i = 0; i < timeout / 10 && pros::competition::get_status() == compState && this->motionRunning; i++) {
@@ -460,13 +469,15 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         dataLine.append("target x: " + std::to_string(pathPoints.at(closestPoint).x) + "\n");
         dataLine.append("target y: " + std::to_string(pathPoints.at(closestPoint).y) + "\n");
 
+
+
+
+
+
         // find the lookahead point
 
-        float minLookahead = 7.5; //TODO: OPTIMIZE: dynamic lookahead
-        float maxLookahead = 15;
-
-        float avgVel = abs((leftMotors.get_voltage() + rightMotors.get_voltage()) / 2);
-        float pctVel = avgVel / 12000;
+        float avgVel = round(((leftMotors.get_voltage() + rightMotors.get_voltage()) * 1000.0) / 2.0 / 1000.0);
+        float pctVel = std::abs(avgVel / 12000); //TODO: Check
     
         float lookaheadDist = minLookahead + ((maxLookahead - minLookahead) * pctVel);
 
@@ -480,23 +491,23 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         float curvatureHeading = M_PI / 2 - (pose.theta); //TODO: WHERE IS IT TURNED TO RAD????
         curvature = findLookaheadCurvature(pose, curvatureHeading, lookaheadPose);
 
-        lookaheadDist -= (curvature * 50); //TODO: tune 50 as curvature factor
-
- //TODO: curvature adaptability
-        lookaheadPose = lookaheadPoint(lastLookahead, pose, pathPoints, closestPoint, lookaheadDist);
-        lastLookahead = lookaheadPose; // update last lookahead position
-
-        // get the curvature of the arc between the robot and the lookahead point
-        dataLine.append("target vel: " + std::to_string(targetVel) + "\n");
-        curvatureHeading = M_PI / 2 - (pose.theta);
-        curvature = findLookaheadCurvature(pose, curvatureHeading, lookaheadPose);
-
-
         dataLine.append("curvature: " + std::to_string(curvature) + "\n");
 
 
-        // get the target velocity of the robot //*SLEW REMOVED, ADD BACK IF NECESSARY
+
+ 
+
+
+        //*PIDs
         targetVel = std::stof(velocities.at(closestPoint)) * 1.00; //TODO: TUNE THE MULTIPLIER!
+
+        float error = targetVel - avgVel;
+        float errorChange = prevError - error;
+
+        float proportional = error * Kp;
+        float derivative = errorChange * Kd;
+
+        targetVel = proportional + derivative;
 
         // calculate target left and right velocities
         float targetLeftVel = targetVel * (2 + curvature * drivetrain.trackWidth) / 2; 
@@ -505,7 +516,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         //*secondary exclusion for small vels
         if ((std::abs(targetLeftVel) < 5.0) && (std::abs(targetRightVel) < 5.0)) { 
             dataLine.append("SMALL VEL\n\n");
-            pros::delay(10); //*change to tick speed always
+            pros::delay(100); //*change to tick speed always
             closestPoint++;
             continue;
         }

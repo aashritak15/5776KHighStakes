@@ -75,7 +75,7 @@ void writePose() {
     std::string dataLine = ""; //TODO: CHANGE GETPOSE BACK
     std::int32_t left = leftMotors.get_voltage();
     std::int32_t right = rightMotors.get_voltage(); 
-    float adjusted = round((right+left) / 2.0 * 127.0 / 12000.0 * 1000) / 1000;
+    float adjusted = round((right+left) * 1000) / 1000;
 
     dataLine.append(std::to_string((round(chassis.getPose().x*1000))/1000) + ", "); //*all rounded to 3 decimal places
     dataLine.append(std::to_string((round(chassis.getPose().y*1000))/1000) + ", ");
@@ -85,14 +85,12 @@ void writePose() {
     fileO << dataLine;
 }
 
-void writeAdditional() { //TODO: OPTIMIZE
+void writeAdditional() {
     std::string dataLine = "";
 
     std::int32_t left = leftMotors.get_voltage();
     std::int32_t right = rightMotors.get_voltage(); 
-    float adjLeft = right/2.0*127.0/12000.0;
-    float adjRight = left/2.0*127.0/12000.0;
-    float adjTotal = adjLeft + adjRight;
+    float total = left + right;
 
     if(leftMotors.get_voltage() < 0 && rightMotors.get_voltage() < 0)
         dataLine.append("1, ");
@@ -101,17 +99,18 @@ void writeAdditional() { //TODO: OPTIMIZE
 
     dataLine.append(std::to_string(intakeState) + ", ");
 
-    if(std::abs(adjTotal) < 5) { //TODO: TUNE THIS VALUE
+    if(std::abs(total) < 600) { //TODO: TUNE THIS VALUE
 
-        if(std::abs(adjRight) > 5 && std::abs(adjLeft) > 5) {
-            if(adjRight > 0)  {//TODO: CHECK {
+        if(std::abs(right) > 600 && std::abs(left) > 600) {
+            if(right > 0)  { //TODO: CHECK 
                 dataLine.append("TURNING CW, ");
-            } else if (adjRight < 0) {
+            } else if (right < 0) {
                 dataLine.append("TURNING CCW, ");
             }
         } else if(!(prevIntakeState == intakeState) || !(prevClampState == clampState)) {
             dataLine.append("SUBSYS, ");
         } 
+
         else {dataLine.append("STOPPED, ");}
 
     } else {
