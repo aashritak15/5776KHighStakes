@@ -126,8 +126,9 @@ void initialize() {
             pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
             pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
             pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
-            // pros::lcd::print(3, "LB: %f", ladyBrown.get_position()); // lift encoder
-            pros::lcd::print(3, "Color: %f ", optical.get_hue());
+            pros::lcd::print(3, "LB: %f", ladyBrown.get_position()); // lift encoder
+            //pros::lcd::print(3, "Color: %f ", optical.get_hue());
+            std::cout<<chassis.getPose().x<<", "<<chassis.getPose().y<<", "<<chassis.getPose().theta<<"\n";
 
             // log position telemetry
             lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
@@ -368,14 +369,85 @@ void blueMogo() {
     mogoClamp.set_value(false);
 }
 
+void skills() {
+    //lbRotation.set_position(0);
+
+    // alliance stake
+    intake.move_voltage(-12000);
+    pros::delay(400);
+    intake.move_voltage(0);
+
+    // first ring
+    chassis.turnToHeading(34.68, 900, {.earlyExitRange = 1});
+    chassis.moveToPoint(30.01, 33.12, 2000, {.maxSpeed = 80, .earlyExitRange = 1});
+    intake.move_voltage(-12000);
+    pros::delay(1250);
+    intake.move_voltage(0);
+
+    // mogo and score
+    chassis.turnToHeading(13, 900, {.earlyExitRange = 1});
+    chassis.moveToPoint(27.59, 16.57, 2000, {.forwards = false, .maxSpeed = 80});
+    chassis.waitUntilDone();
+    mogoClamp.set_value(true);
+    intake.move_voltage(-12000);
+    pros::delay(100);
+
+    // second and third rings
+    //iffy but wont crash into the ladder
+    // //chassis.turnToHeading(45.39, 900, {.earlyExitRange = 1});
+    // chassis.moveToPose(51.9, 52.5, 9, 2000, {.earlyExitRange = 5});
+    // //chassis.moveToPoint(51.9, 67, 2000, {.forwards = true, .maxSpeed = 100, .earlyExitRange = 1});
+    // chassis.moveToPoint(52.86, 68.21, 2000, {.earlyExitRange = 3});
+    // chassis.turnToHeading(42, 1000);
+    // //chassis.moveToPoint(80.26, 90.86, 2000, {.forwards = true, .maxSpeed = 100, .earlyExitRange = 1}); //76.5, 94.8
+    // chassis.moveToPoint(76.5, 94.8, 2000, {.forwards = true, .maxSpeed = 100, .earlyExitRange = 1}); //76.5, 94.8
+
+    //crashes into the ladder half the time
+    chassis.turnToHeading(45.39, 900, {.earlyExitRange = 1});
+    chassis.moveToPoint(58.67, 72.24, 2000, {.forwards = true, .maxSpeed = 100, .earlyExitRange = 1});
+    chassis.moveToPoint(80.26, 90.86, 2000, {.forwards = true, .maxSpeed = 100, .earlyExitRange = 1});
+
+
+    pros::delay(850);
+
+    autonLB(43.4); // need to add timeout
+
+
+    //go to wall stake
+    chassis.moveToPoint(53.6, 52.6, 3000, {.forwards = false}); //needs to be tuned
+    intake.move_voltage(12000);
+    autonLB(55);
+    pros::delay(100);
+    intake.move_voltage(-12000);
+    chassis.turnToHeading(101.5, 1000);
+    chassis.moveToPoint(72.2, 50.2, 1000); 
+    // chassis.moveToPose(72, 47.4, 107, 1000);
+    chassis.waitUntilDone();
+    pros::delay(250);
+    autonLB(145.7);
+
+    // three rings in a row - prob needs to be tuned cos everything before is off
+    chassis.moveToPoint(56.5, 51, 1000, {.forwards = false});
+    chassis.turnToHeading(191.5, 1000);
+    chassis.moveToPoint(41.9, -6.9, 3000);
+
+
+
+}
+
 void autonomous() {
     chassis.setPose(0, 0, 0);
     chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
-    //intake.move_velocity(-12000);
-    // chassis.turnToHeading(45, 3000);
-    // chassis.moveToPose(0, 24, 0, 10000);
 
-    redSoloWP();
+    //intake.move_velocity(-12000);
+    //chassis.turnToHeading(45, 3000);
+    // chassis.moveToPose(0, 24, 0, 10000);
+    //pros::delay(500);
+    //ladyTarget = 41.4;
+    //autonLB(43.4);
+
+    skills();
+    //redSoloWP();
     //redMogo();
     //blueSoloWP();
     //blueMogo();

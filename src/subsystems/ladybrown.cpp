@@ -11,10 +11,18 @@ void ladyBrownInit() {
     ladyBrown.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
     lbRotation.reset_position();
     lbRotation.set_position(0);
+
+//     void* ladyAuton = (void*)autonLB;
+
+//     pros::task_fn_t idk = (pros::task_fn_t) ladyAuton;
+
+//     pros::Task ladyTask (idk);
 }
 
 double target = 0;
+//double ladyTarget = 0;
 double prevDistance = 0;
+double prevDistance1 = 0;
 double kP = 0.65;
 double kD = 0.65;
 //bool start = false;
@@ -30,7 +38,7 @@ void updateLB() {
 
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
 
-        target = 41.4;
+        target = 43.4;
 
         // ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
         //start = true;
@@ -61,6 +69,25 @@ void updateLB() {
     ladyBrown.move_velocity(armMoveSpeed);
     prevDistance = distance;
 }
+
+void autonLB(double ladyTarget) {
+    while(abs(ladyTarget-lbRotation.get_position() / 100.0)>=1) {
+        double currentAngle = lbRotation.get_position() / 100.0;
+        pros::lcd::print(5, "Current angle: %f", currentAngle);
+        double distance = ladyTarget - currentAngle;
+        double derivative = distance - prevDistance1;
+        double armMoveSpeed = (kP * distance) + (kD * derivative);
+        pros::lcd::print(6, "Move speed: %f", armMoveSpeed);
+        // if (armMoveSpeed < 1) {
+        //     armMoveSpeed = 0;
+        // }
+        ladyBrown.move_velocity(armMoveSpeed);
+        prevDistance1 = distance;
+    }
+    ladyBrown.move_velocity(0);
+}
+
+
 // ladybrown pid
 
 // void updateLB() {

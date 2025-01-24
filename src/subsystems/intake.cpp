@@ -65,7 +65,7 @@ void colorSort(int lol) {
         //         buttonUpPressed = false;
         //     }
         // }
-                    std::cout<<optical.get_hue()<<"\n";
+                    //std::cout<<optical.get_hue()<<"\n";
 
         if(sortState == 1) {
             if(optical.get_hue() < 30 && optical.get_hue() > 8) {

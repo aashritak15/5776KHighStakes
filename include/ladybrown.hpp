@@ -15,7 +15,9 @@ void updateLift();
 void allianceStake();
 void updateLB();
 
+//extern double ladyTarget;
 
 void updateLadyTask(double target);
+void autonLB(double ladyTarget);
 
 #endif
