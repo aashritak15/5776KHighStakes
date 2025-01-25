@@ -4,7 +4,7 @@
 
 #include "main.h"
 
-inline pros::Motor lift(16, pros::MotorGearset::red);
+inline pros::Motor lift(-17, pros::MotorGearset::red);
 extern pros::Rotation rotationSensor;
 
 void liftInit();

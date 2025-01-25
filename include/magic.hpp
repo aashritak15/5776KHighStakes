@@ -20,6 +20,7 @@ extern bool active;
 
 extern int prevIntakeState;
 extern int prevClampState;
+extern float prevError;
 
 void initO();
 void initDebug();
@@ -30,6 +31,8 @@ void writePose();
 void writeAdditional();
 
 void addSegment();
+
+void rerunPIDs();
 
 //jerry
 

@@ -2,21 +2,21 @@
 
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
-pros::MotorGroup leftMotors({-6, -3, -4}, pros::MotorGearset::blue);
-pros::MotorGroup rightMotors({20, 19, 18}, pros::MotorGearset::blue);
+pros::MotorGroup leftMotors({-7, -9, -21}, pros::MotorGearset::blue);
+pros::MotorGroup rightMotors({20, 12, 18}, pros::MotorGearset::blue);
 
 // pros::Rotation vertical(-1);
 // pros::Rotation horizontal(10); //TODO: check later
 
-pros::Imu imu(7);
+pros::Imu imu(10);
 
-pros::Rotation verticalEnc(1);
+// pros::Rotation verticalEnc(1);
 
-lemlib::TrackingWheel vertical(&verticalEnc, lemlib::Omniwheel::NEW_275, 0.125);
+// lemlib::TrackingWheel vertical(&verticalEnc, lemlib::Omniwheel::NEW_275, 0.125);
 
-pros::Rotation horizontalEnc(10);
+// pros::Rotation horizontalEnc(10);
 
-lemlib::TrackingWheel horizontal(&horizontalEnc, lemlib::Omniwheel::NEW_275, -2.5);
+// lemlib::TrackingWheel horizontal(&horizontalEnc, lemlib::Omniwheel::NEW_275, -2.5);
 
 // lemlib::TrackingWheel verticalTracker(&vertical, lemlib::Omniwheel::NEW_275, 0.125);
 // lemlib::TrackingWheel horizontalTracker(&horizontal, lemlib::Omniwheel::NEW_275, -2.5);

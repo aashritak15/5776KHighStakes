@@ -120,15 +120,16 @@ void opcontrol() {
 
     chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
 
-    // initO();
+    // rerunPIDs();
 
-    // chassis.calibrate(); // calibrate sensors
-    // chassis.setPose(0, 0, 0);
+    initO();
+
+    chassis.calibrate(); // calibrate sensors
+    chassis.setPose(0, 0, 0);
 
     int count = 1;
 
     while (true) {
-
       
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
@@ -139,7 +140,7 @@ void opcontrol() {
         updateClamp();
         //updateLadyPID();
         //updateLadyTask();
-        updateLB();
+        // updateLB();
 
 
         // if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
@@ -152,6 +153,8 @@ void opcontrol() {
             writePose();
             writeAdditional();
             count = 1;
+            fileO.flush();
+            fileOTwo.flush();
         }
 
         count++;

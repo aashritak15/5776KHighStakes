@@ -170,7 +170,7 @@ int findClosest(lemlib::Pose pose, std::vector<lemlib::Pose> path, int prevIndex
     if (prevIndex + 7 > path.size()) {
         maxIndex = path.size();
     } else {
-        maxIndex = prevIndex + 7; //TODO: TUNE VALUE ONE: SKIP TOLERANCE
+        maxIndex = prevIndex + 7; //TODO: TUNE VALUE SKIP TOLERANCE
     }
 
     // loop through all path points
@@ -202,7 +202,7 @@ float circleIntersect(lemlib::Pose p1, lemlib::Pose p2, lemlib::Pose pose, float
     float a = d * d;
     float b = 2 * (f * d);
     float c = (f * f) - lookaheadDist * lookaheadDist;
-    float discriminant = b * b - 4 * a * c;
+    float discriminant = (b * b) - (4 * a * c);
 
     // if a possible intersection was found
     if (discriminant >= 0) {
@@ -236,16 +236,7 @@ lemlib::Pose lookaheadPoint(lemlib::Pose lastLookahead, lemlib::Pose pose, std::
     // and intersections that have an index greater than or equal to the index of the last
     // lookahead point
 
-    float minLookahead = 7.5;
-    float maxLookahead = 15;
-
-    float avgVel = abs((leftMotors.get_voltage() + rightMotors.get_voltage()) / 2);
-    float pctVel = avgVel / 12000;
-    
-    lookaheadDist = minLookahead + ((maxLookahead - minLookahead) * pctVel);
-
-    const int start = std::max(closest, int(lastLookahead.theta));
-    for (int i = start; i < path.size() - 1; i++) {
+    for (int i = closest; i < path.size() - 1; i++){ //*-1 is for endData
         lemlib::Pose lastPathPose = path.at(i);
         lemlib::Pose currentPathPose = path.at(i + 1);
 
@@ -307,11 +298,11 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
     int compState = pros::competition::get_status();
     distTraveled = 0;
 
-    float Kd = 0; //TODO: TUNE
-    float Kp = 0;
+    float Kd = 1;
+    float Kp = 7.3;
     float prevError = 0;
 
-    float minLookahead = 7.5;
+    float minLookahead = 5;
     float maxLookahead = 15;
 
 
@@ -398,8 +389,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
                 dataLine.append("beginning theta: " + std::to_string(chassis.getPose().theta) + "\n");
                 chassis.turnToHeading(pathPoints.at(closestPoint).theta, 1000, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE}, false);
                 pros::delay(10);
-                dataLine.append("ending theta: " + std::to_string(chassis.getPose()
-                .theta) + "\n\n");
+                dataLine.append("ending theta: " + std::to_string(chassis.getPose().theta) + "\n\n");
             }
 
             closestPoint++;
@@ -484,7 +474,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         dataLine.append("lookahead dist: " + std::to_string(lookaheadDist) + "\n");
 
         lookaheadPose = lookaheadPoint(lastLookahead, pose, pathPoints, closestPoint, lookaheadDist);
-        lastLookahead = lookaheadPose; // update last lookahead position
+        lastLookahead = lookaheadPose; //* update last lookahead position FOR DEVIATION FIXES
 
         // get the curvature of the arc between the robot and the lookahead point
         dataLine.append("target vel: " + std::to_string(targetVel) + "\n");
@@ -501,13 +491,13 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         //*PIDs
         targetVel = std::stof(velocities.at(closestPoint)) * 1.00; //TODO: TUNE THE MULTIPLIER!
 
-        float error = targetVel - avgVel;
-        float errorChange = prevError - error;
+        // float error = targetVel - avgVel; //TODO: ADD BACK PID IF NECESSARY
+        // float errorChange = prevError - error;
 
-        float proportional = error * Kp;
-        float derivative = errorChange * Kd;
+        // float proportional = error * Kp;
+        // float derivative = errorChange * Kd;
 
-        targetVel = proportional + derivative;
+        // targetVel = proportional + derivative;
 
         // calculate target left and right velocities
         float targetLeftVel = targetVel * (2 + curvature * drivetrain.trackWidth) / 2; 

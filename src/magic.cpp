@@ -11,6 +11,7 @@
 bool active = true;
 int prevIntakeState = 0;
 int prevClampState = 0;
+float prevError;
 
 // std::vector<Waypoint> route;
 // int count = 1;
@@ -50,7 +51,7 @@ void initDebug() {
 
 
 void closeO() {
-    if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_B) && active) {
+    if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_B)) {
         std::string dataLine = "endData";
 
         fileO << dataLine;
@@ -75,7 +76,7 @@ void writePose() {
     std::string dataLine = ""; //TODO: CHANGE GETPOSE BACK
     std::int32_t left = leftMotors.get_voltage();
     std::int32_t right = rightMotors.get_voltage(); 
-    float adjusted = round((right+left) * 1000) / 1000;
+    float adjusted = round((right+left) * 1000.0) / 1000.0;
 
     dataLine.append(std::to_string((round(chassis.getPose().x*1000))/1000) + ", "); //*all rounded to 3 decimal places
     dataLine.append(std::to_string((round(chassis.getPose().y*1000))/1000) + ", ");
@@ -123,6 +124,32 @@ void writeAdditional() {
     prevClampState = clampState;
 
     fileOTwo << dataLine;
+}
+
+void rerunPIDs() {
+    float avgVel = ((leftMotors.get_voltage() + rightMotors.get_voltage()) / 2.0);
+    float targetVel = 400.0;
+    prevError = targetVel;
+
+    while(true) {
+        float Kd = 0;
+        float Kp = 1;
+        
+        avgVel = ((leftMotors.get_voltage() + rightMotors.get_voltage()) / 2.0);
+        
+        float error = targetVel - avgVel;
+        float errorChange = prevError - error;
+
+        float proportional = error * Kp;
+        float derivative = errorChange * Kd;
+
+        targetVel = proportional + derivative;
+
+        leftMotors.move_voltage(targetVel);
+        rightMotors.move_voltage(targetVel);
+
+        pros::delay(10);
+    }
 }
 
 
