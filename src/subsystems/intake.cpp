@@ -38,7 +38,7 @@ void colorSort(int lol) {
 
         if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_UP)) {
             sortState = 0;
-            controller.set_text(0, 0, "TANISH YOU SUCK   ");
+            controller.set_text(0, 0, "TANISH YOU rock!   ");
         }
 
         if(sortState == 1)
@@ -68,29 +68,30 @@ void colorSort(int lol) {
                     //std::cout<<optical.get_hue()<<"\n";
 
         if(sortState == 1) {
+            
             if(optical.get_hue() < 30 && optical.get_hue() > 8) {
-                // if(!colorDetected && intakeState == 1) {
+                if(!colorDetected) {
                     colorDetected = true;
-                    pros::Task::delay(30);
+                    pros::Task::delay(40);
                     intake.move_voltage(0);
-                    pros::Task::delay(250);
+                    pros::Task::delay(260);
                     intake.move_voltage(-12000);
                     std::cout<<optical.get_hue()<<"kjfjhgjhg\n";
-                // }
+                }
             } else {
                 colorDetected = false;
             }
+            //std::cout<<colorDetected<<"\n";
         } else if(sortState == 2) {
-            if(optical.get_hue() < 245 && optical.get_hue() > 90
-             && colorDetected == false) {
-                // if(!colorDetected && intakeState == 1) {
+            if(optical.get_hue() < 245 && optical.get_hue() > 90) {
+                if(!colorDetected) {
                     colorDetected = true;
-                    pros::Task::delay(30);
+                    pros::Task::delay(40);
                     intake.move_voltage(0);
-                    pros::Task::delay(250);
+                    pros::Task::delay(260);
                     intake.move_voltage(-12000);
                     std::cout<<optical.get_hue()<<"kjfjhgjhg\n";
-                // }
+                }
             } else {
                 colorDetected = false;
             }
@@ -113,7 +114,7 @@ void intakeInnit() {
     pros::Task sortTask (colorSortation);
 }
 
-void opticalInit() { optical.set_led_pwm(75); }
+void opticalInit() { optical.set_led_pwm(100); }
 
 void updateIntake() {
     static bool buttonl1Pressed = false;
