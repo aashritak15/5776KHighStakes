@@ -127,7 +127,7 @@ void initialize() {
             pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
             pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
             pros::lcd::print(3, "LB: %f", ladyBrown.get_position()); // lift encoder
-            //pros::lcd::print(3, "Color: %f ", optical.get_hue());
+            pros::lcd::print(4, "Color: %f ", optical.get_hue());
             std::cout<<chassis.getPose().x<<", "<<chassis.getPose().y<<", "<<chassis.getPose().theta<<"\n";
 
             // log position telemetry
@@ -233,9 +233,14 @@ void blueSoloWP() {
     chassis.moveToPoint(-24.8, -34.7, 2000);
     pros::delay(1750);
 
-    // //ladder
-    // chassis.turnToHeading(-229.6, 1000, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE});
-    // chassis.moveToPoint(-12.7, -48.3, 2000, {.maxSpeed = 50});
+    //ladder
+    chassis.turnToHeading(-229.6, 1000, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE});
+    chassis.moveToPoint(-12.7, -48.3, 2000, {.maxSpeed = 50});
+    chassis.waitUntilDone();
+    intake.move_voltage(0);
+
+    // // elims
+    // chassis.moveToPose(36, -10, 90, 2000);
     // chassis.waitUntilDone();
     // intake.move_voltage(0);
 }
@@ -273,15 +278,16 @@ void redSoloWP() {
     chassis.moveToPoint(24.8, -34.7, 2000);
     pros::delay(1750);
 
-    // //ladder
-    // chassis.turnToHeading(229.6, 1000, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE});
-    // chassis.moveToPoint(12.7, -48.3, 2000, {.maxSpeed = 50});
-    // chassis.waitUntilDone();
-    // intake.move_voltage(0);
-    
-    chassis.moveToPose(-36, -10, -90, 2000);
+    //ladder
+    chassis.turnToHeading(229.6, 1000, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE});
+    chassis.moveToPoint(12.7, -48.3, 2000, {.maxSpeed = 50});
     chassis.waitUntilDone();
     intake.move_voltage(0);
+    
+    // // elims
+    // chassis.moveToPose(-36, -10, -90, 2000);
+    // chassis.waitUntilDone();
+    // intake.move_voltage(0);
 
 
     
@@ -381,7 +387,7 @@ void skills() {
     chassis.turnToHeading(34.68, 900, {.earlyExitRange = 1});
     chassis.moveToPoint(30.01, 33.12, 2000, {.maxSpeed = 80, .earlyExitRange = 1});
     intake.move_voltage(-12000);
-    pros::delay(1250);
+    pros::delay(1300);
     intake.move_voltage(0);
 
     // mogo and score
@@ -393,43 +399,98 @@ void skills() {
     pros::delay(100);
 
     // second and third rings
-    //iffy but wont crash into the ladder
-    // //chassis.turnToHeading(45.39, 900, {.earlyExitRange = 1});
-    // chassis.moveToPose(51.9, 52.5, 9, 2000, {.earlyExitRange = 5});
-    // //chassis.moveToPoint(51.9, 67, 2000, {.forwards = true, .maxSpeed = 100, .earlyExitRange = 1});
-    // chassis.moveToPoint(52.86, 68.21, 2000, {.earlyExitRange = 3});
-    // chassis.turnToHeading(42, 1000);
-    // //chassis.moveToPoint(80.26, 90.86, 2000, {.forwards = true, .maxSpeed = 100, .earlyExitRange = 1}); //76.5, 94.8
-    // chassis.moveToPoint(76.5, 94.8, 2000, {.forwards = true, .maxSpeed = 100, .earlyExitRange = 1}); //76.5, 94.8
+    // 1/2
+    chassis.moveToPose(60.7, 77.14, 33.03, 2000, {.lead = 0.7}); //28.55
 
-    //crashes into the ladder half the time
-    chassis.turnToHeading(45.39, 900, {.earlyExitRange = 1});
-    chassis.moveToPoint(58.67, 72.24, 2000, {.forwards = true, .maxSpeed = 100, .earlyExitRange = 1});
-    chassis.moveToPoint(80.26, 90.86, 2000, {.forwards = true, .maxSpeed = 100, .earlyExitRange = 1});
+    // // three rings in a row
+    pros::delay(750);
+    chassis.turnToHeading(192, 2000);
+    chassis.moveToPose(51.59, 41.03, 192, 2000, {.minSpeed = 100}); //192
+    chassis.moveToPose(37.05, -6.64, 195, 5000, {.maxSpeed = 30}); //195
+    pros::delay(500);
+    // chassis.moveToPose(56.5, 47.4, 194.5, 2000, {.minSpeed = 100});
+    // chassis.moveToPose(40.9, -7.1, 198.8, 3000, {.maxSpeed = 40});
 
+    //that one ring next to it
+    chassis.moveToPoint(51.26, 26.9, 2000, {.forwards = false, .maxSpeed = 80});
+    chassis.turnToHeading(182.2, 1000); //168
+    // chassis.moveToPoint(57.437, 2.1, 1000);
+    chassis.moveToPoint(50.2, 2.4, 1000);
 
-    pros::delay(850);
-
-    autonLB(43.4); // need to add timeout
-
-
-    //go to wall stake
-    chassis.moveToPoint(53.6, 52.6, 3000, {.forwards = false}); //needs to be tuned
-    intake.move_voltage(12000);
-    autonLB(55);
-    pros::delay(100);
-    intake.move_voltage(-12000);
-    chassis.turnToHeading(101.5, 1000);
-    chassis.moveToPoint(72.2, 50.2, 1000); 
-    // chassis.moveToPose(72, 47.4, 107, 1000);
+    //mogo in corner
+    chassis.turnToHeading(-1.1, 2000, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE});
+    chassis.moveToPoint(57.76, -7.3, 1000, {.forwards = false});
     chassis.waitUntilDone();
-    pros::delay(250);
-    autonLB(145.7);
+    mogoClamp.set_value(false);
 
-    // three rings in a row - prob needs to be tuned cos everything before is off
-    chassis.moveToPoint(56.5, 51, 1000, {.forwards = false});
-    chassis.turnToHeading(191.5, 1000);
-    chassis.moveToPoint(41.9, -6.9, 3000);
+    //moving forward from the corner to go to second half 
+    chassis.moveToPoint(57.4, -0.4, 1000);
+    chassis.turnToHeading(91.6, 1000);
+    // chassis.moveToPoint(-0.67, 0.55, 3000, {.forwards = false, .minSpeed = 100});
+    // chassis.moveToPose(-22.9, 0.8, 98.5, 2000, {.forwards = false, .maxSpeed = 80});
+    // chassis.waitUntilDone();
+    // mogoClamp.set_value(true);
+
+    // // first ring second side
+    // chassis.turnToHeading(9.5, 1000);
+    // chassis.moveToPoint(-20.4, 37.8, 1000);
+
+    // chassis.turnToHeading(-82.7, 1000);
+    // chassis.moveToPoint()
+
+
+
+
+    // //mogo in corner
+    // chassis.turnToHeading(302.7, 2000);
+    // chassis.moveToPoint()
+
+
+
+    // wall stake stuff
+    
+    // // 2/2
+    // chassis.turnToHeading(41.68, 1000);
+    // //chassis.moveToPoint(78.17, 93, 2000);
+    // chassis.moveToPoint(80.34, 95.27, 1000);
+    // pros::delay(850);
+    // autonLB(43.4, 1000); 
+
+
+    // //go to wall stake
+    // //go backwards
+    // chassis.moveToPose(30.76, 35.9, 51.7, 3000, {.forwards = false, .lead = 0.5}); 
+    // chassis.waitUntilDone();
+    // intake.move_voltage(0);
+    // //move lb out of way for intake
+    // autonLB(55, 1000);
+    // //pros::delay(100);
+    // intake.move_voltage(-12000);
+    // //wall stake ring 1
+    // chassis.moveToPose(70.16, 49.54, 104.92, 1000, {.lead = 0.4});
+    // chassis.turnToHeading(98, 1000);
+    // chassis.moveToPoint(73.5, 48.7, 1000);
+    // //chassis.moveToPose(72.66, 49.06, 104, 1000); //74.6, 48.6, 97
+    // chassis.waitUntilDone();
+    // //pros::delay(1500);
+    // intake.move_voltage(0);
+    // autonLB(166, 1000);
+    // chassis.moveToPoint(73, 49, 1000);
+    // //wall stake ring 2
+    // pros::delay(500);
+    // autonLB(43.4, 1000);
+    // intake.move_voltage(-12000);
+    // pros::delay(1250);
+    // intake.move_voltage(0);
+    // autonLB(166, 1000);
+    // chassis.moveToPoint(73, 49, 1000);
+
+
+
+    // // three rings in a row - prob needs to be tuned cos everything before is off
+    // chassis.moveToPoint(55.6, 53, 1000, {.forwards = false});
+    // chassis.turnToHeading(187.1, 1000);
+    // chassis.moveToPoint(57.5, -6.9, 3000);
 
 
 
@@ -444,7 +505,14 @@ void autonomous() {
     // chassis.moveToPose(0, 24, 0, 10000);
     //pros::delay(500);
     //ladyTarget = 41.4;
-    //autonLB(43.4);
+    // autonLB(43.4, 1000);
+    // pros::delay(1000);
+    // autonLB(80, 2000);
+    // pros::delay(1000);
+    // autonLB(166, 2000);
+    // pros::delay(1000);
+    // autonLB(5, 1000);
+    //ladyBrown.move_absolute(43.4, 50);
 
     skills();
     //redSoloWP();
@@ -519,12 +587,12 @@ void opcontrol() {
         //updateColorToggle();
         updateDoink();
 
-        if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT)) {
-            chassis.setPose(0, 0, 0);
-            chassis.moveToPose(-3.4, 6.06, -27.6, 1000); //red solo wp - macro only for red
-            std::cout << "done";
-            // chassis.turnToHeading();
-        }
+        // if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT)) {
+        //     chassis.setPose(0, 0, 0);
+        //     chassis.moveToPose(-3.4, 6.06, -27.6, 1000); //red solo wp - macro only for red
+        //     std::cout << "done";
+        //     // chassis.turnToHeading();
+        // }
 
 
         // static unsigned long lastWriteTime = 0; // Tracks the last time writePose was called

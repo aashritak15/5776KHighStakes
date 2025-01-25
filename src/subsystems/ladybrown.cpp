@@ -4,6 +4,8 @@
 #include "ports.hpp"
 #include "ladybrown.hpp"
 #include "globals.hpp"
+#include "lemlib/util.hpp"
+#include "lemlib/timer.hpp"
 #include <cmath>
 
 void ladyBrownInit() { 
@@ -70,8 +72,10 @@ void updateLB() {
     prevDistance = distance;
 }
 
-void autonLB(double ladyTarget) {
-    while(abs(ladyTarget-lbRotation.get_position() / 100.0)>=1) {
+void autonLB(double ladyTarget, int timeout) {
+    lemlib::Timer timer(timeout);
+    
+    while(!timer.isDone() && abs(ladyTarget-lbRotation.get_position() / 100.0)>=1) {
         double currentAngle = lbRotation.get_position() / 100.0;
         pros::lcd::print(5, "Current angle: %f", currentAngle);
         double distance = ladyTarget - currentAngle;

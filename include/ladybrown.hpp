@@ -18,6 +18,6 @@ void updateLB();
 //extern double ladyTarget;
 
 void updateLadyTask(double target);
-void autonLB(double ladyTarget);
+void autonLB(double ladyTarget, int timeout);
 
 #endif
