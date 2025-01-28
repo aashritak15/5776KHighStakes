@@ -17,8 +17,8 @@ float prevError;
 // int count = 1;
 
 void initO() {
-    fileO.open("/usd/autonomous.txt");
-    fileOTwo.open("/usd/extra.txt");
+    fileO.open("/usd/autonomous.txt", std::ios::out | std::ios::trunc);
+    fileOTwo.open("/usd/extra.txt", std::ios::out | std::ios::trunc);
     if(!fileO && !fileOTwo) {
         pros::lcd::print(7, "both are cooked");
         controller.set_text(0, 0, "failed to open both");
@@ -84,6 +84,10 @@ void writePose() {
     dataLine.append(std::to_string(adjusted) + "\n");
 
     fileO << dataLine;
+    
+    if(!fileO) {
+        controller.set_text(0, 0, "write error");
+    }
 }
 
 void writeAdditional() {
@@ -98,7 +102,7 @@ void writeAdditional() {
     else
         dataLine.append("0, ");
 
-    dataLine.append(std::to_string(intakeState) + ", ");
+    dataLine.append(std::to_string(0) + ", ");
 
     if(std::abs(total) < 600) { //TODO: TUNE THIS VALUE
 
@@ -108,9 +112,9 @@ void writeAdditional() {
             } else if (right < 0) {
                 dataLine.append("TURNING CCW, ");
             }
-        } else if(!(prevIntakeState == intakeState) || !(prevClampState == clampState)) {
-            dataLine.append("SUBSYS, ");
-        } 
+        } //else if(!(prevIntakeState == intakeState) || !(prevClampState == clampState)) {
+        //     dataLine.append("SUBSYS, ");
+        // } 
 
         else {dataLine.append("STOPPED, ");}
 
@@ -118,12 +122,13 @@ void writeAdditional() {
         dataLine.append("GOING, ");
     }
 
-    dataLine.append(std::to_string(clampState) + "\n");
+    dataLine.append(std::to_string(0) + "\n");
 
-    prevIntakeState = intakeState;
-    prevClampState = clampState;
+    // prevIntakeState = intakeState;
+    // prevClampState = clampState;
 
     fileOTwo << dataLine;
+    fileOTwo.flush();
 }
 
 void rerunPIDs() {

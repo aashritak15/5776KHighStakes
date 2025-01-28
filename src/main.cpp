@@ -39,12 +39,12 @@ void initialize() {
     chassis.calibrate(); // calibrate sensors
     chassis.setPose(0, 0, 0, false);
 
-    clampInit();
-    intakeInnit();
-    liftInit();
-    intakeClampInit();
-    opticalInit();
-    initO();
+    // clampInit();
+    // intakeInnit();
+    // liftInit();
+    // intakeClampInit();
+    // opticalInit();
+    // initO();
 
     // lv_init();
     // selector::init();
@@ -124,6 +124,14 @@ void opcontrol() {
 
     initO();
 
+    // fileO<<"I LOVE T TEAM";
+    // fileOTwo<<"I LOVE T TEAM";
+    // if(!fileO || !fileOTwo) {
+    //     pros::lcd::print(0, "i hate t team");
+    // }
+    // fileO.flush();
+    // fileOTwo.flush();
+
     chassis.calibrate(); // calibrate sensors
     chassis.setPose(0, 0, 0);
 
@@ -136,8 +144,8 @@ void opcontrol() {
 
         chassis.arcade(leftY, rightX * 0.9);
 
-        updateIntake();
-        updateClamp();
+        // updateIntake();
+        // updateClamp();
         //updateLadyPID();
         //updateLadyTask();
         // updateLB();

@@ -5,7 +5,7 @@
 #include "main.h"
 
 inline pros::Motor intake(14, pros::MotorGearset::blue); //changed from blue to green
-inline pros::Optical optical(14);
+inline pros::Optical optical(8);
 
 void intakeInnit();
 void updateIntake();
