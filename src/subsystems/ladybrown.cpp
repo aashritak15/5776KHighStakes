@@ -1,4 +1,3 @@
-#include "main.h"
 #include "pros/misc.h"
 #include "pros/motors.h"
 #include "ports.hpp"

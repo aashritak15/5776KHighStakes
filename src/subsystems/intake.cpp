@@ -1,9 +1,7 @@
-#include "main.h"
 #include "pros/misc.h"
 #include "pros/motors.h"
 #include "ports.hpp"
 #include "intake.hpp"
-#include "intakeFirst.hpp"
 #include "globals.hpp"
 
 void intakeInnit() { intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST); }

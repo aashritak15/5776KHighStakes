@@ -1,4 +1,3 @@
-#include "main.h"
 #include "globals.hpp"
 #include "magic.hpp"
 #include "intake.hpp"
@@ -9,8 +8,8 @@
 #include <cmath>
 
 bool active = true;
-int prevIntakeState = 0;
-int prevClampState = 0;
+int section = 0;
+bool buttonPressed = false;
 float prevError;
 
 // std::vector<Waypoint> route;
@@ -102,7 +101,8 @@ void writeAdditional() {
     else
         dataLine.append("0, ");
 
-    dataLine.append(std::to_string(0) + ", ");
+    dataLine.append(std::to_string(intakeState) + ", ");
+    dataLine.append(std::to_string(clampState) + ", ");
 
     if(std::abs(total) < 600) { //TODO: TUNE THIS VALUE
 
@@ -122,10 +122,16 @@ void writeAdditional() {
         dataLine.append("GOING, ");
     }
 
-    dataLine.append(std::to_string(0) + "\n");
+    if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) { //TODO: CHANGE BUTTON
+        if (!buttonPressed) {
+            buttonPressed = true;
+            section++;
+        }
+    } else {
+        buttonPressed = false;
+    }
 
-    // prevIntakeState = intakeState;
-    // prevClampState = clampState;
+    dataLine.append(std::to_string(section) + "\n");
 
     fileOTwo << dataLine;
     fileOTwo.flush();

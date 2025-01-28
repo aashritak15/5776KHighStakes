@@ -5,11 +5,9 @@
 #include "intake.hpp"
 #include "globals.hpp"
 #include "ladybrown.hpp"
-#include "intakeFirst.hpp"
 #include "intakePiston.hpp"
 #include "autons.hpp"
 #include "magic.hpp"
-#include <iostream>
 #include <cmath>
 
 // #include "autoSelect/selection.h"

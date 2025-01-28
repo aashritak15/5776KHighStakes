@@ -298,43 +298,48 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
     int compState = pros::competition::get_status();
     distTraveled = 0;
 
-    float Kd = 1;
-    float Kp = 7.3;
-    float prevError = 0;
+    // float Kd = 1;
+    // float Kp = 7.3;
+    // float prevError = 0;
 
     float minLookahead = 5;
-    float maxLookahead = 15;
+    float maxLookahead = 10;
 
 
     // loop until the robot is within the end tolerance
     for (int i = 0; i < timeout / 10 && pros::competition::get_status() == compState && this->motionRunning; i++) {
-        if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) { //TODO: CHANGE THE BUTTON!
-            // logic: copy file until stop point (copy number of lines from closestPoint) for both files
-            // copy coords and heading to separate file (i dont wanna break stuff by switching to driver in the middle of auton)
-            // in main: start writing new file but initialize bot position with coords and heading
-            // combine files when done
+        //* logic: check for section, stop when section reached and begin recording
+        //* speed multipliers
+        //* copy file, write to new file, replace????
+        //* update all ports, update data order
 
-            std::ifstream file0("/usd/autonomous.txt");
-            std::ifstream file0Two("/usd/extra.txt");
-            std::ofstream newFile0("/usd/newAuton.txt");
-            std::ofstream newFile0Two("/usd/newExtra.txt");
-            std::ofstream coords("/usd/coords.txt");
+        // if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) { //TODO: CHANGE THE BUTTON!
+        //     // logic: copy file until stop point (copy number of lines from closestPoint) for both files
+        //     // copy coords and heading to separate file (i dont wanna break stuff by switching to driver in the middle of auton)
+        //     // in main: start writing new file but initialize bot position with coords and heading
+        //     // combine files when done
 
-            std::string temp="";
-            for(int kiwi=0; kiwi<closestPoint; kiwi++){
-                std::getline(file0, temp);
-                newFile0<<temp;
-                temp="";
-                std::getline(file0Two, temp);
-                newFile0Two<<temp;
-                temp="";
-            }
+        //     std::ifstream file0("/usd/autonomous.txt");
+        //     std::ifstream file0Two("/usd/extra.txt");
+        //     std::ofstream newFile0("/usd/newAuton.txt");
+        //     std::ofstream newFile0Two("/usd/newExtra.txt");
+        //     std::ofstream coords("/usd/coords.txt");
 
-            lemlib::Pose pose = chassis.getPose();
-            coords<<pose.x<<"\n"<<pose.y<<"\n"<<pose.theta;
+        //     std::string temp="";
+        //     for(int kiwi=0; kiwi<closestPoint; kiwi++){
+        //         std::getline(file0, temp);
+        //         newFile0<<temp;
+        //         temp="";
+        //         std::getline(file0Two, temp);
+        //         newFile0Two<<temp;
+        //         temp="";
+        //     }
 
-            break;
-        }
+        //     lemlib::Pose pose = chassis.getPose();
+        //     coords<<pose.x<<"\n"<<pose.y<<"\n"<<pose.theta;
+
+        //     break;
+        // }
         
         std::string dataLine = "";
 
@@ -348,6 +353,22 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         if (subValues.at(closestPoint)[2] == "STOPPED") { //*primary exclusion for delays
             drivetrain.leftMotors->move(0);                 
             drivetrain.rightMotors->move(0);
+
+            if (subValues.at(closestPoint)[0] == "0") {
+                intake.move_voltage(0);
+            } else if (subValues.at(closestPoint)[0] == "1") {
+                intake.move_voltage(-12000);
+            } else if (subValues.at(closestPoint)[0] == "2") {
+                intake.move_voltage(12000);
+            }
+
+            if (subValues.at(closestPoint)[1] == "0") {
+                mogoClamp.set_value(false);
+            } else if (subValues.at(closestPoint)[1] == "1") {
+                mogoClamp.set_value(true);
+            }
+
+            pros::delay(100);
 
             dataLine.append("DELAYED\n\n");
             fileOThree<<dataLine;
@@ -400,32 +421,6 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
             this->requestMotionStart();
 
             continue;
-
-        } else if(subValues.at(closestPoint)[2] == "SUBSYS") {
-            
-            if (subValues.at(closestPoint)[0] == "0") {
-            intake.move_voltage(0);
-            } else if (subValues.at(closestPoint)[0] == "1") {
-                intake.move_voltage(-12000);
-            } else if (subValues.at(closestPoint)[0] == "2") {
-                intake.move_voltage(12000);
-            }
-
-            if (subValues.at(closestPoint)[1] == "0") {
-                mogoClamp.set_value(false);
-            } else if (subValues.at(closestPoint)[1] == "1") {
-                mogoClamp.set_value(true);
-            }
-
-            closestPoint++;
-
-            dataLine.append("SUBSYSTEM\n\n");
-            fileOThree<<dataLine;
-            fileOThree.flush();
-
-            pros::delay(100);
-
-            continue;
         }
  
         dataLine.append("current x: " + std::to_string(pose.x) + "\n");
@@ -459,11 +454,6 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         dataLine.append("target x: " + std::to_string(pathPoints.at(closestPoint).x) + "\n");
         dataLine.append("target y: " + std::to_string(pathPoints.at(closestPoint).y) + "\n");
 
-
-
-
-
-
         // find the lookahead point
 
         float avgVel = round(((leftMotors.get_voltage() + rightMotors.get_voltage()) * 1000.0) / 2.0 / 1000.0);
@@ -482,11 +472,6 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         curvature = findLookaheadCurvature(pose, curvatureHeading, lookaheadPose);
 
         dataLine.append("curvature: " + std::to_string(curvature) + "\n");
-
-
-
- 
-
 
         //*PIDs
         targetVel = std::stof(velocities.at(closestPoint)) * 1.00; //TODO: TUNE THE MULTIPLIER!
@@ -528,7 +513,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
             drivetrain.rightMotors->move(0);
             // set distTraveled to -1 to indicate that the function has finished
             distTraveled = -1;
-                std::cout<<"stopped\n";
+            dataLine.append("PATH FINISHED");
 
             // give the mutex back
             this->endMotion();
