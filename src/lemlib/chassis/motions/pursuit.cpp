@@ -455,9 +455,9 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         //*PIDs
         targetVel = std::stof(velocities.at(closestPoint));
 
-        if(subValues.at(closestPoint)[3] == "2") { //TODO: SEGMENT MULTIPLIERS
-            targetVel *= 1.5;
-        }
+        // if(subValues.at(closestPoint)[3] == "0") { //TODO: SEGMENT MULTIPLIERS
+        //     targetVel = targetVel * 0.5;
+        // }
 
         // float error = targetVel - avgVel; //*add back pid if necessary
         // float errorChange = prevError - error;
@@ -468,7 +468,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         // targetVel = proportional + derivative;
 
         // calculate target left and right velocities
-        float targetLeftVel = targetVel * (2 + curvature * drivetrain.trackWidth) / 2; 
+        float targetLeftVel = targetVel * (2 + curvature * drivetrain.trackWidth) / 2; //TODO aight gang what
         float targetRightVel = targetVel * (2 - curvature * drivetrain.trackWidth) / 2;
 
         //*secondary exclusion for small vels

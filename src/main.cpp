@@ -61,11 +61,19 @@ void initialize() {
             pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
             pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
             pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
-            pros::lcd::print(3, "Left encoders: %f", leftMotors.get_position());
-            pros::lcd::print(4, "Right encoders: %f", rightMotors.get_position());
             // pros::lcd::print(3, "Rotation (Lift): %i", rotationSensor.get_position()); // lift encoder
             // pros::lcd::print(4, "Intake State: %f", intakeState);
+
+            std::vector<double> left = leftMotors.get_position_all();
+            std::vector<double> right = rightMotors.get_position_all();
+            // pros::lcd::print(3, "LeftF Encoders: %f", left[0]);
+            // pros::lcd::print(4, "LeftM Encoders: %f", left[1]);
+            // pros::lcd::print(5, "LeftB Encoders: %f", left[2]);
+            // pros::lcd::print(6, "RightF Encoders: %f", right[0]);
+            // pros::lcd::print(7, "RightM Encoders: %f", right[1]);
+            // pros::lcd::print(8, "RightB Encoders: %f", right[2]);
             // pros::lcd::print(7 "Color: %f", optical.get_hue());
+
 
             lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
 
@@ -95,6 +103,8 @@ ASSET(extra_txt);
 
 void autonomous() {
     chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
+    chassis.calibrate();
+    chassis.setPose(0, 0, 0);
 
     // chassis.turnToHeading(90, 1000);
     initDebug();
@@ -116,7 +126,6 @@ lemlib:: PID liftPID( 3, 10, 0, 0);
 
 void opcontrol() {
     chassis.calibrate();
-    pros::delay(1000);
     chassis.setPose(0, 0, 0);
 
     initO();
@@ -140,6 +149,8 @@ void opcontrol() {
             writePose();
             writeAdditional();
             count = 1;
+            fileO.flush();
+            fileOTwo.flush();
         }
 
         count++;
