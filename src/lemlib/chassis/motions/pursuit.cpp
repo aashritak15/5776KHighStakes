@@ -275,7 +275,6 @@ float findLookaheadCurvature(lemlib::Pose pose, float heading, lemlib::Pose look
 }
 
 void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahead, int timeout, bool forwards, bool async) { //* forwards and async unused
-    
     std::cout<<"rerun started\n";
 
     this->requestMotionStart();
@@ -311,35 +310,15 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         //* logic: check for section, stop when section reached and begin recording
         //* speed multipliers
         //* copy file, write to new file, replace????
-        //* update all ports, update data order
 
-        // if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) { //TODO: CHANGE THE BUTTON!
-        //     // logic: copy file until stop point (copy number of lines from closestPoint) for both files
-        //     // copy coords and heading to separate file (i dont wanna break stuff by switching to driver in the middle of auton)
-        //     // in main: start writing new file but initialize bot position with coords and heading
-        //     // combine files when done
+        if(subValues.at(closestPoint)[3] == std::to_string(2)) {
+            drivetrain.leftMotors->move(0);
+            drivetrain.rightMotors->move(0);
 
-        //     std::ifstream file0("/usd/autonomous.txt");
-        //     std::ifstream file0Two("/usd/extra.txt");
-        //     std::ofstream newFile0("/usd/newAuton.txt");
-        //     std::ofstream newFile0Two("/usd/newExtra.txt");
-        //     std::ofstream coords("/usd/coords.txt");
+            initInterrupt(stoi(subValues.at(closestPoint)[3]), closestPoint);
 
-        //     std::string temp="";
-        //     for(int kiwi=0; kiwi<closestPoint; kiwi++){
-        //         std::getline(file0, temp);
-        //         newFile0<<temp;
-        //         temp="";
-        //         std::getline(file0Two, temp);
-        //         newFile0Two<<temp;
-        //         temp="";
-        //     }
-
-        //     lemlib::Pose pose = chassis.getPose();
-        //     coords<<pose.x<<"\n"<<pose.y<<"\n"<<pose.theta;
-
-        //     break;
-        // }
+            interruptLoop();
+        }
         
         std::string dataLine = "";
 
@@ -457,7 +436,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         // find the lookahead point
 
         float avgVel = round(((leftMotors.get_voltage() + rightMotors.get_voltage()) * 1000.0) / 2.0 / 1000.0);
-        float pctVel = std::abs(avgVel / 12000); //TODO: Check
+        float pctVel = std::abs(avgVel / 12000);
     
         float lookaheadDist = minLookahead + ((maxLookahead - minLookahead) * pctVel);
 
@@ -468,15 +447,19 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
 
         // get the curvature of the arc between the robot and the lookahead point
         dataLine.append("target vel: " + std::to_string(targetVel) + "\n");
-        float curvatureHeading = M_PI / 2 - (pose.theta); //TODO: WHERE IS IT TURNED TO RAD????
+        float curvatureHeading = M_PI / 2 - (pose.theta);
         curvature = findLookaheadCurvature(pose, curvatureHeading, lookaheadPose);
 
         dataLine.append("curvature: " + std::to_string(curvature) + "\n");
 
         //*PIDs
-        targetVel = std::stof(velocities.at(closestPoint)) * 1.00; //TODO: TUNE THE MULTIPLIER!
+        targetVel = std::stof(velocities.at(closestPoint));
 
-        // float error = targetVel - avgVel; //TODO: ADD BACK PID IF NECESSARY
+        if(subValues.at(closestPoint)[3] == "2") { //TODO: SEGMENT MULTIPLIERS
+            targetVel *= 1.5;
+        }
+
+        // float error = targetVel - avgVel; //*add back pid if necessary
         // float errorChange = prevError - error;
 
         // float proportional = error * Kp;

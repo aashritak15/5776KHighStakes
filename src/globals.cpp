@@ -1,4 +1,15 @@
 #include "globals.hpp"
+#include "main.h"
+#include "lemlib/api.hpp" // IWYU pragma: keep
+#include "ports.hpp"
+#include "piston.hpp"
+#include "intake.hpp"
+#include "globals.hpp"
+#include "ladybrown.hpp"
+#include "intakePiston.hpp"
+#include "autons.hpp"
+#include "magic.hpp"
+#include <cmath>
 
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
@@ -8,7 +19,7 @@ pros::MotorGroup rightMotors({7, 21, 18}, pros::MotorGearset::blue);
 // pros::Rotation vertical(-1);
 // pros::Rotation horizontal(10); //TODO: check later
 
-pros::Imu imu(10);
+pros::Imu imu(11);
 
 // pros::Rotation verticalEnc(1);
 
@@ -56,7 +67,7 @@ lemlib::OdomSensors sensors(nullptr, // vertical tracking wheel 1, set to null /
                             nullptr, // vertical tracking wheel 2, set to nullptr as we are using IMEs
                             nullptr, // horizontal tracking wheel 1
                             nullptr, // horizontal tracking wheel 2, set to nullptr as we don't have a second one
-                            &imu // inertial sensor
+                            nullptr // inertial sensor
 );
 
 // tanish driver functions:
@@ -74,3 +85,66 @@ lemlib::ExpoDriveCurve steerCurve(5, // joystick deadband out of 127
 
 // create the chassis
 lemlib::Chassis chassis(drivetrain, linearController, angularController, sensors, &throttleCurve, &steerCurve);
+
+void mainLoop() {
+    chassis.calibrate();
+
+    initO();
+
+    int count = 1;
+
+    while (true) {
+      
+        int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
+        int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+
+        chassis.arcade(leftY, rightX * 0.9);
+
+        updateIntake();
+        updateClamp();
+        //updateLadyPID();
+        //updateLadyTask();
+        // updateLB();
+
+        if(count == 10) {
+            writePose();
+            writeAdditional();
+            count = 1;
+        }
+
+        count++;
+
+        closeO();
+
+        pros::delay(10);
+    }
+}
+
+void interruptLoop() {
+    int count = 1;
+
+    while (true) {
+        int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
+        int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+
+        chassis.arcade(leftY, rightX * 0.9);
+
+        updateIntake();
+        updateClamp();
+        //updateLadyPID();
+        //updateLadyTask();
+        // updateLB();
+
+        if(count == 10) {
+            writeInterruptPose();
+            writeInterruptAdditional();
+            count = 1;
+        }
+
+        count++;
+
+        closeOInterrupt();
+
+        pros::delay(10);
+    }
+}

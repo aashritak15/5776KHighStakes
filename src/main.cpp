@@ -34,11 +34,10 @@
 
 void initialize() {
     pros::lcd::initialize(); // initialize brain screen
-    chassis.calibrate(); // calibrate sensors
-    chassis.setPose(0, 0, 0, false);
+    chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
 
-    // clampInit();
-    // intakeInnit();
+    clampInit();
+    intakeInnit();
     // liftInit();
     // intakeClampInit();
     // opticalInit();
@@ -62,8 +61,10 @@ void initialize() {
             pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
             pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
             pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
-            pros::lcd::print(3, "Rotation (Lift): %i", rotationSensor.get_position()); // lift encoder
-            pros::lcd::print(4, "Intake State: %f", intakeState);
+            pros::lcd::print(3, "Left encoders: %f", leftMotors.get_position());
+            pros::lcd::print(4, "Right encoders: %f", rightMotors.get_position());
+            // pros::lcd::print(3, "Rotation (Lift): %i", rotationSensor.get_position()); // lift encoder
+            // pros::lcd::print(4, "Intake State: %f", intakeState);
             // pros::lcd::print(7 "Color: %f", optical.get_hue());
 
             lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
@@ -114,24 +115,11 @@ lemlib:: PID liftPID( 3, 10, 0, 0);
  */
 
 void opcontrol() {
-    //addSegment();
-
-    chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
-
-    // rerunPIDs();
+    chassis.calibrate();
+    pros::delay(1000);
+    chassis.setPose(0, 0, 0);
 
     initO();
-
-    // fileO<<"I LOVE T TEAM";
-    // fileOTwo<<"I LOVE T TEAM";
-    // if(!fileO || !fileOTwo) {
-    //     pros::lcd::print(0, "i hate t team");
-    // }
-    // fileO.flush();
-    // fileOTwo.flush();
-
-    chassis.calibrate(); // calibrate sensors
-    chassis.setPose(0, 0, 0);
 
     int count = 1;
 
@@ -142,25 +130,16 @@ void opcontrol() {
 
         chassis.arcade(leftY, rightX * 0.9);
 
-        // updateIntake();
-        // updateClamp();
+        updateIntake();
+        updateClamp();
         //updateLadyPID();
         //updateLadyTask();
         // updateLB();
-
-
-        // if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
-        //     setLiftTarget(24);
-        //     liftOutput = liftPID.update(liftTarget - lift.get_position());
-        //     lift.move(liftOutput);
-        // }
 
         if(count == 10) {
             writePose();
             writeAdditional();
             count = 1;
-            fileO.flush();
-            fileOTwo.flush();
         }
 
         count++;

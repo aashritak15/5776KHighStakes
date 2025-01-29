@@ -12,11 +12,15 @@
 inline std::ofstream fileO;
 inline std::ofstream fileOTwo;
 inline std::ofstream fileOThree;
+inline std::ifstream fileI;
+inline std::ifstream fileITwo;
+inline std::ofstream fileInterrupt;
+inline std::ofstream fileInterruptTwo;
 
 // inline std::ofstream newPoseFile;
 // inline std::ofstream newExtraFile;
 
-extern bool active;
+extern bool buttonPressed;
 
 extern int prevIntakeState;
 extern int prevClampState;
@@ -24,11 +28,16 @@ extern float prevError;
 
 void initO();
 void initDebug();
+void initInterrupt(int lastSection, int stopIndex);
 
 void closeO();
+void closeOInterrupt();
 
 void writePose();
 void writeAdditional();
+
+void writeInterruptPose();
+void writeInterruptAdditional();
 
 void addSegment();
 
