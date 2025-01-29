@@ -472,7 +472,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         float targetRightVel = targetVel * (2 - curvature * drivetrain.trackWidth) / 2;
 
         //*secondary exclusion for small vels
-        if ((std::abs(targetLeftVel) < 5.0) && (std::abs(targetRightVel) < 5.0)) { 
+        if ((std::abs(targetLeftVel) < 600) && (std::abs(targetRightVel) < 600)) { //TODO: fix allat
             dataLine.append("SMALL VEL\n\n");
             pros::delay(100); //*change to tick speed always
             closestPoint++;
@@ -480,7 +480,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         }
 
         // ratio the speeds to respect the max speed
-        float ratio = std::max(std::fabs(targetLeftVel), std::fabs(targetRightVel)) / 127;
+        float ratio = std::max(std::fabs(targetLeftVel), std::fabs(targetRightVel)) / 12000;
         if (ratio > 1) {
             targetLeftVel /= ratio;
             targetRightVel /= ratio;
@@ -488,8 +488,8 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
 
         dataLine.append("target vels: " + std::to_string(targetLeftVel) + " " + std::to_string(targetRightVel) + "\n\n");
 
-        drivetrain.leftMotors->move(targetLeftVel);
-        drivetrain.rightMotors->move(targetRightVel);
+        leftMotors.move_voltage(targetLeftVel); //TODO: test
+        rightMotors.move_voltage(targetRightVel);
 
         if (closestPoint == subValues.size() - 2) {
             drivetrain.leftMotors->move(0);
