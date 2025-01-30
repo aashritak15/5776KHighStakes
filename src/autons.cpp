@@ -13,14 +13,14 @@
 
 
 
-void redSoloWP() {
+// void redSoloWP() {
 
-}
+// }
 
 
-void blueSoloWP() {
+// void blueSoloWP() {
 
-}
+// }
 
 
 

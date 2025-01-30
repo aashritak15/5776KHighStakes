@@ -11,7 +11,6 @@
 #include <cmath>
 
 
-#include "EZ-Template/api.hpp"
 
 
 
@@ -44,17 +43,6 @@ void initialize() {
 
     
     
-       ez::as::auton_selector.autons_add({
-    {"Solo AWP\n\nStarting Position: Plat Down", redSoloWP},
-     {"Solo AWP\n\nStarting Position: Plat Down", blueSoloWP},
-    
- });
-
-
-
-
-        ez::as::initialize();
-
 
    
     
