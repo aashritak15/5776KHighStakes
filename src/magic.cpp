@@ -17,15 +17,9 @@ float prevError;
 void initO() {
     fileO.open("/usd/autonomous.txt", std::ios::out | std::ios::trunc);
     fileOTwo.open("/usd/extra.txt", std::ios::out | std::ios::trunc);
-    if(!fileO && !fileOTwo) {
+    if(!fileO || !fileOTwo) {
         pros::lcd::print(7, "failed to open both");
         controller.set_text(0, 0, "failed to open both");
-    } else if (!fileO) {
-        pros::lcd::print(7, "pose is cooked");
-        controller.set_text(0, 0, "pose failed to open");
-    } else if (!fileOTwo) {
-        pros::lcd::print(7, "extra is cooked");
-        controller.set_text(0, 0, "extra failed to open");
     }
     
     else {
@@ -34,12 +28,44 @@ void initO() {
     }
 }
 
-void initInterrupt(int lastSection, int stopIndex) {
+// void initInterrupt(int lastSection, int stopIndex) {
+//     fileInterrupt.open("/usd/revAutonomous", std::ios::out | std::ios::trunc);
+//     fileInterruptTwo.open("/usd/revExtra", std::ios::out | std::ios::trunc);
+
+//     fileI.open("/usd/autonomous.txt");
+//     fileITwo.open("/usd/extra.txt");
+
+//     if(!fileInterrupt || !fileInterruptTwo || fileI || fileITwo) {
+//         pros::lcd::print(7, "failed to open");
+//         controller.set_text(0, 0, "failed to open");
+//     } else {
+//         controller.set_text(0, 0, "open successful");
+//     }
+
+//     std::string dataLine;
+
+//     for (int i = 0; i<stopIndex; i++) { //TODO: add data checks (like if it isn't getting data properly)
+//         std::getline(fileI, dataLine);
+//         fileInterrupt<<dataLine;
+//     }
+
+//     for (int j = 0; j<stopIndex; j++) {
+//         std::getline(fileITwo, dataLine);
+//         fileInterruptTwo<<dataLine;
+//     }
+
+//     section = lastSection + 1; //TODO: check logic
+
+//     controller.set_text(0, 0, "copied");
+// }
+
+void initButtonInterrupt(int stopIndex) {
     fileInterrupt.open("/usd/revAutonomous", std::ios::out | std::ios::trunc);
     fileInterruptTwo.open("/usd/revExtra", std::ios::out | std::ios::trunc);
+    //maybe move out of function
 
     fileI.open("/usd/autonomous.txt");
-    fileITwo.open("/usd/autonomous.txt");
+    fileITwo.open("/usd/extra.txt");
 
     if(!fileInterrupt || !fileInterruptTwo || fileI || fileITwo) {
         pros::lcd::print(7, "failed to open");
@@ -56,11 +82,11 @@ void initInterrupt(int lastSection, int stopIndex) {
     }
 
     for (int j = 0; j<stopIndex; j++) {
-        std::getline(fileI, dataLine);
-        fileInterrupt<<dataLine;
+        std::getline(fileITwo, dataLine);
+        fileInterruptTwo<<dataLine;
     }
 
-    section = lastSection;
+    section++;
 
     controller.set_text(0, 0, "copied");
 }
@@ -73,7 +99,6 @@ void initDebug() {
         controller.set_text(0, 0, "opened");
     }
 }
-
 
 void closeO() {
     if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_B)) {
@@ -148,9 +173,9 @@ void writeAdditional() {
     if(std::abs(total) < 600) { //TODO: TUNE THIS VALUE
 
         if(std::abs(right) > 600 && std::abs(left) > 600) {
-            if(right > 0)  { //TODO: CHECK 
+            if(right < 0)  { //TODO: CHECK 
                 dataLine.append("TURNING CW, ");
-            } else if (right < 0) {
+            } else if (right > 0) {
                 dataLine.append("TURNING CCW, ");
             }
         } //else if(!(prevIntakeState == intakeState) || !(prevClampState == clampState)) {
@@ -206,10 +231,10 @@ void writeInterruptAdditional() {
     dataLine.append(std::to_string(intakeState) + ", ");
     dataLine.append(std::to_string(clampState) + ", ");
 
-    if(std::abs(total) < 600) { //TODO: TUNE THIS VALUE
+    if(std::abs(total) < 600) {
 
         if(std::abs(right) > 600 && std::abs(left) > 600) {
-            if(right > 0)  { //TODO: CHECK 
+            if(right > 0)  {
                 dataLine.append("TURNING CW, ");
             } else if (right < 0) {
                 dataLine.append("TURNING CCW, ");
@@ -238,6 +263,58 @@ void writeInterruptAdditional() {
     fileInterruptTwo << dataLine;
 }
 
+void reflect(bool x, bool y) {
+
+    reflector.open("/usd/reflectAutonomous", std::ios::out | std::ios::trunc);
+    reflector.open("/usd/reflectExtra", std::ios::out | std::ios::trunc);
+
+    fileI.open("/usd/autonomous.txt");
+    fileITwo.open("/usd/extra.txt");
+
+    if(!fileInterrupt || !fileInterruptTwo || fileI || fileITwo) {
+        pros::lcd::print(7, "failed to open");
+        controller.set_text(0, 0, "failed to open");
+    } else {
+        controller.set_text(0, 0, "open successful");
+    }
+
+    std::string dataLine;
+    std::string tempData;
+
+    while (std::getline(fileI, tempData)) {
+        std::vector<std::string> pointData = readElementMagic(tempData, ", ");
+        for(int i = 0; i<pointData.size(); i++) {
+
+            if(i == 1) {
+                if(x) {
+                    dataLine.append(std::to_string(stof(pointData.at(i)) * -1));
+                    dataLine.append(std::to_string(stof(pointData.at(2)) * -1));
+                }
+            } else if(i == 0) {
+                if(y) {
+                    dataLine.append(std::to_string(stof(pointData.at(i)) * -1));
+                    dataLine.append(std::to_string(stof(pointData.at(2)) * -1));
+                }
+            }
+
+            dataLine.append(pointData.at(i));
+        }
+        
+        reflector<<dataLine;
+    }
+
+    while (std::getline(fileITwo, tempData)) {
+        std::vector<std::string> pointData = readElementMagic(tempData, ", ");
+        for(int i = 0; i<pointData.size(); i++) {
+            dataLine.append(pointData.at(i));
+        }
+        
+        reflectorTwo<<dataLine;
+    }
+
+    controller.set_text(0, 0, "reflected"); 
+}
+
 void rerunPIDs() {
     float avgVel = ((leftMotors.get_voltage() + rightMotors.get_voltage()) / 2.0);
     float targetVel = 400.0;
@@ -262,4 +339,22 @@ void rerunPIDs() {
 
         pros::delay(10);
     }
+}
+
+std::vector<std::string> readElementMagic(const std::string& input, const std::string& delimiter) {
+    std::string token;
+    std::string s = input;
+    std::vector<std::string> output;
+    size_t pos = 0;
+
+    // main loop
+    while ((pos = s.find(delimiter)) != std::string::npos) { // while there are still delimiters in the string
+        token = s.substr(0, pos); // processed substring
+        output.push_back(token);
+        s.erase(0, pos + delimiter.length()); // remove the read substring
+    }
+
+    output.push_back(s); // add the last element to the returned string
+
+    return output;
 }

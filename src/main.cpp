@@ -10,6 +10,11 @@
 #include "magic.hpp"
 #include <cmath>
 
+
+#include "EZ-Template/api.hpp"
+
+
+
 // #include "autoSelect/selection.h"
 
 // rd::Selector selector({
@@ -33,6 +38,26 @@
  */
 
 void initialize() {
+
+
+    //auton selector 
+
+    
+    
+       ez::as::auton_selector.autons_add({
+    {"Solo AWP\n\nStarting Position: Plat Down", redSoloWP},
+     {"Solo AWP\n\nStarting Position: Plat Down", blueSoloWP},
+    
+ });
+
+
+
+
+        ez::as::initialize();
+
+
+   
+    
     pros::lcd::initialize(); // initialize brain screen
     chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
 
@@ -58,6 +83,8 @@ void initialize() {
 
     pros::Task screenTask([&]() {
         while (true) {
+
+
             pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
             pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
             pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
@@ -103,12 +130,10 @@ ASSET(extra_txt);
 
 void autonomous() {
     chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
-    chassis.calibrate();
+    chassis.calibrate(); //TODO: NEVER COMMENT OUT CALIBRATE OR SETPOSE OR ELSE IT WILL BREAK!!!!!!!!
     chassis.setPose(0, 0, 0);
 
-    // chassis.turnToHeading(90, 1000);
     initDebug();
-    mogoClamp.set_value(false); 
 
     chassis.follow(autonomous_txt, extra_txt, 10, 40000, true, false);
 }
@@ -131,6 +156,7 @@ void opcontrol() {
     initO();
 
     int count = 1;
+    int segCount = 1;
 
     while (true) {
       
@@ -153,7 +179,12 @@ void opcontrol() {
             fileOTwo.flush();
         }
 
+        if(segCount == 100) {
+            section++;
+        }
+
         count++;
+        segCount++;
 
         closeO();
 

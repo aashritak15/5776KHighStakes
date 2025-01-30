@@ -20,3134 +20,1007 @@ DELAYED
 
 NEW TICK
 target index: 5
+DELAYED
+
+NEW TICK
+target index: 6
+DELAYED
+
+NEW TICK
+target index: 7
+DELAYED
+
+NEW TICK
+target index: 8
+DELAYED
+
+NEW TICK
+target index: 9
 current x: 0.000000
 current y: 0.000000
 current theta RAD: 0.000000
 current theta DEG: 0.000000
-target x: 0.007000
-target y: 0.169000
-lookahead dist: 5.000000
+target x: -0.000000
+target y: 0.248000
+lookahead dist: 5.001250
 target vel: 0.000000
-curvature: 0.122828
-target vels: 127.000000 16.691536
+curvature: 0.001709
+target vels: 3810.268066 3729.732178
 
 NEW TICK
-target index: 5
+target index: 9
 current x: 0.000000
 current y: 0.000000
 current theta RAD: 0.000000
 current theta DEG: 0.000000
-target x: 0.007000
-target y: 0.169000
-lookahead dist: 6.337500
-target vel: 2218.000000
-curvature: 0.104454
-target vels: 127.000000 26.674829
+target x: -0.000000
+target y: 0.248000
+lookahead dist: 6.192500
+target vel: 3770.000000
+curvature: 0.001321
+target vels: 3801.128662 3738.871338
 
 NEW TICK
-target index: 5
-current x: 0.000694
-current y: 0.111589
-current theta RAD: 0.013247
-current theta DEG: 0.759000
-target x: 0.007000
-target y: 0.169000
-lookahead dist: 7.171667
-target vel: 2218.000000
-curvature: 0.093278
-target vels: 127.000000 33.456081
+target index: 9
+current x: 0.000049
+current y: 0.089994
+current theta RAD: 0.001728
+current theta DEG: 0.099000
+target x: -0.000000
+target y: 0.248000
+lookahead dist: 6.479583
+target vel: 3770.000000
+curvature: 0.002486
+target vels: 3828.581299 3711.418701
 
 NEW TICK
-target index: 5
-current x: 0.003039
-current y: 0.223155
-current theta RAD: 0.028798
-current theta DEG: 1.650000
-target x: 0.007000
-target y: 0.169000
-lookahead dist: 7.244583
-target vel: 2218.000000
-curvature: 0.089319
-target vels: 127.000000 36.003815
+target index: 9
+current x: 0.000049
+current y: 0.205185
+current theta RAD: -0.001728
+current theta DEG: -0.099000
+target x: -0.000000
+target y: 0.248000
+lookahead dist: 6.473333
+target vel: 3770.000000
+curvature: 0.004011
+target vels: 3864.502930 3675.497314
 
 NEW TICK
-target index: 6
-current x: 0.011142
-current y: 0.420970
+target index: 9
+current x: -0.000544
+current y: 0.327575
+current theta RAD: -0.006336
+current theta DEG: -0.363000
+target x: -0.000000
+target y: 0.248000
+lookahead dist: 6.477083
+target vel: 3770.000000
+curvature: 0.003406
+target vels: 3850.262695 3689.737305
+
+NEW TICK
+target index: 9
+current x: -0.001216
+current y: 0.457164
+current theta RAD: -0.004032
+current theta DEG: -0.231000
+target x: -0.000000
+target y: 0.248000
+lookahead dist: 6.495000
+target vel: 3770.000000
+curvature: 0.002283
+target vels: 3823.800781 3716.199219
+
+NEW TICK
+target index: 10
+current x: -0.001549
+current y: 0.640750
+current theta RAD: 0.000000
+current theta DEG: 0.000000
+target x: -0.003000
+target y: 1.012000
+lookahead dist: 6.504167
+target vel: 3770.000000
+curvature: 0.001623
+target vels: 7087.184570 6944.815430
+
+NEW TICK
+target index: 10
+current x: -0.001441
+current y: 0.734343
+current theta RAD: 0.002304
+current theta DEG: 0.132000
+target x: -0.003000
+target y: 1.012000
+lookahead dist: 6.837916
+target vel: 7016.000000
+curvature: 0.001527
+target vels: 7082.976074 6949.023926
+
+NEW TICK
+target index: 10
+current x: -0.000955
+current y: 0.932329
+current theta RAD: 0.002880
+current theta DEG: 0.165000
+target x: -0.003000
+target y: 1.012000
+lookahead dist: 7.640000
+target vel: 7016.000000
+curvature: 0.001314
+target vels: 7073.634277 6958.365723
+
+NEW TICK
+target index: 10
+current x: 0.000361
+current y: 1.267102
+current theta RAD: 0.004608
+current theta DEG: 0.264000
+target x: -0.003000
+target y: 1.012000
+lookahead dist: 7.750417
+target vel: 7016.000000
+curvature: 0.001225
+target vels: 7069.704102 6962.295898
+
+NEW TICK
+target index: 10
+current x: 0.000872
+current y: 1.371493
+current theta RAD: 0.005184
+current theta DEG: 0.297000
+target x: -0.003000
+target y: 1.012000
+lookahead dist: 7.805417
+target vel: 7016.000000
+curvature: 0.000478
+target vels: 7036.975586 6995.024414
+
+NEW TICK
+target index: 11
+current x: 0.003770
+current y: 1.753054
+current theta RAD: 0.008639
+current theta DEG: 0.495000
+target x: -0.002000
+target y: 2.250000
+lookahead dist: 7.855416
+target vel: 7016.000000
+curvature: 0.000561
+target vels: 7101.830078 7052.169922
+
+NEW TICK
+target index: 11
+current x: 0.005823
+current y: 1.990629
+current theta RAD: 0.008639
+current theta DEG: 0.494999
+target x: -0.002000
+target y: 2.250000
+lookahead dist: 7.870833
+target vel: 7077.000000
+curvature: -0.000008
+target vels: 7076.658691 7077.340820
+
+NEW TICK
+target index: 11
+current x: 0.013765
+current y: 2.768131
+current theta RAD: 0.012095
+current theta DEG: 0.693000
+target x: -0.002000
+target y: 2.250000
+lookahead dist: 7.867084
+target vel: 7077.000000
+curvature: 0.000258
+target vels: 7088.416016 7065.583984
+
+NEW TICK
+target index: 12
+current x: 0.023037
+current y: 3.516820
+current theta RAD: 0.012095
+current theta DEG: 0.693000
+target x: 0.010000
+target y: 3.992000
+lookahead dist: 7.860833
+target vel: 7077.000000
+curvature: -0.000716
+target vels: 7113.010254 7176.990234
+
+NEW TICK
+target index: 12
+current x: 0.025526
+current y: 3.693190
+current theta RAD: 0.016127
+current theta DEG: 0.924001
+target x: 0.010000
+target y: 3.992000
+lookahead dist: 7.922083
+target vel: 7145.000000
+curvature: -0.000245
+target vels: 7134.041016 7155.959473
+
+NEW TICK
+target index: 12
+current x: 0.038964
+current y: 4.596625
+current theta RAD: 0.015551
+current theta DEG: 0.891000
+target x: 0.010000
+target y: 3.992000
+lookahead dist: 7.931250
+target vel: 7145.000000
+curvature: 0.001049
+target vels: 7191.853027 7098.146484
+
+NEW TICK
+target index: 13
+current x: 0.048367
+current y: 5.240910
+current theta RAD: 0.011519
+current theta DEG: 0.660000
+target x: 0.033000
+target y: 6.033000
+lookahead dist: 7.933750
+target vel: 7145.000000
+curvature: -0.000507
+target vels: 7172.183594 7217.816895
+
+NEW TICK
+target index: 13
+current x: 0.063231
+current y: 6.144320
+current theta RAD: 0.019007
+current theta DEG: 1.089001
+target x: 0.033000
+target y: 6.033000
+lookahead dist: 7.937500
+target vel: 7195.000000
+curvature: -0.000455
+target vels: 7174.552246 7215.447754
+
+NEW TICK
+target index: 13
+current x: 0.066651
+current y: 6.324275
+current theta RAD: 0.019007
+current theta DEG: 1.089001
+target x: 0.033000
+target y: 6.033000
+lookahead dist: 7.936250
+target vel: 7195.000000
+curvature: -0.000562
+target vels: 7169.749512 7220.250977
+
+NEW TICK
+target index: 13
+current x: 0.079616
+current y: 6.982901
+current theta RAD: 0.020734
+current theta DEG: 1.187999
+target x: 0.033000
+target y: 6.033000
+lookahead dist: 7.952917
+target vel: 7195.000000
+curvature: -0.000511
+target vels: 7172.029297 7217.970215
+
+NEW TICK
+target index: 14
+current x: 0.087107
+current y: 7.339196
+current theta RAD: 0.021310
+current theta DEG: 1.220998
+target x: 0.057000
+target y: 7.977000
+lookahead dist: 7.959167
+target vel: 7195.000000
+curvature: -0.000590
+target vels: 7248.171387 7301.828125
+
+NEW TICK
+target index: 14
+current x: 0.103577
+current y: 8.076960
+current theta RAD: 0.023038
+current theta DEG: 1.319999
+target x: 0.057000
+target y: 7.977000
+lookahead dist: 7.963333
+target vel: 7275.000000
+curvature: -0.000707
+target vels: 7242.865234 7307.134766
+
+NEW TICK
+target index: 15
+current x: 0.131028
+current y: 9.224947
+current theta RAD: 0.025918
+current theta DEG: 1.484999
+target x: 0.094000
+target y: 10.010000
+lookahead dist: 7.980000
+target vel: 7275.000000
+curvature: -0.000496
+target vels: 7854.575195 7903.425293
+
+NEW TICK
+target index: 15
+current x: 0.141103
+current y: 9.613589
+current theta RAD: 0.025918
+current theta DEG: 1.484995
+target x: 0.094000
+target y: 10.010000
+lookahead dist: 8.127501
+target vel: 7879.000000
+curvature: -0.000513
+target vels: 7853.726562 7904.273438
+
+NEW TICK
+target index: 15
+current x: 0.160574
+current y: 10.322471
+current theta RAD: 0.027646
+current theta DEG: 1.584001
+target x: 0.094000
+target y: 10.010000
+lookahead dist: 8.171249
+target vel: 7879.000000
+curvature: -0.000670
+target vels: 7845.993652 7912.006348
+
+NEW TICK
+target index: 15
+current x: 0.181926
+current y: 11.063710
+current theta RAD: 0.029950
+current theta DEG: 1.716002
+target x: 0.094000
+target y: 10.010000
+lookahead dist: 8.220000
+target vel: 7879.000000
+curvature: -0.000805
+target vels: 7839.359375 7918.641113
+
+NEW TICK
+target index: 16
+current x: 0.206765
+current y: 11.869670
+current theta RAD: 0.032254
+current theta DEG: 1.848003
+target x: 0.144000
+target y: 12.144000
+lookahead dist: 8.217500
+target vel: 7879.000000
+curvature: -0.000439
+target vels: 7899.260742 7942.739746
+
+NEW TICK
+target index: 16
+current x: 0.234171
+current y: 12.711564
+current theta RAD: 0.032254
+current theta DEG: 1.847994
+target x: 0.144000
+target y: 12.144000
+lookahead dist: 8.231667
+target vel: 7921.000000
+curvature: -0.000727
+target vels: 7884.984375 7957.015625
+
+NEW TICK
+target index: 16
+current x: 0.240727
+current y: 12.909441
+current theta RAD: 0.033982
+current theta DEG: 1.947005
+target x: 0.144000
+target y: 12.144000
+lookahead dist: 8.239166
+target vel: 7921.000000
+curvature: -0.001847
+target vels: 7829.586426 8012.413574
+
+NEW TICK
+target index: 17
+current x: 0.267530
+current y: 13.661308
+current theta RAD: 0.040317
+current theta DEG: 2.309999
+target x: 0.207000
+target y: 14.397000
+lookahead dist: 8.257084
+target vel: 7921.000000
+curvature: -0.002066
+target vels: 7856.212891 8061.786621
+
+NEW TICK
+target index: 17
+current x: 0.321133
+current y: 14.938091
+current theta RAD: 0.043197
+current theta DEG: 2.475003
+target x: 0.207000
+target y: 14.397000
+lookahead dist: 8.268750
+target vel: 7959.000000
+curvature: 0.000984
+target vels: 8007.944336 7910.055664
+
+NEW TICK
+target index: 18
+current x: 0.362954
+current y: 16.089243
+current theta RAD: 0.033982
+current theta DEG: 1.947000
+target x: 0.283000
+target y: 16.429001
+lookahead dist: 8.277917
+target vel: 7959.000000
+curvature: -0.001901
+target vels: 7918.760254 8109.240234
+
+NEW TICK
+target index: 18
+current x: 0.419444
+current y: 17.358688
+current theta RAD: 0.048380
+current theta DEG: 2.771995
+target x: 0.283000
+target y: 16.429001
+lookahead dist: 8.284166
+target vel: 8014.000000
+curvature: -0.001516
+target vels: 7938.074219 8089.925781
+
+NEW TICK
+target index: 19
+current x: 0.441422
+current y: 17.815327
+current theta RAD: 0.047805
+current theta DEG: 2.739001
+target x: 0.378000
+target y: 18.677000
+lookahead dist: 8.299583
+target vel: 8014.000000
+curvature: -0.001302
+target vels: 7967.651855 8098.348145
+
+NEW TICK
+target index: 19
+current x: 0.484940
+current y: 18.714209
+current theta RAD: 0.048957
+current theta DEG: 2.805008
+target x: 0.378000
+target y: 18.677000
+lookahead dist: 8.318750
+target vel: 8033.000000
+curvature: -0.001482
+target vels: 7958.588379 8107.412109
+
+NEW TICK
+target index: 19
+current x: 0.507349
+current y: 19.163618
+current theta RAD: 0.050684
+current theta DEG: 2.903992
+target x: 0.378000
+target y: 18.677000
+lookahead dist: 8.307083
+target vel: 8033.000000
+curvature: -0.001276
+target vels: 7968.913574 8097.086914
+
+NEW TICK
+target index: 20
+current x: 0.553826
+current y: 20.069563
+current theta RAD: 0.051836
+current theta DEG: 2.969999
+target x: 0.485000
+target y: 20.938999
+lookahead dist: 8.326250
+target vel: 8033.000000
+curvature: -0.001130
+target vels: 7920.660645 8033.339844
+
+NEW TICK
+target index: 20
+current x: 0.577270
+current y: 20.518919
 current theta RAD: 0.052412
-current theta DEG: 3.003000
-target x: 0.033000
-target y: 0.528000
-lookahead dist: 7.439583
-target vel: 2218.000000
-curvature: 0.085101
-target vels: 127.000000 38.808952
-
-NEW TICK
-target index: 6
-current x: 0.020367
-current y: 0.571876
-current theta RAD: 0.069691
-current theta DEG: 3.992999
-target x: 0.033000
-target y: 0.528000
-lookahead dist: 7.412500
-target vel: 2464.000000
-curvature: 0.079954
-target vels: 127.000000 42.365826
-
-NEW TICK
-target index: 7
-current x: 0.048917
-current y: 0.894574
-current theta RAD: 0.106552
-current theta DEG: 6.105000
-target x: 0.101000
-target y: 1.038000
-lookahead dist: 7.628333
-target vel: 2464.000000
-curvature: 0.075253
-target vels: 127.000000 45.749905
-
-NEW TICK
-target index: 7
-current x: 0.069341
-current y: 1.069772
-current theta RAD: 0.125559
-current theta DEG: 7.194000
-target x: 0.101000
-target y: 1.038000
-lookahead dist: 7.691250
-target vel: 2772.000000
-curvature: 0.068188
-target vels: 127.000000 51.098434
-
-NEW TICK
-target index: 8
-current x: 0.129117
-current y: 1.475734
-current theta RAD: 0.168180
-current theta DEG: 9.636000
-target x: 0.211000
-target y: 1.578000
-lookahead dist: 7.778750
-target vel: 2772.000000
-curvature: 0.064425
-target vels: 127.000000 54.085194
-
-NEW TICK
-target index: 8
-current x: 0.164803
-current y: 1.674133
-current theta RAD: 0.187763
-current theta DEG: 10.758001
-target x: 0.211000
-target y: 1.578000
-lookahead dist: 7.843750
-target vel: 2778.000000
-curvature: 0.058113
-target vels: 127.000000 59.325481
-
-NEW TICK
-target index: 9
-current x: 0.258109
-current y: 2.117971
-current theta RAD: 0.225776
-current theta DEG: 12.935999
-target x: 0.368000
-target y: 2.139000
-lookahead dist: 7.919583
-target vel: 2778.000000
-curvature: 0.054475
-target vels: 127.000000 62.485901
-
-NEW TICK
-target index: 9
-current x: 0.310975
-current y: 2.338504
-current theta RAD: 0.244782
-current theta DEG: 14.025000
-target x: 0.368000
-target y: 2.139000
-lookahead dist: 7.946667
-target vel: 2784.000000
-curvature: 0.049750
-target vels: 127.000000 66.754883
-
-NEW TICK
-target index: 10
-current x: 0.427594
-current y: 2.776805
-current theta RAD: 0.274732
-current theta DEG: 15.741000
-target x: 0.584000
-target y: 2.742000
-lookahead dist: 8.004167
-target vel: 2784.000000
-curvature: 0.047555
-target vels: 127.000000 68.803986
-
-NEW TICK
-target index: 10
-current x: 0.491498
-current y: 2.998147
-current theta RAD: 0.287403
-current theta DEG: 16.466997
-target x: 0.584000
-target y: 2.742000
-lookahead dist: 7.955417
-target vel: 2913.000000
-curvature: 0.006901
-target vels: 127.000000 116.497307
-
-NEW TICK
-target index: 16
-current x: 2.189154
-current y: 7.088198
-current theta RAD: 0.535642
-current theta DEG: 30.690001
-target x: 2.639000
-target y: 6.998000
-lookahead dist: 7.976250
-target vel: 2913.000000
-curvature: 0.004826
-target vels: 127.000008 119.562447
-
-NEW TICK
-target index: 16
-current x: 2.244752
-current y: 7.180777
-current theta RAD: 0.546009
-current theta DEG: 31.283998
-target x: 2.639000
-target y: 6.998000
-lookahead dist: 8.060417
-target vel: 3351.000000
-curvature: -0.015366
-target vels: 104.743675 127.000000
-
-NEW TICK
-target index: 17
-current x: 2.707835
-current y: 7.862380
-current theta RAD: 0.639890
-current theta DEG: 36.663001
-target x: 3.004000
-target y: 7.737000
-lookahead dist: 7.067500
-target vel: 3351.000000
-curvature: -0.023635
-target vels: 94.308502 127.000000
-
-NEW TICK
-target index: 17
-current x: 2.785453
-current y: 7.966153
-current theta RAD: 0.644498
-current theta DEG: 36.926995
-target x: 3.004000
-target y: 7.737000
-lookahead dist: 7.437083
-target vel: 3141.000000
-curvature: -0.026313
-target vels: 91.127609 127.000000
-
-NEW TICK
-target index: 17
-current x: 2.908145
-current y: 8.126098
-current theta RAD: 0.666384
-current theta DEG: 38.181003
-target x: 3.004000
-target y: 7.737000
-lookahead dist: 7.745000
-target vel: 3141.000000
-curvature: -0.025710
-target vels: 91.835625 127.000000
-
-NEW TICK
-target index: 17
-current x: 2.999943
-current y: 8.241663
-current theta RAD: 0.676175
-current theta DEG: 38.741999
-target x: 3.004000
-target y: 7.737000
-lookahead dist: 7.528334
-target vel: 3141.000000
-curvature: -0.026798
-target vels: 90.561363 127.000000
-
-NEW TICK
-target index: 18
-current x: 3.166583
-current y: 8.449485
-current theta RAD: 0.675023
-current theta DEG: 38.675997
-target x: 3.426000
-target y: 8.589000
-lookahead dist: 7.861667
-target vel: 3141.000000
-curvature: -0.023500
-target vels: 94.471397 127.000000
-
-NEW TICK
-target index: 18
-current x: 3.261132
-current y: 8.567463
-current theta RAD: 0.676175
-current theta DEG: 38.741999
-target x: 3.426000
-target y: 8.589000
-lookahead dist: 7.869583
-target vel: 3320.000000
-curvature: -0.020794
-target vels: 97.786583 127.000000
-
-NEW TICK
-target index: 18
-current x: 3.431818
-current y: 8.781267
-current theta RAD: 0.669264
-current theta DEG: 38.345993
-target x: 3.426000
-target y: 8.589000
-lookahead dist: 7.896667
-target vel: 3320.000000
-curvature: -0.019967
-target vels: 98.819298 127.000000
-
-NEW TICK
-target index: 18
-current x: 3.514420
-current y: 8.885750
-current theta RAD: 0.668688
-current theta DEG: 38.313000
-target x: 3.426000
-target y: 8.589000
-lookahead dist: 7.596250
-target vel: 3320.000000
-curvature: -0.020069
-target vels: 98.690834 126.999992
-
-NEW TICK
-target index: 19
-current x: 3.594350
-current y: 8.987754
-current theta RAD: 0.660625
-current theta DEG: 37.850997
-target x: 3.781000
-target y: 9.304000
-lookahead dist: 7.822083
-target vel: 3320.000000
-curvature: -0.014723
-target vels: 105.597122 127.000000
-
-NEW TICK
-target index: 19
-current x: 3.708257
-current y: 9.136292
-current theta RAD: 0.650257
-current theta DEG: 37.256995
-target x: 3.781000
-target y: 9.304000
-lookahead dist: 7.189583
-target vel: 3135.000000
-curvature: -0.020652
-target vels: 97.962349 127.000000
-
-NEW TICK
-target index: 19
-current x: 3.784675
-current y: 9.236463
-current theta RAD: 0.653137
-current theta DEG: 37.421996
-target x: 3.781000
-target y: 9.304000
-lookahead dist: 7.369166
-target vel: 3135.000000
-curvature: -0.020517
-target vels: 98.130959 127.000008
-
-NEW TICK
-target index: 19
-current x: 3.903497
-current y: 9.390304
-current theta RAD: 0.662352
-current theta DEG: 37.949993
-target x: 3.781000
-target y: 9.304000
-lookahead dist: 7.430417
-target vel: 3135.000000
-curvature: -0.019909
-target vels: 98.891785 127.000000
-
-NEW TICK
-target index: 19
-current x: 3.956666
-current y: 9.458399
-current theta RAD: 0.663504
-current theta DEG: 38.015995
-target x: 3.781000
-target y: 9.304000
-lookahead dist: 7.176667
-target vel: 3135.000000
-curvature: -0.022989
-target vels: 95.090187 127.000000
+current theta DEG: 3.003002
+target x: 0.485000
+target y: 20.938999
+lookahead dist: 8.310833
+target vel: 7977.000000
+curvature: 0.000826
+target vels: 8018.174316 7935.825195
 
 NEW TICK
 target index: 20
-current x: 4.088093
-current y: 9.625234
-current theta RAD: 0.668688
-current theta DEG: 38.312997
-target x: 4.148000
-target y: 10.039000
-lookahead dist: 7.420417
-target vel: 3135.000000
-curvature: -0.021170
-target vels: 97.319191 127.000000
+current x: 0.614518
+current y: 21.241507
+current theta RAD: 0.046077
+current theta DEG: 2.639999
+target x: 0.485000
+target y: 20.938999
+lookahead dist: 8.295834
+target vel: 7977.000000
+curvature: 0.000891
+target vels: 8021.419922 7932.580566
 
 NEW TICK
 target index: 20
-current x: 4.283009
-current y: 9.870360
-current theta RAD: 0.675023
-current theta DEG: 38.675997
-target x: 4.148000
-target y: 10.039000
-lookahead dist: 7.661667
-target vel: 3332.000000
-curvature: -0.019955
-target vels: 98.834763 127.000000
-
-NEW TICK
-target index: 20
-current x: 4.371025
-current y: 9.979733
-current theta RAD: 0.680207
-current theta DEG: 38.972999
-target x: 4.148000
-target y: 10.039000
-lookahead dist: 8.053333
-target vel: 3332.000000
-curvature: -0.020120
-target vels: 98.627083 127.000000
+current x: 0.635334
+current y: 21.687387
+current theta RAD: 0.047229
+current theta DEG: 2.706006
+target x: 0.485000
+target y: 20.938999
+lookahead dist: 8.295417
+target vel: 7977.000000
+curvature: 0.001577
+target vels: 8055.645020 7898.355469
 
 NEW TICK
 target index: 21
-current x: 4.768884
-current y: 10.463487
-current theta RAD: 0.699790
-current theta DEG: 40.094991
-target x: 4.508000
-target y: 10.752000
-lookahead dist: 8.005417
-target vel: 3332.000000
-curvature: -0.021170
-target vels: 97.320084 127.000000
+current x: 0.679752
+current y: 22.618662
+current theta RAD: 0.047805
+current theta DEG: 2.739001
+target x: 0.607000
+target y: 23.184999
+lookahead dist: 8.299583
+target vel: 7977.000000
+curvature: 0.001408
+target vels: 8035.114258 7894.885742
 
 NEW TICK
 target index: 21
-current x: 4.815348
-current y: 10.518481
-current theta RAD: 0.703246
-current theta DEG: 40.292999
-target x: 4.508000
-target y: 10.752000
-lookahead dist: 7.691250
-target vel: 3283.000000
-curvature: -0.027517
-target vels: 89.726509 127.000000
-
-NEW TICK
-target index: 21
-current x: 5.012671
-current y: 10.747597
-current theta RAD: 0.720524
-current theta DEG: 41.282999
-target x: 4.508000
-target y: 10.752000
-lookahead dist: 7.590833
-target vel: 3283.000000
-curvature: -0.028764
-target vels: 88.295067 127.000008
+current x: 0.701948
+current y: 23.071688
+current theta RAD: 0.050109
+current theta DEG: 2.871006
+target x: 0.607000
+target y: 23.184999
+lookahead dist: 8.277500
+target vel: 7965.000000
+curvature: 0.002349
+target vels: 8081.948242 7848.051758
 
 NEW TICK
 target index: 22
-current x: 5.167301
-current y: 10.923203
-current theta RAD: 0.723404
-current theta DEG: 41.447997
-target x: 4.848000
-target y: 11.394000
-lookahead dist: 7.620833
-target vel: 3283.000000
-curvature: -0.027016
-target vels: 90.307686 127.000000
+current x: 0.772709
+current y: 24.466593
+current theta RAD: 0.051261
+current theta DEG: 2.937021
+target x: 0.757000
+target y: 25.667999
+lookahead dist: 8.292917
+target vel: 7965.000000
+curvature: 0.004109
+target vels: 8200.322266 7789.676758
 
 NEW TICK
 target index: 22
-current x: 5.322195
-current y: 11.098576
-current theta RAD: 0.719372
-current theta DEG: 41.216997
-target x: 4.848000
-target y: 11.394000
-lookahead dist: 7.397083
-target vel: 3259.000000
-curvature: -0.027486
-target vels: 89.762299 127.000000
+current x: 0.832031
+current y: 25.660234
+current theta RAD: 0.048956
+current theta DEG: 2.804999
+target x: 0.757000
+target y: 25.667999
+lookahead dist: 8.280001
+target vel: 7995.000000
+curvature: 0.004063
+target vels: 8198.016602 7791.983398
 
 NEW TICK
 target index: 22
-current x: 5.400237
-current y: 11.188136
-current theta RAD: 0.714189
-current theta DEG: 40.920000
-target x: 4.848000
-target y: 11.394000
-lookahead dist: 7.667917
-target vel: 3259.000000
-curvature: -0.021575
-target vels: 96.819336 127.000008
-
-NEW TICK
-target index: 22
-current x: 5.547823
-current y: 11.360324
-current theta RAD: 0.703245
-current theta DEG: 40.292994
-target x: 4.848000
-target y: 11.394000
-lookahead dist: 7.677083
-target vel: 3259.000000
-curvature: -0.016994
-target vels: 102.612030 127.000000
+current x: 0.843437
+current y: 25.890335
+current theta RAD: 0.050109
+current theta DEG: 2.871006
+target x: 0.757000
+target y: 25.667999
+lookahead dist: 8.290417
+target vel: 7995.000000
+curvature: 0.004535
+target vels: 8221.618164 7768.381836
 
 NEW TICK
 target index: 23
-current x: 5.785921
-current y: 11.644542
-current theta RAD: 0.689999
-current theta DEG: 39.534009
-target x: 5.323000
-target y: 12.205000
-lookahead dist: 7.851667
-target vel: 3259.000000
-curvature: -0.014919
-target vels: 105.336487 127.000000
+current x: 0.914679
+current y: 27.263592
+current theta RAD: 0.054716
+current theta DEG: 3.135007
+target x: 0.904000
+target y: 27.870001
+lookahead dist: 8.294583
+target vel: 7995.000000
+curvature: 0.003509
+target vels: 8107.997070 7760.002441
 
 NEW TICK
 target index: 23
-current x: 5.827107
-current y: 11.694562
-current theta RAD: 0.687695
-current theta DEG: 39.401998
-target x: 5.323000
-target y: 12.205000
-lookahead dist: 7.567917
-target vel: 3431.000000
-curvature: -0.012763
-target vels: 108.235229 127.000000
-
-NEW TICK
-target index: 23
-current x: 5.960881
-current y: 11.859521
-current theta RAD: 0.674448
-current theta DEG: 38.642998
-target x: 5.323000
-target y: 12.205000
-lookahead dist: 7.797916
-target vel: 3431.000000
-curvature: -0.009884
-target vels: 112.221954 127.000000
-
-NEW TICK
-target index: 23
-current x: 6.028173
-current y: 11.943985
-current theta RAD: 0.670992
-current theta DEG: 38.445006
-target x: 5.323000
-target y: 12.205000
-lookahead dist: 7.615417
-target vel: 3431.000000
-curvature: -0.007060
-target vels: 116.266403 127.000000
-
-NEW TICK
-target index: 23
-current x: 6.154858
-current y: 12.105390
-current theta RAD: 0.658897
-current theta DEG: 37.751996
-target x: 5.323000
-target y: 12.205000
-lookahead dist: 7.710417
-target vel: 3431.000000
-curvature: -0.004076
-target vels: 120.690315 127.000000
+current x: 0.964395
+current y: 28.140518
+current theta RAD: 0.062780
+current theta DEG: 3.597003
+target x: 0.904000
+target y: 27.870001
+lookahead dist: 8.281667
+target vel: 7934.000000
+curvature: 0.003320
+target vels: 8098.635742 7769.364258
 
 NEW TICK
 target index: 24
-current x: 6.218462
-current y: 12.188169
-current theta RAD: 0.651409
-current theta DEG: 37.323012
-target x: 5.820000
-target y: 12.977000
-lookahead dist: 7.566667
-target vel: 3431.000000
-curvature: 0.000677
-target vels: 127.000008 125.930138
+current x: 1.024728
+current y: 29.074503
+current theta RAD: 0.067387
+current theta DEG: 3.860997
+target x: 1.051000
+target y: 29.888000
+lookahead dist: 8.268750
+target vel: 7934.000000
+curvature: 0.003340
+target vels: 8149.625000 7816.375488
 
 NEW TICK
 target index: 24
-current x: 6.339104
-current y: 12.349665
-current theta RAD: 0.634131
-current theta DEG: 36.333002
-target x: 5.820000
-target y: 12.977000
-lookahead dist: 7.799167
-target vel: 3289.000000
-curvature: 0.003986
-target vels: 127.000000 120.826622
+current x: 1.055906
+current y: 29.530605
+current theta RAD: 0.069115
+current theta DEG: 3.959999
+target x: 1.051000
+target y: 29.888000
+lookahead dist: 8.287916
+target vel: 7983.000000
+curvature: 0.004768
+target vels: 8220.892578 7745.106934
 
 NEW TICK
 target index: 24
-current x: 6.400688
-current y: 12.433957
-current theta RAD: 0.627795
-current theta DEG: 35.969996
-target x: 5.820000
-target y: 12.977000
-lookahead dist: 7.670834
-target vel: 3289.000000
-curvature: 0.000726
-target vels: 127.000000 125.852707
+current x: 1.135824
+current y: 30.708612
+current theta RAD: 0.067963
+current theta DEG: 3.894000
+target x: 1.051000
+target y: 29.888000
+lookahead dist: 8.284166
+target vel: 7983.000000
+curvature: 0.005009
+target vels: 8232.907227 7733.092773
 
 NEW TICK
 target index: 24
-current x: 6.586123
-current y: 12.686325
-current theta RAD: 0.644498
-current theta DEG: 36.926995
-target x: 5.820000
-target y: 12.977000
-lookahead dist: 7.289583
-target vel: 3289.000000
-curvature: -0.005582
-target vels: 118.437462 127.000000
+current x: 1.151470
+current y: 30.938463
+current theta RAD: 0.067963
+current theta DEG: 3.894000
+target x: 1.051000
+target y: 29.888000
+lookahead dist: 8.303333
+target vel: 7983.000000
+curvature: 0.004899
+target vels: 8227.418945 7738.580078
 
 NEW TICK
 target index: 25
-current x: 6.712921
-current y: 12.852194
-current theta RAD: 0.664080
-current theta DEG: 38.049003
-target x: 6.289000
-target y: 13.633000
-lookahead dist: 7.377917
-target vel: 3289.000000
-curvature: -0.011582
-target vels: 109.854713 127.000000
+current x: 1.249850
+current y: 32.317257
+current theta RAD: 0.074874
+current theta DEG: 4.289990
+target x: 1.224000
+target y: 32.098000
+lookahead dist: 8.302917
+target vel: 7983.000000
+curvature: 0.005383
+target vels: 8251.573242 7714.426758
 
 NEW TICK
 target index: 25
-current x: 6.832550
-current y: 13.000807
-current theta RAD: 0.691150
-current theta DEG: 39.599992
-target x: 6.289000
-target y: 13.633000
-lookahead dist: 7.317917
-target vel: 3191.000000
-curvature: -0.013744
-target vels: 106.907097 127.000000
-
-NEW TICK
-target index: 25
-current x: 6.885563
-current y: 13.064402
-current theta RAD: 0.698638
-current theta DEG: 40.029003
-target x: 6.289000
-target y: 13.633000
-lookahead dist: 7.339583
-target vel: 3191.000000
-curvature: -0.013175
-target vels: 107.675728 127.000000
-
-NEW TICK
-target index: 25
-current x: 6.964336
-current y: 13.158073
-current theta RAD: 0.698638
-current theta DEG: 40.028996
-target x: 6.289000
-target y: 13.633000
-lookahead dist: 7.574583
-target vel: 3191.000000
-curvature: -0.011693
-target vels: 109.701088 127.000008
-
-NEW TICK
-target index: 25
-current x: 7.010674
-current y: 13.213175
-current theta RAD: 0.699790
-current theta DEG: 40.095000
-target x: 6.289000
-target y: 13.633000
-lookahead dist: 7.577084
-target vel: 3191.000000
-curvature: -0.009032
-target vels: 113.428528 127.000000
-
-NEW TICK
-target index: 25
-current x: 7.112255
-current y: 13.334700
-current theta RAD: 0.691726
-current theta DEG: 39.632995
-target x: 6.289000
-target y: 13.633000
-lookahead dist: 7.823334
-target vel: 3191.000000
-curvature: -0.007080
-target vels: 116.237137 127.000000
-
-NEW TICK
-target index: 25
-current x: 7.171914
-current y: 13.406815
-current theta RAD: 0.690575
-current theta DEG: 39.567005
-target x: 6.289000
-target y: 13.633000
-lookahead dist: 7.044583
-target vel: 3191.000000
-curvature: -0.009336
-target vels: 112.996452 127.000000
+current x: 1.285394
+current y: 32.791092
+current theta RAD: 0.074875
+current theta DEG: 4.289998
+target x: 1.224000
+target y: 32.098000
+lookahead dist: 8.302083
+target vel: 7983.000000
+curvature: 0.003198
+target vels: 8142.572266 7823.427246
 
 NEW TICK
 target index: 26
-current x: 7.258667
-current y: 13.512574
-current theta RAD: 0.683663
-current theta DEG: 39.170998
-target x: 6.826000
-target y: 14.300000
-lookahead dist: 6.995833
-target vel: 3191.000000
-curvature: -0.007752
-target vels: 115.261734 127.000000
+current x: 1.356441
+current y: 33.680988
+current theta RAD: 0.087546
+current theta DEG: 5.016005
+target x: 1.414000
+target y: 34.351002
+lookahead dist: 8.301666
+target vel: 7983.000000
+curvature: 0.002095
+target vels: 8256.731445 8043.268555
 
 NEW TICK
 target index: 26
-current x: 7.344824
-current y: 13.618821
-current theta RAD: 0.679055
-current theta DEG: 38.906997
-target x: 6.826000
-target y: 14.300000
-lookahead dist: 7.440833
-target vel: 3191.000000
-curvature: -0.002487
-target vels: 123.113029 127.000008
+current x: 1.428586
+current y: 34.487709
+current theta RAD: 0.095033
+current theta DEG: 5.445006
+target x: 1.414000
+target y: 34.351002
+lookahead dist: 8.329166
+target vel: 8150.000000
+curvature: 0.001562
+target vels: 8229.548828 8070.451172
 
 NEW TICK
 target index: 26
-current x: 7.452878
-current y: 13.753652
-current theta RAD: 0.672144
-current theta DEG: 38.510994
-target x: 6.826000
-target y: 14.300000
-lookahead dist: 7.615417
-target vel: 3191.000000
-curvature: 0.001592
-target vels: 127.000000 124.497673
-
-NEW TICK
-target index: 26
-current x: 7.568697
-current y: 13.900704
-current theta RAD: 0.662928
-current theta DEG: 37.982999
-target x: 6.826000
-target y: 14.300000
-lookahead dist: 7.940416
-target vel: 3191.000000
-curvature: 0.004611
-target vels: 127.000000 119.885635
-
-NEW TICK
-target index: 26
-current x: 7.617256
-current y: 13.963265
-current theta RAD: 0.657169
-current theta DEG: 37.652998
-target x: 6.826000
-target y: 14.300000
-lookahead dist: 7.593750
-target vel: 3191.000000
-curvature: 0.002455
-target vels: 127.000000 123.161087
+current x: 1.472406
+current y: 34.939156
+current theta RAD: 0.098489
+current theta DEG: 5.643009
+target x: 1.414000
+target y: 34.351002
+lookahead dist: 8.365000
+target vel: 8150.000000
+curvature: 0.001879
+target vels: 8245.724609 8054.275391
 
 NEW TICK
 target index: 27
-current x: 7.731730
-current y: 14.111366
-current theta RAD: 0.664080
-current theta DEG: 38.048996
-target x: 7.363000
-target y: 14.891000
-lookahead dist: 7.638750
-target vel: 3191.000000
-curvature: 0.001194
-target vels: 126.999992 125.117867
+current x: 1.564322
+current y: 35.877796
+current theta RAD: 0.099641
+current theta DEG: 5.708982
+target x: 1.632000
+target y: 36.699001
+lookahead dist: 8.372084
+target vel: 8150.000000
+curvature: 0.004887
+target vels: 8962.635742 8431.364258
 
 NEW TICK
 target index: 27
-current x: 7.785213
-current y: 14.179216
-current theta RAD: 0.670992
-current theta DEG: 38.445006
-target x: 7.363000
-target y: 14.891000
-lookahead dist: 7.466667
-target vel: 3234.000000
-curvature: -0.008476
-target vels: 114.221809 127.000000
+current x: 1.645713
+current y: 36.734272
+current theta RAD: 0.089850
+current theta DEG: 5.148001
+target x: 1.632000
+target y: 36.699001
+lookahead dist: 8.466249
+target vel: 8697.000000
+curvature: 0.005248
+target vels: 8982.266602 8411.733398
 
 NEW TICK
 target index: 27
-current x: 8.016444
-current y: 14.459751
-current theta RAD: 0.709581
-current theta DEG: 40.656003
-target x: 7.363000
-target y: 14.891000
-lookahead dist: 7.375417
-target vel: 3234.000000
-curvature: -0.011948
-target vels: 109.350739 127.000000
-
-NEW TICK
-target index: 27
-current x: 8.120395
-current y: 14.579253
-current theta RAD: 0.722252
-current theta DEG: 41.382014
-target x: 7.363000
-target y: 14.891000
-lookahead dist: 7.514167
-target vel: 3234.000000
-curvature: -0.014679
-target vels: 105.654755 127.000000
-
-NEW TICK
-target index: 27
-current x: 8.204424
-current y: 14.673129
-current theta RAD: 0.736651
-current theta DEG: 42.207009
-target x: 7.363000
-target y: 14.891000
-lookahead dist: 7.461667
-target vel: 3234.000000
-curvature: -0.015815
-target vels: 104.151596 127.000000
+current x: 1.733956
+current y: 37.694962
+current theta RAD: 0.093306
+current theta DEG: 5.346022
+target x: 1.632000
+target y: 36.699001
+lookahead dist: 8.548750
+target vel: 8697.000000
+curvature: 0.004961
+target vels: 8966.668945 8427.331055
 
 NEW TICK
 target index: 28
-current x: 8.289254
-current y: 14.766283
-current theta RAD: 0.740683
-current theta DEG: 42.438009
-target x: 7.979000
-target y: 15.523000
-lookahead dist: 7.402500
-target vel: 3234.000000
-curvature: -0.015110
-target vels: 105.082939 127.000000
-
-NEW TICK
-target index: 28
-current x: 8.388828
-current y: 14.875221
-current theta RAD: 0.737803
-current theta DEG: 42.273016
-target x: 7.979000
-target y: 15.523000
-lookahead dist: 7.570416
-target vel: 3363.000000
-curvature: -0.013324
-target vels: 107.473892 127.000000
-
-NEW TICK
-target index: 28
-current x: 8.442033
-current y: 14.933883
-current theta RAD: 0.735500
-current theta DEG: 42.141016
-target x: 7.979000
-target y: 15.523000
-lookahead dist: 7.231667
-target vel: 3363.000000
-curvature: -0.012180
-target vels: 109.032707 127.000000
-
-NEW TICK
-target index: 28
-current x: 8.538287
-current y: 15.040971
-current theta RAD: 0.725132
-current theta DEG: 41.547007
-target x: 7.979000
-target y: 15.523000
-lookahead dist: 7.660417
-target vel: 3363.000000
-curvature: -0.007596
-target vels: 115.487579 127.000000
-
-NEW TICK
-target index: 28
-current x: 8.602476
-current y: 15.113952
-current theta RAD: 0.717645
-current theta DEG: 41.118011
-target x: 7.979000
-target y: 15.523000
-lookahead dist: 7.623333
-target vel: 3363.000000
-curvature: -0.004326
-target vels: 120.313499 127.000000
-
-NEW TICK
-target index: 28
-current x: 8.762535
-current y: 15.299150
-current theta RAD: 0.707277
-current theta DEG: 40.524002
-target x: 7.979000
-target y: 15.523000
-lookahead dist: 7.543750
-target vel: 3363.000000
-curvature: -0.004615
-target vels: 119.878914 127.000000
+current x: 1.779044
+current y: 38.167980
+current theta RAD: 0.096761
+current theta DEG: 5.544007
+target x: 1.878000
+target y: 39.123001
+lookahead dist: 8.592083
+target vel: 8697.000000
+curvature: 0.008188
+target vels: 9343.901367 8434.099609
 
 NEW TICK
 target index: 29
-current x: 8.898396
-current y: 15.457685
-current theta RAD: 0.709581
-current theta DEG: 40.656016
-target x: 8.515000
-target y: 16.076000
-lookahead dist: 7.407500
-target vel: 3363.000000
-curvature: -0.004902
-target vels: 119.448700 127.000000
+current x: 2.022434
+current y: 40.592819
+current theta RAD: 0.103097
+current theta DEG: 5.907003
+target x: 2.155000
+target y: 41.631001
+lookahead dist: 8.651250
+target vel: 8889.000000
+curvature: 0.010059
+target vels: 9657.215820 8514.784180
 
 NEW TICK
 target index: 29
-current x: 8.933562
-current y: 15.498658
-current theta RAD: 0.709005
-current theta DEG: 40.623007
-target x: 8.515000
-target y: 16.076000
-lookahead dist: 7.679584
-target vel: 3320.000000
-curvature: -0.001479
-target vels: 124.673836 127.000000
+current x: 2.156378
+current y: 41.834724
+current theta RAD: 0.110584
+current theta DEG: 6.336022
+target x: 2.155000
+target y: 41.631001
+lookahead dist: 8.692083
+target vel: 9086.000000
+curvature: 0.010309
+target vels: 9671.422852 8500.577148
 
 NEW TICK
 target index: 29
-current x: 9.022252
-current y: 15.602802
-current theta RAD: 0.702094
-current theta DEG: 40.227014
-target x: 8.515000
-target y: 16.076000
-lookahead dist: 7.405000
-target vel: 3320.000000
-curvature: -0.002526
-target vels: 123.051956 127.000000
-
-NEW TICK
-target index: 29
-current x: 9.087390
-current y: 15.679719
-current theta RAD: 0.703246
-current theta DEG: 40.293004
-target x: 8.515000
-target y: 16.076000
-lookahead dist: 6.990417
-target vel: 3320.000000
-curvature: -0.003203
-target vels: 122.015106 127.000000
-
-NEW TICK
-target index: 29
-current x: 9.215458
-current y: 15.830704
-current theta RAD: 0.701518
-current theta DEG: 40.194018
-target x: 8.515000
-target y: 16.076000
-lookahead dist: 7.877083
-target vel: 3320.000000
-curvature: 0.002085
-target vels: 127.000000 123.732635
-
-NEW TICK
-target index: 29
-current x: 9.271025
-current y: 15.896857
-current theta RAD: 0.695758
-current theta DEG: 39.864010
-target x: 8.515000
-target y: 16.076000
-lookahead dist: 7.824583
-target vel: 3320.000000
-curvature: 0.003502
-target vels: 127.000000 121.560249
+current x: 2.211526
+current y: 42.321171
+current theta RAD: 0.115192
+current theta DEG: 6.600014
+target x: 2.155000
+target y: 41.631001
+lookahead dist: 8.712916
+target vel: 9086.000000
+curvature: 0.007158
+target vels: 9492.459961 8679.540039
 
 NEW TICK
 target index: 30
-current x: 9.420694
-current y: 16.076710
-current theta RAD: 0.692878
-current theta DEG: 39.699010
-target x: 9.087000
-target y: 16.664000
-lookahead dist: 7.665417
-target vel: 3320.000000
-curvature: 0.002554
-target vels: 127.000000 123.008812
+current x: 2.307277
+current y: 43.121803
+current theta RAD: 0.126711
+current theta DEG: 7.260014
+target x: 2.450000
+target y: 44.098000
+lookahead dist: 8.734583
+target vel: 9086.000000
+curvature: 0.009173
+target vels: 3698.543213 3297.456787
 
 NEW TICK
 target index: 30
-current x: 9.570690
-current y: 16.256289
-current theta RAD: 0.698062
-current theta DEG: 39.996007
-target x: 9.087000
-target y: 16.664000
-lookahead dist: 7.787500
-target vel: 3320.000000
-curvature: -0.001574
-target vels: 124.525536 127.000000
-
-NEW TICK
-target index: 30
-current x: 9.789817
-current y: 16.514122
-current theta RAD: 0.718797
-current theta DEG: 41.184018
-target x: 9.087000
-target y: 16.664000
-lookahead dist: 6.720833
-target vel: 3320.000000
-curvature: -0.009036
-target vels: 113.422287 127.000000
+current x: 2.370622
+current y: 43.614510
+current theta RAD: 0.129015
+current theta DEG: 7.392011
+target x: 2.450000
+target y: 44.098000
+lookahead dist: 8.753750
+target vel: 3498.000000
+curvature: 0.029576
+target vels: 4144.611816 2851.388184
 
 NEW TICK
 target index: 31
-current x: 9.854257
-current y: 16.586880
-current theta RAD: 0.730892
-current theta DEG: 41.877013
-target x: 9.740000
-target y: 17.330999
-lookahead dist: 7.402500
-target vel: 3320.000000
-curvature: -0.009129
-target vels: 113.290588 127.000000
-
-NEW TICK
-target index: 31
-current x: 9.960818
-current y: 16.704063
-current theta RAD: 0.744715
-current theta DEG: 42.669024
-target x: 9.740000
-target y: 17.330999
-lookahead dist: 7.637083
-target vel: 3278.000000
-curvature: -0.009065
-target vels: 113.380455 127.000000
-
-NEW TICK
-target index: 31
-current x: 9.992583
-current y: 16.738424
-current theta RAD: 0.747595
-current theta DEG: 42.834017
-target x: 9.740000
-target y: 17.330999
-lookahead dist: 7.737500
-target vel: 3278.000000
-curvature: -0.011283
-target vels: 110.268677 127.000000
-
-NEW TICK
-target index: 31
-current x: 10.140200
-current y: 16.896091
-current theta RAD: 0.757962
-current theta DEG: 43.428011
-target x: 9.740000
-target y: 17.330999
-lookahead dist: 7.828750
-target vel: 3278.000000
-curvature: -0.012420
-target vels: 108.703033 127.000000
-
-NEW TICK
-target index: 31
-current x: 10.229557
-current y: 16.989948
-current theta RAD: 0.763722
-current theta DEG: 43.758026
-target x: 9.740000
-target y: 17.330999
-lookahead dist: 7.478333
-target vel: 3278.000000
-curvature: -0.012556
-target vels: 108.517136 127.000000
-
-NEW TICK
-target index: 31
-current x: 10.351364
-current y: 17.117521
-current theta RAD: 0.759690
-current theta DEG: 43.527012
-target x: 9.740000
-target y: 17.330999
-lookahead dist: 7.835000
-target vel: 3278.000000
-curvature: -0.010712
-target vels: 111.061348 127.000000
-
-NEW TICK
-target index: 31
-current x: 10.410756
-current y: 17.180265
-current theta RAD: 0.756234
-current theta DEG: 43.329010
-target x: 9.740000
-target y: 17.330999
-lookahead dist: 7.559166
-target vel: 3278.000000
-curvature: -0.009769
-target vels: 112.384109 127.000000
+DELAYED
 
 NEW TICK
 target index: 32
-current x: 10.560936
-current y: 17.340464
-current theta RAD: 0.749899
-current theta DEG: 42.966021
-target x: 10.320000
-target y: 17.916000
-lookahead dist: 7.620833
-target vel: 3278.000000
-curvature: -0.007404
-target vels: 115.766190 127.000000
+DELAYED
 
 NEW TICK
-target index: 32
-current x: 10.617103
-current y: 17.401293
-current theta RAD: 0.741259
-current theta DEG: 42.471012
-target x: 10.320000
-target y: 17.916000
-lookahead dist: 7.448750
-target vel: 3333.000000
-curvature: -0.003999
-target vels: 120.806541 127.000008
+target index: 33
+DELAYED
 
 NEW TICK
-target index: 32
-current x: 10.742600
-current y: 17.540174
-current theta RAD: 0.727436
-current theta DEG: 41.679016
-target x: 10.320000
-target y: 17.916000
-lookahead dist: 8.020834
-target vel: 3333.000000
-curvature: -0.010858
-target vels: 110.858734 126.999992
+target index: 34
+DELAYED
 
 NEW TICK
 target index: 35
-current x: 12.585505
-current y: 19.672552
-current theta RAD: 0.738379
-current theta DEG: 42.306000
-target x: 12.109000
-target y: 19.695000
-lookahead dist: 6.287500
-target vel: 3333.000000
-curvature: -0.011034
-target vels: 110.613014 127.000000
+DELAYED
 
 NEW TICK
 target index: 36
-current x: 12.745755
-current y: 19.847952
-current theta RAD: 0.742987
-current theta DEG: 42.570003
-target x: 12.810000
-target y: 20.384001
-lookahead dist: 6.315417
-target vel: 3332.000000
-curvature: -0.012004
-target vels: 109.272980 127.000000
-
-NEW TICK
-target index: 36
-current x: 12.816443
-current y: 19.924772
-current theta RAD: 0.744715
-current theta DEG: 42.669009
-target x: 12.810000
-target y: 20.384001
-lookahead dist: 7.619583
-target vel: 3327.000000
-curvature: -0.013418
-target vels: 107.347221 127.000000
-
-NEW TICK
-target index: 36
-current x: 12.984129
-current y: 20.108007
-current theta RAD: 0.739531
-current theta DEG: 42.372012
-target x: 12.810000
-target y: 20.384001
-lookahead dist: 7.693750
-target vel: 3327.000000
-curvature: -0.014250
-target vels: 106.228302 127.000000
-
-NEW TICK
-target index: 36
-current x: 13.044798
-current y: 20.174475
-current theta RAD: 0.740107
-current theta DEG: 42.405025
-target x: 12.810000
-target y: 20.384001
-lookahead dist: 7.150833
-target vel: 3327.000000
-curvature: -0.010983
-target vels: 110.683952 127.000000
-
-NEW TICK
-target index: 36
-current x: 13.126985
-current y: 20.265165
-current theta RAD: 0.729740
-current theta DEG: 41.811011
-target x: 12.810000
-target y: 20.384001
-lookahead dist: 7.731250
-target vel: 3327.000000
-curvature: -0.011277
-target vels: 110.276733 127.000000
-
-NEW TICK
-target index: 36
-current x: 13.239401
-current y: 20.391605
-current theta RAD: 0.722252
-current theta DEG: 41.382014
-target x: 12.810000
-target y: 20.384001
-lookahead dist: 7.741250
-target vel: 3327.000000
-curvature: -0.010230
-target vels: 111.736336 127.000000
-
-NEW TICK
-target index: 36
-current x: 13.274992
-current y: 20.432213
-current theta RAD: 0.717069
-current theta DEG: 41.085007
-target x: 12.810000
-target y: 20.384001
-lookahead dist: 7.220000
-target vel: 3327.000000
-curvature: -0.007080
-target vels: 116.236107 127.000000
-
-NEW TICK
-target index: 37
-current x: 13.449020
-current y: 20.633888
-current theta RAD: 0.705550
-current theta DEG: 40.425011
-target x: 13.518000
-target y: 21.076000
-lookahead dist: 7.435833
-target vel: 3327.000000
-curvature: -0.006945
-target vels: 116.433739 127.000000
-
-NEW TICK
-target index: 37
-current x: 13.509546
-current y: 20.705276
-current theta RAD: 0.700942
-current theta DEG: 40.161010
-target x: 13.518000
-target y: 21.076000
-lookahead dist: 7.176667
-target vel: 3327.000000
-curvature: -0.004537
-target vels: 119.996323 127.000000
-
-NEW TICK
-target index: 37
-current x: 13.613674
-current y: 20.829365
-current theta RAD: 0.692303
-current theta DEG: 39.666013
-target x: 13.518000
-target y: 21.076000
-lookahead dist: 7.320416
-target vel: 3327.000000
-curvature: -0.000202
-target vels: 126.680405 127.000008
-
-NEW TICK
-target index: 37
-current x: 13.718005
-current y: 20.957949
-current theta RAD: 0.671568
-current theta DEG: 38.478010
-target x: 13.518000
-target y: 21.076000
-lookahead dist: 7.352500
-target vel: 3327.000000
-curvature: 0.000999
-target vels: 127.000000 125.424194
-
-NEW TICK
-target index: 37
-current x: 13.775986
-current y: 21.031418
-current theta RAD: 0.664657
-current theta DEG: 38.082014
-target x: 13.518000
-target y: 21.076000
-lookahead dist: 7.339583
-target vel: 3327.000000
-curvature: 0.003189
-target vels: 127.000000 122.036819
-
-NEW TICK
-target index: 37
-current x: 13.899405
-current y: 21.190805
-current theta RAD: 0.653138
-current theta DEG: 37.422022
-target x: 13.518000
-target y: 21.076000
-lookahead dist: 7.327917
-target vel: 3327.000000
-curvature: 0.003116
-target vels: 127.000000 122.147995
-
-NEW TICK
-target index: 38
-current x: 13.936580
-current y: 21.239418
-current theta RAD: 0.652561
-current theta DEG: 37.389019
-target x: 14.112000
-target y: 21.653000
-lookahead dist: 7.678333
-target vel: 3327.000000
-curvature: -0.001839
-target vels: 124.113861 127.000000
-
-NEW TICK
-target index: 38
-current x: 14.004780
-current y: 21.327740
-current theta RAD: 0.662353
-current theta DEG: 37.950017
-target x: 14.112000
-target y: 21.653000
-lookahead dist: 7.369166
-target vel: 3493.000000
-curvature: -0.003379
-target vels: 121.746399 127.000008
-
-NEW TICK
-target index: 38
-current x: 14.087141
-current y: 21.432411
-current theta RAD: 0.670992
-current theta DEG: 38.445006
-target x: 14.112000
-target y: 21.653000
-lookahead dist: 7.591250
-target vel: 3493.000000
-curvature: -0.006370
-target vels: 117.275360 127.000000
-
-NEW TICK
-target index: 38
-current x: 14.134277
-current y: 21.491512
-current theta RAD: 0.676176
-current theta DEG: 38.742011
-target x: 14.112000
-target y: 21.653000
-lookahead dist: 7.602500
-target vel: 3493.000000
-curvature: -0.008592
-target vels: 114.055496 127.000000
-
-NEW TICK
-target index: 38
-current x: 14.258558
-current y: 21.645632
-current theta RAD: 0.679056
-current theta DEG: 38.907028
-target x: 14.112000
-target y: 21.653000
-lookahead dist: 6.929167
-target vel: 3493.000000
-curvature: -0.008524
-target vels: 114.153046 127.000000
-
-NEW TICK
-target index: 38
-current x: 14.353919
-current y: 21.762953
-current theta RAD: 0.687119
-current theta DEG: 39.369023
-target x: 14.112000
-target y: 21.653000
-lookahead dist: 7.272917
-target vel: 3493.000000
-curvature: -0.010158
-target vels: 111.836487 127.000000
-
-NEW TICK
-target index: 38
-current x: 14.422410
-current y: 21.846447
-current theta RAD: 0.683663
-current theta DEG: 39.171003
-target x: 14.112000
-target y: 21.653000
-lookahead dist: 7.478333
-target vel: 3493.000000
-curvature: -0.009994
-target vels: 112.067703 127.000000
-
-NEW TICK
-target index: 39
-current x: 14.481276
-current y: 21.919210
-current theta RAD: 0.676752
-current theta DEG: 38.775022
-target x: 14.708000
-target y: 22.228001
-lookahead dist: 7.369166
-target vel: 3493.000000
-curvature: -0.006849
-target vels: 116.573425 127.000000
-
-NEW TICK
-target index: 39
-current x: 14.564083
-current y: 22.023531
-current theta RAD: 0.663505
-current theta DEG: 38.016019
-target x: 14.708000
-target y: 22.228001
-lookahead dist: 7.745000
-target vel: 3696.000000
-curvature: -0.007616
-target vels: 115.458427 127.000000
-
-NEW TICK
-target index: 39
-current x: 14.603842
-current y: 22.074694
-current theta RAD: 0.657745
-current theta DEG: 37.686014
-target x: 14.708000
-target y: 22.228001
-lookahead dist: 7.343333
-target vel: 3696.000000
-curvature: -0.003145
-target vels: 122.103218 126.999992
-
-NEW TICK
-target index: 39
-current x: 14.710678
-current y: 22.215044
-current theta RAD: 0.644498
-current theta DEG: 36.927012
-target x: 14.708000
-target y: 22.228001
-lookahead dist: 6.336250
-target vel: 3696.000000
-curvature: 0.005616
-target vels: 127.000000 118.386818
-
-NEW TICK
-target index: 39
-current x: 14.762344
-current y: 22.284286
-current theta RAD: 0.637587
-current theta DEG: 36.531021
-target x: 14.708000
-target y: 22.228001
-lookahead dist: 6.077084
-target vel: 3696.000000
-curvature: 0.007061
-target vels: 127.000000 116.264198
-
-NEW TICK
-target index: 39
-current x: 14.807292
-current y: 22.345066
-current theta RAD: 0.638162
-current theta DEG: 36.564015
-target x: 14.708000
-target y: 22.228001
-lookahead dist: 7.256250
-target vel: 3696.000000
-curvature: -0.002833
-target vels: 122.580643 127.000000
-
-NEW TICK
-target index: 39
-current x: 14.833065
-current y: 22.379732
-current theta RAD: 0.640466
-current theta DEG: 36.696019
-target x: 14.708000
-target y: 22.228001
-lookahead dist: 6.985416
-target vel: 3696.000000
-curvature: -0.005404
-target vels: 118.701645 127.000000
-
-NEW TICK
-target index: 39
-current x: 14.895845
-current y: 22.463137
-current theta RAD: 0.652561
-current theta DEG: 37.389012
-target x: 14.708000
-target y: 22.228001
-lookahead dist: 7.656667
-target vel: 3696.000000
-curvature: -0.013079
-target vels: 107.806435 127.000000
-
-NEW TICK
-target index: 39
-current x: 14.981786
-current y: 22.574148
-current theta RAD: 0.662353
-current theta DEG: 37.950029
-target x: 14.708000
-target y: 22.228001
-lookahead dist: 7.401250
-target vel: 3696.000000
-curvature: -0.013212
-target vels: 107.626083 127.000000
-
-NEW TICK
-target index: 40
-current x: 15.028359
-current y: 22.633690
-current theta RAD: 0.665232
-current theta DEG: 38.115013
-target x: 15.351000
-target y: 22.888000
-lookahead dist: 7.693750
-target vel: 3696.000000
-curvature: -0.014140
-target vels: 106.375305 127.000008
-
-NEW TICK
-target index: 40
-current x: 15.141226
-current y: 22.778486
-current theta RAD: 0.657745
-current theta DEG: 37.686014
-target x: 15.351000
-target y: 22.888000
-lookahead dist: 7.785000
-target vel: 3869.000000
-curvature: -0.014998
-target vels: 105.230721 127.000000
-
-NEW TICK
-target index: 40
-current x: 15.174223
-current y: 22.821226
-current theta RAD: 0.657169
-current theta DEG: 37.653027
-target x: 15.351000
-target y: 22.888000
-lookahead dist: 7.870833
-target vel: 3869.000000
-curvature: -0.015784
-target vels: 104.192589 127.000008
-
-NEW TICK
-target index: 40
-current x: 15.389973
-current y: 23.104868
-current theta RAD: 0.646226
-current theta DEG: 37.025995
-target x: 15.351000
-target y: 22.888000
-lookahead dist: 7.118750
-target vel: 3869.000000
-curvature: -0.014649
-target vels: 105.695107 127.000000
-
-NEW TICK
-target index: 40
-current x: 15.531166
-current y: 23.291449
-current theta RAD: 0.649106
-current theta DEG: 37.191013
-target x: 15.351000
-target y: 22.888000
-lookahead dist: 7.459167
-target vel: 3869.000000
-curvature: -0.016227
-target vels: 103.611389 127.000000
-
-NEW TICK
-target index: 41
-current x: 15.572399
-current y: 23.346018
-current theta RAD: 0.645074
-current theta DEG: 36.960015
-target x: 15.962000
-target y: 23.563000
-lookahead dist: 7.600000
-target vel: 3869.000000
-curvature: -0.016338
-target vels: 103.466637 127.000000
-
-NEW TICK
-target index: 41
-current x: 15.643467
-current y: 23.441206
-current theta RAD: 0.638738
-current theta DEG: 36.597011
-target x: 15.962000
-target y: 23.563000
-lookahead dist: 6.835417
-target vel: 3887.000000
-curvature: -0.010835
-target vels: 110.890831 127.000008
-
-NEW TICK
-target index: 41
-current x: 15.696892
-current y: 23.513628
-current theta RAD: 0.632403
-current theta DEG: 36.234024
-target x: 15.962000
-target y: 23.563000
-lookahead dist: 7.715833
-target vel: 3887.000000
-curvature: -0.013900
-target vels: 106.697205 127.000008
-
-NEW TICK
-target index: 41
-current x: 15.829185
-current y: 23.697824
-current theta RAD: 0.615700
-current theta DEG: 35.277013
-target x: 15.962000
-target y: 23.563000
-lookahead dist: 7.048333
-target vel: 3887.000000
-curvature: -0.009391
-target vels: 112.917679 127.000000
-
-NEW TICK
-target index: 41
-current x: 15.951186
-current y: 23.871670
-current theta RAD: 0.607060
-current theta DEG: 34.782004
-target x: 15.962000
-target y: 23.563000
-lookahead dist: 7.219167
-target vel: 3887.000000
-curvature: -0.009364
-target vels: 112.956657 127.000000
-
-NEW TICK
-target index: 41
-current x: 15.983905
-current y: 23.919069
-current theta RAD: 0.601301
-current theta DEG: 34.452013
-target x: 15.962000
-target y: 23.563000
-lookahead dist: 7.474167
-target vel: 3887.000000
-curvature: -0.010160
-target vels: 111.834702 127.000000
-
-NEW TICK
-target index: 41
-current x: 16.068748
-current y: 24.044210
-current theta RAD: 0.592086
-current theta DEG: 33.924038
-target x: 15.962000
-target y: 23.563000
-lookahead dist: 7.031667
-target vel: 3887.000000
-curvature: -0.007603
-target vels: 115.478065 127.000000
-
-NEW TICK
-target index: 42
-current x: 16.118950
-current y: 24.118898
-current theta RAD: 0.591510
-current theta DEG: 33.890998
-target x: 16.548000
-target y: 24.256001
-lookahead dist: 6.975000
-target vel: 3887.000000
-curvature: -0.005923
-target vels: 117.932930 126.999992
-
-NEW TICK
-target index: 42
-current x: 16.194864
-current y: 24.232691
-current theta RAD: 0.582295
-current theta DEG: 33.363023
-target x: 16.548000
-target y: 24.256001
-lookahead dist: 6.794167
-target vel: 3807.000000
-curvature: -0.003642
-target vels: 121.346558 127.000000
-
-NEW TICK
-target index: 42
-current x: 16.240217
-current y: 24.301960
-current theta RAD: 0.577111
-current theta DEG: 33.066008
-target x: 16.548000
-target y: 24.256001
-lookahead dist: 6.678750
-target vel: 3807.000000
-curvature: -0.003425
-target vels: 121.676758 127.000000
-
-NEW TICK
-target index: 42
-current x: 16.277498
-current y: 24.359299
-current theta RAD: 0.577687
-current theta DEG: 33.099002
-target x: 16.548000
-target y: 24.256001
-lookahead dist: 7.587500
-target vel: 3807.000000
-curvature: -0.010463
-target vels: 111.409515 127.000000
-
-NEW TICK
-target index: 42
-current x: 16.291254
-current y: 24.380415
-current theta RAD: 0.577111
-current theta DEG: 33.066016
-target x: 16.548000
-target y: 24.256001
-lookahead dist: 7.716667
-target vel: 3807.000000
-curvature: -0.014821
-target vels: 105.466820 127.000008
-
-NEW TICK
-target index: 42
-current x: 16.395864
-current y: 24.539965
-current theta RAD: 0.583446
-current theta DEG: 33.428998
-target x: 16.548000
-target y: 24.256001
-lookahead dist: 7.778334
-target vel: 3807.000000
-curvature: -0.018639
-target vels: 100.497978 127.000008
+TURN COUNTERCLOCKWISE
+turn end index: 42
+target theta: 84.281998
+beginning theta: 8.579978
+ending theta: -273.801056
 
 NEW TICK
 target index: 43
-current x: 16.646246
-current y: 24.922472
-current theta RAD: 0.579415
-current theta DEG: 33.198022
-target x: 17.112000
-target y: 24.975000
-lookahead dist: 7.545000
-target vel: 3807.000000
-curvature: -0.018960
-target vels: 100.090103 127.000000
-
-NEW TICK
-target index: 43
-current x: 16.713318
-current y: 25.024849
-current theta RAD: 0.580566
-current theta DEG: 33.264002
-target x: 17.112000
-target y: 24.975000
-lookahead dist: 7.548750
-target vel: 3905.000000
-curvature: -0.019554
-target vels: 99.338928 127.000000
-
-NEW TICK
-target index: 43
-current x: 16.823906
-current y: 25.193390
-current theta RAD: 0.574807
-current theta DEG: 32.934011
-target x: 17.112000
-target y: 24.975000
-lookahead dist: 7.664166
-target vel: 3905.000000
-curvature: -0.018445
-target vels: 100.745316 127.000008
-
-NEW TICK
-target index: 43
-current x: 16.889854
-current y: 25.296495
-current theta RAD: 0.563288
-current theta DEG: 32.274029
-target x: 17.112000
-target y: 24.975000
-lookahead dist: 7.358750
-target vel: 3905.000000
-curvature: -0.013566
-target vels: 107.147781 127.000000
-
-NEW TICK
-target index: 43
-current x: 16.988417
-current y: 25.455627
-current theta RAD: 0.544857
-current theta DEG: 31.218032
-target x: 17.112000
-target y: 24.975000
-lookahead dist: 7.763333
-target vel: 3905.000000
-curvature: -0.016612
-target vels: 103.109367 127.000000
-
-NEW TICK
-target index: 43
-current x: 17.027540
-current y: 25.520309
-current theta RAD: 0.543129
-current theta DEG: 31.119012
-target x: 17.112000
-target y: 24.975000
-lookahead dist: 7.510417
-target vel: 3905.000000
-curvature: -0.013158
-target vels: 107.699554 127.000008
+DELAYED
 
 NEW TICK
 target index: 44
-current x: 17.115793
-current y: 25.668858
-current theta RAD: 0.529306
-current theta DEG: 30.327023
-target x: 17.745001
-target y: 25.868000
-lookahead dist: 7.642500
-target vel: 3905.000000
-curvature: -0.013826
-target vels: 106.797241 127.000008
+DELAYED
 
 NEW TICK
-target index: 44
-current x: 17.166487
-current y: 25.755974
-current theta RAD: 0.524699
-current theta DEG: 30.063022
-target x: 17.745001
-target y: 25.868000
-lookahead dist: 7.177917
-target vel: 3905.000000
-curvature: -0.008318
-target vels: 114.448334 126.999992
-
-NEW TICK
-target index: 44
-current x: 17.250280
-current y: 25.902948
-current theta RAD: 0.510299
-current theta DEG: 29.238004
-target x: 17.745001
-target y: 25.868000
-lookahead dist: 7.733750
-target vel: 3905.000000
-curvature: -0.011811
-target vels: 109.538933 127.000008
-
-NEW TICK
-target index: 44
-current x: 17.288803
-current y: 25.972145
-current theta RAD: 0.505692
-current theta DEG: 28.974010
-target x: 17.745001
-target y: 25.868000
-lookahead dist: 6.713333
-target vel: 3905.000000
-curvature: -0.005406
-target vels: 118.698456 127.000000
-
-NEW TICK
-target index: 44
-current x: 17.318501
-current y: 26.025652
-current theta RAD: 0.509724
-current theta DEG: 29.205029
-target x: 17.745001
-target y: 25.868000
-lookahead dist: 7.517917
-target vel: 3905.000000
-curvature: -0.013232
-target vels: 107.598679 127.000000
-
-NEW TICK
-target index: 44
-current x: 17.346661
-current y: 26.075891
-current theta RAD: 0.512027
-current theta DEG: 29.337009
-target x: 17.745001
-target y: 25.868000
-lookahead dist: 7.873333
-target vel: 3905.000000
-curvature: -0.055039
-target vels: 61.988857 127.000000
+target index: 45
+DELAYED
 
 NEW TICK
 target index: 46
-current x: 18.473263
-current y: 27.985245
-current theta RAD: 0.573079
-current theta DEG: 32.835013
-target x: 18.664000
-target y: 27.377001
-lookahead dist: 7.650000
-target vel: 3905.000000
-curvature: -0.060920
-target vels: 56.958344 126.999992
-
-NEW TICK
-target index: 47
-current x: 18.589487
-current y: 28.163006
-current theta RAD: 0.584022
-current theta DEG: 33.462011
-target x: 19.125000
-target y: 28.273001
-lookahead dist: 7.313750
-target vel: 3887.000000
-curvature: -0.068137
-target vels: 51.138397 127.000000
-
-NEW TICK
-target index: 47
-current x: 18.717520
-current y: 28.354540
-current theta RAD: 0.595541
-current theta DEG: 34.122010
-target x: 19.125000
-target y: 28.273001
-lookahead dist: 6.472083
-target vel: 3881.000000
-curvature: -0.079564
-target vels: 42.641598 127.000000
-
-NEW TICK
-target index: 47
-current x: 18.833603
-current y: 28.523729
-current theta RAD: 0.611093
-current theta DEG: 35.013024
-target x: 19.125000
-target y: 28.273001
-lookahead dist: 7.155000
-target vel: 3881.000000
-curvature: -0.078195
-target vels: 43.616734 127.000000
-
-NEW TICK
-target index: 47
-current x: 18.885361
-current y: 28.597349
-current theta RAD: 0.613972
-current theta DEG: 35.178014
-target x: 19.125000
-target y: 28.273001
-lookahead dist: 7.330833
-target vel: 3881.000000
-curvature: -0.076621
-target vels: 44.751213 127.000000
-
-NEW TICK
-target index: 47
-current x: 18.941097
-current y: 28.676971
-current theta RAD: 0.606485
-current theta DEG: 34.749008
-target x: 19.125000
-target y: 28.273001
-lookahead dist: 6.987917
-target vel: 3881.000000
-curvature: -0.077970
-target vels: 43.777863 127.000000
-
-NEW TICK
-target index: 47
-current x: 18.961546
-current y: 28.706594
-current theta RAD: 0.601877
-current theta DEG: 34.485007
-target x: 19.125000
-target y: 28.273001
-lookahead dist: 7.255000
-target vel: 3881.000000
-curvature: -0.074359
-target vels: 46.409172 127.000000
-
-NEW TICK
-target index: 47
-current x: 19.008032
-current y: 28.775106
-current theta RAD: 0.589782
-current theta DEG: 33.792019
-target x: 19.125000
-target y: 28.273001
-lookahead dist: 7.280416
-target vel: 3881.000000
-curvature: -0.072882
-target vels: 47.509048 127.000000
-
-NEW TICK
-target index: 47
-current x: 19.033915
-current y: 28.814095
-current theta RAD: 0.582294
-current theta DEG: 33.363008
-target x: 19.125000
-target y: 28.273001
-lookahead dist: 7.322917
-target vel: 3881.000000
-curvature: -0.070013
-target vels: 49.685585 127.000000
-
-NEW TICK
-target index: 48
-current x: 19.082863
-current y: 28.889612
-current theta RAD: 0.567895
-current theta DEG: 32.538006
-target x: 19.507000
-target y: 29.115000
-lookahead dist: 7.238334
-target vel: 3881.000000
-curvature: -0.069222
-target vels: 50.295452 127.000000
-
-NEW TICK
-target index: 48
-current x: 19.105970
-current y: 28.926109
-current theta RAD: 0.560984
-current theta DEG: 32.142011
-target x: 19.507000
-target y: 29.115000
-lookahead dist: 7.447500
-target vel: 3869.000000
-curvature: -0.063212
-target vels: 55.068863 127.000000
-
-NEW TICK
-target index: 48
-current x: 19.210718
-current y: 29.098337
-current theta RAD: 0.533338
-current theta DEG: 30.558006
-target x: 19.507000
-target y: 29.115000
-lookahead dist: 7.392083
-target vel: 3869.000000
-curvature: -0.062539
-target vels: 55.619953 127.000000
-
-NEW TICK
-target index: 48
-current x: 19.241663
-current y: 29.151131
-current theta RAD: 0.527002
-current theta DEG: 30.195012
-target x: 19.507000
-target y: 29.115000
-lookahead dist: 7.488333
-target vel: 3869.000000
-curvature: -0.060324
-target vels: 57.455299 127.000000
-
-NEW TICK
-target index: 48
-current x: 19.293676
-current y: 29.241644
-current theta RAD: 0.516059
-current theta DEG: 29.568026
-target x: 19.507000
-target y: 29.115000
-lookahead dist: 7.519167
-target vel: 3869.000000
-curvature: -0.059358
-target vels: 58.267494 127.000000
-
-NEW TICK
-target index: 48
-current x: 19.353640
-current y: 29.348337
-current theta RAD: 0.507996
-current theta DEG: 29.106011
-target x: 19.507000
-target y: 29.115000
-lookahead dist: 7.385833
-target vel: 3869.000000
-curvature: -0.058331
-target vels: 59.139656 127.000000
-
-NEW TICK
-target index: 48
-current x: 19.434944
-current y: 29.496708
-current theta RAD: 0.494749
-current theta DEG: 28.347009
-target x: 19.507000
-target y: 29.115000
-lookahead dist: 7.450000
-target vel: 3869.000000
-curvature: -0.056908
-target vels: 60.360500 126.999992
-
-NEW TICK
-target index: 49
-current x: 19.511147
-current y: 29.639652
-current theta RAD: 0.484957
-current theta DEG: 27.786011
-target x: 19.861000
-target y: 29.997000
-lookahead dist: 7.506250
-target vel: 3869.000000
-curvature: -0.056610
-target vels: 60.618176 127.000000
-
-NEW TICK
-target index: 49
-current x: 19.534615
-current y: 29.684252
-current theta RAD: 0.483805
-current theta DEG: 27.720004
-target x: 19.861000
-target y: 29.997000
-lookahead dist: 7.428333
-target vel: 3936.000000
-curvature: -0.061950
-target vels: 56.104038 126.999992
-
-NEW TICK
-target index: 49
-current x: 19.653008
-current y: 29.906689
-current theta RAD: 0.494173
-current theta DEG: 28.314033
-target x: 19.861000
-target y: 29.997000
-lookahead dist: 6.955833
-target vel: 3936.000000
-curvature: -0.067365
-target vels: 51.743778 127.000000
-
-NEW TICK
-target index: 49
-current x: 19.685534
-current y: 29.966852
-current theta RAD: 0.497052
-current theta DEG: 28.478987
-target x: 19.861000
-target y: 29.997000
-lookahead dist: 6.812083
-target vel: 3936.000000
-curvature: -0.072496
-target vels: 47.798840 127.000000
-
-NEW TICK
-target index: 49
-current x: 19.721928
-current y: 30.033110
-current theta RAD: 0.507996
-current theta DEG: 29.106007
-target x: 19.861000
-target y: 29.997000
-lookahead dist: 7.397500
-target vel: 3936.000000
-curvature: -0.067323
-target vels: 51.776157 127.000000
-
-NEW TICK
-target index: 49
-current x: 19.802488
-current y: 30.177780
-current theta RAD: 0.503388
-current theta DEG: 28.842013
-target x: 19.861000
-target y: 29.997000
-lookahead dist: 7.330417
-target vel: 3936.000000
-curvature: -0.066862
-target vels: 52.140064 127.000000
-
-NEW TICK
-target index: 49
-current x: 19.818043
-current y: 30.206200
-current theta RAD: 0.498204
-current theta DEG: 28.545008
-target x: 19.861000
-target y: 29.997000
-lookahead dist: 7.351250
-target vel: 3936.000000
-curvature: -0.063805
-target vels: 54.586971 127.000000
-
-NEW TICK
-target index: 49
-current x: 19.862213
-current y: 30.288710
-current theta RAD: 0.484381
-current theta DEG: 27.752993
-target x: 19.861000
-target y: 29.997000
-lookahead dist: 7.407500
-target vel: 3936.000000
-curvature: -0.061700
-target vels: 56.310951 127.000000
-
-NEW TICK
-target index: 49
-current x: 19.892157
-current y: 30.346174
-current theta RAD: 0.476317
-current theta DEG: 27.290978
-target x: 19.861000
-target y: 29.997000
-lookahead dist: 7.421667
-target vel: 3936.000000
-curvature: -0.057806
-target vels: 59.587784 126.999992
-
-NEW TICK
-target index: 49
-current x: 19.957001
-current y: 30.474731
-current theta RAD: 0.457887
-current theta DEG: 26.234991
-target x: 19.861000
-target y: 29.997000
-lookahead dist: 7.026667
-target vel: 3936.000000
-curvature: -0.057499
-target vels: 59.851261 127.000000
-
-NEW TICK
-target index: 50
-current x: 20.016319
-current y: 30.597988
-current theta RAD: 0.440609
-current theta DEG: 25.245008
-target x: 20.200001
-target y: 30.969000
-lookahead dist: 7.072500
-target vel: 3936.000000
-curvature: -0.056982
-target vels: 60.296429 127.000000
-
-NEW TICK
-target index: 50
-current x: 20.028585
-current y: 30.624043
-current theta RAD: 0.439457
-current theta DEG: 25.179018
-target x: 20.200001
-target y: 30.969000
-lookahead dist: 7.395000
-target vel: 3887.000000
-curvature: -0.054821
-target vels: 62.180645 127.000008
-
-NEW TICK
-target index: 50
-current x: 20.077713
-current y: 30.728233
-current theta RAD: 0.439456
-current theta DEG: 25.178984
-target x: 20.200001
-target y: 30.969000
-lookahead dist: 7.411250
-target vel: 3887.000000
-curvature: -0.054510
-target vels: 62.455135 126.999992
-
-NEW TICK
-target index: 50
-current x: 20.093010
-current y: 30.760820
-current theta RAD: 0.438304
-current theta DEG: 25.112994
-target x: 20.200001
-target y: 30.969000
-lookahead dist: 7.099584
-target vel: 3887.000000
-curvature: -0.056734
-target vels: 60.511116 127.000000
-
-NEW TICK
-target index: 50
-current x: 20.152128
-current y: 30.888155
-current theta RAD: 0.431969
-current theta DEG: 24.750002
-target x: 20.200001
-target y: 30.969000
-lookahead dist: 6.803333
-target vel: 3887.000000
-curvature: -0.060657
-target vels: 57.177410 126.999992
-
-NEW TICK
-target index: 50
-current x: 20.168756
-current y: 30.924089
-current theta RAD: 0.434849
-current theta DEG: 24.914993
-target x: 20.200001
-target y: 30.969000
-lookahead dist: 6.957083
-target vel: 3887.000000
-curvature: -0.063046
-target vels: 55.204273 127.000000
-
-NEW TICK
-target index: 50
-current x: 20.216368
-current y: 31.025019
-current theta RAD: 0.445792
-current theta DEG: 25.542015
-target x: 20.200001
-target y: 30.969000
-lookahead dist: 7.208750
-target vel: 3887.000000
-curvature: -0.061426
-target vels: 56.537781 127.000000
-
-NEW TICK
-target index: 50
-current x: 20.256868
-current y: 31.109394
-current theta RAD: 0.449248
-current theta DEG: 25.740002
-target x: 20.200001
-target y: 30.969000
-lookahead dist: 7.202500
-target vel: 3887.000000
-curvature: -0.067164
-target vels: 51.901550 127.000000
-
-NEW TICK
-target index: 50
-current x: 20.325529
-current y: 31.248119
-current theta RAD: 0.467102
-current theta DEG: 26.762996
-target x: 20.200001
-target y: 30.969000
-lookahead dist: 7.502500
-target vel: 3887.000000
-curvature: -0.063774
-target vels: 54.612122 127.000000
-
-NEW TICK
-target index: 50
-current x: 20.385414
-current y: 31.367085
-current theta RAD: 0.465375
-current theta DEG: 26.664012
-target x: 20.200001
-target y: 30.969000
-lookahead dist: 7.394584
-target vel: 3887.000000
-curvature: -0.064584
-target vels: 53.956913 127.000000
-
-NEW TICK
-target index: 50
-current x: 20.409575
-current y: 31.415373
-current theta RAD: 0.462495
-current theta DEG: 26.499002
-target x: 20.200001
-target y: 30.969000
-lookahead dist: 7.389584
-target vel: 3887.000000
-curvature: -0.063053
-target vels: 55.198509 126.999992
-
-NEW TICK
-target index: 51
-current x: 20.468512
-current y: 31.534817
-current theta RAD: 0.453855
-current theta DEG: 26.003993
-target x: 20.492001
-target y: 31.959999
-lookahead dist: 7.466667
-target vel: 3887.000000
-curvature: -0.060764
-target vels: 57.088299 127.000000
-
-NEW TICK
-target index: 51
-current x: 20.509254
-current y: 31.619074
-current theta RAD: 0.446944
-current theta DEG: 25.608005
-target x: 20.492001
-target y: 31.959999
-lookahead dist: 6.839167
-target vel: 4010.000000
-curvature: -0.070440
-target vels: 49.358604 127.000000
-
-NEW TICK
-target index: 51
-current x: 20.552948
-current y: 31.709902
-current theta RAD: 0.450400
-current theta DEG: 25.806009
-target x: 20.492001
-target y: 31.959999
-lookahead dist: 7.239583
-target vel: 4010.000000
-curvature: -0.065852
-target vels: 52.941216 126.999992
-
-NEW TICK
-target index: 51
-current x: 20.578081
-current y: 31.761726
-current theta RAD: 0.452704
-current theta DEG: 25.938023
-target x: 20.492001
-target y: 31.959999
-lookahead dist: 6.454166
-target vel: 4010.000000
-curvature: -0.079781
-target vels: 42.487831 127.000008
-
-NEW TICK
-target index: 51
-current x: 20.653589
-current y: 31.917137
-current theta RAD: 0.456159
-current theta DEG: 26.136010
-target x: 20.492001
-target y: 31.959999
-lookahead dist: 7.039166
-target vel: 4010.000000
-curvature: -0.070660
-target vels: 49.190006 127.000000
-
-NEW TICK
-target index: 51
-current x: 20.672619
-current y: 31.955917
-current theta RAD: 0.456159
-current theta DEG: 26.136010
-target x: 20.492001
-target y: 31.959999
-lookahead dist: 7.207500
-target vel: 4010.000000
-curvature: -0.068362
-target vels: 50.962696 127.000008
-
-NEW TICK
-target index: 51
-current x: 20.693222
-current y: 31.997931
-current theta RAD: 0.456735
-current theta DEG: 26.168986
-target x: 20.492001
-target y: 31.959999
-lookahead dist: 7.250834
-target vel: 4010.000000
-curvature: -0.067204
-target vels: 51.870060 127.000000
-
-NEW TICK
-target index: 51
-current x: 20.712229
-current y: 32.036724
-current theta RAD: 0.454431
-current theta DEG: 26.036990
-target x: 20.492001
-target y: 31.959999
-lookahead dist: 7.292083
-target vel: 4010.000000
-curvature: -0.063516
-target vels: 54.821178 127.000000
-
-NEW TICK
-target index: 51
-current x: 20.762123
-current y: 32.140545
-current theta RAD: 0.441761
-current theta DEG: 25.311018
-target x: 20.492001
-target y: 31.959999
-lookahead dist: 7.422916
-target vel: 4010.000000
-curvature: -0.059101
-target vels: 58.485600 127.000000
-
-NEW TICK
-target index: 51
-current x: 20.798653
-current y: 32.218834
-current theta RAD: 0.431393
-current theta DEG: 24.716989
-target x: 20.492001
-target y: 31.959999
-lookahead dist: 7.546250
-target vel: 4010.000000
-curvature: -0.054020
-target vels: 62.889061 126.999992
-
-NEW TICK
-target index: 52
-current x: 20.871193
-current y: 32.379612
-current theta RAD: 0.416994
-current theta DEG: 23.891999
-target x: 20.716999
-target y: 32.875999
-lookahead dist: 7.597500
-target vel: 4010.000000
-curvature: -0.051660
-target vels: 65.006180 127.000000
-
-NEW TICK
-target index: 52
-current x: 20.905910
-current y: 32.458725
-current theta RAD: 0.410082
-current theta DEG: 23.495992
-target x: 20.716999
-target y: 32.875999
-lookahead dist: 7.661667
-target vel: 3899.000000
-curvature: -0.049947
-target vels: 66.572891 127.000000
-
-NEW TICK
-target index: 52
-current x: 21.042727
-current y: 32.776058
-current theta RAD: 0.406627
-current theta DEG: 23.297988
-target x: 20.716999
-target y: 32.875999
-lookahead dist: 7.723333
-target vel: 3899.000000
-curvature: -0.049453
-target vels: 67.028748 127.000000
-
-NEW TICK
-target index: 52
-current x: 21.071241
-current y: 32.842171
-current theta RAD: 0.407779
-current theta DEG: 23.364012
-target x: 20.716999
-target y: 32.875999
-lookahead dist: 7.571667
-target vel: 3899.000000
-curvature: -0.051774
-target vels: 64.903061 127.000000
-
-NEW TICK
-target index: 52
-current x: 21.182829
-current y: 33.099819
-current theta RAD: 0.408930
-current theta DEG: 23.429985
-target x: 20.716999
-target y: 32.875999
-lookahead dist: 7.664166
-target vel: 3899.000000
-curvature: -0.049822
-target vels: 66.687798 127.000000
-
-NEW TICK
-target index: 52
-current x: 21.258463
-current y: 33.274979
-current theta RAD: 0.406050
-current theta DEG: 23.264975
-target x: 20.716999
-target y: 32.875999
-lookahead dist: 7.363750
-target vel: 3899.000000
-curvature: -0.053346
-target vels: 63.488911 127.000008
+DELAYED
 
 NEW TICK
 target index: 53
-current x: 21.292494
-current y: 33.354385
-current theta RAD: 0.403747
-current theta DEG: 23.132995
-target x: 20.914000
-target y: 33.856998
-lookahead dist: 7.392083
-target vel: 3899.000000
-curvature: -0.051067
-target vels: 65.545586 127.000000
-
-NEW TICK
-target index: 53
-current x: 21.359735
-current y: 33.513554
-current theta RAD: 0.396836
-current theta DEG: 22.737023
-target x: 20.914000
-target y: 33.856998
-lookahead dist: 7.358750
-target vel: 3954.000000
-curvature: -0.048383
-target vels: 68.025139 126.999992
-
-NEW TICK
-target index: 53
-current x: 21.420185
-current y: 33.659946
-current theta RAD: 0.385316
-current theta DEG: 22.077007
-target x: 20.914000
-target y: 33.856998
-lookahead dist: 6.739167
-target vel: 3954.000000
-curvature: -0.056471
-target vels: 60.738613 126.999992
-
-NEW TICK
-target index: 53
-current x: 21.455112
-current y: 33.746780
-current theta RAD: 0.379557
-current theta DEG: 21.747007
-target x: 20.914000
-target y: 33.856998
-lookahead dist: 6.727500
-target vel: 3954.000000
-curvature: -0.055179
-target vels: 61.865673 127.000000
-
-NEW TICK
-target index: 53
-current x: 21.500107
-current y: 33.860603
-current theta RAD: 0.374949
-current theta DEG: 21.482996
-target x: 20.914000
-target y: 33.856998
-lookahead dist: 6.791667
-target vel: 3954.000000
-curvature: -0.053664
-target vels: 63.204979 127.000000
-
-NEW TICK
-target index: 53
-current x: 21.515902
-current y: 33.900806
-current theta RAD: 0.373797
-current theta DEG: 21.417006
-target x: 20.914000
-target y: 33.856998
-lookahead dist: 7.420417
-target vel: 3954.000000
-curvature: -0.044254
-target vels: 71.967896 127.000000
-
-NEW TICK
-target index: 53
-current x: 21.540829
-current y: 33.964500
-current theta RAD: 0.374373
-current theta DEG: 21.449983
-target x: 20.914000
-target y: 33.856998
-lookahead dist: 7.176667
-target vel: 3954.000000
-curvature: -0.047253
-target vels: 69.088676 127.000000
-
-NEW TICK
-target index: 53
-current x: 21.559231
-current y: 34.011417
-current theta RAD: 0.373221
-current theta DEG: 21.383993
-target x: 20.914000
-target y: 33.856998
-lookahead dist: 7.410417
-target vel: 3954.000000
-curvature: -0.042511
-target vels: 73.680115 127.000008
-
-NEW TICK
-target index: 53
-current x: 21.591820
-current y: 34.095303
-current theta RAD: 0.368038
-current theta DEG: 21.087005
-target x: 20.914000
-target y: 33.856998
-lookahead dist: 7.519167
-target vel: 3954.000000
-curvature: -0.037441
-target vels: 78.833229 127.000000
-
-NEW TICK
-target index: 54
-current x: 21.668209
-current y: 34.297321
-current theta RAD: 0.355366
-current theta DEG: 20.360999
-target x: 21.101999
-target y: 34.835999
-lookahead dist: 7.234167
-target vel: 3954.000000
-curvature: -0.040181
-target vels: 76.016518 127.000000
-
-NEW TICK
-target index: 54
-current x: 21.705667
-current y: 34.398609
-current theta RAD: 0.353063
-current theta DEG: 20.229002
-target x: 21.101999
-target y: 34.835999
-lookahead dist: 7.837500
-target vel: 3843.000000
-curvature: -0.027499
-target vels: 89.748077 127.000000
-
-NEW TICK
-target index: 54
-current x: 21.891569
-current y: 34.924679
-current theta RAD: 0.336360
-current theta DEG: 19.271999
-target x: 21.101999
-target y: 34.835999
-lookahead dist: 7.263750
-target vel: 3843.000000
-curvature: -0.033525
-target vels: 82.999237 127.000000
-
-NEW TICK
-target index: 54
-current x: 21.912954
-current y: 34.985840
-current theta RAD: 0.336360
-current theta DEG: 19.271999
-target x: 21.101999
-target y: 34.835999
-lookahead dist: 7.596250
-target vel: 3843.000000
-curvature: -0.027140
-target vels: 90.163063 127.000008
-
-NEW TICK
-target index: 55
-current x: 21.971918
-current y: 35.155899
-current theta RAD: 0.328296
-current theta DEG: 18.810001
-target x: 21.282000
-target y: 35.743999
-lookahead dist: 7.735000
-target vel: 3843.000000
-curvature: -0.022627
-target vels: 95.529503 126.999992
-
-NEW TICK
-target index: 55
-current x: 22.019924
-current y: 35.299263
-current theta RAD: 0.317929
-current theta DEG: 18.215972
-target x: 21.282000
-target y: 35.743999
-lookahead dist: 6.949583
-target vel: 3868.000000
-curvature: -0.024930
-target vels: 92.758263 127.000008
-
-NEW TICK
-target index: 55
-current x: 22.077999
-current y: 35.480995
-current theta RAD: 0.298922
-current theta DEG: 17.126972
-target x: 21.282000
-target y: 35.743999
-lookahead dist: 6.922500
-target vel: 3868.000000
-curvature: -0.024093
-target vels: 93.757469 127.000000
-
-NEW TICK
-target index: 55
-current x: 22.098047
-current y: 35.546387
-current theta RAD: 0.296043
-current theta DEG: 16.962000
-target x: 21.282000
-target y: 35.743999
-lookahead dist: 7.397083
-target vel: 3868.000000
-curvature: -0.016942
-target vels: 102.680397 127.000000
-
-NEW TICK
-target index: 55
-current x: 22.131346
-current y: 35.656658
-current theta RAD: 0.290283
-current theta DEG: 16.631999
-target x: 21.282000
-target y: 35.743999
-lookahead dist: 7.299583
-target vel: 3868.000000
-curvature: -0.016328
-target vels: 103.479393 127.000000
-
-NEW TICK
-target index: 55
-current x: 22.147705
-current y: 35.711884
-current theta RAD: 0.285676
-current theta DEG: 16.368005
-target x: 21.282000
-target y: 35.743999
-lookahead dist: 7.348333
-target vel: 3868.000000
-curvature: -0.011116
-target vels: 110.500084 126.999992
-
-NEW TICK
-target index: 55
-current x: 22.183350
-current y: 35.836475
-current theta RAD: 0.270701
-current theta DEG: 15.510003
-target x: 21.282000
-target y: 35.743999
-lookahead dist: 7.229167
-target vel: 3868.000000
-curvature: -0.006565
-target vels: 116.988304 127.000000
-
-NEW TICK
-target index: 55
-current x: 22.225264
-current y: 35.992947
-current theta RAD: 0.253998
-current theta DEG: 14.552998
-target x: 21.282000
-target y: 35.743999
-lookahead dist: 6.457917
-target vel: 3868.000000
-curvature: -0.012770
-target vels: 108.225853 126.999992
-
-NEW TICK
-target index: 55
-current x: 22.239679
-current y: 36.048710
-current theta RAD: 0.250542
-current theta DEG: 14.354978
-target x: 21.282000
-target y: 35.743999
-lookahead dist: 7.212500
-target vel: 3868.000000
-curvature: -0.004812
-target vels: 119.584587 127.000000
-
-NEW TICK
-target index: 56
-current x: 22.254835
-current y: 36.107998
-current theta RAD: 0.249966
-current theta DEG: 14.322001
-target x: 21.490000
-target y: 36.748001
-lookahead dist: 7.970834
-target vel: 3868.000000
-curvature: 0.009907
-target vels: 126.999992 112.190369
-
-NEW TICK
-target index: 58
-current x: 22.838642
-current y: 38.451801
-current theta RAD: 0.245934
-current theta DEG: 14.090984
-target x: 22.121000
-target y: 38.898998
-lookahead dist: 7.415417
-target vel: 3862.000000
-curvature: 0.009985
-target vels: 127.000008 112.079758
-
-NEW TICK
-target index: 58
-current x: 22.926256
-current y: 38.797237
-current theta RAD: 0.249966
-current theta DEG: 14.321983
-target x: 22.121000
-target y: 38.898998
-lookahead dist: 7.245833
-target vel: 3886.000000
-curvature: 0.010332
-target vels: 127.000000 111.592850
-
-NEW TICK
-target index: 58
-current x: 22.997566
-current y: 39.076248
-current theta RAD: 0.251118
-current theta DEG: 14.387990
-target x: 22.121000
-target y: 38.898998
-lookahead dist: 7.112500
-target vel: 3886.000000
-curvature: 0.013733
-target vels: 127.000000 106.922394
+TURN CLOCKWISE
+turn end index: 58
+target theta: -3.630000
+beginning theta: -273.801056
+ending theta: -5.906921
 
 NEW TICK
 target index: 59
-current x: 23.077585
-current y: 39.397606
-current theta RAD: 0.241903
-current theta DEG: 13.860003
-target x: 22.490999
-target y: 39.844002
-lookahead dist: 7.487083
-target vel: 3886.000000
-curvature: 0.009494
-target vels: 127.000008 112.771828
+DELAYED
 
 NEW TICK
-target index: 59
-current x: 23.148424
-current y: 39.676735
-current theta RAD: 0.256877
-current theta DEG: 14.717989
-target x: 22.490999
-target y: 39.844002
-lookahead dist: 7.640000
-target vel: 3998.000000
-curvature: 0.007608
-target vels: 127.000008 115.470215
+target index: 66
+TURN CLOCKWISE
+turn end index: 73
+target theta: -95.997002
+beginning theta: -5.906921
+ending theta: 262.218048
 
 NEW TICK
-target index: 59
-current x: 23.168722
-current y: 39.753288
-current theta RAD: 0.261485
-current theta DEG: 14.981983
-target x: 22.490999
-target y: 39.844002
-lookahead dist: 7.845000
-target vel: 3998.000000
-curvature: 0.002829
-target vels: 126.999992 122.586678
+target index: 74
+DELAYED
 
 NEW TICK
-target index: 59
-current x: 23.240490
-current y: 40.013550
-current theta RAD: 0.275884
-current theta DEG: 15.806991
-target x: 22.490999
-target y: 39.844002
-lookahead dist: 7.535833
-target vel: 3998.000000
-curvature: 0.001073
-target vels: 127.000000 125.308739
+target index: 75
+DELAYED
 
 NEW TICK
-target index: 60
-current x: 23.281307
-current y: 40.155388
-current theta RAD: 0.284524
-current theta DEG: 16.301998
-target x: 22.924999
-target y: 40.855999
-lookahead dist: 7.660417
-target vel: 3998.000000
-curvature: -0.002454
-target vels: 123.163490 127.000000
+target index: 76
+DELAYED
 
 NEW TICK
-target index: 60
-current x: 23.377909
-current y: 40.479679
-current theta RAD: 0.293739
-current theta DEG: 16.830020
-target x: 22.924999
-target y: 40.855999
-lookahead dist: 6.162917
-target vel: 3948.000000
-curvature: -0.006686
-target vels: 116.811508 127.000000
+target index: 77
+DELAYED
 
 NEW TICK
-target index: 60
-current x: 23.466805
-current y: 40.761147
-current theta RAD: 0.314473
-current theta DEG: 18.017971
-target x: 22.924999
-target y: 40.855999
-lookahead dist: 5.755833
-target vel: 3948.000000
-curvature: -0.006956
-target vels: 116.417229 127.000008
+target index: 79
+TURN COUNTERCLOCKWISE
+turn end index: 83
+target theta: -2.046000
+beginning theta: 262.218048
+ending theta: -0.000019
 
 NEW TICK
-target index: 60
-current x: 23.470142
-current y: 40.771420
-current theta RAD: 0.313897
-current theta DEG: 17.984976
-target x: 22.924999
-target y: 40.855999
-lookahead dist: 7.230417
-target vel: 3948.000000
-curvature: -0.008890
-target vels: 113.629936 127.000000
+target index: 84
+DELAYED
 
 NEW TICK
-target index: 60
-current x: 23.522320
-current y: 40.932362
-current theta RAD: 0.314473
-current theta DEG: 18.017988
-target x: 22.924999
-target y: 40.855999
-lookahead dist: 7.669583
-target vel: 3948.000000
-curvature: -0.012459
-target vels: 108.650253 127.000000
+target index: 85
+DELAYED
 
 NEW TICK
-target index: 60
-current x: 23.561600
-current y: 41.052071
-current theta RAD: 0.319657
-current theta DEG: 18.314994
-target x: 22.924999
-target y: 40.855999
-lookahead dist: 7.535833
-target vel: 3948.000000
-curvature: -0.011377
-target vels: 110.137344 126.999992
+target index: 86
+DELAYED
 
 NEW TICK
-target index: 61
-current x: 23.635714
-current y: 41.277798
-current theta RAD: 0.311594
-current theta DEG: 17.852997
-target x: 23.315001
-target y: 41.757999
-lookahead dist: 7.000834
-target vel: 3948.000000
-curvature: -0.008702
-target vels: 113.898628 126.999992
+target index: 87
+DELAYED
 
 NEW TICK
-target index: 61
-current x: 23.678329
-current y: 41.411564
-current theta RAD: 0.305258
-current theta DEG: 17.489985
-target x: 23.315001
-target y: 41.757999
-lookahead dist: 6.615833
-target vel: 3868.000000
-curvature: -0.004880
-target vels: 119.481789 127.000000
+target index: 88
+DELAYED
+
+NEW TICK
+target index: 89
+DELAYED
+
+NEW TICK
+target index: 90
+TURN COUNTERCLOCKWISE
+turn end index: 94
+target theta: 1.749000
+beginning theta: 0.032958
+ending theta: -356.697083
+
+NEW TICK
+target index: 95
+DELAYED
+
+NEW TICK
+target index: 96
+DELAYED
+
+NEW TICK
+target index: 97
+DELAYED
 

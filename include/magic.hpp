@@ -1,21 +1,24 @@
 #ifndef MAGIC_HPP
 #define MAGIC_HPP
 
-#include "main.h"
 #include "globals.hpp"
-#include "intake.hpp"
-#include "piston.hpp"
-#include <iostream>
 #include <fstream>
 #include <string>
+
+extern int section;
 
 inline std::ofstream fileO;
 inline std::ofstream fileOTwo;
 inline std::ofstream fileOThree;
+
 inline std::ifstream fileI;
 inline std::ifstream fileITwo;
+
 inline std::ofstream fileInterrupt;
 inline std::ofstream fileInterruptTwo;
+
+inline std::ofstream reflector;
+inline std::ofstream reflectorTwo;
 
 // inline std::ofstream newPoseFile;
 // inline std::ofstream newExtraFile;
@@ -29,6 +32,7 @@ extern float prevError;
 void initO();
 void initDebug();
 void initInterrupt(int lastSection, int stopIndex);
+void initButtonInterrupt(int stopIndex);
 
 void closeO();
 void closeOInterrupt();
@@ -42,6 +46,10 @@ void writeInterruptAdditional();
 void addSegment();
 
 void rerunPIDs();
+
+void reflect();
+
+std::vector<std::string> readElementMagic(const std::string& input, const std::string& delimiter);
 
 //jerry
 

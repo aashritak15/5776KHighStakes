@@ -311,11 +311,20 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         //* speed multipliers
         //* copy file, write to new file, replace????
 
-        if(subValues.at(closestPoint)[3] == std::to_string(2)) {
+        if(subValues.at(closestPoint)[3] == std::to_string(5)) {
             drivetrain.leftMotors->move(0);
             drivetrain.rightMotors->move(0);
 
-            initInterrupt(stoi(subValues.at(closestPoint)[3]), closestPoint);
+            initButtonInterrupt(closestPoint);
+
+            interruptLoop();
+        }
+
+        if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_B)) {
+            drivetrain.leftMotors->move(0);
+            drivetrain.rightMotors->move(0);
+
+            initButtonInterrupt(closestPoint);
 
             interruptLoop();
         }
@@ -361,7 +370,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         } else if(subValues.at(closestPoint)[2] == "TURNING CW" || subValues.at(closestPoint)[2] == "TURNING CCW" ) { //*exclusion for turns (pids are back)
             this->endMotion();
 
-            pros::delay(10);
+            pros::delay(10); //TODO: you can maybe remove
             
             if(subValues.at(closestPoint)[2] == "TURNING CW") {
                 dataLine.append("TURN CLOCKWISE\n");
@@ -435,7 +444,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
 
         // find the lookahead point
 
-        float avgVel = round(((leftMotors.get_voltage() + rightMotors.get_voltage()) * 1000.0) / 2.0 / 1000.0);
+        float avgVel = round(((leftMotors.get_voltage() + rightMotors.get_voltage()) * 1000.0 / 2.0) / 1000.0);
         float pctVel = std::abs(avgVel / 12000);
     
         float lookaheadDist = minLookahead + ((maxLookahead - minLookahead) * pctVel);
@@ -468,12 +477,12 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         // targetVel = proportional + derivative;
 
         // calculate target left and right velocities
-        float targetLeftVel = targetVel * (2 + curvature * drivetrain.trackWidth) / 2; //TODO aight gang what
+        float targetLeftVel = targetVel * (2 + curvature * drivetrain.trackWidth) / 2;
         float targetRightVel = targetVel * (2 - curvature * drivetrain.trackWidth) / 2;
 
         //*secondary exclusion for small vels
-        if ((std::abs(targetLeftVel) < 600) && (std::abs(targetRightVel) < 600)) { //TODO: fix allat
-            dataLine.append("SMALL VEL\n\n");
+        if ((std::abs(targetLeftVel) < 600) && (std::abs(targetRightVel) < 600)) {
+            dataLine.append("VEL < 600\n\n");
             pros::delay(100); //*change to tick speed always
             closestPoint++;
             continue;
@@ -488,7 +497,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
 
         dataLine.append("target vels: " + std::to_string(targetLeftVel) + " " + std::to_string(targetRightVel) + "\n\n");
 
-        leftMotors.move_voltage(targetLeftVel); //TODO: test
+        leftMotors.move_voltage(targetLeftVel);
         rightMotors.move_voltage(targetRightVel);
 
         if (closestPoint == subValues.size() - 2) {
@@ -510,10 +519,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         fileOThree << dataLine;
         fileOThree.flush();
 
-        std::cout<<"closest point: "<<closestPoint<<"\n";
-
         pros::delay(10);
-
     }
 
     drivetrain.leftMotors->move(0);

@@ -1,15 +1,15 @@
 #include "globals.hpp"
-#include "main.h"
 #include "lemlib/api.hpp" // IWYU pragma: keep
 #include "ports.hpp"
 #include "piston.hpp"
 #include "intake.hpp"
 #include "globals.hpp"
-#include "ladybrown.hpp"
 #include "intakePiston.hpp"
 #include "autons.hpp"
 #include "magic.hpp"
 #include <cmath>
+
+
 
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
@@ -33,14 +33,14 @@ pros::Imu imu(11);
 // lemlib::TrackingWheel horizontalTracker(&horizontal, lemlib::Omniwheel::NEW_275, -2.5);
 
 // drivetrain settings
-lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 12.5, lemlib::Omniwheel::NEW_275, 450,
-                              8 // TODO:
+lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 13.3, lemlib::Omniwheel::NEW_275, 450,
+                              6 // TODO:
 );
 
 // lateral motion controller
-lemlib::ControllerSettings linearController(12, // proportional gain (kP) //TODO: tune pids!!!
+lemlib::ControllerSettings linearController(7.3, // proportional gain (kP)
                                             0, // integral gain (kI)
-                                            4, // 48.905, //46.86273, // derivative gain (kD)
+                                            1, // 48.905, //46.86273, // derivative gain (kD)
                                             3, // anti windup
                                             1, // small error range, in inches
                                             100, // small error range timeout, in milliseconds
@@ -50,9 +50,9 @@ lemlib::ControllerSettings linearController(12, // proportional gain (kP) //TODO
 );
 
 // angular motion controller
-lemlib::ControllerSettings angularController(1.5, // proportional gain (kP)
+lemlib::ControllerSettings angularController(4.6, // proportional gain (kP)
                                              0, // integral gain (kI)
-                                             7, // 38,//37.88, // 32.92, //40.5, // derivative gain (kD)
+                                             2, // 38,//37.88, // 32.92, //40.5, // derivative gain (kD)
                                              0, // anti windup
                                              1, // small error range, in degrees
                                              100, // small error range timeout, in milliseconds
@@ -122,6 +122,7 @@ void mainLoop() {
 
 void interruptLoop() {
     int count = 1;
+    int segCount = 1;
 
     while (true) {
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
@@ -141,7 +142,12 @@ void interruptLoop() {
             count = 1;
         }
 
+        if(segCount == 100) {
+            section++;
+        }
+
         count++;
+        segCount++;
 
         closeOInterrupt();
 

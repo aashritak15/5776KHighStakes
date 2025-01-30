@@ -1,6 +1,7 @@
 #include "main.h"
 
+#pragma once
+
 void redSoloWP();
-void redMogo();
+
 void blueSoloWP();
-void blueMogo();
