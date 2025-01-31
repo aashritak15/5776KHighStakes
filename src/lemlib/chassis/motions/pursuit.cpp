@@ -16,6 +16,7 @@
 #include "intake.hpp"
 #include "magic.hpp"
 #include "piston.hpp"
+#include "ladybrown.hpp"
 
 /**
  * @brief function that returns elements in a file line, separated by a delimeter
@@ -311,7 +312,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         //* speed multipliers
         //* copy file, write to new file, replace????
 
-        if(subValues.at(closestPoint)[3] == std::to_string(5)) {
+        if(subValues.at(closestPoint)[4] == std::to_string(5)) {
             drivetrain.leftMotors->move(0);
             drivetrain.rightMotors->move(0);
 
@@ -338,7 +339,10 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         dataLine.append("NEW TICK\n");
         dataLine.append("target index: " + std::to_string(closestPoint) + "\n");
 
-        if (subValues.at(closestPoint)[2] == "STOPPED") { //*primary exclusion for delays
+        target = stod(subValues.at(closestPoint)[2]);
+        runLB();
+
+        if (subValues.at(closestPoint)[3] == "STOPPED") { //*primary exclusion for delays
             drivetrain.leftMotors->move(0);                 
             drivetrain.rightMotors->move(0);
 
@@ -367,12 +371,12 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
             //closestPoint++;
             continue;
 
-        } else if(subValues.at(closestPoint)[2] == "TURNING CW" || subValues.at(closestPoint)[2] == "TURNING CCW" ) { //*exclusion for turns (pids are back)
+        } else if(subValues.at(closestPoint)[3] == "TURNING CW" || subValues.at(closestPoint)[3] == "TURNING CCW" ) { //*exclusion for turns (pids are back)
             this->endMotion();
 
             pros::delay(10); //TODO: you can maybe remove
             
-            if(subValues.at(closestPoint)[2] == "TURNING CW") {
+            if(subValues.at(closestPoint)[3] == "TURNING CW") {
                 dataLine.append("TURN CLOCKWISE\n");
             } else {
                 dataLine.append("TURN COUNTERCLOCKWISE\n");
@@ -382,14 +386,14 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
             //chassis.setPose(pose.x, pose.y, 0);
 
             closestPoint++; 
-            while(subValues.at(closestPoint)[2] == "TURNING CW" || subValues.at(closestPoint)[2] == "TURNING CCW") {closestPoint++;}
+            while(subValues.at(closestPoint)[3] == "TURNING CW" || subValues.at(closestPoint)[3] == "TURNING CCW") {closestPoint++;}
             closestPoint++;
 
             dataLine.append("turn end index: " + std::to_string(closestPoint) + "\n");
 
             dataLine.append("target theta: " + std::to_string(pathPoints.at(closestPoint).theta)+"\n");
 
-            if (subValues.at(prevClosestPoint)[2] == "TURNING CW") {
+            if (subValues.at(prevClosestPoint)[3] == "TURNING CW") {
                 dataLine.append("beginning theta: " + std::to_string(chassis.getPose().theta) + "\n");
                 chassis.turnToHeading(pathPoints.at(closestPoint).theta, 1000, {.direction = AngularDirection::CW_CLOCKWISE}, false); //TODO: TUNE turnToHeading TIMEOUT
                 pros::delay(10);

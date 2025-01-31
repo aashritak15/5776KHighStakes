@@ -52,13 +52,11 @@ void updateLB() {
 
         //start = true;
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
-
         target = 141.7;
-
-        // ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-        //start = true;
     } 
+}
 
+void runLB() {
     double currentAngle = lbRotation.get_position() / 100.0;
     pros::lcd::print(5, "Current angle: %f", currentAngle);
     double distance = target - currentAngle;

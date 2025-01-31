@@ -6,6 +6,7 @@
 #include <fstream>
 #include <string>
 #include <cmath>
+#include "ladybrown.hpp"
 
 int section = 0;
 bool buttonPressed = false;
@@ -169,6 +170,7 @@ void writeAdditional() {
 
     dataLine.append(std::to_string(intakeState) + ", ");
     dataLine.append(std::to_string(clampState) + ", ");
+    dataLine.append(std::to_string(target) + ", ");
 
     if(std::abs(total) < 600) { //TODO: TUNE THIS VALUE
 

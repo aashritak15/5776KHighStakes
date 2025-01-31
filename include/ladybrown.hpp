@@ -14,10 +14,13 @@ void rotationInit();
 void updateLift();
 void allianceStake();
 void updateLB();
+void runLB();
 
 //extern double ladyTarget;
 
 void updateLadyTask(double target);
 void autonLB(double ladyTarget, int timeout);
+
+extern double target;
 
 #endif
