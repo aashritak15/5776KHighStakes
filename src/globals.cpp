@@ -5,6 +5,7 @@
 #include "globals.hpp"
 #include "magic.hpp"
 #include <cmath>
+#include "ladybrown.hpp"
 
 
 
@@ -84,7 +85,7 @@ lemlib::ExpoDriveCurve steerCurve(5, // joystick deadband out of 127
 lemlib::Chassis chassis(drivetrain, linearController, angularController, sensors, &throttleCurve, &steerCurve);
 
 void interruptLoop() {
-    int count = 1;
+    int count = 1; //TODO: check count and segCount logic
     int segCount = 1;
 
     while (true) {
@@ -94,10 +95,11 @@ void interruptLoop() {
         chassis.arcade(leftY, rightX * 0.9);
 
         updateIntake();
+        updateColorSort();
         updateClamp();
-        //updateLadyPID();
-        //updateLadyTask();
-        // updateLB();
+        updateDoink();
+        updateLB();
+        runLB();
 
         if(count == 10) {
             writeInterruptPose();

@@ -32,7 +32,7 @@ extern float prevError;
 void initO();
 void initDebug();
 void initInterrupt(int lastSection, int stopIndex);
-void initButtonInterrupt(int stopIndex);
+// void initButtonInterrupt(int stopIndex);
 
 void closeO();
 void closeOInterrupt();

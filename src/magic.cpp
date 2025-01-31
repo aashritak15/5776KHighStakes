@@ -29,38 +29,7 @@ void initO() {
     }
 }
 
-// void initInterrupt(int lastSection, int stopIndex) {
-//     fileInterrupt.open("/usd/revAutonomous", std::ios::out | std::ios::trunc);
-//     fileInterruptTwo.open("/usd/revExtra", std::ios::out | std::ios::trunc);
-
-//     fileI.open("/usd/autonomous.txt");
-//     fileITwo.open("/usd/extra.txt");
-
-//     if(!fileInterrupt || !fileInterruptTwo || fileI || fileITwo) {
-//         pros::lcd::print(7, "failed to open");
-//         controller.set_text(0, 0, "failed to open");
-//     } else {
-//         controller.set_text(0, 0, "open successful");
-//     }
-
-//     std::string dataLine;
-
-//     for (int i = 0; i<stopIndex; i++) { //TODO: add data checks (like if it isn't getting data properly)
-//         std::getline(fileI, dataLine);
-//         fileInterrupt<<dataLine;
-//     }
-
-//     for (int j = 0; j<stopIndex; j++) {
-//         std::getline(fileITwo, dataLine);
-//         fileInterruptTwo<<dataLine;
-//     }
-
-//     section = lastSection + 1; //TODO: check logic
-
-//     controller.set_text(0, 0, "copied");
-// }
-
-void initButtonInterrupt(int stopIndex) {
+void initInterrupt(int lastSection, int stopIndex) {
     fileInterrupt.open("/usd/revAutonomous", std::ios::out | std::ios::trunc);
     fileInterruptTwo.open("/usd/revExtra", std::ios::out | std::ios::trunc);
     //maybe move out of function
@@ -87,7 +56,10 @@ void initButtonInterrupt(int stopIndex) {
         fileInterruptTwo<<dataLine;
     }
 
-    section++;
+    section = lastSection + 1;
+
+    fileInterrupt.flush();
+    fileInterruptTwo.flush();
 
     controller.set_text(0, 0, "copied");
 }

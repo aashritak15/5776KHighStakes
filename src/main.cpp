@@ -10,7 +10,6 @@
 void initialize() {
 
     pros::lcd::initialize();
-    chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
 
     clampInit();
     doinkInit();
@@ -18,10 +17,15 @@ void initialize() {
     ladyBrownInit();
     opticalInit();
 
+    chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
+    chassis.calibrate(); //TODO: NEVER COMMENT OUT CALIBRATE OR SETPOSE OR ELSE IT WILL BREAK!!!!!!!!
+    chassis.setPose(0, 0, 0);
+
     pros::Task screenTask([&]() {
         while (true) {
 
-
+            //* line 7 reserved for rerun states.
+            
             pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
             pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
             pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
@@ -70,18 +74,14 @@ ASSET(autonomous_txt); // TODO: add std functionality
 ASSET(extra_txt);
 
 void autonomous() {
-    chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
-    chassis.calibrate(); //TODO: NEVER COMMENT OUT CALIBRATE OR SETPOSE OR ELSE IT WILL BREAK!!!!!!!!
-    chassis.setPose(0, 0, 0);
-
     initDebug();
 
-    chassis.follow(autonomous_txt, extra_txt, 10, 40000, true, false);
+    chassis.follow(autonomous_txt, extra_txt);
 }
 
 void opcontrol() {
-    chassis.calibrate();
-    chassis.setPose(0, 0, 0);
+    // chassis.calibrate();
+    // chassis.setPose(0, 0, 0);
 
     initO();
 
