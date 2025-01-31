@@ -30,20 +30,21 @@ void updateClamp() {
     }
 }
 
-void updateDoink() { //TODO: FIX DOINK TO MATCH CLAMP
+void updateDoink() {
+    static bool buttonDoinkPressed = false;
+
     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
-        if (doinkState == 0) {
-            doink.set_value(true);
-            doinkState++;
-        } else if (doinkState == 2) {
-            doink.set_value(false);
-            doinkState++;
+        if (!buttonDoinkPressed) {
+            buttonDoinkPressed = true;
+            if(doinkState == 0) {
+                doinkState = 1;
+                doink.set_value(true);
+            } else {
+                doinkState = 0;
+                doink.set_value(false);
+            }
         }
-    } else if (!controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
-        if (doinkState == 1) {
-            doinkState++;
-        } else if (doinkState == 3) {
-            doinkState = 0;
-        }
+    } else {
+        buttonDoinkPressed = false;
     }
 }

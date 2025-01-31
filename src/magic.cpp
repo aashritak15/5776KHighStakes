@@ -171,6 +171,7 @@ void writeAdditional() {
     dataLine.append(std::to_string(intakeState) + ", ");
     dataLine.append(std::to_string(clampState) + ", ");
     dataLine.append(std::to_string(target) + ", ");
+    dataLine.append(std::to_string(doinkState) + ", ");
 
     if(std::abs(total) < 600) { //TODO: TUNE THIS VALUE
 
