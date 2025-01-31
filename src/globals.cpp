@@ -1,11 +1,8 @@
 #include "globals.hpp"
 #include "lemlib/api.hpp" // IWYU pragma: keep
-#include "ports.hpp"
 #include "piston.hpp"
 #include "intake.hpp"
 #include "globals.hpp"
-#include "intakePiston.hpp"
-#include "autons.hpp"
 #include "magic.hpp"
 #include <cmath>
 
@@ -86,40 +83,6 @@ lemlib::ExpoDriveCurve steerCurve(5, // joystick deadband out of 127
 // create the chassis
 lemlib::Chassis chassis(drivetrain, linearController, angularController, sensors, &throttleCurve, &steerCurve);
 
-void mainLoop() {
-    chassis.calibrate();
-
-    initO();
-
-    int count = 1;
-
-    while (true) {
-      
-        int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
-        int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
-
-        chassis.arcade(leftY, rightX * 0.9);
-
-        updateIntake();
-        updateClamp();
-        //updateLadyPID();
-        //updateLadyTask();
-        // updateLB();
-
-        if(count == 10) {
-            writePose();
-            writeAdditional();
-            count = 1;
-        }
-
-        count++;
-
-        closeO();
-
-        pros::delay(10);
-    }
-}
-
 void interruptLoop() {
     int count = 1;
     int segCount = 1;
@@ -140,6 +103,8 @@ void interruptLoop() {
             writeInterruptPose();
             writeInterruptAdditional();
             count = 1;
+            fileInterrupt.flush();
+            fileInterruptTwo.flush();
         }
 
         if(segCount == 100) {

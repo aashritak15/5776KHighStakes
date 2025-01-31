@@ -1,10 +1,8 @@
 #include "main.h"
 #include "pros/misc.h"
 #include "pros/motors.h"
-#include "ports.hpp"
 #include "ladybrown.hpp"
 #include "globals.hpp"
-#include "lemlib/util.hpp"
 #include "lemlib/timer.hpp"
 #include <cmath>
 
@@ -13,12 +11,6 @@ void ladyBrownInit() {
     ladyBrown.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
     lbRotation.reset_position();
     lbRotation.set_position(0);
-
-//     void* ladyAuton = (void*)autonLB;
-
-//     pros::task_fn_t idk = (pros::task_fn_t) ladyAuton;
-
-//     pros::Task ladyTask (idk);
 }
 
 double target = 0;

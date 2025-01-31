@@ -24,5 +24,4 @@ extern lemlib::ExpoDriveCurve steerCurve;
 
 extern lemlib::Chassis chassis;
 
-void mainLoop();
 void interruptLoop();

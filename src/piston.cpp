@@ -1,12 +1,9 @@
-
 #include "main.h"
-#include "ports.hpp"
 #include "piston.hpp"
 #include "globals.hpp"
 
 void clampInit() { mogoClamp.set_value(false); }
 void doinkInit() { doink.set_value(false); }
-
 
 int clampState = 0;
 int doinkState = 0;

@@ -298,13 +298,11 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
     int compState = pros::competition::get_status();
     distTraveled = 0;
 
-    // float Kd = 1;
-    // float Kp = 7.3;
-    // float prevError = 0;
-
     float minLookahead = 5;
     float maxLookahead = 10;
 
+    sortState = 1; //TODO: change sortState
+    colorSort(0);
 
     // loop until the robot is within the end tolerance
     for (int i = 0; i < timeout / 10 && pros::competition::get_status() == compState && this->motionRunning; i++) {
@@ -401,7 +399,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
                 dataLine.append("beginning theta: " + std::to_string(chassis.getPose().theta) + "\n");
                 chassis.turnToHeading(pathPoints.at(closestPoint).theta, 1000, {.direction = AngularDirection::CW_CLOCKWISE}, false); //TODO: TUNE turnToHeading TIMEOUT
                 pros::delay(10);
-                dataLine.append("ending theta: " + std::to_string(chassis.getPose().theta) + "\n\n"); //TODO: RADIANS??????????
+                dataLine.append("ending theta: " + std::to_string(chassis.getPose().theta) + "\n\n"); //* radians but i don't care anymore
             } else {
                 dataLine.append("beginning theta: " + std::to_string(chassis.getPose().theta) + "\n");
                 chassis.turnToHeading(pathPoints.at(closestPoint).theta, 1000, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE}, false);
@@ -456,9 +454,11 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         //*PIDs
         targetVel = std::stof(velocities.at(closestPoint));
 
-        // if(subValues.at(closestPoint)[5] == "0") { //TODO: SEGMENT MULTIPLIERS
-        //     targetVel = targetVel * 0.5;
-        // }
+        if(subValues.at(closestPoint)[5] == "0") { //TODO: SEGMENT MULTIPLIERS
+            targetVel = targetVel * 1;
+        } else if(subValues.at(closestPoint)[5] == "1") {
+            targetVel = targetVel * 1;
+        }
 
         // calculate target left and right velocities
         float targetLeftVel = targetVel * (2 + curvature * drivetrain.trackWidth) / 2;
