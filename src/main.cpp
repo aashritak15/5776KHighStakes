@@ -155,6 +155,7 @@ void opcontrol() {
 
         updateIntake();
         updateClamp();
+        updateLB();
         //updateLadyPID();
         //updateLadyTask();
         // updateLB();

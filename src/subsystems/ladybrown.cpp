@@ -1,114 +1,213 @@
+#include "main.h"
 #include "pros/misc.h"
 #include "pros/motors.h"
 #include "ports.hpp"
 #include "ladybrown.hpp"
 #include "globals.hpp"
+#include "lemlib/util.hpp"
+#include "lemlib/timer.hpp"
+#include <cmath>
 
-pros::Rotation rotationSensor(13);
+void ladyBrownInit() { 
+    ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD); 
+    ladyBrown.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
+    lbRotation.reset_position();
+    lbRotation.set_position(0);
 
-void liftInit() { lift.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE); }
+//     void* ladyAuton = (void*)autonLB;
+
+//     pros::task_fn_t idk = (pros::task_fn_t) ladyAuton;
+
+//     pros::Task ladyTask (idk);
+}
+
+double target = 0;
+//double ladyTarget = 0;
+double prevDistance = 0;
+double prevDistance1 = 0;
+double kP = 0.65;
+double kD = 0.65;
+//bool start = false;
 
 void updateLB() {
-    lift.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+    //std::cout<<start<<" ";
+    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
+        target = 166;
+        // ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+        //start = true;
 
-    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) { // lift up/down
-        lift.move_velocity(-100);
-    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) { // lift up/down
-        lift.move_velocity(100);
-    } else {
-        lift.move_velocity(0);
+        // ladyBrown.move_velocity(-100);
+
+    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
+
+        target = 43.4;
+
+        // ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+        //start = true;
+    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) {
+        //target = -10;
+        // ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+
+        target = 5;
+
+        //start = true;
+    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
+
+        target = 141.7;
+
+        // ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+        //start = true;
+    } 
+
+    double currentAngle = lbRotation.get_position() / 100.0;
+    pros::lcd::print(5, "Current angle: %f", currentAngle);
+    double distance = target - currentAngle;
+    double derivative = distance - prevDistance;
+    double armMoveSpeed = (kP * distance) + (kD * derivative);
+    pros::lcd::print(6, "Move speed: %f", armMoveSpeed);
+    // if (armMoveSpeed < 1) {
+    //     armMoveSpeed = 0;
+    // }
+    ladyBrown.move_velocity(armMoveSpeed);
+    prevDistance = distance;
+}
+
+void autonLB(double ladyTarget, int timeout) {
+    lemlib::Timer timer(timeout);
+    
+    while(!timer.isDone() && abs(ladyTarget-lbRotation.get_position() / 100.0)>=1) {
+        double currentAngle = lbRotation.get_position() / 100.0;
+        pros::lcd::print(5, "Current angle: %f", currentAngle);
+        double distance = ladyTarget - currentAngle;
+        double derivative = distance - prevDistance1;
+        double armMoveSpeed = (kP * distance) + (kD * derivative);
+        pros::lcd::print(6, "Move speed: %f", armMoveSpeed);
+        // if (armMoveSpeed < 1) {
+        //     armMoveSpeed = 0;
+        // }
+        ladyBrown.move_velocity(armMoveSpeed);
+        prevDistance1 = distance;
     }
+    ladyBrown.move_velocity(0);
 }
 
 
-/*
+// ladybrown pid
 
-if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2))) {
-setLiftTarget(target: 24);
-// pid that runs constantly
-float liftOutput = liftPID.update(error: liftTarget - lift get_position());
-lift.move(voltage: liftOutput) ;
-}
-
-
-*/
-// const int position1 = 24;
-// const int position2 = 100; // Adjust as per your desired positions
-// const int position3 = 0;
-
-// double kp = 0.0; // Set appropriate PID tuning constants
-// double kd = 0.0;
-
-// int target = position1;
-
-// double prevError = 0;
-
-// bool pidControl = false;
-
-// bool ladyState = false;
-
-// // PID Update Function
-// void updateLadyPID() {
-//     if (pidControl) {
-//         int current = rotationSensor.get_angle();
-
-//         double error = target - current;
-//         double derivative = error - prevError;
-
-//         prevError = error;
-
-//         double power = ((kp * error) + (kd * derivative)) * 100;
-
-//         lift.move_voltage(power); // Assuming move_voltage accepts values in millivolts
-//     } else {
-//         lift.move_voltage(0);
-//     }
-// }
-
-// // Task Update Function
-// void updateLadyTask() {
+// void updateLB() {
 //     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
-//         target = position1; // Reset to position1
-//         pidControl = true;
-//         ladyState = false; // Reset state
+//         setLiftTarget(24);
+//         // pid that runs constantly
+//         float liftOutput = liftPID.update(liftTarget - ladyBrown.get_position());
+//         ladyBrown.move(liftOutput);
 //     }
 
-//     if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_R1)) {
-//         if (target == position1) {
-//             target = position2;
-//         } else if (target == position2) {
-//             target = position3;
+//     const int position1 = 24;
+//     const int position2 = 100; // Adjust as per your desired positions
+//     const int position3 = 0;
+
+//     double kp = 0.0; // Set appropriate PID tuning constants
+//     double kd = 0.0;
+
+//     int target = position1;
+
+//     double prevError = 0;
+
+//     bool pidControl = false;
+
+//     bool ladyState = false;
+
+//     // PID Update Function
+//     void updateLadyPID() {
+//         if (pidControl) {
+//             int current = rotationSensor.get_angle();
+
+//             double error = target - current;
+//             double derivative = error - prevError;
+
+//             prevError = error;
+
+//             double power = ((kp * error) + (kd * derivative)) * 100;
+
+//             ladyBrown.move_voltage(power); // Assuming move_voltage accepts values in millivolts
 //         } else {
-//             target = position1; // Wrap back to position1
+//             ladyBrown.move_voltage(0);
 //         }
-//         pidControl = true; // Enable PID control
+//     }
+
+//     // Task Update Function
+//     void updateLadyTask() {
+//         if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
+//             target = position1; // Reset to position1
+//             pidControl = true;
+//             ladyState = false; // Reset state
+//         }
+
+//         if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_R1)) {
+//             if (target == position1) {
+//                 target = position2;
+//             } else if (target == position2) {
+//                 target = position3;
+//             } else {
+//                 target = position1; // Wrap back to position1
+//             }
+//             pidControl = true; // Enable PID control
+//         }
 //     }
 // }
 
+/// ---------------> Basic
 
+// void updateLB() {
+//     ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 
-//----------> PID 1
-
-// lemlib::PID  (
-//     0,
-//     0,
-//     0
-//     5, 
-//     false
-// );
-
-
-// void updateLadyTask(double target){
-
-//         double current = rotationSensor.get_position(); 
-
-//         double error = lift.calculate(target, current);
-
-//         lift.move(error);
-        
+//     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) { // lift up/down
+//         ladyBrown.move_absolute(-700, -100);
+//         ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+//     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) { // lift up/down
+//         ladyBrown.move_absolute(-130, -100);
+//         ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+//     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) {
+//         ladyBrown.move_absolute(-15, 100);
+//         ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+//     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
+//         ladyBrown.move_absolute(-600, -100);
+//         ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+//     } else {
+//         ladyBrown.move_velocity(0);
+//     }
 // }
 
+// Down is go to -145 but coast
+// right is -600 brake
 
+// void updateLB() {
+//     ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
 
-// ---------> PID 2
+//     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) { // lift up/down
+//         ladyBrown.move_absolute(390, -200);
+//         ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+//         // ladyBrown.move_velocity(-100);
+//     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) { // lift up/down
+//         ladyBrown.move_absolute(1800, -200);
+//         ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
 
+//     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) {
+//         ladyBrown.move_absolute(0, 200);
+//         ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+
+//     } else {
+//         ladyBrown.move_absolute(0, 250);
+//     }
+// }
+
+//     lemlib::PID(0, 0, 0.5, false);
+
+//     void updateLadyTask(double target) {
+//         double current = rotationSensor.get_position();
+
+//         double error = ladyBrown.calculate(target, current);
+
+//         ladyBrown.move(error);
+//     }
+// }
