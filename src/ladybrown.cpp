@@ -32,7 +32,7 @@ void updateLB() {
 
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
         
-        target = 43.4;
+        target = 41;
         ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) {
         ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);

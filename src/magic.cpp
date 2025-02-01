@@ -136,13 +136,22 @@ void writePose() {
 
 void writeAdditional() {
 
-    //*0 is intake, 1 is mogo, 2 is lb, 3 is doinker, 4 is 
+    //*0 is intake, 1 is mogo, 2 is lb, 3 is doinker, 4 is state, 5 is segment
 
     std::string dataLine = "";
 
     std::int32_t left = leftMotors.get_voltage();
     std::int32_t right = rightMotors.get_voltage(); 
     float total = left + right;
+
+    if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) { //TODO: CHANGE BUTTON
+        if (!buttonPressed) {
+            buttonPressed = true;
+            section++;
+        }
+    } else {
+        buttonPressed = false;
+    }
 
     dataLine.append(std::to_string(intakeState) + ", ");
     dataLine.append(std::to_string(clampState) + ", ");
@@ -165,15 +174,6 @@ void writeAdditional() {
 
     } else {
         dataLine.append("GOING, ");
-    }
-
-    if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) { //TODO: CHANGE BUTTON
-        if (!buttonPressed) {
-            buttonPressed = true;
-            section++;
-        }
-    } else {
-        buttonPressed = false;
     }
 
     dataLine.append(std::to_string(section) + "\n");

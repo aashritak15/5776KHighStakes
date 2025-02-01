@@ -31,8 +31,8 @@ pros::MotorGroup rightMotors({8, 21, 17}, pros::MotorGearset::blue);
 // lemlib::TrackingWheel horizontalTracker(&horizontal, lemlib::Omniwheel::NEW_275, -2.5);
 
 // drivetrain settings
-lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 13.3, lemlib::Omniwheel::NEW_275, 450,
-                              6 // TODO:
+lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 14, lemlib::Omniwheel::NEW_275, 450,
+                              0 // TODO:
 );
 
 // lateral motion controller

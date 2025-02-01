@@ -23,7 +23,7 @@ void initialize() {
         while (true) {
 
             //* line 7 reserved for rerun states.
-            
+        
             pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
             pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
             pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
@@ -74,9 +74,14 @@ void autonomous() {
     chassis.calibrate(); //TODO: NEVER COMMENT OUT CALIBRATE OR SETPOSE OR ELSE IT WILL BREAK!!!!!!!!
     chassis.setPose(0, 0, 0);
 
-    initDebug();
+    // initDebug();
 
-    chassis.follow(autonomous_txt, extra_txt, 10, 1000000, true, false);
+    // chassis.follow(autonomous_txt, extra_txt, 10, 1000000, true, false);
+
+    mogoClamp.set_value(true);
+    pros::delay(1000);
+
+    chassis.turnToHeading(90, 10000);
 }
 
 void opcontrol() {
@@ -109,13 +114,15 @@ void opcontrol() {
             fileOTwo.flush();
         }
 
-        if(segCount == 500) { //TODO: NEW SEGMENT EVERY 5 SECONDS
-            section++;
-            segCount = 1;
-        }
+        // if(segCount == 100) { //TODO: NEW SEGMENT EVERY 5 SECONDS
+        //     section++;
+        //     segCount = 1;
+        // }
+
+        
 
         count++;
-        segCount++;
+        // segCount++;
 
         closeO();
 

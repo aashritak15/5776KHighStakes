@@ -210,7 +210,7 @@ float circleIntersect(lemlib::Pose p1, lemlib::Pose p2, lemlib::Pose pose, float
  * @param closest - the index of the point closest to the robot
  * @param lookaheadDist - the lookahead distance of the algorithm
  */
-lemlib::Pose lookaheadPoint(lemlib::Pose lastLookahead, lemlib::Pose pose, std::vector<lemlib::Pose> path, int closest, float lookaheadDist) {
+lemlib::Pose lookaheadPoint(lemlib::Pose lastLookahead, lemlib::Pose pose, std::vector<lemlib::Pose> path, std::vector<std::vector<std::string>> subValues, int closest, float lookaheadDist) {
     // optimizations applied:
     // only consider xintersections that have an index greater than or equal to the point closest
     // to the robot
@@ -221,12 +221,14 @@ lemlib::Pose lookaheadPoint(lemlib::Pose lastLookahead, lemlib::Pose pose, std::
         lemlib::Pose lastPathPose = path.at(i);
         lemlib::Pose currentPathPose = path.at(i + 1);
 
+        if(subValues.at(i)[4] == "STOPPED" || subValues.at(i)[4] == "TURNING CW" || subValues.at(i)[4] == "TURNING CCW") { //TODO: does this make sense
+            return path.at(i);
+        }
+
         float t = circleIntersect(lastPathPose, currentPathPose, pose, lookaheadDist);
 
         if (t != -1) {
             lemlib::Pose lookahead = lastPathPose.lerp(currentPathPose, t);
-            std::cout<<std::to_string(lookahead.x) + "\n";
-            std::cout<<std::to_string(lookahead.y) + "\n";
             return lookahead;
         }
     }
@@ -251,6 +253,10 @@ float findLookaheadCurvature(lemlib::Pose pose, float heading, lemlib::Pose look
     float c = std::tan(heading) * pose.x - pose.y;
     float x = std::fabs(a * lookahead.x + lookahead.y + c) / std::sqrt((a * a) + 1);
     float d = std::hypot(lookahead.x - pose.x, lookahead.y - pose.y);
+
+    if (d < 2) {
+        return 0;
+    }
 
     // return curvature
     return side * ((2 * x) / (d * d));
@@ -286,7 +292,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
     double prevLBTarget;
     double lbTarget = 0;
 
-    sortState = 0; //TODO: change sortState
+    sortState = 0; //TODO: change sortStatews
 
     while (true) {
         // if(subValues.at(closestPoint)[5] == std::to_string(5)) { //interrupt check (by segment)
@@ -314,7 +320,6 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         //line write: tick and index
         dataLine.append("NEW TICK\n");
         dataLine.append("target index: " + std::to_string(closestPoint) + "\n");
-
 
         //update all subsystems
         if (subValues.at(closestPoint)[0] == "0") {intake.move_voltage(0);} 
@@ -416,8 +421,11 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         dataLine.append("lookahead dist: " + std::to_string(lookaheadDist) + "\n"); //write lookahead
 
         //do lookahead
-        lookaheadPose = lookaheadPoint(lastLookahead, pose, pathPoints, closestPoint, lookaheadDist);
+        lookaheadPose = lookaheadPoint(lastLookahead, pose, pathPoints, subValues, closestPoint, lookaheadDist);
         lastLookahead = lookaheadPose; //* update last lookahead position FOR DEVIATION FIXES
+
+        dataLine.append("lookahead x: " + std::to_string(lookaheadPose.x) + "\n");
+        dataLine.append("lookahead y: " + std::to_string(lookaheadPose.y) + "\n");
 
         curvature = findLookaheadCurvature(pose, M_PI / 2 - (pose.theta), lookaheadPose); //TODO: curvature heading variable removed
         dataLine.append("curvature: " + std::to_string(curvature) + "\n"); //write curvature
@@ -425,11 +433,11 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         targetVel = std::stof(velocities.at(closestPoint));
         dataLine.append("target vel: " + std::to_string(targetVel) + "\n"); //write target vel
 
-        if(subValues.at(closestPoint)[5] == "0") { //segment multipliers //TODO: SEGMENT MULTIPLIERS
-            targetVel = targetVel * 1;
-        } else if(subValues.at(closestPoint)[5] == "1") {
-            targetVel = targetVel * 1;
-        }
+        // if(subValues.at(closestPoint)[5] == "0") { //segment multipliers //TODO: SEGMENT MULTIPLIERS
+        //     targetVel = targetVel * 1;
+        // } else if(subValues.at(closestPoint)[5] == "1") {
+        //     targetVel = targetVel * 1;
+        // }
 
         // calculate target left and right velocities
         targetLeftVel = targetVel * (2 + curvature * drivetrain.trackWidth) / 2;
