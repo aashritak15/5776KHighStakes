@@ -351,8 +351,6 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
             dataLine.append("DELAYED\n\n");
             fileOThree<<dataLine;
             fileOThree.flush();
-
-            pros::delay(100); //*change to tick speed always
             closestPoint++;
             //closestPoint++;
             continue;
