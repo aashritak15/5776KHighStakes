@@ -11,13 +11,13 @@
 
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
-pros::MotorGroup leftMotors({-8, -5, -13}, pros::MotorGearset::blue);
-pros::MotorGroup rightMotors({7, 21, 11}, pros::MotorGearset::blue);
+pros::MotorGroup leftMotors({-7, -5, -11}, pros::MotorGearset::blue);
+pros::MotorGroup rightMotors({8, 21, 17}, pros::MotorGearset::blue);
 
 // pros::Rotation vertical(-1);
 // pros::Rotation horizontal(10); //TODO: check later
 
-pros::Imu imu(11);
+// pros::Imu imu(11);
 
 // pros::Rotation verticalEnc(1);
 

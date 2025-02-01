@@ -65,6 +65,7 @@ void initInterrupt(int lastSection, int stopIndex) {
 }
 
 void initDebug() {
+
     fileOThree.open("/usd/debug.txt");
     if(!fileOThree) {
         controller.set_text(0, 0, "failed to open");
@@ -74,7 +75,7 @@ void initDebug() {
 }
 
 void closeO() {
-    if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_B)) {
+    if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
         std::string dataLine = "endData";
 
         fileO << dataLine;
@@ -134,6 +135,9 @@ void writePose() {
 }
 
 void writeAdditional() {
+
+    //*0 is intake, 1 is mogo, 2 is lb, 3 is doinker, 4 is 
+
     std::string dataLine = "";
 
     std::int32_t left = leftMotors.get_voltage();

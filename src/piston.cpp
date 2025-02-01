@@ -30,7 +30,7 @@ void updateClamp() {
 void updateDoink() {
     static bool buttonDoinkPressed = false;
 
-    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
+    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_B)) {
         if (!buttonDoinkPressed) {
             buttonDoinkPressed = true;
             if(doinkState == 0) {

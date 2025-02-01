@@ -4,7 +4,7 @@
 
 #include "main.h"
 
-inline pros::Motor ladyBrown(-17, pros::MotorGearset::red);
+inline pros::Motor ladyBrown(-2, pros::MotorGearset::red);
 // inline pros::Rotation rotationSensor(13);
 inline pros::Rotation lbRotation(13); //AKANKSH CHECK IF THE PORT IS RIGHT
 

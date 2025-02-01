@@ -149,10 +149,10 @@ int findClosest(lemlib::Pose pose, std::vector<lemlib::Pose> path, int prevIndex
     float closestDist = infinity();
     int maxIndex;
 
-    if (prevIndex + 7 > path.size()) {
+    if (prevIndex + 5 > path.size()) {
         maxIndex = path.size();
     } else {
-        maxIndex = prevIndex + 7; //TODO: TUNE VALUE SKIP TOLERANCE
+        maxIndex = prevIndex + 5; //TODO: TUNE VALUE SKIP TOLERANCE
     }
 
     // loop through all path points
@@ -225,7 +225,8 @@ lemlib::Pose lookaheadPoint(lemlib::Pose lastLookahead, lemlib::Pose pose, std::
 
         if (t != -1) {
             lemlib::Pose lookahead = lastPathPose.lerp(currentPathPose, t);
-            lookahead.theta = i;
+            std::cout<<std::to_string(lookahead.x) + "\n";
+            std::cout<<std::to_string(lookahead.y) + "\n";
             return lookahead;
         }
     }
@@ -255,10 +256,7 @@ float findLookaheadCurvature(lemlib::Pose pose, float heading, lemlib::Pose look
     return side * ((2 * x) / (d * d));
 }
 
-void lemlib::Chassis::follow(const asset& path, const asset& sub) {
-    std::cout<<"rerun started\n";
-
-    this->requestMotionStart();
+void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahead, int timeout, bool forwards, bool async) {
 
     std::vector<lemlib::Pose> pathPoints = getData(path); // get list of path points
     std::vector<std::vector<std::string>> subValues = getSubData(sub); //get subsystem values
@@ -280,16 +278,17 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub) {
     float ratio;
 
     int closestPoint = 0;
-    int compState = pros::competition::get_status();
+    // int compState = pros::competition::get_status();
 
     float minLookahead = 5;
     float maxLookahead = 10;
 
-    sortState = 1; //TODO: change sortState
-    colorSort(0);
+    double prevLBTarget;
+    double lbTarget = 0;
+
+    sortState = 0; //TODO: change sortState
 
     while (true) {
-
         // if(subValues.at(closestPoint)[5] == std::to_string(5)) { //interrupt check (by segment)
         //     drivetrain.leftMotors->move(0);
         //     drivetrain.rightMotors->move(0);
@@ -299,14 +298,14 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub) {
         //     interruptLoop();
         // }
 
-        if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_B)) { //interrupt check (by button)
-            drivetrain.leftMotors->move(0);
-            drivetrain.rightMotors->move(0);
+        // if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) { //interrupt check (by button)
+        //     // drivetrain.leftMotors->move(0);
+        //     // drivetrain.rightMotors->move(0);
 
-            initInterrupt(stoi(subValues.at(closestPoint)[5]), closestPoint);
+        //     initInterrupt(stoi(subValues.at(closestPoint)[5]), closestPoint);
 
-            interruptLoop();
-        }
+        //     interruptLoop();
+        // }
         
         std::string dataLine = ""; //initialize debug dataline
 
@@ -315,6 +314,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub) {
         //line write: tick and index
         dataLine.append("NEW TICK\n");
         dataLine.append("target index: " + std::to_string(closestPoint) + "\n");
+
 
         //update all subsystems
         if (subValues.at(closestPoint)[0] == "0") {intake.move_voltage(0);} 
@@ -326,6 +326,12 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub) {
 
         target = stod(subValues.at(closestPoint)[2]);
         runLB();
+
+        // prevLBTarget = lbTarget;
+        // lbTarget = stod(subValues.at(closestPoint)[2]);
+        // if(lbTarget != prevLBTarget) {
+        //     autonLB(lbTarget, 2000);
+        // }
 
         if (subValues.at(closestPoint)[3] == "0") {doink.set_value(false);} 
         else if (subValues.at(closestPoint)[3] == "1") {doink.set_value(true);} 
@@ -347,10 +353,10 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub) {
             continue;
 
         } else if(subValues.at(closestPoint)[4] == "TURNING CW" || subValues.at(closestPoint)[4] == "TURNING CCW" ) { //*turn exclusion
-            this->endMotion();
+            leftMotors.move(0);
+            rightMotors.move(0);
+            pros::delay(10);
 
-            pros::delay(10); //TODO: you can maybe remove
-            
             if(subValues.at(closestPoint)[4] == "TURNING CW") {
                 dataLine.append("TURN CLOCKWISE\n");
             } else {
@@ -384,8 +390,6 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub) {
 
             fileOThree<<dataLine;
             fileOThree.flush();
-
-            this->requestMotionStart();
 
             continue;
         }
@@ -448,6 +452,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub) {
 
         // write velocities
         dataLine.append("target vels: " + std::to_string(targetLeftVel) + " " + std::to_string(targetRightVel) + "\n\n");
+        std::cout<<"target vels: " + std::to_string(targetLeftVel) + " " + std::to_string(targetRightVel) + "\n\n";
 
         // send velocity
         leftMotors.move_voltage(targetLeftVel);
@@ -458,8 +463,6 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub) {
             drivetrain.leftMotors->move(0);
             drivetrain.rightMotors->move(0);
             dataLine.append("PATH FINISHED");
-
-            this->endMotion();
 
             fileOThree << dataLine;
             fileOThree.flush();
@@ -472,4 +475,12 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub) {
 
         pros::delay(10);
     }
+
+    // stop the robot
+    drivetrain.leftMotors->move(0);
+    drivetrain.rightMotors->move(0);
+    // set distTraveled to -1 to indicate that the function has finished
+    distTraveled = -1;
+    // give the mutex back
+    this->endMotion();
 }

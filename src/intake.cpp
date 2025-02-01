@@ -6,7 +6,8 @@
 #include <iostream>
 
 int intakeState = 0;
-int sortState = 2; //1 = score blue sort red, 2 = score red sort blue
+int sortState = 0; //1 = score blue sort red, 2 = score red sort blue
+//int sortState1 = 0;
 bool buttonUpPressed = false;
 bool colorDetected = false;
 
@@ -14,19 +15,9 @@ bool colorDetected = false;
 // bool colorDetected = false;
 
 void colorSort(int lol) {
-
     while (true) {
-
-        if(sortState == 1)
-            controller.set_text(0, 0, "scores blue  ");
-        else if(sortState == 2)
-            controller.set_text(0, 0, "scores red    ");
-        else 
-            controller.set_text(0, 0, "no sort    ");
-
-
         if(sortState == 1) {
-            
+            //controller.set_text(0, 0, "scores blue       ");
             if(optical.get_hue() < 30 && optical.get_hue() > 8) {
                 if(!colorDetected) {
                     colorDetected = true;
@@ -34,13 +25,13 @@ void colorSort(int lol) {
                     intake.move_voltage(0);
                     pros::Task::delay(260);
                     intake.move_voltage(-12000);
-                    std::cout<<optical.get_hue()<<"\n";
                 }
             } else {
                 colorDetected = false;
             }
             //std::cout<<colorDetected<<"\n";
         } else if(sortState == 2) {
+            //controller.set_text(0, 0, "scores red        ");
             if(optical.get_hue() < 245 && optical.get_hue() > 90) {
                 if(!colorDetected) {
                     colorDetected = true;
@@ -48,11 +39,12 @@ void colorSort(int lol) {
                     intake.move_voltage(0);
                     pros::Task::delay(260);
                     intake.move_voltage(-12000);
-                    std::cout<<optical.get_hue()<<"\n";
                 }
             } else {
                 colorDetected = false;
             }
+        } else {
+            //controller.set_text(0, 0, "no sort         ");
         }
 
         pros::delay(10);
@@ -110,27 +102,38 @@ void updateIntake() {
 }
 
 void updateColorSort() {
-    if(sortState == 1)
-        controller.set_text(0, 0, "scores blue  ");
-    else if(sortState == 2)
-        controller.set_text(0, 0, "scores red    ");
-    else 
-        controller.set_text(0, 0, "no sort    ");
-
-
-    if(!buttonUpPressed) {
-        buttonUpPressed = true;
-        if(sortState == 0) {
-            sortState = 1;
-            controller.set_text(0, 0, "scores red ");
-        } else if(sortState == 1) {
-            sortState = 2;
-            controller.set_text(0, 0, "scores blue");
-        } else if(sortState == 2) {
-            sortState = 0;
-            controller.set_text(0, 0, "no sort    ");
+    if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_UP)) {
+        if(!buttonUpPressed) {
+            buttonUpPressed = true;
+            if(sortState == 0) {
+                sortState = 1;
+                controller.set_text(0, 0, "scores blue");
+            } else if(sortState == 1) {
+                sortState = 2;
+                controller.set_text(0, 0, "scores red");
+            } else if(sortState == 2) {
+                sortState = 0;
+                controller.set_text(0, 0, "no sort");
+            }
         }
     } else {
         buttonUpPressed = false;
     }
+
+    /*
+    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_UP)) {
+        if (!buttonUpPressed) {
+            buttonUpPressed = true;
+            if (sortState1 == 0 || sortState1 == 2) {
+                sortState1 = 1;
+                sortState = 1
+            } else if (sortState1 == 1) {
+                sortState1 = 0;
+                sortState = 0;
+            }
+        }
+    } else {
+        buttonUpPressed = false;
+    }
+    */
 }
