@@ -95,7 +95,7 @@ void closeO() {
 }
 
 void closeOInterrupt() {
-    if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_B)) {
+    if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
         std::string dataLine = "endData";
 
         fileInterrupt << dataLine;
@@ -144,7 +144,7 @@ void writeAdditional() {
     std::int32_t right = rightMotors.get_voltage(); 
     float total = left + right;
 
-    if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) { //TODO: CHANGE BUTTON
+    if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_B)) { //TODO: CHANGE BUTTON
         if (!buttonPressed) {
             buttonPressed = true;
             section++;
@@ -201,21 +201,34 @@ void writeInterruptPose() {
 
 void writeInterruptAdditional() {
     
+    //*0 is intake, 1 is mogo, 2 is lb, 3 is doinker, 4 is state, 5 is segment
+
     std::string dataLine = "";
 
     std::int32_t left = leftMotors.get_voltage();
     std::int32_t right = rightMotors.get_voltage(); 
     float total = left + right;
 
+    if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_B)) { //TODO: CHANGE BUTTON
+        if (!buttonPressed) {
+            buttonPressed = true;
+            section++;
+        }
+    } else {
+        buttonPressed = false;
+    }
+
     dataLine.append(std::to_string(intakeState) + ", ");
     dataLine.append(std::to_string(clampState) + ", ");
+    dataLine.append(std::to_string(target) + ", ");
+    dataLine.append(std::to_string(doinkState) + ", ");
 
-    if(std::abs(total) < 600) {
+    if(std::abs(total) < 600) { //TODO: TUNE THIS VALUE
 
         if(std::abs(right) > 600 && std::abs(left) > 600) {
-            if(right > 0)  {
+            if(right < 0)  { //TODO: CHECK 
                 dataLine.append("TURNING CW, ");
-            } else if (right < 0) {
+            } else if (right > 0) {
                 dataLine.append("TURNING CCW, ");
             }
         } //else if(!(prevIntakeState == intakeState) || !(prevClampState == clampState)) {
@@ -226,15 +239,6 @@ void writeInterruptAdditional() {
 
     } else {
         dataLine.append("GOING, ");
-    }
-
-    if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) { //TODO: CHANGE BUTTON
-        if (!buttonPressed) {
-            buttonPressed = true;
-            section++;
-        }
-    } else {
-        buttonPressed = false;
     }
 
     dataLine.append(std::to_string(section) + "\n");
@@ -269,12 +273,12 @@ void reflect(bool x, bool y) {
                     dataLine.append(std::to_string(stof(pointData.at(i)) * -1));
                     dataLine.append(std::to_string(stof(pointData.at(2)) * -1));
                 }
-            } else if(i == 0) {
+            } /*else if(i == 0) {
                 if(y) {
                     dataLine.append(std::to_string(stof(pointData.at(i)) * -1));
                     dataLine.append(std::to_string(stof(pointData.at(2)) * -1));
                 }
-            }
+            }*/
 
             dataLine.append(pointData.at(i));
         }

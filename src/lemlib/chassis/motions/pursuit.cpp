@@ -254,7 +254,7 @@ float findLookaheadCurvature(lemlib::Pose pose, float heading, lemlib::Pose look
     float x = std::fabs(a * lookahead.x + lookahead.y + c) / std::sqrt((a * a) + 1);
     float d = std::hypot(lookahead.x - pose.x, lookahead.y - pose.y);
 
-    if (d < 2) {
+    if (d < 1) {
         return 0;
     }
 
@@ -286,8 +286,8 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
     int closestPoint = 0;
     // int compState = pros::competition::get_status();
 
-    float minLookahead = 5;
-    float maxLookahead = 10;
+    float minLookahead = 2;
+    float maxLookahead = 15;
 
     double prevLBTarget;
     double lbTarget = 0;
@@ -314,6 +314,9 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         // }
         
         std::string dataLine = ""; //initialize debug dataline
+
+        // get the current position of the robot
+        pose = this->getPose(true); //TODO: THIS IS WHERE RADIANS COME FROM
 
         closestPoint = findClosest(pose, pathPoints, closestPoint); //find closest point 
 
@@ -389,6 +392,8 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
                 dataLine.append("ending theta: " + std::to_string(chassis.getPose().theta) + "\n\n");
             }
 
+            this->setPose(pathPoints.at(closestPoint).x, pathPoints.at(closestPoint).y, chassis.getPose().theta); //TODO: what the 
+
             closestPoint++;
 
             fileOThree<<dataLine;
@@ -396,7 +401,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
 
             continue;
         }
- 
+        
         //line write: coordinates and target
         dataLine.append("current x: " + std::to_string(pose.x) + "\n");
         dataLine.append("current y: " + std::to_string(pose.y) + "\n");
@@ -404,9 +409,6 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         dataLine.append("current theta DEG: " + std::to_string(pose.theta * 180 / M_PI) + "\n");
         dataLine.append("target x: " + std::to_string(pathPoints.at(closestPoint).x) + "\n");
         dataLine.append("target y: " + std::to_string(pathPoints.at(closestPoint).y) + "\n");
-
-        // get the current position of the robot
-        pose = this->getPose(true); //TODO: THIS IS WHERE RADIANS COME FROM
 
         // find the lookahead point
 
@@ -472,6 +474,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
 
             fileOThree << dataLine;
             fileOThree.flush();
+            fileOThree.close();
 
             return;
         }
