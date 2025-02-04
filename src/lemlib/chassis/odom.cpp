@@ -85,7 +85,7 @@ void lemlib::update() {
     if (odomSensors.vertical2 != nullptr) vertical2Raw = odomSensors.vertical2->getDistanceTraveled();
     if (odomSensors.horizontal1 != nullptr) horizontal1Raw = odomSensors.horizontal1->getDistanceTraveled();
     if (odomSensors.horizontal2 != nullptr) horizontal2Raw = odomSensors.horizontal2->getDistanceTraveled();
-    if (odomSensors.imu != nullptr) imuRaw = degToRad(odomSensors.imu->get_rotation());
+    if (odomSensors.imu != nullptr) imuRaw = (round(degToRad(odomSensors.imu->get_rotation())*1000))/1000;
 
     // calculate the change in sensor values
     float deltaVertical1 = vertical1Raw - prevVertical1;
@@ -139,8 +139,6 @@ void lemlib::update() {
     if (verticalWheel != nullptr) rawVertical = verticalWheel->getDistanceTraveled();
     if (horizontalWheel != nullptr) rawHorizontal = horizontalWheel->getDistanceTraveled();
 
-    pros::lcd::print(3, (std::to_string(rawHorizontal).c_str()), rawHorizontal); //TODO: the magical line that shall never be touched
-
     float horizontalOffset = 0;
     float verticalOffset = 0;
     if (verticalWheel != nullptr) verticalOffset = verticalWheel->getOffset();
@@ -151,6 +149,13 @@ void lemlib::update() {
     float deltaY = 0;
     if (verticalWheel != nullptr) deltaY = rawVertical - prevVertical;
     if (horizontalWheel != nullptr) deltaX = rawHorizontal - prevHorizontal;
+
+    if (abs(deltaVertical1 + deltaVertical2) < 2) { //TODO: TUNE
+        if (deltaVertical1 > 600 && deltaVertical2 > 2) {
+            deltaX = 0;
+            deltaY = 0;
+        }
+    }
 
     prevVertical = rawVertical;
     prevHorizontal = rawHorizontal;
@@ -166,8 +171,8 @@ void lemlib::update() {
         localY = 2 * sin(deltaHeading / 2) * (deltaY / deltaHeading + verticalOffset);
     }
 
-    pros::lcd::print(4, (std::to_string(localX).c_str()), rawHorizontal);
-    pros::lcd::print(5, (std::to_string(localY).c_str()), rawHorizontal);
+    pros::lcd::print(4, (std::to_string(localX).c_str()), 0);
+    pros::lcd::print(5, (std::to_string(localY).c_str()), 0);
 
     // save previous pose
     lemlib::Pose prevPose = odomPose;

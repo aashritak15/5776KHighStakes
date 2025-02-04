@@ -255,7 +255,7 @@ float findLookaheadCurvature(lemlib::Pose pose, float heading, lemlib::Pose look
     float d = std::hypot(lookahead.x - pose.x, lookahead.y - pose.y);
 
     if (d < 1) {
-        return 0;
+        return 0; //TODO: it's the magical wonderful minimum lookahead distance thing
     }
 
     // return curvature
@@ -291,6 +291,8 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
 
     double prevLBTarget;
     double lbTarget = 0;
+
+    int turned = 0;
 
     sortState = 0; //TODO: change sortState
 
@@ -402,6 +404,8 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
             if(lookaheadDist<=10)
                 lookaheadDist += 5; //increases lookahead after a turn - remove if it doen't work
 
+            turned++;
+
             continue;
         }
         
@@ -419,7 +423,14 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         avgVel = round(((leftMotors.get_voltage() + rightMotors.get_voltage()) * 1000.0 / 2.0) / 1000.0);
         pctVel = std::abs(avgVel / 12000);
     
-        lookaheadDist = minLookahead + ((maxLookahead - minLookahead) * pctVel);
+        if(turned != 0) {
+            if(turned == 5) {
+                turned = 0;
+            }
+        } else {
+            lookaheadDist = minLookahead + ((maxLookahead - minLookahead) * pctVel);
+        }
+
 
         dataLine.append("lookahead dist: " + std::to_string(lookaheadDist) + "\n"); //write lookahead
 

@@ -8,7 +8,7 @@
 #include "ladybrown.hpp"
 
 
-
+//Note: try moving all this back to main and see if initializing chassis works in initialize
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
 pros::MotorGroup leftMotors({-7, -5, -11}, pros::MotorGearset::blue);
@@ -17,21 +17,21 @@ pros::MotorGroup rightMotors({8, 21, 17}, pros::MotorGearset::blue);
 // pros::Rotation vertical(-1);
 // pros::Rotation horizontal(10); //TODO: check later
 
-// pros::Imu imu(11);
+pros::Imu imu(3);
 
 // pros::Rotation verticalEnc(1);
 
 // lemlib::TrackingWheel vertical(&verticalEnc, lemlib::Omniwheel::NEW_275, 0.125);
 
-pros::Rotation horizontalEnc(3);
+// pros::Rotation horizontalEnc(3);
 
-lemlib::TrackingWheel horizontal(&horizontalEnc, lemlib::Omniwheel::NEW_275, -4.625); //2.75
+// lemlib::TrackingWheel horizontal(&horizontalEnc, lemlib::Omniwheel::NEW_275, -4.625); //2.75
 
 // lemlib::TrackingWheel verticalTracker(&vertical, lemlib::Omniwheel::NEW_275, 0.125);
 // lemlib::TrackingWheel horizontalTracker(&horizontal, lemlib::Omniwheel::NEW_275, -2.5);
 
 // drivetrain settings
-lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 12.625, lemlib::Omniwheel::NEW_275, 450,
+lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 12.5, lemlib::Omniwheel::NEW_275, 450,
                               8 //13.4 trackwidth artificial
 );
 
@@ -48,12 +48,12 @@ lemlib::ControllerSettings linearController(7.3, // proportional gain (kP)
 );
 
 // angular motion controller
-lemlib::ControllerSettings angularController(6, // proportional gain (kP) 4.6
+lemlib::ControllerSettings angularController(8, // proportional gain (kP) 4.6
                                              0, // integral gain (kI)
-                                             2, // 38,//37.88, // 32.92, //40.5, // derivative gain (kD) 2
+                                             75, // 38,//37.88, // 32.92, //40.5, // derivative gain (kD) 2
                                              0, // anti windup
-                                             0.25, // small error range, in degrees
-                                             750, // small error range timeout, in milliseconds
+                                             0.5, // small error range, in degrees
+                                             100, // small error range timeout, in milliseconds
                                              1, // large error range, in degrees
                                              1500, // large error range timeout, in milliseconds
                                              0 // slew
@@ -63,9 +63,9 @@ lemlib::ControllerSettings angularController(6, // proportional gain (kP) 4.6
 // sensors for odometry
 lemlib::OdomSensors sensors(nullptr, // vertical tracking wheel 1, set to null //TODO: what the actual flip
                             nullptr, // vertical tracking wheel 2, set to nullptr as we are using IMEs
-                            &horizontal, // horizontal tracking wheel 1
+                            nullptr, // horizontal tracking wheel 1
                             nullptr, // horizontal tracking wheel 2, set to nullptr as we don't have a second one
-                            nullptr // inertial sensor
+                            &imu // inertial sensor
 );
 
 // tanish driver functions:
