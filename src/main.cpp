@@ -27,8 +27,9 @@ void initialize() {
             pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
             pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
             pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
-            pros::lcd::print(3, "Color: %f", optical.get_hue());
-            pros::lcd::print(4, "LB Rot Sensor: %i", lbRotation.get_position());
+            // pros::lcd::print(3, "Color: %f", optical.get_hue());
+            // pros::lcd::print(4, "LB Rot Sensor: %i", lbRotation.get_position());
+            // pros::lcd::print(5, "Tracking: %i", horizontalEnc.get_position());
 
             // pros::lcd::print(3, "Rotation (Lift): %i", rotationSensor.get_position()); // lift encoder
             // pros::lcd::print(4, "Intake State: %f", intakeState);

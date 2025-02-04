@@ -8,7 +8,7 @@ extern pros::MotorGroup rightMotors;
 extern pros::Imu imu;
 
 // extern pros::Rotation vertical;
-// extern pros::Rotation horizontal;
+extern pros::Rotation horizontalEnc;
 
 extern lemlib::TrackingWheel vertical;
 extern lemlib::TrackingWheel horizontal;

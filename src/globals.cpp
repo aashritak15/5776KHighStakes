@@ -25,14 +25,14 @@ pros::MotorGroup rightMotors({8, 21, 17}, pros::MotorGearset::blue);
 
 pros::Rotation horizontalEnc(3);
 
-lemlib::TrackingWheel horizontal(&horizontalEnc, lemlib::Omniwheel::NEW_275, -2.75); //2.75
+lemlib::TrackingWheel horizontal(&horizontalEnc, lemlib::Omniwheel::NEW_275, -4.625); //2.75
 
 // lemlib::TrackingWheel verticalTracker(&vertical, lemlib::Omniwheel::NEW_275, 0.125);
 // lemlib::TrackingWheel horizontalTracker(&horizontal, lemlib::Omniwheel::NEW_275, -2.5);
 
 // drivetrain settings
-lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 12.5, lemlib::Omniwheel::NEW_275, 450,
-                              8
+lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 12.625, lemlib::Omniwheel::NEW_275, 450,
+                              8 //13.4 trackwidth artificial
 );
 
 // lateral motion controller

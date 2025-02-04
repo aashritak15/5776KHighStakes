@@ -292,7 +292,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
     double prevLBTarget;
     double lbTarget = 0;
 
-    sortState = 0; //TODO: change sortStatews
+    sortState = 0; //TODO: change sortState
 
     while (true) {
         // if(subValues.at(closestPoint)[5] == std::to_string(5)) { //interrupt check (by segment)
@@ -392,12 +392,15 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
                 dataLine.append("ending theta: " + std::to_string(chassis.getPose().theta) + "\n\n");
             }
 
-            this->setPose(pathPoints.at(closestPoint).x, pathPoints.at(closestPoint).y, chassis.getPose().theta); //TODO: what the 
+            // this->setPose(pathPoints.at(closestPoint).x, pathPoints.at(closestPoint).y, chassis.getPose().theta); //TODO: what the 
 
             closestPoint++;
 
             fileOThree<<dataLine;
             fileOThree.flush();
+
+            if(lookaheadDist<=10)
+                lookaheadDist += 5; //increases lookahead after a turn - remove if it doen't work
 
             continue;
         }

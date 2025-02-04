@@ -4,6 +4,7 @@
 // http://thepilons.ca/wp-content/uploads/2018/10/Tracking.pdf
 
 #include <math.h>
+#include "pros/llemu.hpp"
 #include "pros/rtos.hpp"
 #include "lemlib/util.hpp"
 #include "lemlib/chassis/odom.hpp"
@@ -137,6 +138,9 @@ void lemlib::update() {
     float rawHorizontal = 0;
     if (verticalWheel != nullptr) rawVertical = verticalWheel->getDistanceTraveled();
     if (horizontalWheel != nullptr) rawHorizontal = horizontalWheel->getDistanceTraveled();
+
+    pros::lcd::print(3, (std::to_string(rawHorizontal).c_str()), rawHorizontal); //TODO: the magical line that shall never be touched
+
     float horizontalOffset = 0;
     float verticalOffset = 0;
     if (verticalWheel != nullptr) verticalOffset = verticalWheel->getOffset();
@@ -147,6 +151,7 @@ void lemlib::update() {
     float deltaY = 0;
     if (verticalWheel != nullptr) deltaY = rawVertical - prevVertical;
     if (horizontalWheel != nullptr) deltaX = rawHorizontal - prevHorizontal;
+
     prevVertical = rawVertical;
     prevHorizontal = rawHorizontal;
 
@@ -160,6 +165,9 @@ void lemlib::update() {
         localX = 2 * sin(deltaHeading / 2) * (deltaX / deltaHeading + horizontalOffset);
         localY = 2 * sin(deltaHeading / 2) * (deltaY / deltaHeading + verticalOffset);
     }
+
+    pros::lcd::print(4, (std::to_string(localX).c_str()), rawHorizontal);
+    pros::lcd::print(5, (std::to_string(localY).c_str()), rawHorizontal);
 
     // save previous pose
     lemlib::Pose prevPose = odomPose;
