@@ -286,7 +286,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
     int closestPoint = 0;
     // int compState = pros::competition::get_status();
 
-    float minLookahead = 2;
+    float minLookahead = 4;
     float maxLookahead = 15;
 
     double prevLBTarget;
@@ -363,7 +363,8 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         } else if(subValues.at(closestPoint)[4] == "TURNING CW" || subValues.at(closestPoint)[4] == "TURNING CCW" ) { //*turn exclusion
             leftMotors.move(0);
             rightMotors.move(0);
-            pros::delay(10);
+
+            pros::delay(50); //TODO: tune
 
             if(subValues.at(closestPoint)[4] == "TURNING CW") {
                 dataLine.append("TURN CLOCKWISE\n");
@@ -372,7 +373,6 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
             }
 
             int prevClosestPoint = closestPoint;
-            //chassis.setPose(pose.x, pose.y, 0);
 
             closestPoint++; 
             while(subValues.at(closestPoint)[4] == "TURNING CW" || subValues.at(closestPoint)[4] == "TURNING CCW") {closestPoint++;}
@@ -384,19 +384,17 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
 
             if (subValues.at(prevClosestPoint)[4] == "TURNING CW") {
                 dataLine.append("beginning theta: " + std::to_string(chassis.getPose().theta) + "\n");
-                chassis.turnToHeading(pathPoints.at(closestPoint).theta, 1000, {.direction = AngularDirection::CW_CLOCKWISE}, false); //TODO: TUNE turnToHeading TIMEOUT
+                chassis.turnToHeading(pathPoints.at(closestPoint).theta, 2500, {.direction = AngularDirection::CW_CLOCKWISE, .maxSpeed = 100}, false); //TODO: TUNE turnToHeading TIMEOUT
+
                 pros::delay(10);
                 dataLine.append("ending theta: " + std::to_string(chassis.getPose().theta) + "\n\n"); //* radians but i don't care anymore
             } else {
                 dataLine.append("beginning theta: " + std::to_string(chassis.getPose().theta) + "\n");
-                chassis.turnToHeading(pathPoints.at(closestPoint).theta, 1000, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE}, false);
+                chassis.turnToHeading(pathPoints.at(closestPoint).theta, 2500, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE, .maxSpeed = 100}, false);
+
                 pros::delay(10);
                 dataLine.append("ending theta: " + std::to_string(chassis.getPose().theta) + "\n\n");
             }
-
-            // this->setPose(pathPoints.at(closestPoint).x, pathPoints.at(closestPoint).y, chassis.getPose().theta); //TODO: what the 
-
-            closestPoint++;
 
             fileOThree<<dataLine;
             fileOThree.flush();

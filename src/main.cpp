@@ -261,9 +261,9 @@ void autonomous() {
 
     initDebug();
 
-    // chassis.follow(autonomous_txt, extra_txt, 10, 1000000, true, false);
+    chassis.follow(autonomous_txt, extra_txt, 10, 1000000, true, false);
 
-    chassis.turnToHeading(90, 100000);
+    // chassis.turnToHeading(20, 100000);
 }
 
 void opcontrol() {
@@ -279,7 +279,7 @@ void opcontrol() {
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
 
-        chassis.arcade(leftY, rightX * 0.9);
+        chassis.arcade(leftY, rightX); //0.9
 
         updateIntake();
         updateColorSort();
@@ -295,6 +295,11 @@ void opcontrol() {
             fileO.flush();
             fileOTwo.flush();
         }
+
+
+        // pros::lcd::print(4, std::to_string(round(leftMotors.get_voltage()) * 1000.0 / 1000.0).c_str(), 0);
+        // pros::lcd::print(5, std::to_string(round(rightMotors.get_voltage()) * 1000.0 / 1000.0).c_str(), 0);
+        // pros::lcd::print(6, std::to_string(round(leftMotors.get_voltage() + rightMotors.get_voltage()) * 1000.0 / 1000.0 / 2).c_str(), 0);
 
         // if(segCount == 100) { //TODO: NEW SEGMENT EVERY 5 SECONDS
         //     section++;

@@ -92,7 +92,13 @@ void lemlib::update() {
     float deltaVertical2 = vertical2Raw - prevVertical2;
     float deltaHorizontal1 = horizontal1Raw - prevHorizontal1;
     float deltaHorizontal2 = horizontal2Raw - prevHorizontal2;
+
     float deltaImu = imuRaw - prevImu;
+
+    //imu filter 
+    // float alpha = 0.95;
+
+    // float deltaImu = alpha * deltaImu + (1 - alpha) * (imuRaw - prevImu);
 
     // update the previous sensor values
     prevVertical1 = vertical1Raw;
@@ -150,12 +156,12 @@ void lemlib::update() {
     if (verticalWheel != nullptr) deltaY = rawVertical - prevVertical;
     if (horizontalWheel != nullptr) deltaX = rawHorizontal - prevHorizontal;
 
-    if (abs(deltaVertical1 + deltaVertical2) < 1) { //TODO: HARDCODE STOP TRANSLATION DURING TURNS: CHANGE
-        if (deltaVertical1 > 2 && deltaVertical2 > 1) {
-            deltaX = 0;
-            deltaY = 0;
-        }
-    }
+    // if (abs(deltaVertical1 + deltaVertical2) < 1) { //TODO: HARDCODE STOP TRANSLATION DURING TURNS: CHANGE
+    //     if (deltaVertical1 > 2 && deltaVertical2 > 1) {
+    //         deltaX = 0;
+    //         deltaY = 0;
+    //     }
+    // }
 
     prevVertical = rawVertical;
     prevHorizontal = rawHorizontal;
@@ -170,9 +176,6 @@ void lemlib::update() {
         localX = 2 * sin(deltaHeading / 2) * (deltaX / deltaHeading + horizontalOffset);
         localY = 2 * sin(deltaHeading / 2) * (deltaY / deltaHeading + verticalOffset);
     }
-
-    pros::lcd::print(4, (std::to_string(localX).c_str()), 0);
-    pros::lcd::print(5, (std::to_string(localY).c_str()), 0);
 
     // save previous pose
     lemlib::Pose prevPose = odomPose;
@@ -193,6 +196,12 @@ void lemlib::update() {
     odomLocalSpeed.x = ema(localX / 0.01, odomLocalSpeed.x, 0.95);
     odomLocalSpeed.y = ema(localY / 0.01, odomLocalSpeed.y, 0.95);
     odomLocalSpeed.theta = ema(deltaHeading / 0.01, odomLocalSpeed.theta, 0.95);
+
+
+    //veloicty reset thign `
+
+    // if (abs(odomSpeed.x) < 0.01 && abs(odomSpeed.y) < 0.01) { imuRaw = prevImu; }
+
 }
 
 void lemlib::init() {

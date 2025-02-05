@@ -6,7 +6,7 @@
 #include <iostream>
 
 int intakeState = 0;
-int sortState = 2; //1 = score blue sort red, 2 = score red sort blue
+int sortState; //1 = score blue sort red, 2 = score red sort blue
 //int sortState1 = 0;
 bool buttonUpPressed = false;
 bool colorDetected = false;
@@ -54,6 +54,7 @@ void colorSort(int lol) {
 
 void intakeInit() { 
     intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST); 
+    sortState = 0; //TODO: CHANGE
 
     void* colorSorted = (void*)colorSort;
 
@@ -107,13 +108,13 @@ void updateColorSort() {
             buttonUpPressed = true;
             if(sortState == 0) {
                 sortState = 1;
-                controller.set_text(0, 0, "scores blue");
+                controller.set_text(0, 0, "scores blue      ");
             } else if(sortState == 1) {
                 sortState = 2;
-                controller.set_text(0, 0, "scores red");
+                controller.set_text(0, 0, "scores red       ");
             } else if(sortState == 2) {
                 sortState = 0;
-                controller.set_text(0, 0, "no sort");
+                controller.set_text(0, 0, "no sort         ");
             }
         }
     } else {
