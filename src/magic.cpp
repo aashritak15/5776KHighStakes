@@ -12,6 +12,8 @@ int section = 0;
 bool buttonPressed = false;
 float prevError;
 
+bool active = false;
+
 // std::vector<Waypoint> route;
 // int count = 1;
 
@@ -26,6 +28,7 @@ void initO() {
     else {
         pros::lcd::print(7, "goated");
         controller.set_text(0, 0, "goated");
+        active = true;
     }
 }
 
@@ -71,6 +74,7 @@ void initDebug() {
         controller.set_text(0, 0, "failed to open");
     } else {
         controller.set_text(0, 0, "opened");
+        active = true;
     }
 }
 
@@ -89,6 +93,8 @@ void closeO() {
 
         fileO.close();
         fileOTwo.close();
+
+        active = false;
 
         controller.set_text(0, 0, "file closed");
     }
@@ -113,6 +119,8 @@ void closeOInterrupt() {
         fileITwo.close();
 
         controller.set_text(0, 0, "file closed");
+
+        active = false;
     }
 }
 
@@ -129,7 +137,7 @@ void writePose() {
 
     fileO << dataLine;
     
-    if(!fileO) {
+    if(!fileO && active) {
         controller.set_text(0, 0, "write error");
     }
 }
@@ -161,7 +169,7 @@ void writeAdditional() {
     if(std::abs(total) < 600) { //TODO: TUNE THIS VALUE
 
         if(std::abs(right) > 600 && std::abs(left) > 600) {
-            if(right < 0)  { //TODO: CHECK 
+            if(right < 0)  { //TODO: CHECK DIRECTION
                 dataLine.append("TURNING CW, ");
             } else if (right > 0) {
                 dataLine.append("TURNING CCW, ");

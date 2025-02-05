@@ -292,7 +292,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
     double prevLBTarget;
     double lbTarget = 0;
 
-    int turned = 0;
+    // int turned = 0; //TODO: mooncy magic
 
     sortState = 0; //TODO: change sortState
 
@@ -401,10 +401,10 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
             fileOThree<<dataLine;
             fileOThree.flush();
 
-            if(lookaheadDist<=10)
-                lookaheadDist += 5; //increases lookahead after a turn - remove if it doen't work
+            // if(lookaheadDist<=10) //TODO: mooncy magic
+            //     lookaheadDist += 5; //increases lookahead after a turn - remove if it doen't work
 
-            turned++;
+            // turned++;
 
             continue;
         }
@@ -422,14 +422,16 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         // adaptive lookahead
         avgVel = round(((leftMotors.get_voltage() + rightMotors.get_voltage()) * 1000.0 / 2.0) / 1000.0);
         pctVel = std::abs(avgVel / 12000);
+
+        lookaheadDist = minLookahead + ((maxLookahead - minLookahead) * pctVel);
     
-        if(turned != 0) {
-            if(turned == 5) {
-                turned = 0;
-            }
-        } else {
-            lookaheadDist = minLookahead + ((maxLookahead - minLookahead) * pctVel);
-        }
+        // if(turned != 0) { //TODO: MOONCY MAGIC
+        //     if(turned == 5) {
+        //         turned = 0;
+        //     }
+        // } else {
+        //     lookaheadDist = minLookahead + ((maxLookahead - minLookahead) * pctVel);
+        // }
 
 
         dataLine.append("lookahead dist: " + std::to_string(lookaheadDist) + "\n"); //write lookahead
@@ -441,7 +443,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         dataLine.append("lookahead x: " + std::to_string(lookaheadPose.x) + "\n");
         dataLine.append("lookahead y: " + std::to_string(lookaheadPose.y) + "\n");
 
-        curvature = findLookaheadCurvature(pose, M_PI / 2 - (pose.theta), lookaheadPose); //TODO: curvature heading variable removed
+        curvature = findLookaheadCurvature(pose, M_PI / 2 - (pose.theta), lookaheadPose);
         dataLine.append("curvature: " + std::to_string(curvature) + "\n"); //write curvature
 
         targetVel = std::stof(velocities.at(closestPoint));

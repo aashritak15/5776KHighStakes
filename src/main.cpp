@@ -310,8 +310,4 @@ void opcontrol() {
 
         pros::delay(10);
     }
-
-    if(pros::E_CONTROLLER_DIGITAL_RIGHT) {
-    
-}
 }

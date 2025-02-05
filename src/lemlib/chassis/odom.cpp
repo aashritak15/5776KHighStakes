@@ -150,8 +150,8 @@ void lemlib::update() {
     if (verticalWheel != nullptr) deltaY = rawVertical - prevVertical;
     if (horizontalWheel != nullptr) deltaX = rawHorizontal - prevHorizontal;
 
-    if (abs(deltaVertical1 + deltaVertical2) < 2) { //TODO: TUNE
-        if (deltaVertical1 > 600 && deltaVertical2 > 2) {
+    if (abs(deltaVertical1 + deltaVertical2) < 1) { //TODO: HARDCODE STOP TRANSLATION DURING TURNS: CHANGE
+        if (deltaVertical1 > 2 && deltaVertical2 > 1) {
             deltaX = 0;
             deltaY = 0;
         }
