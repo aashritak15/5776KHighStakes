@@ -237,6 +237,7 @@ lemlib::Pose lookaheadPoint(lemlib::Pose lastLookahead, lemlib::Pose pose, std::
     return lastLookahead;
 }
 
+
 /**
  * @brief Get the curvature of a circle that intersects the robot and the lookahead point
  *
@@ -254,9 +255,9 @@ float findLookaheadCurvature(lemlib::Pose pose, float heading, lemlib::Pose look
     float x = std::fabs(a * lookahead.x + lookahead.y + c) / std::sqrt((a * a) + 1);
     float d = std::hypot(lookahead.x - pose.x, lookahead.y - pose.y);
 
-    if (d < 1) {
-        return 0; //TODO: it's the magical wonderful minimum lookahead distance thing
-    }
+    // if (d < 1) {
+    //     return 0; //TODO: it's the magical wonderful minimum lookahead distance thing
+    // }
 
     // return curvature
     return side * ((2 * x) / (d * d));
@@ -334,14 +335,15 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         if (subValues.at(closestPoint)[1] == "0") {mogoClamp.set_value(false);} 
         else if (subValues.at(closestPoint)[1] == "1") {mogoClamp.set_value(true);}        
 
-        target = stod(subValues.at(closestPoint)[2]);
-        runLB();
+        // target = stod(subValues.at(closestPoint)[2]);
+        // runLB();
 
-        // prevLBTarget = lbTarget;
-        // lbTarget = stod(subValues.at(closestPoint)[2]);
-        // if(lbTarget != prevLBTarget) {
-        //     autonLB(lbTarget, 2000);
-        // }
+        prevLBTarget = lbTarget;
+        lbTarget = stod(subValues.at(closestPoint)[2]);
+        if(lbTarget != prevLBTarget) {
+            autonLB(lbTarget, 2000);
+            dataLine.append("lb done\n");
+        }
 
         if (subValues.at(closestPoint)[3] == "0") {doink.set_value(false);} 
         else if (subValues.at(closestPoint)[3] == "1") {doink.set_value(true);} 
@@ -357,7 +359,6 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
             fileOThree<<dataLine;
             fileOThree.flush();
             closestPoint++;
-            //closestPoint++;
             continue;
 
         } else if(subValues.at(closestPoint)[4] == "TURNING CW" || subValues.at(closestPoint)[4] == "TURNING CCW" ) { //*turn exclusion
@@ -395,9 +396,15 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
                 pros::delay(10);
                 dataLine.append("ending theta: " + std::to_string(chassis.getPose().theta) + "\n\n");
             }
+            
+            //pose = this->getPose(true);
+            dataLine.append("current x: " + std::to_string(this->getPose().x) + "\n");
+            dataLine.append("current y: " + std::to_string(this->getPose().y) + "\n");
 
             fileOThree<<dataLine;
             fileOThree.flush();
+
+            //closestPoint++;
 
             // if(lookaheadDist<=10) //TODO: mooncy magic
             //     lookaheadDist += 5; //increases lookahead after a turn - remove if it doen't work
@@ -442,9 +449,16 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         dataLine.append("lookahead y: " + std::to_string(lookaheadPose.y) + "\n");
 
         curvature = findLookaheadCurvature(pose, M_PI / 2 - (pose.theta), lookaheadPose);
+        if(curvature<0.001 && curvature > -0.001) {
+            curvature = 0;
+            dataLine.append("zero");
+        }
         dataLine.append("curvature: " + std::to_string(curvature) + "\n"); //write curvature
 
+        //std::cout<<velocities.size()<<"     "<<pathPoints.size()<<"     "<<closestPoint<<"\n";
         targetVel = std::stof(velocities.at(closestPoint));
+        
+
         dataLine.append("target vel: " + std::to_string(targetVel) + "\n"); //write target vel
 
         // if(subValues.at(closestPoint)[5] == "0") { //segment multipliers //TODO: SEGMENT MULTIPLIERS
