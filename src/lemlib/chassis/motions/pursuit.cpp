@@ -297,6 +297,9 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
 
     sortState = 0; //TODO: change sortState
 
+    this->requestMotionStart();
+    pros::delay(100);
+
     while (true) {
         // if(subValues.at(closestPoint)[5] == std::to_string(5)) { //interrupt check (by segment)
         //     drivetrain.leftMotors->move(0);
@@ -307,14 +310,16 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         //     interruptLoop();
         // }
 
-        // if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) { //interrupt check (by button)
-        //     // drivetrain.leftMotors->move(0);
-        //     // drivetrain.rightMotors->move(0);
+        // doesn't register buttons, maybe run function from driver control
+        if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_B)) { //interrupt check (by button)
+            controller.set_text(0,0,"interrupt");
+            drivetrain.leftMotors->move(0);
+            drivetrain.rightMotors->move(0);
 
-        //     initInterrupt(stoi(subValues.at(closestPoint)[5]), closestPoint);
+            initInterrupt(stoi(subValues.at(closestPoint)[5]), closestPoint);
 
-        //     interruptLoop();
-        // }
+            interruptLoop();
+        }
         
         std::string dataLine = ""; //initialize debug dataline
 
@@ -365,6 +370,8 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
             leftMotors.move(0);
             rightMotors.move(0);
 
+            this->endMotion();
+
             pros::delay(50); //TODO: tune
 
             if(subValues.at(closestPoint)[4] == "TURNING CW") {
@@ -385,26 +392,30 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
 
             if (subValues.at(prevClosestPoint)[4] == "TURNING CW") {
                 dataLine.append("beginning theta: " + std::to_string(chassis.getPose().theta) + "\n");
-                chassis.turnToHeading(pathPoints.at(closestPoint).theta, 2500, {.direction = AngularDirection::CW_CLOCKWISE, .maxSpeed = 100}, false); //TODO: TUNE turnToHeading TIMEOUT
+                chassis.turnToHeading(pathPoints.at(closestPoint).theta, 2500, {.direction = AngularDirection::CW_CLOCKWISE, .maxSpeed = 80}, false); //TODO: TUNE turnToHeading TIMEOUT
 
                 pros::delay(10);
                 dataLine.append("ending theta: " + std::to_string(chassis.getPose().theta) + "\n\n"); //* radians but i don't care anymore
             } else {
                 dataLine.append("beginning theta: " + std::to_string(chassis.getPose().theta) + "\n");
-                chassis.turnToHeading(pathPoints.at(closestPoint).theta, 2500, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE, .maxSpeed = 100}, false);
+                chassis.turnToHeading(pathPoints.at(closestPoint).theta, 2500, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE, .maxSpeed = 80}, false);
 
                 pros::delay(10);
                 dataLine.append("ending theta: " + std::to_string(chassis.getPose().theta) + "\n\n");
             }
+
+            chassis.setPose(pathPoints[closestPoint].x, pathPoints[closestPoint].y, pathPoints[closestPoint].theta); // temp reset position because bot being fat
             
-            //pose = this->getPose(true);
             dataLine.append("current x: " + std::to_string(this->getPose().x) + "\n");
             dataLine.append("current y: " + std::to_string(this->getPose().y) + "\n");
 
             fileOThree<<dataLine;
             fileOThree.flush();
 
-            //closestPoint++;
+            closestPoint++;
+
+            this->requestMotionStart();
+            pros::delay(100);
 
             // if(lookaheadDist<=10) //TODO: mooncy magic
             //     lookaheadDist += 5; //increases lookahead after a turn - remove if it doen't work
@@ -460,6 +471,14 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         
 
         dataLine.append("target vel: " + std::to_string(targetVel) + "\n"); //write target vel
+        dataLine.append("acc target vel: " + std::to_string(leftMotors.get_target_velocity()) + ", " + std::to_string(rightMotors.get_target_velocity()) + "\n");
+        dataLine.append("acc acc vel: " + std::to_string(leftMotors.get_voltage()) + ", " + std::to_string(rightMotors.get_voltage()) + "\n");
+
+
+        //dataLine.append("acc target vel: %f" + leftMotors.get_target_velocity() + ", " + rightMotors.get_target_velocity() + "\n"); 
+        //dataLine.append("acc acc vel: " + leftMotors.get_actual_velocity() + ", " + rightMotors.get_actual_velocity() + "\n");
+
+
 
         // if(subValues.at(closestPoint)[5] == "0") { //segment multipliers //TODO: SEGMENT MULTIPLIERS
         //     targetVel = targetVel * 1;
@@ -503,6 +522,8 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
             fileOThree << dataLine;
             fileOThree.flush();
             fileOThree.close();
+
+            this->endMotion();
 
             return;
         }

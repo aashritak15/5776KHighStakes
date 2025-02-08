@@ -23,7 +23,9 @@ void initialize() {
         while (true) {
 
             //* line 7 reserved for rerun states.
-        
+            std::cout<<chassis.getPose().x<<", "<<chassis.getPose().y<<", "<<chassis.getPose().theta<<"\n";
+
+
             pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
             pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
             pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
@@ -263,7 +265,7 @@ void autonomous() {
 
     chassis.follow(autonomous_txt, extra_txt, 10, 1000000, true, false);
 
-    //chassis.turnToHeading(3, 100000);
+    // chassis.turnToHeading(90, 100000, {.maxSpeed = 80});
 }
 
 void opcontrol() {
