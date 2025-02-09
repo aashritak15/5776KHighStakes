@@ -22,8 +22,8 @@ void initialize() {
     pros::Task screenTask([&]() {
         while (true) {
 
-            //* line 7 reserved for rerun states.
-            std::cout<<chassis.getPose().x<<", "<<chassis.getPose().y<<", "<<chassis.getPose().theta<<"\n";
+            // //* line 7 reserved for rerun states.
+            // std::cout<<chassis.getPose().x<<", "<<chassis.getPose().y<<", "<<chassis.getPose().theta<<"\n";
 
 
             pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
@@ -258,14 +258,20 @@ void blueMogo() {
 }
 
 void autonomous() {
-    // chassis.calibrate(); //TODO: NEVER COMMENT OUT CALIBRATE OR SETPOSE OR ELSE IT WILL BREAK!!!!!!!!
-    // chassis.setPose(0, 0, 0);
+    chassis.calibrate(); //TODO: NEVER COMMENT OUT CALIBRATE OR SETPOSE OR ELSE IT WILL BREAK!!!!!!!!
+    chassis.setPose(0, 0, 0);
+   chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
 
     // initDebug();
 
     // chassis.follow(autonomous_txt, extra_txt, 10, 1000000, true, false);
 
-    chassis.turnToHeading(90, 100000, {.maxSpeed = 80});
+    chassis.turnToHeading(90, 100000);
+    // pros::delay(1000);
+    // chassis.turnToHeading(180, 100000, {.maxSpeed = 80});
+    // pros::delay(1000);
+
+
 }
 
 void opcontrol() {

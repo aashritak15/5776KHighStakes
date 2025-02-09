@@ -13,6 +13,8 @@ void updateIntake();
 void updateColorSort();
 
 void colorSort(int lol);
+void antiJam();
+void antiJamInit();
 
 extern int intakeState;
 extern int sortState;
