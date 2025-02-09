@@ -258,17 +258,25 @@ void blueMogo() {
 }
 
 void autonomous() {
-    chassis.calibrate(); //TODO: NEVER COMMENT OUT CALIBRATE OR SETPOSE OR ELSE IT WILL BREAK!!!!!!!!
-    chassis.setPose(0, 0, 0);
+    // chassis.calibrate(); //TODO: NEVER COMMENT OUT CALIBRATE OR SETPOSE OR ELSE IT WILL BREAK!!!!!!!!
+    // chassis.setPose(0, 0, 0);
 
-    initDebug();
+    // initDebug();
 
-    chassis.follow(autonomous_txt, extra_txt, 10, 1000000, true, false);
+    // chassis.follow(autonomous_txt, extra_txt, 10, 1000000, true, false);
 
-    // chassis.turnToHeading(90, 100000, {.maxSpeed = 80});
+    chassis.turnToHeading(90, 100000, {.maxSpeed = 80});
 }
 
 void opcontrol() {
+    // chassis.calibrate(); //TODO: NEVER COMMENT OUT CALIBRATE OR SETPOSE OR ELSE IT WILL BREAK!!!!!!!!
+    // chassis.setPose(0, 0, 0);
+
+    // initDebug();
+
+    // chassis.follow(interruptAutonomous_txt, interruptExtra_txt, 10, 1000000, true, false);   
+    
+    
     chassis.calibrate();
     chassis.setPose(0, 0, 0);
 

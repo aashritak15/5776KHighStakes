@@ -310,7 +310,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         //     interruptLoop();
         // }
 
-        // doesn't register buttons, maybe run function from driver control
+        // autonomous and extra files NEED to be same as the path you want to interrupt
         if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_B)) { //interrupt check (by button)
             controller.set_text(0,0,"interrupt");
             drivetrain.leftMotors->move(0);
@@ -514,7 +514,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         rightMotors.move_voltage(targetRightVel);
 
         // path termination check
-        if (closestPoint == subValues.size() - 2) {
+        if (subValues.at(closestPoint)[5] == "-1") {
             drivetrain.leftMotors->move(0);
             drivetrain.rightMotors->move(0);
             dataLine.append("PATH FINISHED");

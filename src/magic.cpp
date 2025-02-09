@@ -33,8 +33,8 @@ void initO() {
 }
 
 void initInterrupt(int lastSection, int stopIndex) {
-    fileInterrupt.open("/usd/revAutonomous", std::ios::out | std::ios::trunc);
-    fileInterruptTwo.open("/usd/revExtra", std::ios::out | std::ios::trunc);
+    fileInterrupt.open("/usd/interruptAutonomous.txt", std::ios::out | std::ios::trunc);
+    fileInterruptTwo.open("/usd/interruptExtra.txt", std::ios::out | std::ios::trunc);
     //maybe move out of function
 
     fileI.open("/usd/autonomous.txt");
@@ -51,12 +51,12 @@ void initInterrupt(int lastSection, int stopIndex) {
 
     for (int i = 0; i<stopIndex; i++) { //TODO: add data checks (like if it isn't getting data properly)
         std::getline(fileI, dataLine);
-        fileInterrupt<<dataLine;
+        fileInterrupt<<dataLine<<"\n";
     }
 
     for (int j = 0; j<stopIndex; j++) {
         std::getline(fileITwo, dataLine);
-        fileInterruptTwo<<dataLine;
+        fileInterruptTwo<<dataLine<<"\n";
     }
 
     section = lastSection + 1;
@@ -80,7 +80,10 @@ void initDebug() {
 
 void closeO() {
     if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
-        std::string dataLine = "endData";
+        std::string dataLine = "0, 0, 0.000000, 0, STOPPED, -1";
+        fileOTwo << dataLine;
+        
+        dataLine = "endData";
 
         fileO << dataLine;
         fileOTwo << dataLine;
@@ -102,7 +105,10 @@ void closeO() {
 
 void closeOInterrupt() {
     if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
-        std::string dataLine = "endData";
+        std::string dataLine = "0, 0, 0.000000, 0, STOPPED, -1";
+        fileInterruptTwo << dataLine;
+        
+        dataLine = "endData";
 
         fileInterrupt << dataLine;
         fileInterruptTwo << dataLine;
@@ -168,7 +174,7 @@ void writeAdditional() {
 
     if(std::abs(total) < 600) { //TODO: TUNE THIS VALUE
 
-        if(std::abs(right) > 600 && std::abs(left) > 600) {
+        if(std::abs(right) > 800 && std::abs(left) > 800) {
             if(right < 0)  { //TODO: CHECK DIRECTION
                 dataLine.append("TURNING CW, ");
             } else if (right > 0) {
@@ -233,7 +239,7 @@ void writeInterruptAdditional() {
 
     if(std::abs(total) < 600) { //TODO: TUNE THIS VALUE
 
-        if(std::abs(right) > 600 && std::abs(left) > 600) {
+        if(std::abs(right) > 800 && std::abs(left) > 800) {
             if(right < 0)  { //TODO: CHECK 
                 dataLine.append("TURNING CW, ");
             } else if (right > 0) {
@@ -256,8 +262,8 @@ void writeInterruptAdditional() {
 
 void reflect(bool x, bool y) {
 
-    reflector.open("/usd/reflectAutonomous", std::ios::out | std::ios::trunc);
-    reflector.open("/usd/reflectExtra", std::ios::out | std::ios::trunc);
+    reflector.open("/usd/reflectAutonomous.txt", std::ios::out | std::ios::trunc);
+    reflector.open("/usd/reflectExtra.txt", std::ios::out | std::ios::trunc);
 
     fileI.open("/usd/autonomous.txt");
     fileITwo.open("/usd/extra.txt");
