@@ -8,7 +8,6 @@
 #include <cmath>
 
 void initialize() {
-
     pros::lcd::initialize();
 
     clampInit();
@@ -17,20 +16,18 @@ void initialize() {
     ladyBrownInit();
     opticalInit();
 
-    chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
+    // chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
 
     pros::Task screenTask([&]() {
         while (true) {
-
             // //* line 7 reserved for rerun states.
             // std::cout<<chassis.getPose().x<<", "<<chassis.getPose().y<<", "<<chassis.getPose().theta<<"\n";
-
 
             pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
             pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
             pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
             // pros::lcd::print(3, "Color: %f", optical.get_hue());
-            // pros::lcd::print(4, "LB Rot Sensor: %i", lbRotation.get_position());
+            pros::lcd::print(4, "LB Rot Sensor: %i", lbRotation.get_position());
             // pros::lcd::print(5, "Tracking: %i", horizontalEnc.get_position());
 
             // pros::lcd::print(3, "Rotation (Lift): %i", rotationSensor.get_position()); // lift encoder
@@ -45,7 +42,6 @@ void initialize() {
             // pros::lcd::print(7, "RightM Encoders: %f", right[1]);
             // pros::lcd::print(8, "RightB Encoders: %f", right[2]);
             // pros::lcd::print(7 "Color: %f", optical.get_hue());
-
 
             lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
 
@@ -94,11 +90,11 @@ void blueSoloWP() {
     intake.move_voltage(-12000);
     chassis.moveToPoint(-24.5, -46.4, 2000);
     chassis.turnToHeading(-116, 1000);
-    chassis.moveToPoint(-29.8, -48, 2000); 
+    chassis.moveToPoint(-29.8, -48, 2000);
     chassis.waitUntilDone();
     pros::delay(1000);
 
-    //middle ring
+    // middle ring
     chassis.moveToPoint(-10.6, -44.7, 2000, {.forwards = false});
     chassis.turnToHeading(-60, 1000);
     chassis.moveToPoint(-24.8, -34.7, 2000);
@@ -117,7 +113,7 @@ void blueSoloWP() {
 }
 
 void redSoloWP() {
-    //inversed blue
+    // inversed blue
     chassis.moveToPose(-3.4, 5.3, -33.3, 1000, {.maxSpeed = 30});
     chassis.waitUntilDone();
     pros::delay(100);
@@ -139,11 +135,11 @@ void redSoloWP() {
     chassis.moveToPoint(22.2, -49.3, 2000);
     pros::delay(500);
     chassis.turnToHeading(114.6, 1000);
-    chassis.moveToPoint(28.5, -52.1, 2000); 
+    chassis.moveToPoint(28.5, -52.1, 2000);
     chassis.waitUntilDone();
     pros::delay(1000);
 
-    //middle ring
+    // middle ring
     chassis.moveToPoint(10.6, -44.7, 2000, {.forwards = false});
     chassis.turnToHeading(60, 1000);
     chassis.moveToPoint(24.8, -34.7, 2000);
@@ -154,20 +150,17 @@ void redSoloWP() {
     // chassis.moveToPoint(12.7, -48.3, 2000, {.maxSpeed = 50});
     // chassis.waitUntilDone();
     // intake.move_voltage(0);
-    
+
     // elims
     intake.move_voltage(0);
     chassis.moveToPose(-36, -15, -90, 2000);
     chassis.waitUntilDone();
 
-
-    
-    
-    //old red
-    // ladyBrown.move_absolute(915, 100); // change to score angle
-    // pros::delay(500);
-    // ladyBrown.move_absolute(0, 100);
-    // pros::delay(100);
+    // old red
+    //  ladyBrown.move_absolute(915, 100); // change to score angle
+    //  pros::delay(500);
+    //  ladyBrown.move_absolute(0, 100);
+    //  pros::delay(100);
 
     // // mogo
     // // chassis.turnToHeading();
@@ -205,7 +198,7 @@ void redSoloWP() {
 }
 
 void redMogo() {
-    //mogo
+    // mogo
     chassis.moveToPoint(0, -30, 2000, {.forwards = false});
     chassis.waitUntilDone();
     mogoClamp.set_value(true);
@@ -213,7 +206,7 @@ void redMogo() {
     intake.move_voltage(-12000);
     pros::delay(250);
 
-    //ring
+    // ring
     chassis.turnToHeading(-100, 1000);
     chassis.moveToPoint(-17.7, -35, 1000);
     pros::delay(250);
@@ -223,9 +216,9 @@ void redMogo() {
     // chassis.moveToPoint(-0.2, -45.8, 1000);
     // intake.move_voltage(0);
 
-    //elims
+    // elims
     chassis.turnToHeading(-233.7, 2000);
-    chassis.moveToPoint(-37, -19.6, 2000, {.forwards = false}); 
+    chassis.moveToPoint(-37, -19.6, 2000, {.forwards = false});
     chassis.waitUntilDone();
     mogoClamp.set_value(false);
     intake.move_voltage(0);
@@ -234,7 +227,7 @@ void redMogo() {
 }
 
 void blueMogo() {
-    //mogo
+    // mogo
     chassis.moveToPoint(0, -30, 2000, {.forwards = false});
     chassis.waitUntilDone();
     mogoClamp.set_value(true);
@@ -247,31 +240,28 @@ void blueMogo() {
     chassis.moveToPoint(17.7, -35, 1000);
     pros::delay(2000);
 
-    //ladder
+    // ladder
     chassis.turnToHeading(236.4, 1000);
     chassis.waitUntilDone();
     intake.move_voltage(0);
     mogoClamp.set_value(false);
-    //chassis.moveToPoint(-0.8, -45.8, 1000);
-    chassis.moveToPoint(-5.4, -44.6, 1000, {.maxSpeed = 50}); //238.7
-
+    // chassis.moveToPoint(-0.8, -45.8, 1000);
+    chassis.moveToPoint(-5.4, -44.6, 1000, {.maxSpeed = 50}); // 238.7
 }
 
 void autonomous() {
-    chassis.calibrate(); //TODO: NEVER COMMENT OUT CALIBRATE OR SETPOSE OR ELSE IT WILL BREAK!!!!!!!!
+    chassis.calibrate(); // TODO: NEVER COMMENT OUT CALIBRATE OR SETPOSE OR ELSE IT WILL BREAK!!!!!!!!
     chassis.setPose(0, 0, 0);
-   chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
+    chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
 
     // initDebug();
 
     // chassis.follow(autonomous_txt, extra_txt, 10, 1000000, true, false);
 
-    chassis.turnToHeading(90, 100000);
+    // chassis.turnToHeading(90, 100000);
     // pros::delay(1000);
-    // chassis.turnToHeading(180, 100000, {.maxSpeed = 80});
+    chassis.turnToHeading(180, 5000);
     // pros::delay(1000);
-
-
 }
 
 void opcontrol() {
@@ -280,9 +270,8 @@ void opcontrol() {
 
     // initDebug();
 
-    // chassis.follow(interruptAutonomous_txt, interruptExtra_txt, 10, 1000000, true, false);   
-    
-    
+    // chassis.follow(interruptAutonomous_txt, interruptExtra_txt, 10, 1000000, true, false);
+
     chassis.calibrate();
     chassis.setPose(0, 0, 0);
 
@@ -295,7 +284,7 @@ void opcontrol() {
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
 
-        chassis.arcade(leftY, rightX); //0.9
+        chassis.arcade(leftY, rightX); // 0.9
 
         updateIntake();
         updateColorSort();
@@ -304,7 +293,7 @@ void opcontrol() {
         updateLB();
         runLB();
 
-        if(count == 10) { //TODO: DATA WRITTEN EVERY 0.1 SECONDS
+        if (count == 10) { // TODO: DATA WRITTEN EVERY 0.1 SECONDS
             writePose();
             writeAdditional();
             count = 1;
@@ -312,17 +301,15 @@ void opcontrol() {
             fileOTwo.flush();
         }
 
-
         // pros::lcd::print(4, std::to_string(round(leftMotors.get_voltage()) * 1000.0 / 1000.0).c_str(), 0);
         // pros::lcd::print(5, std::to_string(round(rightMotors.get_voltage()) * 1000.0 / 1000.0).c_str(), 0);
-        // pros::lcd::print(6, std::to_string(round(leftMotors.get_voltage() + rightMotors.get_voltage()) * 1000.0 / 1000.0 / 2).c_str(), 0);
+        // pros::lcd::print(6, std::to_string(round(leftMotors.get_voltage() + rightMotors.get_voltage()) * 1000.0 /
+        // 1000.0 / 2).c_str(), 0);
 
         // if(segCount == 100) { //TODO: NEW SEGMENT EVERY 5 SECONDS
         //     section++;
         //     segCount = 1;
         // }
-
-        
 
         count++;
         // segCount++;

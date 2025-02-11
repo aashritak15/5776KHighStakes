@@ -7,11 +7,10 @@
 #include <cmath>
 #include "ladybrown.hpp"
 
-
-//Note: try moving all this back to main and see if initializing chassis works in initialize
+// Note: try moving all this back to main and see if initializing chassis works in initialize
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
-pros::MotorGroup leftMotors({-16, -17, -12}, pros::MotorGearset::blue);
+pros::MotorGroup leftMotors({-8, -17, -12}, pros::MotorGearset::blue);
 pros::MotorGroup rightMotors({18, 15, 11}, pros::MotorGearset::blue);
 
 // pros::Rotation vertical(-1);
@@ -32,7 +31,7 @@ pros::Imu imu(3);
 
 // drivetrain settings
 lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 12.5, lemlib::Omniwheel::NEW_275, 450,
-                              8 //13.4 trackwidth artificial
+                              8 // 13.4 trackwidth artificial
 );
 
 // lateral motion controller
@@ -48,14 +47,14 @@ lemlib::ControllerSettings linearController(7.3, // proportional gain (kP)
 );
 
 // angular motion controller
-lemlib::ControllerSettings angularController(3, // proportional gain (kP) 4.6 //TODO: maybe tune more!
+lemlib::ControllerSettings angularController(3.3, // proportional gain (kP) 4.6 //TODO: maybe tune more!
                                              0, // integral gain (kI)
-                                             15, // 38,//37.88, // 32.92, //40.5, // derivative gain (kD) 2
+                                             20, // 38,//37.88, // 32.92, //40.5, // derivative gain (kD) 2
                                              0, // anti windup
-                                             0.5, // small error range, in degrees
+                                             1, // small error range, in degrees
                                              100, // small error range timeout, in milliseconds
-                                             1, // large error range, in degrees
-                                             3000, // large error range timeout, in milliseconds
+                                             3, // large error range, in degrees
+                                             500, // large error range timeout, in milliseconds
                                              0 // slew
 
                                              // OLD VALUES OCT 6: P 4.05, D 34.86768
@@ -85,7 +84,7 @@ lemlib::ExpoDriveCurve steerCurve(5, // joystick deadband out of 127
 lemlib::Chassis chassis(drivetrain, linearController, angularController, sensors, &throttleCurve, &steerCurve);
 
 void interruptLoop() {
-    int count = 1; //TODO: check count and segCount logic
+    int count = 1; // TODO: check count and segCount logic
     int segCount = 1;
 
     while (true) {
@@ -101,7 +100,7 @@ void interruptLoop() {
         updateLB();
         runLB();
 
-        if(count == 10) {
+        if (count == 10) {
             writeInterruptPose();
             writeInterruptAdditional();
             count = 1;
@@ -109,9 +108,7 @@ void interruptLoop() {
             fileInterruptTwo.flush();
         }
 
-        if(segCount == 100) {
-            section++;
-        }
+        if (segCount == 100) { section++; }
 
         count++;
         segCount++;
