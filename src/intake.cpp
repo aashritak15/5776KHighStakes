@@ -94,7 +94,7 @@ void updateIntake() {
             buttonl1Pressed = true;
             if (intakeState == 0 || intakeState == 2) {
                 intakeState = 1;
-                intake.move_voltage(-12000);
+                intake.move_voltage(12000);
             } else if (intakeState == 1) {
                 intakeState = 0;
                 intake.move_voltage(0);
@@ -109,7 +109,7 @@ void updateIntake() {
             buttonxPressed = true;
             if (intakeState == 0 || intakeState == 1) {
                 intakeState = 2;
-                intake.move_voltage(12000);
+                intake.move_voltage(-12000);
             } else if (intakeState == 2) {
                 intakeState = 0;
                 intake.move_voltage(0);

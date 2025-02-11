@@ -14,34 +14,34 @@ void ladyBrownInit() {
 }
 
 double target = 0;
-// double ladyTarget = 0;
 double prevDistance = 0;
 double prevDistance1 = 0;
-double kP = 0.65;
-double kD = 0.65;
+double kP = 0.9;
+double kD = 0.6;
 
 // bool start = false;
 
 void updateLB() {
+    //*LOAD: 43
+    //*ALLIANCE STAKE: 236.2
+    //*NEUTRAL STAKE: 170
+    //*PASSIVE: 125.3
+
+
     // std::cout<<start<<" ";
-    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
-        target = 166;
-        ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-        // start = true;
+    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) { //*ALLIANCE STAKE
+        target = 236.2;
 
-        // ladyBrown.move_velocity(-100);
+    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) { //*LOAD
+        target = 43;
 
-    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
-        target = 41;
-        ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) {
-        ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) { //*DISABLED/ZERO
         target = 0;
 
         // start = true;
-    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
-        target = 141.7;
-        ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) { //*PASSIVE
+        target = 125.3;
+
     }
 }
 
@@ -50,9 +50,6 @@ void runLB() {
     double distance = target - currentAngle;
     double derivative = distance - prevDistance;
     double armMoveSpeed = (kP * distance) + (kD * derivative);
-    // if (armMoveSpeed < 1) {
-    //     armMoveSpeed = 0;
-    // }
     ladyBrown.move_velocity(armMoveSpeed);
     prevDistance = distance;
 }
