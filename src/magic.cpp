@@ -82,6 +82,12 @@ void closeO() {
     if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
         std::string dataLine = "0, 0, 0.000000, 0, STOPPED, -1";
         fileOTwo << dataLine;
+
+        dataLine.append(std::to_string((round(chassis.getPose().x*1000))/1000) + ", "); //*all rounded to 3 decimal places
+        dataLine.append(std::to_string((round(chassis.getPose().y*1000))/1000) + ", ");
+        dataLine.append(std::to_string((round(chassis.getPose().theta*1000))/1000) + ", ");
+        dataLine.append("0\n");
+        fileO << dataLine;
         
         dataLine = "endData";
 

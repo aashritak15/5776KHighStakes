@@ -6,7 +6,7 @@
 #include <iostream>
 
 int intakeState = 0;
-int sortState; //1 = score blue sort red, 2 = score red sort blue
+int sortState = 1; //1 = score blue sort red, 2 = score red sort blue
 //int sortState1 = 0;
 bool buttonUpPressed = false;
 bool colorDetected = false;
@@ -21,15 +21,15 @@ void colorSort(int lol) {
                 if(!colorDetected) {
                     colorDetected = true;
                     
-                    if(intake.get_actual_velocity() >= 500) {
+                    if(intake.get_actual_velocity() >= 200) {
                         pros::Task::delay(40);
                         intake.move_voltage(0);
                         pros::Task::delay(260);
-                        intake.move_voltage(-12000);
-                    } else {
                         intake.move_voltage(12000);
-                        pros::Task::delay(0);
+                    } else {
                         intake.move_voltage(-12000);
+                        pros::Task::delay(0);
+                        intake.move_voltage(12000);
                     }
                 }
             } else {
@@ -41,15 +41,15 @@ void colorSort(int lol) {
                 if(!colorDetected) {
                     colorDetected = true;
                     
-                    if(intake.get_actual_velocity() >= 500) {
+                    if(intake.get_actual_velocity() >= 200) {
                         pros::Task::delay(40);
                         intake.move_voltage(0);
                         pros::Task::delay(260);
-                        intake.move_voltage(-12000);
-                    } else {
                         intake.move_voltage(12000);
-                        pros::Task::delay(0);
+                    } else {
                         intake.move_voltage(-12000);
+                        pros::Task::delay(0);
+                        intake.move_voltage(12000);
                     }
                 }
             } else {
