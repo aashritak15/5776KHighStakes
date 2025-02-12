@@ -1,4 +1,3 @@
-#include "main.h"
 #include "pros/misc.h"
 #include "pros/motors.h"
 #include "ladybrown.hpp"
@@ -57,7 +56,7 @@ void runLB() {
 void autonLB(double ladyTarget, int timeout) {
     lemlib::Timer timer(timeout);
 
-    while (!timer.isDone() && abs(ladyTarget - lbRotation.get_position() / 100.0) >= 1) {
+    while (!timer.isDone() && std::abs(ladyTarget - lbRotation.get_position() / 100.0) >= 1) {
         double currentAngle = lbRotation.get_position() / 100.0;
         double distance = ladyTarget - currentAngle;
         double derivative = distance - prevDistance1;

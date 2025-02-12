@@ -3,12 +3,10 @@
 // Here is a link to the original document
 // https://www.chiefdelphi.com/uploads/default/original/3X/b/e/be0e06de00e07db66f97686505c3f4dde2e332dc.pdf
 
-#include <iostream>
 #include <cmath>
 #include <vector>
 #include <string>
 #include <fstream>
-#include "pros/misc.hpp"
 #include "lemlib/logger/logger.hpp"
 #include "lemlib/chassis/chassis.hpp"
 #include "lemlib/util.hpp"

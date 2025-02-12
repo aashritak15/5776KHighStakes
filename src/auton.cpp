@@ -1,4 +1,3 @@
-#include "main.h"
 #include "lemlib/api.hpp" // IWYU pragma: keep
 #include "piston.hpp"
 #include "intake.hpp"
