@@ -259,11 +259,11 @@ void autonomous() {
 
     // initDebug();
 
-    // chassis.follow(autonomous_txt, extra_txt, 10, 1000000, true, false);
+    chassis.follow(autonomous_txt, extra_txt, 10, 1000000, true, false);
 
     // chassis.turnToHeading(90, 100000);
-    // pros::delay(1000);
-    chassis.turnToHeading(180, 5000);
+    // // pros::delay(1000);
+    // chassis.turnToHeading(180, 5000);
     // pros::delay(1000);
 }
 

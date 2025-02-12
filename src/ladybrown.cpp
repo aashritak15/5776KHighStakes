@@ -7,7 +7,7 @@
 #include <cmath>
 
 void ladyBrownInit() {
-    ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+    ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
     ladyBrown.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
     lbRotation.reset_position();
     lbRotation.set_position(0);
@@ -16,11 +16,8 @@ void ladyBrownInit() {
 double target = 0;
 double prevDistance = 0;
 double prevDistance1 = 0;
-
-double prevSpeedError = 0;
-
-double kP = 0.6;
-double kD = 0.7;
+double kP = 0.9;
+double kD = 0.6;
 
 // bool start = false;
 
@@ -39,7 +36,7 @@ void updateLB() {
         target = 43;
 
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) { //*DISABLED/ZERO
-        target = 5;
+        target = 3;
 
         // start = true;
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) { //*PASSIVE
@@ -49,20 +46,12 @@ void updateLB() {
 }
 
 void runLB() {
-    double currentAngle = lbRotation.get_position() / 100.0; // get values
-
-    double speedError = (target - currentAngle) / target * 100.0; //convert units
-
-    double derivative = speedError - prevSpeedError;
-    double armMoveSpeed = (kP * speedError) + (kD * derivative);
-
-    if(std::abs(armMoveSpeed) > 100.0) { // ratio
-        armMoveSpeed = 100.0;
-    }
-
+    double currentAngle = lbRotation.get_position() / 100.0;
+    double distance = target - currentAngle;
+    double derivative = distance - prevDistance;
+    double armMoveSpeed = (kP * distance) + (kD * derivative);
     ladyBrown.move_velocity(armMoveSpeed);
-    // std::cout<<std::to_string(armMoveSpeed)<<"\n";
-    prevSpeedError = speedError;
+    prevDistance = distance;
 }
 
 void autonLB(double ladyTarget, int timeout) {

@@ -80,19 +80,16 @@ void initDebug() {
 
 void closeO() {
     if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
-        std::string dataLine = "0, 0, 0.000000, 0, STOPPED, -1";
+        std::string dataLine = "0, 0, 0.000000, 0, STOPPED, -1\nendData";
         fileOTwo << dataLine;
+        
+        dataLine.clear();
 
         dataLine.append(std::to_string((round(chassis.getPose().x*1000))/1000) + ", "); //*all rounded to 3 decimal places
         dataLine.append(std::to_string((round(chassis.getPose().y*1000))/1000) + ", ");
         dataLine.append(std::to_string((round(chassis.getPose().theta*1000))/1000) + ", ");
         dataLine.append("0\n");
         fileO << dataLine;
-        
-        dataLine = "endData";
-
-        fileO << dataLine;
-        fileOTwo << dataLine;
 
         fileO.flush();
         fileOTwo.flush();
@@ -109,15 +106,18 @@ void closeO() {
     }
 }
 
-void closeOInterrupt() {
+void closeOInterrupt() { //TODO: CHANGE END LOGIC TO MATCH CLOSEO
     if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
-        std::string dataLine = "0, 0, 0.000000, 0, STOPPED, -1";
+        std::string dataLine = "0, 0, 0.000000, 0, STOPPED, -1\nendData";
         fileInterruptTwo << dataLine;
         
-        dataLine = "endData";
+        dataLine.clear();
 
+        dataLine.append(std::to_string((round(chassis.getPose().x*1000))/1000) + ", "); //*all rounded to 3 decimal places
+        dataLine.append(std::to_string((round(chassis.getPose().y*1000))/1000) + ", ");
+        dataLine.append(std::to_string((round(chassis.getPose().theta*1000))/1000) + ", ");
+        dataLine.append("0\n");
         fileInterrupt << dataLine;
-        fileInterruptTwo << dataLine;
 
         fileInterrupt.flush();
         fileInterruptTwo.flush();
@@ -126,13 +126,11 @@ void closeOInterrupt() {
         pros::delay(2500);
 
         fileInterrupt.close();
-        fileInterrupt.close();
-        fileI.close();
-        fileITwo.close();
-
-        controller.set_text(0, 0, "file closed");
+        fileInterruptTwo.close();
 
         active = false;
+
+        controller.set_text(0, 0, "file closed");
     }
 }
 
