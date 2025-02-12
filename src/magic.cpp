@@ -134,7 +134,7 @@ void writePose() {
     std::string dataLine = ""; //TODO: CHANGE GETPOSE BACK
     std::int32_t left = leftMotors.get_voltage();
     std::int32_t right = rightMotors.get_voltage(); 
-    float adjusted = round((right+left) * 1000.0) / 1000.0 / 2; //TODO: NO DIVIDER
+    float adjusted = round((right+left) * 1000.0) / 1000.0 / 2;
 
     dataLine.append(std::to_string((round(chassis.getPose().x*1000))/1000) + ", "); //*all rounded to 3 decimal places
     dataLine.append(std::to_string((round(chassis.getPose().y*1000))/1000) + ", ");
