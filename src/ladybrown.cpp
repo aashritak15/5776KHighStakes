@@ -16,6 +16,9 @@ void ladyBrownInit() {
 double target = 0;
 double prevDistance = 0;
 double prevDistance1 = 0;
+
+double prevSpeedError = 0;
+
 double kP = 0.9;
 double kD = 0.6;
 
@@ -46,12 +49,20 @@ void updateLB() {
 }
 
 void runLB() {
-    double currentAngle = lbRotation.get_position() / 100.0;
-    double distance = target - currentAngle;
-    double derivative = distance - prevDistance;
-    double armMoveSpeed = (kP * distance) + (kD * derivative);
+    double currentAngle = lbRotation.get_position() / 100.0; // get values
+
+    double speedError = (target - currentAngle) / target * 100.0; //convert units
+
+    double derivative = speedError - prevSpeedError;
+    double armMoveSpeed = (kP * speedError) + (kD * derivative);
+
+    if(armMoveSpeed > 100.0) { // ratio
+        armMoveSpeed = 100.0;
+    }
+
     ladyBrown.move_velocity(armMoveSpeed);
-    prevDistance = distance;
+    std::cout<<armMoveSpeed<<"\n";
+    prevSpeedError = speedError;
 }
 
 void autonLB(double ladyTarget, int timeout) {

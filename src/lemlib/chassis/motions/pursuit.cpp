@@ -287,7 +287,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
     int closestPoint = 0;
     // int compState = pros::competition::get_status();
 
-    float minLookahead = 4;
+    float minLookahead = 4; //TODO: what the lfip
     float maxLookahead = 15;
 
     double prevLBTarget;
@@ -357,6 +357,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         if (subValues.at(closestPoint)[4] == "STOPPED") { //*stop exclusion
             drivetrain.leftMotors->move(0);                 
             drivetrain.rightMotors->move(0);
+            ladyBrown.move(0);
 
             pros::delay(100);
 
@@ -369,7 +370,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         } else if(subValues.at(closestPoint)[4] == "TURNING CW" || subValues.at(closestPoint)[4] == "TURNING CCW" ) { //*turn exclusion
             leftMotors.move(0);
             rightMotors.move(0);
-
+            ladyBrown.move(0);
             this->endMotion();
 
             pros::delay(50); //TODO: tune
@@ -466,14 +467,9 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         }
         dataLine.append("curvature: " + std::to_string(curvature) + "\n"); //write curvature
 
-        //std::cout<<velocities.size()<<"     "<<pathPoints.size()<<"     "<<closestPoint<<"\n";
         targetVel = std::stof(velocities.at(closestPoint));
-        
 
         dataLine.append("target vel: " + std::to_string(targetVel) + "\n"); //write target vel
-        dataLine.append("acc target vel: " + std::to_string(leftMotors.get_target_velocity()) + ", " + std::to_string(rightMotors.get_target_velocity()) + "\n");
-        dataLine.append("acc acc vel: " + std::to_string(leftMotors.get_voltage()) + ", " + std::to_string(rightMotors.get_voltage()) + "\n");
-
 
         //dataLine.append("acc target vel: %f" + leftMotors.get_target_velocity() + ", " + rightMotors.get_target_velocity() + "\n"); 
         //dataLine.append("acc acc vel: " + leftMotors.get_actual_velocity() + ", " + rightMotors.get_actual_velocity() + "\n");
@@ -493,6 +489,10 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         //fallback exclusion
         if ((std::abs(targetLeftVel) < 600) && (std::abs(targetRightVel) < 600)) {
             dataLine.append("VEL < 600\n\n");
+            leftMotors.move_velocity(0);
+            rightMotors.move_velocity(0);
+            ladyBrown.move(0);
+
             pros::delay(100); //*change to tick speed always
             closestPoint++;
             continue;
@@ -506,8 +506,8 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         }
 
         // write velocities
+        dataLine.append("current velocities: " + std::to_string(leftMotors.get_voltage()) + " " + std::to_string(rightMotors.get_voltage()) + "\n");
         dataLine.append("target vels: " + std::to_string(targetLeftVel) + " " + std::to_string(targetRightVel) + "\n\n");
-        std::cout<<"target vels: " + std::to_string(targetLeftVel) + " " + std::to_string(targetRightVel) + "\n\n";
 
         // send velocity
         leftMotors.move_voltage(targetLeftVel);
