@@ -6,7 +6,7 @@
 #include <iostream>
 
 int intakeState = 0;
-int sortState = 1; //1 = score blue sort red, 2 = score red sort blue
+int sortState = 0; //1 = score blue sort red, 2 = score red sort blue
 //int sortState1 = 0;
 bool buttonUpPressed = false;
 bool colorDetected = false;
@@ -17,18 +17,18 @@ bool colorDetected = false;
 void colorSort(int lol) {
     while (true) {
         if(sortState == 1) {
-            if(optical.get_hue() < 30 && optical.get_hue() > 8) {
+            if(optical.get_hue() < 30 && optical.get_hue() > 0) {
                 if(!colorDetected) {
                     colorDetected = true;
                     
-                    if(intake.get_actual_velocity() >= 200) {
-                        pros::Task::delay(40);
-                        intake.move_voltage(0);
-                        pros::Task::delay(260);
+                    if(intake.get_actual_velocity() >= 200 ) {
+                        pros::Task::delay(50);
+                        intake.move_voltage(-12000);
+                        pros::Task::delay(200);
                         intake.move_voltage(12000);
                     } else {
                         intake.move_voltage(-12000);
-                        pros::Task::delay(0);
+                        pros::Task::delay(750);
                         intake.move_voltage(12000);
                     }
                 }
@@ -42,13 +42,13 @@ void colorSort(int lol) {
                     colorDetected = true;
                     
                     if(intake.get_actual_velocity() >= 200) {
-                        pros::Task::delay(40);
-                        intake.move_voltage(0);
-                        pros::Task::delay(260);
-                        intake.move_voltage(12000);
+                        pros::Task::delay(50);
+                        intake.move_voltage(-12000);
+                        pros::Task::delay(200);
+                        intake.move_voltage(-12000);
                     } else {
                         intake.move_voltage(-12000);
-                        pros::Task::delay(0);
+                        pros::Task::delay(750);
                         intake.move_voltage(12000);
                     }
                 }
@@ -159,7 +159,8 @@ void updateColorSort() {
 
 void antiJam() {
     while (true) {
-        if(intake.get_actual_velocity() < 0 && intake.get_current_draw() > 0) {
+        std::cout<<std::to_string(intake.get_current_draw())<<"\n";
+        if(intake.get_actual_velocity() < 100 && intake.get_current_draw() > 0) {
             intake.move_voltage(12000);
             pros::Task::delay(40);
             intake.move_voltage(-12000);

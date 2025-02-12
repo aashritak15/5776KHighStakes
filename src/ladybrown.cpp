@@ -7,7 +7,7 @@
 #include <cmath>
 
 void ladyBrownInit() {
-    ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+    ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
     ladyBrown.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
     lbRotation.reset_position();
     lbRotation.set_position(0);
@@ -19,8 +19,8 @@ double prevDistance1 = 0;
 
 double prevSpeedError = 0;
 
-double kP = 0.9;
-double kD = 0.6;
+double kP = 0.6;
+double kD = 0.7;
 
 // bool start = false;
 
@@ -39,7 +39,7 @@ void updateLB() {
         target = 43;
 
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) { //*DISABLED/ZERO
-        target = 0;
+        target = 5;
 
         // start = true;
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) { //*PASSIVE
@@ -56,12 +56,12 @@ void runLB() {
     double derivative = speedError - prevSpeedError;
     double armMoveSpeed = (kP * speedError) + (kD * derivative);
 
-    if(armMoveSpeed > 100.0) { // ratio
+    if(std::abs(armMoveSpeed) > 100.0) { // ratio
         armMoveSpeed = 100.0;
     }
 
     ladyBrown.move_velocity(armMoveSpeed);
-    std::cout<<armMoveSpeed<<"\n";
+    // std::cout<<std::to_string(armMoveSpeed)<<"\n";
     prevSpeedError = speedError;
 }
 

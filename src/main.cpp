@@ -49,6 +49,8 @@ void initialize() {
             pros::delay(50);
         }
     });
+
+    // antiJamInit();
 }
 
 /**
