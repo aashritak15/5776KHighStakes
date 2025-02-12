@@ -106,7 +106,7 @@ void closeO() {
     }
 }
 
-void closeOInterrupt() { //TODO: CHANGE END LOGIC TO MATCH CLOSEO
+void closeOInterrupt() {
     if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
         std::string dataLine = "0, 0, 0.000000, 0, STOPPED, -1\nendData";
         fileInterruptTwo << dataLine;
@@ -135,7 +135,7 @@ void closeOInterrupt() { //TODO: CHANGE END LOGIC TO MATCH CLOSEO
 }
 
 void writePose() {
-    std::string dataLine = ""; //TODO: CHANGE GETPOSE BACK
+    std::string dataLine = "";
     std::int32_t left = leftMotors.get_voltage();
     std::int32_t right = rightMotors.get_voltage(); 
     float adjusted = round((right+left) * 1000.0) / 1000.0 / 2;
@@ -162,7 +162,7 @@ void writeAdditional() {
     std::int32_t right = rightMotors.get_voltage(); 
     float total = left + right;
 
-    if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) { //TODO: CHANGE BUTTON
+    if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_B)) { //TODO: change button back to x
         if (!buttonPressed) {
             buttonPressed = true;
             section++;
@@ -176,10 +176,10 @@ void writeAdditional() {
     dataLine.append(std::to_string(target) + ", ");
     dataLine.append(std::to_string(doinkState) + ", ");
 
-    if(std::abs(total) < 600) { //TODO: TUNE THIS VALUE
+    if(std::abs(total) < 600) { //TODO: tune stop bound
 
         if(std::abs(right) > 800 && std::abs(left) > 800) {
-            if(right < 0)  { //TODO: CHECK DIRECTION
+            if(right < 0)  {
                 dataLine.append("TURNING CW, ");
             } else if (right > 0) {
                 dataLine.append("TURNING CCW, ");
@@ -227,7 +227,7 @@ void writeInterruptAdditional() {
     std::int32_t right = rightMotors.get_voltage(); 
     float total = left + right;
 
-    if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) { //TODO: CHANGE BUTTON
+    if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) { //TODO: change button back
         if (!buttonPressed) {
             buttonPressed = true;
             section++;
@@ -241,10 +241,10 @@ void writeInterruptAdditional() {
     dataLine.append(std::to_string(target) + ", ");
     dataLine.append(std::to_string(doinkState) + ", ");
 
-    if(std::abs(total) < 600) { //TODO: TUNE THIS VALUE
+    if(std::abs(total) < 600) { //TODO: tune stop bound
 
         if(std::abs(right) > 800 && std::abs(left) > 800) {
-            if(right < 0)  { //TODO: CHECK 
+            if(right < 0)  {
                 dataLine.append("TURNING CW, ");
             } else if (right > 0) {
                 dataLine.append("TURNING CCW, ");

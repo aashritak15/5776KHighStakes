@@ -74,7 +74,6 @@ lemlib::Pose lemlib::estimatePose(float time, bool radians) {
 }
 
 void lemlib::update() {
-    // TODO: add particle filter
     // get the current sensor values
     float vertical1Raw = 0;
     float vertical2Raw = 0;
@@ -155,13 +154,6 @@ void lemlib::update() {
     float deltaY = 0;
     if (verticalWheel != nullptr) deltaY = rawVertical - prevVertical;
     if (horizontalWheel != nullptr) deltaX = rawHorizontal - prevHorizontal;
-
-    // if (abs(deltaVertical1 + deltaVertical2) < 1) { //TODO: HARDCODE STOP TRANSLATION DURING TURNS: CHANGE
-    //     if (deltaVertical1 > 2 && deltaVertical2 > 1) {
-    //         deltaX = 0;
-    //         deltaY = 0;
-    //     }
-    // }
 
     prevVertical = rawVertical;
     prevHorizontal = rawHorizontal;
