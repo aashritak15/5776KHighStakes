@@ -64,7 +64,7 @@ void colorSort(int lol) {
 
 void intakeInit() { 
     intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST); 
-    sortState = 0; //TODO: CHANGE
+    sortState = 0; //TODO: sortState in initialize intake
 
     void* colorSorted = (void*)colorSort;
 

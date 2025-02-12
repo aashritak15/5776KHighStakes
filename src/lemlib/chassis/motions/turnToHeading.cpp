@@ -8,7 +8,7 @@
 void lemlib::Chassis::turnToHeading(float theta, int timeout, TurnToHeadingParams params, bool async) {
     params.minSpeed = std::abs(params.minSpeed);
 
-    this->requestMotionStart(); //TODO: did commenting this block out break anything
+    this->requestMotionStart();
     // were all motions cancelled?
     if (!this->motionRunning) return;
  

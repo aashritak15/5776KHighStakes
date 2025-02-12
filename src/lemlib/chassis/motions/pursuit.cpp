@@ -152,7 +152,7 @@ int findClosest(lemlib::Pose pose, std::vector<lemlib::Pose> path, int prevIndex
     if (prevIndex + 5 > path.size()) {
         maxIndex = path.size();
     } else {
-        maxIndex = prevIndex + 5; //TODO: TUNE VALUE SKIP TOLERANCE
+        maxIndex = prevIndex + 5; //TODO: tune path skip tolerance
     }
 
     // loop through all path points
@@ -255,9 +255,9 @@ float findLookaheadCurvature(lemlib::Pose pose, float heading, lemlib::Pose look
     float x = std::fabs(a * lookahead.x + lookahead.y + c) / std::sqrt((a * a) + 1);
     float d = std::hypot(lookahead.x - pose.x, lookahead.y - pose.y);
 
-    // if (d < 1) {
-    //     return 0; //TODO: it's the magical wonderful minimum lookahead distance thing
-    // }
+    if (d < 1.5) { //TODO: tune lookahead distance from exclusion tolerance
+        return 0;
+    }
 
     // return curvature
     return side * ((2 * x) / (d * d));
@@ -269,7 +269,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
     std::vector<std::vector<std::string>> subValues = getSubData(sub); //get subsystem values
     std::vector<std::string> velocities = getVelocities(path); //get velocities
 
-    Pose pose = this->getPose(true); //initialize all the things //TODO: THE TRUE IS WHERE THE RADIANS COME FROM
+    Pose pose = this->getPose(true); //initialize all the things //*: THE TRUE IS WHERE THE RADIANS COME FROM
     Pose lookaheadPose(0, 0, 0); 
     Pose lastLookahead = pathPoints.at(0);
 
@@ -287,15 +287,13 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
     int closestPoint = 0;
     // int compState = pros::competition::get_status();
 
-    float minLookahead = 4; //TODO: what the lfip
+    float minLookahead = 4; //TODO: tune min/max lookahead
     float maxLookahead = 15;
 
     double prevLBTarget;
     double lbTarget = 0;
 
-    // int turned = 0; //TODO: mooncy magic
-
-    sortState = 0; //TODO: change sortState
+    sortState = 2; //TODO: change sortState
 
     this->requestMotionStart();
     pros::delay(100);
@@ -311,26 +309,41 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         // }
 
         // autonomous and extra files NEED to be same as the path you want to interrupt
-        if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_B)) { //interrupt check (by button)
-            controller.set_text(0,0,"interrupt");
-            drivetrain.leftMotors->move(0);
-            drivetrain.rightMotors->move(0);
+        // if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_B)) { //interrupt check (by button) //TODO: swap button
+        //     controller.set_text(0,0,"interrupt");
+        //     drivetrain.leftMotors->move(0);
+        //     drivetrain.rightMotors->move(0);
 
-            initInterrupt(stoi(subValues.at(closestPoint)[5]), closestPoint);
+        //     initInterrupt(stoi(subValues.at(closestPoint)[5]), closestPoint);
 
-            interruptLoop();
-        }
+        //     interruptLoop();
+        // }
         
         std::string dataLine = ""; //initialize debug dataline
 
         // get the current position of the robot
-        pose = this->getPose(true); //TODO: THIS IS WHERE RADIANS COME FROM
+        pose = this->getPose(true); //*this is where radians come from
 
         closestPoint = findClosest(pose, pathPoints, closestPoint); //find closest point 
 
-        //line write: tick and index
+        // line write: tick and index
         dataLine.append("NEW TICK\n");
         dataLine.append("target index: " + std::to_string(closestPoint) + "\n");
+
+        // path termination check
+        if (subValues.at(closestPoint)[5] == "-1") {
+            drivetrain.leftMotors->move(0);
+            drivetrain.rightMotors->move(0);
+            dataLine.append("PATH FINISHED");
+
+            fileOThree << dataLine;
+            fileOThree.flush();
+            fileOThree.close();
+
+            this->endMotion();
+
+            return;
+        }
 
         //update all subsystems
         if (subValues.at(closestPoint)[0] == "0") {intake.move_voltage(0);} 
@@ -343,7 +356,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         // target = stod(subValues.at(closestPoint)[2]);
         // runLB();
 
-        prevLBTarget = lbTarget;
+        prevLBTarget = lbTarget; //*huh
         lbTarget = stod(subValues.at(closestPoint)[2]);
         if(lbTarget != prevLBTarget) {
             autonLB(lbTarget, 2000);
@@ -373,7 +386,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
             ladyBrown.move(0);
             this->endMotion();
 
-            pros::delay(50); //TODO: tune
+            pros::delay(25); //TODO: tune endmotion delay
 
             if(subValues.at(closestPoint)[4] == "TURNING CW") {
                 dataLine.append("TURN CLOCKWISE\n");
@@ -383,32 +396,46 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
 
             int prevClosestPoint = closestPoint;
 
-            closestPoint++; 
+            closestPoint++; //*advance index forward one to begin the check 
             while(subValues.at(closestPoint)[4] == "TURNING CW" || subValues.at(closestPoint)[4] == "TURNING CCW") {closestPoint++;}
-            closestPoint++;
+            closestPoint++; //*go forward one packet past the turn to account for angle imperfections
 
-            dataLine.append("turn end index: " + std::to_string(closestPoint) + "\n");
+            // //*the exception within the exception
+            // if(std::abs(pathPoints.at(prevClosestPoint).theta - pathPoints.at(closestPoint).theta) < 8) { //TODO: tune angle exception
+            //     dataLine.append("angle <8, exiting\n\n");
+            //     closestPoint--;
+
+            //     fileOThree<<dataLine;
+            //     fileOThree.flush();
+
+            //     closestPoint++;
+            //     this->requestMotionStart();
+
+            //     pros::delay(50);
+
+            //     continue;
+            // }
+
+            dataLine.append("turn target index: " + std::to_string(closestPoint) + "\n");
 
             dataLine.append("target theta: " + std::to_string(pathPoints.at(closestPoint).theta)+"\n");
 
             if (subValues.at(prevClosestPoint)[4] == "TURNING CW") {
                 dataLine.append("beginning theta: " + std::to_string(chassis.getPose().theta) + "\n");
-                chassis.turnToHeading(pathPoints.at(closestPoint).theta, 2500, {.direction = AngularDirection::CW_CLOCKWISE, .maxSpeed = 80}, false); //TODO: TUNE turnToHeading TIMEOUT
-
+                chassis.turnToHeading(pathPoints.at(closestPoint).theta, 2500, {.direction = AngularDirection::CW_CLOCKWISE, .maxSpeed = 100}, false); //TODO: turn pid heading + max speed
                 pros::delay(10);
                 dataLine.append("ending theta: " + std::to_string(chassis.getPose().theta) + "\n\n"); //* radians but i don't care anymore
             } else {
                 dataLine.append("beginning theta: " + std::to_string(chassis.getPose().theta) + "\n");
-                chassis.turnToHeading(pathPoints.at(closestPoint).theta, 2500, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE, .maxSpeed = 80}, false);
-
+                chassis.turnToHeading(pathPoints.at(closestPoint).theta, 2500, {.direction = AngularDirection::CCW_COUNTERCLOCKWISE, .maxSpeed = 100}, false);
                 pros::delay(10);
-                dataLine.append("ending theta: " + std::to_string(chassis.getPose().theta) + "\n\n");
+                dataLine.append("ending theta: " + std::to_string(chassis.getPose().theta) + "\n");
             }
 
             chassis.setPose(pathPoints[closestPoint].x, pathPoints[closestPoint].y, pathPoints[closestPoint].theta); // temp reset position because bot being fat
             
             dataLine.append("current x: " + std::to_string(this->getPose().x) + "\n");
-            dataLine.append("current y: " + std::to_string(this->getPose().y) + "\n");
+            dataLine.append("current y: " + std::to_string(this->getPose().y) + "\n\n");
 
             fileOThree<<dataLine;
             fileOThree.flush();
@@ -417,11 +444,6 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
 
             this->requestMotionStart();
             pros::delay(100);
-
-            // if(lookaheadDist<=10) //TODO: mooncy magic
-            //     lookaheadDist += 5; //increases lookahead after a turn - remove if it doen't work
-
-            // turned++;
 
             continue;
         }
@@ -441,15 +463,6 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         pctVel = std::abs(avgVel / 12000);
 
         lookaheadDist = minLookahead + ((maxLookahead - minLookahead) * pctVel);
-    
-        // if(turned != 0) { //TODO: MOONCY MAGIC
-        //     if(turned == 5) {
-        //         turned = 0;
-        //     }
-        // } else {
-        //     lookaheadDist = minLookahead + ((maxLookahead - minLookahead) * pctVel);
-        // }
-
 
         dataLine.append("lookahead dist: " + std::to_string(lookaheadDist) + "\n"); //write lookahead
 
@@ -476,7 +489,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
 
 
 
-        // if(subValues.at(closestPoint)[5] == "0") { //segment multipliers //TODO: SEGMENT MULTIPLIERS
+        // if(subValues.at(closestPoint)[5] == "0") { //segment multipliers //TODO: segment multipliers
         //     targetVel = targetVel * 1;
         // } else if(subValues.at(closestPoint)[5] == "1") {
         //     targetVel = targetVel * 1;
@@ -512,21 +525,6 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         // send velocity
         leftMotors.move_voltage(targetLeftVel);
         rightMotors.move_voltage(targetRightVel);
-
-        // path termination check
-        if (subValues.at(closestPoint)[5] == "-1") {
-            drivetrain.leftMotors->move(0);
-            drivetrain.rightMotors->move(0);
-            dataLine.append("PATH FINISHED");
-
-            fileOThree << dataLine;
-            fileOThree.flush();
-            fileOThree.close();
-
-            this->endMotion();
-
-            return;
-        }
         
         fileOThree << dataLine;
         fileOThree.flush();
