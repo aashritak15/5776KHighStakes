@@ -5,7 +5,7 @@
 
 inline pros::Motor ladyBrown(-5, pros::MotorGearset::red);
 // inline pros::Rotation rotationSensor(13);
-inline pros::Rotation lbRotation(20); // AKANKSH CHECK IF THE PORT IS RIGHT
+inline pros::Rotation lbRotation(20);
 
 void ladyBrownInit();
 void updateLB();
@@ -20,6 +20,6 @@ void runLB();
 void updateLadyTask(double target);
 void autonLB(double ladyTarget, int timeout);
 
-extern double target;
+extern double globalTarget;
 
 #endif

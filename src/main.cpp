@@ -17,9 +17,9 @@ void initialize() {
     ladyBrownInit();
     opticalInit();
 
-    // auton_selector();
-
-    // chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
+    chassis.calibrate(true);
+    chassis.setPose(0, 0, 0);
+    chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
 
     pros::Task screenTask([&]() {
         while (true) {
@@ -31,7 +31,7 @@ void initialize() {
             pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
             pros::lcd::print(3, "Color: %f", optical.get_hue());
             pros::lcd::print(4, "LB Rot Sensor: %i", lbRotation.get_position());
-            pros::lcd::print(5, "Intake Vel: %f", intake.get_actual_velocity());
+            pros::lcd::print(5, "Drive vel: %i", leftMotors.get_voltage());
             // pros::lcd::print(5, "Tracking: %i", horizontalEnc.get_position());
 
             // pros::lcd::print(3, "Rotation (Lift): %i", rotationSensor.get_position()); // lift encoder
@@ -68,10 +68,14 @@ ASSET(autonomous_txt); // TODO: add std functionality
 ASSET(extra_txt);
 
 void autonomous() {
-    chassis.calibrate(); // *: NEVER COMMENT OUT CALIBRATE OR SETPOSE OR ELSE IT WILL BREAK!!!!!!!!
-    chassis.setPose(0, 0, 0);
-    chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
-
+    // chassis.calibrate(); //TODO: COMMENTED POUT BC TESTING IN INITIALIZE
+    // chassis.setPose(0, 0, 0);
+    // chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
+    //TODO: COMMENTED POUT BC TESTING IN INITIALIZE
+    //TODO: COMMENTED POUT BC TESTING IN INITIALIZE
+    //TODO: COMMENTED POUT BC TESTING IN INITIALIZE
+    //TODO: COMMENTED POUT BC TESTING IN INITIALIZE
+    //TODO: COMMENTED POUT BC TESTING IN INITIALIZE
     initDebug();
 
     chassis.follow(autonomous_txt, extra_txt, 10, 1000000, true, false);
@@ -109,7 +113,7 @@ void opcontrol() {
         updateLB();
         runLB();
 
-        if (count == 10) { //*data written every 0.1 seconds
+        if (count == 5) { //*data written every 0.1 seconds
             writePose();
             writeAdditional();
             count = 1;

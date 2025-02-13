@@ -7,17 +7,17 @@
 #include <cmath>
 
 void ladyBrownInit() {
-    ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+    ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
     ladyBrown.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
     lbRotation.reset_position();
     lbRotation.set_position(0);
 }
 
-double target = 0;
+double globalTarget = 0;
 double prevDistance = 0;
 double prevDistance1 = 0;
 double kP = 0.9;
-double kD = 0.6;
+double kD = 0.7;
 
 // bool start = false;
 
@@ -30,26 +30,35 @@ void updateLB() {
 
     // std::cout<<start<<" ";
     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) { //*ALLIANCE STAKE
-        target = 236.2;
+        globalTarget = 236.2;
 
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) { //*LOAD
-        target = 43;
+        globalTarget = 41.5;
 
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) { //*DISABLED/ZERO
-        target = 3;
+        globalTarget = 3;
 
         // start = true;
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) { //*PASSIVE
-        target = 125.3;
+        globalTarget = 125.3;
 
     }
 }
 
 void runLB() {
     double currentAngle = lbRotation.get_position() / 100.0;
-    double distance = target - currentAngle;
+    double distance = globalTarget - currentAngle;
     double derivative = distance - prevDistance;
     double armMoveSpeed = (kP * distance) + (kD * derivative);
+
+    if(std::abs(armMoveSpeed) > 65) {
+        if(armMoveSpeed < 0) {
+            armMoveSpeed = -65;
+        } else {
+            armMoveSpeed = 65;
+        }
+    }
+
     ladyBrown.move_velocity(armMoveSpeed);
     prevDistance = distance;
 }
@@ -57,7 +66,7 @@ void runLB() {
 void autonLB(double ladyTarget, int timeout) {
     lemlib::Timer timer(timeout);
 
-    while (!timer.isDone() && abs(ladyTarget - lbRotation.get_position() / 100.0) >= 1) {
+    while (!timer.isDone() && std::abs(ladyTarget - lbRotation.get_position() / 100.0) >= 1) {
         double currentAngle = lbRotation.get_position() / 100.0;
         double distance = ladyTarget - currentAngle;
         double derivative = distance - prevDistance1;

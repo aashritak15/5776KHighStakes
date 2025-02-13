@@ -88,7 +88,7 @@ void closeO() {
         dataLine.append(std::to_string((round(chassis.getPose().x*1000))/1000) + ", "); //*all rounded to 3 decimal places
         dataLine.append(std::to_string((round(chassis.getPose().y*1000))/1000) + ", ");
         dataLine.append(std::to_string((round(chassis.getPose().theta*1000))/1000) + ", ");
-        dataLine.append("0\n");
+        dataLine.append("0\nendData");
         fileO << dataLine;
 
         fileO.flush();
@@ -173,7 +173,7 @@ void writeAdditional() {
 
     dataLine.append(std::to_string(intakeState) + ", ");
     dataLine.append(std::to_string(clampState) + ", ");
-    dataLine.append(std::to_string(target) + ", ");
+    dataLine.append(std::to_string(globalTarget) + ", ");
     dataLine.append(std::to_string(doinkState) + ", ");
 
     if(std::abs(total) < 600) { //TODO: tune stop bound
@@ -238,7 +238,7 @@ void writeInterruptAdditional() {
 
     dataLine.append(std::to_string(intakeState) + ", ");
     dataLine.append(std::to_string(clampState) + ", ");
-    dataLine.append(std::to_string(target) + ", ");
+    dataLine.append(std::to_string(globalTarget) + ", ");
     dataLine.append(std::to_string(doinkState) + ", ");
 
     if(std::abs(total) < 600) { //TODO: tune stop bound
