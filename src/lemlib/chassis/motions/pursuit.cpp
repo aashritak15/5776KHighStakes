@@ -287,7 +287,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
     int closestPoint = 0;
     // int compState = pros::competition::get_status();
 
-    float minLookahead = 4; //TODO: tune min/max lookahead
+    float minLookahead = 6; //TODO: tune min/max lookahead
     float maxLookahead = 15;
 
     double prevLBTarget;
