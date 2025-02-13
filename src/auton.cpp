@@ -1,4 +1,5 @@
 #include "main.h"
+#include "auton.hpp"
 #include "lemlib/api.hpp" // IWYU pragma: keep
 #include "piston.hpp"
 #include "intake.hpp"
@@ -6,6 +7,65 @@
 #include "ladybrown.hpp"
 #include "magic.hpp"
 #include <cmath>
+
+// Declare global variable to store selected auton
+int auton_selection = 0;
+
+// Function to handle button press events
+static void auton_btn_event_handler(lv_event_t * e) {
+    lv_obj_t * btn = lv_event_get_target(e);
+    int id = (int)lv_event_get_user_data(e); // Button ID
+
+    auton_selection = id; // Store selection
+
+    // Update the label text
+    lv_obj_t * label = (lv_obj_t *)lv_obj_get_user_data(btn);
+    lv_label_set_text(label, (id == 0) ? "Red Left" : (id == 1) ? "Red Right" : "Blue Left");
+}
+
+// Create LVGL GUI elements
+void auton_selector() {
+    // Create a parent screen
+    lv_obj_t * scr = lv_scr_act();
+
+    // Create labels
+    lv_obj_t * label = lv_label_create(scr);
+    lv_label_set_text(label, "Select Autonomous");
+    lv_obj_align(label, LV_ALIGN_TOP_MID, 0, 10);
+
+    // Create buttons for different auton options
+    const char * options[] = { "Red Left", "Red Right", "Blue Left" };
+    for (int i = 0; i < 3; i++) {
+        lv_obj_t * btn = lv_btn_create(scr);
+        lv_obj_set_size(btn, 100, 50);
+        lv_obj_align(btn, LV_ALIGN_CENTER, (i - 1) * 120, 40);
+
+        lv_obj_t * btn_label = lv_label_create(btn);
+        lv_label_set_text(btn_label, options[i]);
+        lv_obj_center(btn_label);
+
+        // Store button ID as user data
+        lv_obj_add_event_cb(btn, auton_btn_event_handler, LV_EVENT_CLICKED, (void *)i);
+        lv_obj_set_user_data(btn, btn_label);
+    }
+}
+
+// Run selected auton
+void autonFromSelector() {
+    switch (auton_selection) {
+        case 0:
+            // Red Left auton code
+            break;
+        case 1:
+            // Red Right auton code
+            break;
+        case 2:
+            // Blue Left auton code
+            break;
+    }
+}
+
+
 
 void blueSoloWP() {
     chassis.moveToPose(3.4, 5.3, 33.3, 1000, {.maxSpeed = 30});

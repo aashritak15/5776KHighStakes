@@ -347,8 +347,8 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
 
         //update all subsystems
         if (subValues.at(closestPoint)[0] == "0") {intake.move_voltage(0);} 
-        else if (subValues.at(closestPoint)[0] == "1") {intake.move_voltage(-12000);}
-        else if (subValues.at(closestPoint)[0] == "2") {intake.move_voltage(12000);}
+        else if (subValues.at(closestPoint)[0] == "1") {intake.move_voltage(12000);}
+        else if (subValues.at(closestPoint)[0] == "2") {intake.move_voltage(-12000);}
 
         if (subValues.at(closestPoint)[1] == "0") {mogoClamp.set_value(false);} 
         else if (subValues.at(closestPoint)[1] == "1") {mogoClamp.set_value(true);}        
@@ -400,8 +400,8 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
             while(subValues.at(closestPoint)[4] == "TURNING CW" || subValues.at(closestPoint)[4] == "TURNING CCW") {closestPoint++;}
             closestPoint++; //*go forward one packet past the turn to account for angle imperfections
 
-            // //*the exception within the exception
-            // if(std::abs(pathPoints.at(prevClosestPoint).theta - pathPoints.at(closestPoint).theta) < 8) { //TODO: tune angle exception
+            // // //*the exception within the exception
+            // if(std::abs(pathPoints.at(prevClosestPoint).theta - pathPoints.at(closestPoint).theta) < 10 || closestPoint - prevClosestPoint < 4) { //TODO: tune angle exception
             //     dataLine.append("angle <8, exiting\n\n");
             //     closestPoint--;
 
@@ -489,11 +489,25 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
 
 
 
-        // if(subValues.at(closestPoint)[5] == "0") { //segment multipliers //TODO: segment multipliers
-        //     targetVel = targetVel * 1;
-        // } else if(subValues.at(closestPoint)[5] == "1") {
-        //     targetVel = targetVel * 1;
-        // }
+        if(subValues.at(closestPoint)[5] == "0") { //segment multipliers //TODO: segment multipliers
+            targetVel = targetVel * 1;
+        } else if(subValues.at(closestPoint)[5] == "1") {
+            targetVel = targetVel * 1.5;
+        } else if(subValues.at(closestPoint)[5] == "2") {
+            targetVel = targetVel * 1.5;
+        } else if(subValues.at(closestPoint)[5] == "3") {
+            targetVel = targetVel * 1.5;
+        } else if(subValues.at(closestPoint)[5] == "4") {
+            targetVel = targetVel * 1.5;
+        } else if(subValues.at(closestPoint)[5] == "5") {
+            targetVel = targetVel * 1.5;
+        } else if(subValues.at(closestPoint)[5] == "6") { 
+            targetVel = targetVel * 1.5;
+        } else if(subValues.at(closestPoint)[5] == "7") {
+            targetVel = targetVel * 1.5;
+        } else if(subValues.at(closestPoint)[5] == "8") {
+            targetVel = targetVel * 1.5;
+        }
 
         // calculate target left and right velocities
         targetLeftVel = targetVel * (2 + curvature * drivetrain.trackWidth) / 2;

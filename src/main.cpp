@@ -5,6 +5,7 @@
 #include "globals.hpp"
 #include "ladybrown.hpp"
 #include "magic.hpp"
+#include "auton.hpp"
 #include <cmath>
 
 void initialize() {
@@ -15,6 +16,8 @@ void initialize() {
     intakeInit();
     ladyBrownInit();
     opticalInit();
+
+    // auton_selector();
 
     // chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
 
@@ -49,6 +52,8 @@ void initialize() {
             pros::delay(50);
         }
     });
+
+
 
     // antiJamInit();
 }
