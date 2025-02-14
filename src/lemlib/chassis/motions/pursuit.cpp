@@ -289,7 +289,11 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pa
     float minLookahead = 5; //TODO: tune min/max lookahead
     float maxLookahead = 10;
 
-    ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+    if(pathID == "blue") {
+        sortState = 1;
+    } else if(pathID == "red") {
+        sortState = 2;
+    }
 
     this->requestMotionStart();
 
@@ -450,7 +454,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pa
 
         dataLine.append("target vel: " + std::to_string(targetVel) + "\n"); //write target vel
 
-        if(pathID == "Red WP") {
+        if(pathID == "red") {
             switch(std::stoi(subValues.at(closestPoint)[5])) {
                 case 1:
                     targetVel *= 1;
@@ -459,7 +463,9 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pa
                     targetVel *= 1;
                     break;
             }
-        } else if(pathID == "Red ")
+        } else if(pathID == "blue") {
+            
+        }
 
         // calculate target left and right velocities
         targetLeftVel = targetVel * (2 + curvature * drivetrain.trackWidth) / 2;
