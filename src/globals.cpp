@@ -1,5 +1,6 @@
 #include "globals.hpp"
 #include "lemlib/api.hpp" // IWYU pragma: keep
+#include "liblvgl/llemu.hpp"
 #include "piston.hpp"
 #include "intake.hpp"
 #include "globals.hpp"
@@ -7,27 +8,20 @@
 #include <cmath>
 #include "ladybrown.hpp"
 
+bool autonSelected = false;
+int color = 0;
+int auton = 1;
+bool colorSelected = false;
+bool middlePressed;
+const int MAX = 8;
+
 // Note: try moving all this back to main and see if initializing chassis works in initialize
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
 pros::MotorGroup leftMotors({-8, -17, -12}, pros::MotorGearset::blue);
 pros::MotorGroup rightMotors({18, 15, 11}, pros::MotorGearset::blue);
 
-// pros::Rotation vertical(-1);
-// pros::Rotation horizontal(10); //TODO: check later
-
 pros::Imu imu(3);
-
-// pros::Rotation verticalEnc(1);
-
-// lemlib::TrackingWheel vertical(&verticalEnc, lemlib::Omniwheel::NEW_275, 0.125);
-
-// pros::Rotation horizontalEnc(3);
-
-// lemlib::TrackingWheel horizontal(&horizontalEnc, lemlib::Omniwheel::NEW_275, -4.625); //2.75
-
-// lemlib::TrackingWheel verticalTracker(&vertical, lemlib::Omniwheel::NEW_275, 0.125);
-// lemlib::TrackingWheel horizontalTracker(&horizontal, lemlib::Omniwheel::NEW_275, -2.5);
 
 // drivetrain settings
 lemlib::Drivetrain drivetrain(&leftMotors, &rightMotors, 12.5, lemlib::Omniwheel::NEW_275, 450,
@@ -48,7 +42,7 @@ lemlib::ControllerSettings linearController(7.3, // proportional gain (kP)
 
 // angular motion controller
 lemlib::ControllerSettings angularController(3.3, // proportional gain (kP) 4.6 //TODO: maybe tune more!
-                                             0, // integral gain (kI)
+                                             50, // integral gain (kI)
                                              20, // 38,//37.88, // 32.92, //40.5, // derivative gain (kD) 2
                                              0, // anti windup
                                              1, // small error range, in degrees
@@ -117,3 +111,114 @@ void interruptLoop() {
         pros::delay(10);
     }
 }
+
+void screenTask() {
+    while (true) {
+        //* line 7 reserved for rerun states.
+        // if(autonSelected) {
+            std::cout<<"screen task running\n";
+            pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
+            pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
+            pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
+            pros::lcd::print(3, "Color: %f", optical.get_hue());
+            pros::lcd::print(4, "LB Rot Sensor: %i", lbRotation.get_position());
+            pros::lcd::print(5, "Intake vel: %d", intake.get_actual_velocity());
+        // }
+        pros::delay(50);
+    }
+}
+
+// void autonSelector() {
+//     while(!colorSelected) {
+            
+//         if(pros::lcd::read_buttons() & LCD_BTN_LEFT) {
+//             pros::lcd::print(7, "Left button");
+//         } else if(pros::lcd::read_buttons() & LCD_BTN_CENTER) {
+//             pros::lcd::print(7, "Center button");
+//         } else if(pros::lcd::read_buttons() & LCD_BTN_RIGHT) {
+//             pros::lcd::print(7, "Right button");
+//         } else {
+//             pros::lcd::print(7, "No button");
+//         }
+
+//         if(color == 0) {
+//             pros::lcd::print(0, "Red");
+//         } else if(color == 1) {
+//             pros::lcd::print(0, "Blue");
+//         }
+        
+//         if(pros::lcd::read_buttons() & LCD_BTN_CENTER) { //center button
+//             if (!middlePressed) {
+//                 middlePressed = true;
+//                 if (color == 0 || color == 2) {
+//                     color = 1;
+//                 } else if (color == 1) {
+//                     color = 0;
+
+//                 }
+//             }
+//         } else {
+//             middlePressed = false;
+//         }
+
+//         if(pros::lcd::read_buttons() & LCD_BTN_RIGHT) { //right
+//             colorSelected = true;
+//             pros::lcd::print(1, "Color Selected!");
+//         }
+
+//         pros::delay(100);
+//     }
+    
+//     while(!autonSelected) {
+//         if(pros::lcd::read_buttons() & LCD_BTN_RIGHT) { //right
+//             if(auton == MAX) {
+//                 auton = 1;
+//             }
+//             auton++;
+//         }
+
+//         if(pros::lcd::read_buttons() & LCD_BTN_LEFT) { //left
+//             if(auton == 1) {
+//                 auton = MAX;
+//             }
+//             auton--;
+//         }
+        
+//         if(pros::lcd::read_buttons() & LCD_BTN_CENTER) { //center
+//             autonSelected = true;
+//             pros::lcd::print(3, "Auton Selected!");
+//         }
+
+//         switch(auton) {
+//             case 1:
+//                 pros::lcd::print(2, "Solo WP"); 
+//                 break;
+//             case 2:
+//                 pros::lcd::print(2, "Mogo Rush"); 
+//                 break;
+//             case 3:
+//                 pros::lcd::print(2, "Straight"); 
+//                 break;
+//             case 4:
+//                 pros::lcd::print(2, "Turn 90"); 
+//                 break;
+//             case 5:
+//                 pros::lcd::print(2, "Turn 180"); 
+//                 break;
+//             case 6:
+//                 pros::lcd::print(2, "Solo WP"); 
+//                 break;
+//             case 7:
+//                 pros::lcd::print(2, "Solo WP"); 
+//                 break;
+//             case 8:
+//                 pros::lcd::print(2, "Solo WP"); 
+//                 break;
+//         }
+//         pros::delay(100);
+//     }
+
+//     pros::delay(250);
+//     pros::lcd::clear();
+//     pros::delay(250);
+// }

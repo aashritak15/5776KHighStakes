@@ -6,8 +6,7 @@
 #include <iostream>
 
 int intakeState = 0;
-int sortState = 2; // 1 = score blue sort red, 2 = score red sort blue
-// int sortState1 = 0;
+int sortState; // 1 = score blue sort red, 2 = score red sort blue
 bool buttonUpPressed = false;
 bool colorDetected = false;
 
@@ -18,8 +17,8 @@ void intakeInit() {
     intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
     optical.set_led_pwm(100);
 
-    pros::Task pd_task2(colorSort);
-    pros::Task pd_task3(antiJam);
+    pros::Task pd_task2(colorSort, "color sort");
+    // pros::Task pd_task3(antiJam);
 }
 
 void updateIntake() {
@@ -104,7 +103,7 @@ void colorSort() {
                     colorDetected = true;
 
                     if (intake.get_actual_velocity() >= 200) {
-                        pros::Task::delay(50);
+                        pros::Task::delay(65);
                         intake.move_voltage(-12000);
                         pros::Task::delay(200);
                         intake.move_voltage(12000);
@@ -119,12 +118,12 @@ void colorSort() {
             }
 
         } else if (sortState == 2) {
-            if (optical.get_hue() < 245 && optical.get_hue() > 90) {
+            if (optical.get_hue() < 245 && optical.get_hue() > 200) {
                 if (!colorDetected) {
                     colorDetected = true;
 
                     if (intake.get_actual_velocity() >= 200) {
-                        pros::Task::delay(50);
+                        pros::Task::delay(65);
                         intake.move_voltage(-12000);
                         pros::Task::delay(200);
                         intake.move_voltage(-12000);
@@ -148,7 +147,7 @@ void antiJam() {
         std::cout << "Intake Current: " << std::to_string(intake.get_current_draw()) << "\n";
 
         // Detect a jam based on velocity and current draw
-        if (intake.get_actual_velocity() < 100 && intake.get_current_draw() > 2000) {
+        if (intake.get_actual_velocity() < 100 && intake.get_current_draw() > 2400) {
             intake.move_voltage(12000); // Try to push forward for a moment
             pros::Task::delay(40);
             intake.move_voltage(-12000); // Reverse to clear jam

@@ -1,4 +1,5 @@
 #include "main.h"
+#include "pros/colors.hpp"
 
 extern pros::Controller controller;
 
@@ -24,4 +25,12 @@ extern lemlib::ExpoDriveCurve steerCurve;
 
 extern lemlib::Chassis chassis;
 
+extern bool autonSelected;
+extern int color;
+extern int auton;
+extern bool colorSelected;
+extern bool middlePressed;
+
 void interruptLoop();
+void screenTask();
+void autonSelector();

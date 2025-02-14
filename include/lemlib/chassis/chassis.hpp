@@ -707,8 +707,7 @@ class Chassis {
          * }
          * @endcode
          */
-        void follow(const asset& path, const asset& sub, 
-        float lookahead, int timeout, bool forwards = true, bool async = true);
+        void follow(const asset& path, const asset& sub, std::string pathID);
         /**
          * @brief Control the robot during the driver using the arcade drive control scheme. In this control scheme one
          * joystick axis controls the forwards and backwards movement of the robot, while the other joystick axis

@@ -21,12 +21,10 @@ void initO() {
     fileO.open("/usd/autonomous.txt", std::ios::out | std::ios::trunc);
     fileOTwo.open("/usd/extra.txt", std::ios::out | std::ios::trunc);
     if(!fileO || !fileOTwo) {
-        pros::lcd::print(7, "failed to open both");
         controller.set_text(0, 0, "failed to open both");
     }
     
     else {
-        pros::lcd::print(7, "goated");
         controller.set_text(0, 0, "goated");
         active = true;
     }
@@ -41,7 +39,6 @@ void initInterrupt(int lastSection, int stopIndex) {
     fileITwo.open("/usd/extra.txt");
 
     if(!fileInterrupt || !fileInterruptTwo || fileI || fileITwo) {
-        pros::lcd::print(7, "failed to open");
         controller.set_text(0, 0, "failed to open");
     } else {
         controller.set_text(0, 0, "open successful");
@@ -273,7 +270,6 @@ void reflect(bool x, bool y) {
     fileITwo.open("/usd/extra.txt");
 
     if(!fileInterrupt || !fileInterruptTwo || fileI || fileITwo) {
-        pros::lcd::print(7, "failed to open");
         controller.set_text(0, 0, "failed to open");
     } else {
         controller.set_text(0, 0, "open successful");

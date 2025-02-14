@@ -30,7 +30,7 @@ void updateClamp() {
 void updateDoink() {
     static bool buttonDoinkPressed = false;
 
-    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) { //TODO: change button back to b
+    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) { //TODO: b for driver
         if (!buttonDoinkPressed) {
             buttonDoinkPressed = true;
             if(doinkState == 0) {

@@ -6,10 +6,12 @@
 #include "ladybrown.hpp"
 #include "magic.hpp"
 #include "auton.hpp"
+#include "pros/rtos.h"
 #include <cmath>
 
 void initialize() {
     pros::lcd::initialize();
+    if(pros::lcd::is_initialized()) {std::cout<<"yippeee\n";}
 
     clampInit();
     doinkInit();
@@ -18,41 +20,11 @@ void initialize() {
 
     chassis.calibrate(true);
     chassis.setPose(0, 0, 0);
-    chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
+    chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE); //TODO: need to change back to coast
 
-    pros::Task screenTask([&]() {
-        while (true) {
-            //* line 7 reserved for rerun states.
-            // std::cout<<chassis.getPose().x<<", "<<chassis.getPose().y<<", "<<chassis.getPose().theta<<"\n";
+    pros::Task pd_task3(screenTask, "screen task");
 
-            pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
-            pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
-            pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
-            pros::lcd::print(3, "Color: %f", optical.get_hue());
-            pros::lcd::print(4, "LB Rot Sensor: %i", lbRotation.get_position());
-            pros::lcd::print(5, "Drive vel: %i", leftMotors.get_voltage());
-            // pros::lcd::print(5, "Tracking: %i", horizontalEnc.get_position());
-
-            // pros::lcd::print(3, "Rotation (Lift): %i", rotationSensor.get_position()); // lift encoder
-            // pros::lcd::print(4, "Intake State: %f", intakeState);
-
-            // std::vector<double> left = leftMotors.get_position_all();
-            // std::vector<double> right = rightMotors.get_position_all();
-            // pros::lcd::print(3, "LeftF Encoders: %f", left[0]);
-            // pros::lcd::print(4, "LeftM Encoders: %f", left[1]);
-            // pros::lcd::print(5, "LeftB Encoders: %f", left[2]);
-            // pros::lcd::print(6, "RightF Encoders: %f", right[0]);
-            // pros::lcd::print(7, "RightM Encoders: %f", right[1]);
-            // pros::lcd::print(8, "RightB Encoders: %f", right[2]);
-            // pros::lcd::print(7 "Color: %f", optical.get_hue());
-
-            lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
-
-            pros::delay(50);
-        }
-    });
-
-    // antiJamInit();
+    // pros::Task selectorTask(autonSelector, "auton selector");
 }
 
 // Runs while the robot is disabled
@@ -75,7 +47,71 @@ void autonomous() {
     // TODO: COMMENTED POUT BC TESTING IN INITIALIZE
     initDebug();
 
-    chassis.follow(autonomous_txt, extra_txt, 10, 1000000, true, false);
+    //chassis.follow(autonomous_txt, extra_txt, "adsf");
+
+    if(color == 0) { //red
+        sortState = 2;
+        switch(auton) {
+            case 1: //solo wp
+                chassis.follow(autonomous_txt, extra_txt, "adsf");
+                break;
+            case 2: //mogo rush
+                //chassis.follow(autonomous_txt, extra_txt, 10, 1000000, true, false);
+                break;
+            case 3:
+                chassis.moveToPoint(0, 24, 10000);
+                //chassis.follow(autonomous_txt, extra_txt, 10, 1000000, true, false);
+                break;
+            case 4:
+                chassis.turnToHeading(90, 10000);
+                //chassis.follow(autonomous_txt, extra_txt, 10, 1000000, true, false);
+                break;
+            case 5:
+                chassis.turnToHeading(180, 10000);
+                //chassis.follow(autonomous_txt, extra_txt, 10, 1000000, true, false);
+                break;
+            case 6:
+                //chassis.follow(autonomous_txt, extra_txt, 10, 1000000, true, false);
+                break;
+            case 7:
+                //chassis.follow(autonomous_txt, extra_txt, 10, 1000000, true, false);
+                break;
+            case 8:
+                //chassis.follow(autonomous_txt, extra_txt, 10, 1000000, true, false);
+                break;
+        }
+    } else if(color == 1) { //blue
+        sortState = 1;
+        switch(auton) {
+            case 1: //solo wp
+                chassis.follow(autonomous_txt, extra_txt, "adsf");
+                break;
+            case 2: //mogo rush
+                //chassis.follow(autonomous_txt, extra_txt, 10, 1000000, true, false);
+                break;
+            case 3:
+                chassis.moveToPoint(0, 24, 10000);
+                //chassis.follow(autonomous_txt, extra_txt, 10, 1000000, true, false);
+                break;
+            case 4:
+                chassis.turnToHeading(90, 10000);
+                //chassis.follow(autonomous_txt, extra_txt, 10, 1000000, true, false);
+                break;
+            case 5:
+                chassis.turnToHeading(180, 10000);
+                //chassis.follow(autonomous_txt, extra_txt, 10, 1000000, true, false);
+                break;
+            case 6:
+                //chassis.follow(autonomous_txt, extra_txt, 10, 1000000, true, false);
+                break;
+            case 7:
+                //chassis.follow(autonomous_txt, extra_txt, 10, 1000000, true, false);
+                break;
+            case 8:
+                //chassis.follow(autonomous_txt, extra_txt, 10, 1000000, true, false);
+                break;
+        }
+    }
 
     // chassis.turnToHeading(90, 100000);
     // chassis.turnToHeading(180, 5000);
@@ -84,8 +120,6 @@ void autonomous() {
 void opcontrol() {
     // chassis.calibrate(); // *: NEVER COMMENT OUT CALIBRATE OR SETPOSE OR ELSE IT WILL BREAK!!!!!!!!
     // chassis.setPose(0, 0, 0);
-
-    // initDebug();
 
     // chassis.follow(interruptAutonomous_txt, interruptExtra_txt, 10, 1000000, true, false);
 
@@ -96,16 +130,9 @@ void opcontrol() {
     // TODO: COMMENTED OUT BC IN INITIALIZE
     // TODO: COMMENTED OUT BC IN INITIALIZE
 
-    initO();
+    // initO();
 
     int count = 1;
-    int segCount = 1;
-
-    pros::Task pd_task1(lbTask);
-    pros::Task pd_task2(colorSort);
-    pros::Task pd_task3(antiJam);
-
-    // lbTask();
 
     while (true) {
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
@@ -127,19 +154,7 @@ void opcontrol() {
             fileO.flush();
             fileOTwo.flush();
         }
-
-        // pros::lcd::print(4, std::to_string(round(leftMotors.get_voltage()) * 1000.0 / 1000.0).c_str(), 0);
-        // pros::lcd::print(5, std::to_string(round(rightMotors.get_voltage()) * 1000.0 / 1000.0).c_str(), 0);
-        // pros::lcd::print(6, std::to_string(round(leftMotors.get_voltage() + rightMotors.get_voltage()) * 1000.0 /
-        // 1000.0 / 2).c_str(), 0);
-
-        // if(segCount == 100) { //*new segment every give seconds
-        //     section++;
-        //     segCount = 1;
-        // }
-
         count++;
-        // segCount++;
 
         closeO();
 

@@ -7,40 +7,36 @@
 #include <cmath>
 
 void ladyBrownInit() {
-    ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+    ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
     ladyBrown.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
     lbRotation.reset_position();
     lbRotation.set_position(0);
 
-    pros::Task pd_task1(lbTask);
+    pros::Task pd_task1(lbTask, "lb task");
 }
 
 double globalTarget = 0;
 
-// double kP = 0.9;
-// double kD = 0.7;
-
-// bool start = false;
 
 void updateLB() {
-    //*LOAD: 43
-    //*ALLIANCE STAKE: 236.2
-    //*NEUTRAL STAKE: 170
-    //*PASSIVE: 125.3
-
-    // std::cout<<start<<" ";
-    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) { //*ALLIANCE STAKE
-        globalTarget = 236.2;
-
-    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) { //*LOAD
-        globalTarget = 41.5;
-
-    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) { //*DISABLED/ZERO
+    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) { //*ZERO
         globalTarget = 3;
 
-        // start = true;
-    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) { //*PASSIVE
-        globalTarget = 125.3;
+    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) { //*LOAD
+        globalTarget = 40;
+
+    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) { //*FULLSCORE
+        globalTarget = 180;
+
+    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) { //*TIP MOGO
+        globalTarget = 300;
+
+    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) { //*MANUAL DOWN
+        ladyBrown.move_velocity(-60);
+
+    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) { //*MANUAL UP
+        ladyBrown.move_velocity(60);
+
     }
 }
 
@@ -70,21 +66,32 @@ void lbTask() {
     double armMoveSpeed;
 
     double kP = 0.9;
-    double kD = 0.8589988;
+    double kD = 0.9; //0.86
 
     while (true) {
         currentAngle = lbRotation.get_position() / 100.0;
 
-        speedError = globalTarget - currentAngle;
+        if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_A) || controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) {
+            prevSpeedError = 0;
+            speedError = 0;
+            globalTarget = currentAngle;
+        } else {
+            speedError = globalTarget - currentAngle;
 
-        derivative = speedError - prevSpeedError;
+            derivative = speedError - prevSpeedError;
+    
+            armMoveSpeed = (kP * speedError) + (kD * derivative);
 
-        armMoveSpeed = (kP * speedError) + (kD * derivative);
+            if (std::abs(armMoveSpeed) > 80) { armMoveSpeed = (armMoveSpeed < 0) ? -80 : 80; }
+            if (std::abs(armMoveSpeed) < 3) { armMoveSpeed = 0; }
 
-        if (std::abs(armMoveSpeed) > 70) { armMoveSpeed = (armMoveSpeed < 0) ? -70 : 70; }
+            armMoveSpeed = (kP * speedError) + (kD * derivative);
+            ladyBrown.move_velocity(armMoveSpeed);
 
-        ladyBrown.move_velocity(armMoveSpeed);
-        prevSpeedError = speedError;
+            prevSpeedError = speedError;
+        }
+
+        pros::delay(10);
     }
 }
 

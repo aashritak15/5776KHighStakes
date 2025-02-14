@@ -263,7 +263,7 @@ float findLookaheadCurvature(lemlib::Pose pose, float heading, lemlib::Pose look
     return side * ((2 * x) / (d * d));
 }
 
-void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahead, int timeout, bool forwards, bool async) {
+void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pathID) {
 
     std::vector<lemlib::Pose> pathPoints = getData(path); // get list of path points
     std::vector<std::vector<std::string>> subValues = getSubData(sub); //get subsystem values
@@ -285,15 +285,9 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
     float ratio;
 
     int closestPoint = 0;
-    // int compState = pros::competition::get_status();
 
     float minLookahead = 5; //TODO: tune min/max lookahead
     float maxLookahead = 10;
-
-    // double prevLBTarget;
-    // double lbTarget = 0;
-
-    sortState = 2; //TODO: change sortState
 
     ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
 
@@ -356,13 +350,6 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
 
         globalTarget = stod(subValues.at(closestPoint)[2]);
 
-        // prevLBTarget = lbTarget; //*huh
-        // lbTarget = stod(subValues.at(closestPoint)[2]);
-        // if(lbTarget != prevLBTarget) {
-        //     autonLB(lbTarget, 2000);
-        //     dataLine.append("lb done\n");
-        // }
-
         if (subValues.at(closestPoint)[3] == "0") {doink.set_value(false);} 
         else if (subValues.at(closestPoint)[3] == "1") {doink.set_value(true);} 
 
@@ -397,22 +384,6 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
             closestPoint++; //*advance index forward one to begin the check 
             while(subValues.at(closestPoint)[4] == "TURNING CW" || subValues.at(closestPoint)[4] == "TURNING CCW") {closestPoint++;}
             closestPoint++; //*go forward one packet past the turn to account for angle imperfections
-
-            // // //*the exception within the exception
-            // if(std::abs(pathPoints.at(prevClosestPoint).theta - pathPoints.at(closestPoint).theta) < 10 || closestPoint - prevClosestPoint < 4) { //TODO: tune angle exception
-            //     dataLine.append("angle <8, exiting\n\n");
-            //     closestPoint--;
-
-            //     fileOThree<<dataLine;
-            //     fileOThree.flush();
-
-            //     closestPoint++;
-            //     this->requestMotionStart();
-
-            //     pros::delay(50);
-
-            //     continue;
-            // }
 
             dataLine.append("turn target index: " + std::to_string(closestPoint) + "\n");
 
@@ -469,40 +440,26 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         dataLine.append("lookahead y: " + std::to_string(lookaheadPose.y) + "\n");
 
         curvature = findLookaheadCurvature(pose, M_PI / 2 - (pose.theta), lookaheadPose);
-        if(curvature<0.001 && curvature > -0.001) {
-            curvature = 0;
-            dataLine.append("zero");
-        }
+        // if(curvature<0.001 && curvature > -0.001) {
+        //     curvature = 0;
+        //     dataLine.append("zero");
+        // }
         dataLine.append("curvature: " + std::to_string(curvature) + "\n"); //write curvature
 
         targetVel = std::stof(velocities.at(closestPoint));
 
         dataLine.append("target vel: " + std::to_string(targetVel) + "\n"); //write target vel
 
-        //dataLine.append("acc target vel: %f" + leftMotors.get_target_velocity() + ", " + rightMotors.get_target_velocity() + "\n"); 
-        //dataLine.append("acc acc vel: " + leftMotors.get_actual_velocity() + ", " + rightMotors.get_actual_velocity() + "\n");
-
-
-
-        // if(subValues.at(closestPoint)[5] == "0") { //segment multipliers //TODO: segment multipliers
-        //     targetVel = targetVel * 1;
-        // } else if(subValues.at(closestPoint)[5] == "1") {
-        //     targetVel = targetVel * 1.5;
-        // } else if(subValues.at(closestPoint)[5] == "2") {
-        //     targetVel = targetVel * 1.5;
-        // } else if(subValues.at(closestPoint)[5] == "3") {
-        //     targetVel = targetVel * 1.5;
-        // } else if(subValues.at(closestPoint)[5] == "4") {
-        //     targetVel = targetVel * 1.5;
-        // } else if(subValues.at(closestPoint)[5] == "5") {
-        //     targetVel = targetVel * 1.5;
-        // } else if(subValues.at(closestPoint)[5] == "6") { 
-        //     targetVel = targetVel * 1.5;
-        // } else if(subValues.at(closestPoint)[5] == "7") {
-        //     targetVel = targetVel * 1.5;
-        // } else if(subValues.at(closestPoint)[5] == "8") {
-        //     targetVel = targetVel * 1.5;
-        // }
+        if(pathID == "Red WP") {
+            switch(std::stoi(subValues.at(closestPoint)[5])) {
+                case 1:
+                    targetVel *= 1;
+                    break;
+                case 2:
+                    targetVel *= 1;
+                    break;
+            }
+        } else if(pathID == "Red ")
 
         // calculate target left and right velocities
         targetLeftVel = targetVel * (2 + curvature * drivetrain.trackWidth) / 2;
