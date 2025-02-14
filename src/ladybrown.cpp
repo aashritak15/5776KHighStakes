@@ -16,8 +16,9 @@ void ladyBrownInit() {
 }
 
 double globalTarget = 0;
-double kP = 0.9;
-double kD = 0.7;
+
+// double kP = 0.9;
+// double kD = 0.7;
 
 // bool start = false;
 
@@ -26,7 +27,6 @@ void updateLB() {
     //*ALLIANCE STAKE: 236.2
     //*NEUTRAL STAKE: 170
     //*PASSIVE: 125.3
-
 
     // std::cout<<start<<" ";
     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) { //*ALLIANCE STAKE
@@ -41,7 +41,6 @@ void updateLB() {
         // start = true;
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) { //*PASSIVE
         globalTarget = 125.3;
-
     }
 }
 
@@ -63,35 +62,31 @@ void updateLB() {
 //     prevDistance = distance;
 // }
 
+double currentAngle;
+double prevSpeedError = 0;
+double speedError = 0;
+double derivative;
+double armMoveSpeed;
+
+double kP = 0.9;
+double kD = 0.8589988;
+
 void lbTask() {
-    double currentAngle;
-    double prevSpeedError = 0;
-    double speedError = 0;
-    double derivative;
-    double armMoveSpeed;
-
-    float kP = 0;
-    float kD = 0;
-
-    while(true) {
+    while (true) {
         currentAngle = lbRotation.get_position() / 100.0;
-        speedError = (currentAngle - globalTarget) / globalTarget * 100;
-        derivative = prevSpeedError - speedError;
+
+        speedError = globalTarget - currentAngle;
+
+        derivative = speedError - prevSpeedError;
 
         armMoveSpeed = (kP * speedError) + (kD * derivative);
 
-        if(std::abs(armMoveSpeed) > 70) {
-            if(armMoveSpeed < 0) {
-                armMoveSpeed = -70;
-            } else {
-                armMoveSpeed = 70;
-            }
-        }
+        if (std::abs(armMoveSpeed) > 70) { armMoveSpeed = (armMoveSpeed < 0) ? -70 : 70; }
 
         ladyBrown.move_velocity(armMoveSpeed);
         prevSpeedError = speedError;
 
-        pros::delay(10);
+        pros::delay(20);
     }
 }
 

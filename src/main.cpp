@@ -52,15 +52,13 @@ void initialize() {
         }
     });
 
-
-
     // antiJamInit();
 }
 
-//Runs while the robot is disabled
+// Runs while the robot is disabled
 void disabled() {}
 
-//Runs after initialize if the robot is connected to field control
+// Runs after initialize if the robot is connected to field control
 void competition_initialize() {}
 
 ASSET(autonomous_txt); // TODO: add std functionality
@@ -70,11 +68,11 @@ void autonomous() {
     // chassis.calibrate(); //TODO: COMMENTED POUT BC TESTING IN INITIALIZE
     // chassis.setPose(0, 0, 0);
     // chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
-    //TODO: COMMENTED POUT BC TESTING IN INITIALIZE
-    //TODO: COMMENTED POUT BC TESTING IN INITIALIZE
-    //TODO: COMMENTED POUT BC TESTING IN INITIALIZE
-    //TODO: COMMENTED POUT BC TESTING IN INITIALIZE
-    //TODO: COMMENTED POUT BC TESTING IN INITIALIZE
+    // TODO: COMMENTED POUT BC TESTING IN INITIALIZE
+    // TODO: COMMENTED POUT BC TESTING IN INITIALIZE
+    // TODO: COMMENTED POUT BC TESTING IN INITIALIZE
+    // TODO: COMMENTED POUT BC TESTING IN INITIALIZE
+    // TODO: COMMENTED POUT BC TESTING IN INITIALIZE
     initDebug();
 
     chassis.follow(autonomous_txt, extra_txt, 10, 1000000, true, false);
@@ -93,16 +91,17 @@ void opcontrol() {
 
     // chassis.calibrate();
     // chassis.setPose(0, 0, 0);
-    //TODO: COMMENTED OUT BC IN INITIALIZE
-    //TODO: COMMENTED OUT BC IN INITIALIZE
-    //TODO: COMMENTED OUT BC IN INITIALIZE
-    //TODO: COMMENTED OUT BC IN INITIALIZE
-
+    // TODO: COMMENTED OUT BC IN INITIALIZE
+    // TODO: COMMENTED OUT BC IN INITIALIZE
+    // TODO: COMMENTED OUT BC IN INITIALIZE
+    // TODO: COMMENTED OUT BC IN INITIALIZE
 
     initO();
 
     int count = 1;
     int segCount = 1;
+
+    lbTask();
 
     while (true) {
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
@@ -115,6 +114,7 @@ void opcontrol() {
         updateClamp();
         updateDoink();
         updateLB();
+        // lbTask();
 
         if (count == 5) { //*data written every 0.1 seconds
             writePose();
