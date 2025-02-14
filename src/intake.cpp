@@ -6,27 +6,26 @@
 #include <iostream>
 
 int intakeState = 0;
-int sortState = 2; //1 = score blue sort red, 2 = score red sort blue
-//int sortState1 = 0;
+int sortState = 2; // 1 = score blue sort red, 2 = score red sort blue
+// int sortState1 = 0;
 bool buttonUpPressed = false;
 bool colorDetected = false;
 
 // bool buttonUpPressed = false;
 // bool colorDetected = false;
 
-void intakeInit() { 
+void intakeInit() {
     intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
     optical.set_led_pwm(100);
 
     pros::Task pd_task2(colorSort);
     pros::Task pd_task3(antiJam);
-
 }
 
 void updateIntake() {
     static bool buttonl1Pressed = false;
     static bool buttonxPressed = false;
-   
+
     // bool buttonaPressed = false;
 
     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
@@ -61,16 +60,16 @@ void updateIntake() {
 }
 
 void updateColorSort() {
-    if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_UP)) {
-        if(!buttonUpPressed) {
+    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_UP)) {
+        if (!buttonUpPressed) {
             buttonUpPressed = true;
-            if(sortState == 0) {
+            if (sortState == 0) {
                 sortState = 1;
                 controller.set_text(0, 0, "scores blue      ");
-            } else if(sortState == 1) {
+            } else if (sortState == 1) {
                 sortState = 2;
                 controller.set_text(0, 0, "scores red       ");
-            } else if(sortState == 2) {
+            } else if (sortState == 2) {
                 sortState = 0;
                 controller.set_text(0, 0, "no sort         ");
             }
@@ -99,12 +98,12 @@ void updateColorSort() {
 
 void colorSort() {
     while (true) {
-        if(sortState == 1) {
-            if(optical.get_hue() < 30 && optical.get_hue() > 0) {
-                if(!colorDetected) {
+        if (sortState == 1) {
+            if (optical.get_hue() < 30 && optical.get_hue() > 0) {
+                if (!colorDetected) {
                     colorDetected = true;
-                    
-                    if(intake.get_actual_velocity() >= 200 ) {
+
+                    if (intake.get_actual_velocity() >= 200) {
                         pros::Task::delay(50);
                         intake.move_voltage(-12000);
                         pros::Task::delay(200);
@@ -118,13 +117,13 @@ void colorSort() {
             } else {
                 colorDetected = false;
             }
-            
-        } else if(sortState == 2) {
-            if(optical.get_hue() < 245 && optical.get_hue() > 90) {
-                if(!colorDetected) {
+
+        } else if (sortState == 2) {
+            if (optical.get_hue() < 245 && optical.get_hue() > 90) {
+                if (!colorDetected) {
                     colorDetected = true;
-                    
-                    if(intake.get_actual_velocity() >= 200) {
+
+                    if (intake.get_actual_velocity() >= 200) {
                         pros::Task::delay(50);
                         intake.move_voltage(-12000);
                         pros::Task::delay(200);
@@ -142,16 +141,21 @@ void colorSort() {
 
         pros::delay(10);
     }
-
 }
 
 void antiJam() {
     while (true) {
-        std::cout<<std::to_string(intake.get_current_draw())<<"\n";
-        if(intake.get_actual_velocity() < 100 && intake.get_current_draw() > 2000) {
-            intake.move_voltage(12000);
+        std::cout << "Intake Current: " << std::to_string(intake.get_current_draw()) << "\n";
+
+        // Detect a jam based on velocity and current draw
+        if (intake.get_actual_velocity() < 100 && intake.get_current_draw() > 2000) {
+            intake.move_voltage(12000); // Try to push forward for a moment
             pros::Task::delay(40);
-            intake.move_voltage(-12000);
+            intake.move_voltage(-12000); // Reverse to clear jam
+            pros::Task::delay(200); // Hold reverse for longer in case of severe jam
+            intake.move_voltage(6000); // Resume with reduced power before full power
+            pros::Task::delay(100);
+            intake.move_voltage(12000);
         }
 
         pros::delay(10);

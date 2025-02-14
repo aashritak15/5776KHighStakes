@@ -62,16 +62,16 @@ void updateLB() {
 //     prevDistance = distance;
 // }
 
-double currentAngle;
-double prevSpeedError = 0;
-double speedError = 0;
-double derivative;
-double armMoveSpeed;
-
-double kP = 0.9;
-double kD = 0.8589988;
-
 void lbTask() {
+    double currentAngle;
+    double prevSpeedError = 0;
+    double speedError = 0;
+    double derivative;
+    double armMoveSpeed;
+
+    double kP = 0.9;
+    double kD = 0.8589988;
+
     while (true) {
         currentAngle = lbRotation.get_position() / 100.0;
 
@@ -85,8 +85,6 @@ void lbTask() {
 
         ladyBrown.move_velocity(armMoveSpeed);
         prevSpeedError = speedError;
-
-        pros::delay(20);
     }
 }
 

@@ -101,7 +101,11 @@ void opcontrol() {
     int count = 1;
     int segCount = 1;
 
-    lbTask();
+    pros::Task pd_task1(lbTask);
+    pros::Task pd_task2(colorSort);
+    pros::Task pd_task3(antiJam);
+
+    // lbTask();
 
     while (true) {
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
