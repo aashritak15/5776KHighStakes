@@ -115,7 +115,6 @@ void opcontrol() {
         updateClamp();
         updateDoink();
         updateLB();
-        runLB();
 
         if (count == 5) { //*data written every 0.1 seconds
             writePose();

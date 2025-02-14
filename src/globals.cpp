@@ -98,7 +98,6 @@ void interruptLoop() {
         updateClamp();
         updateDoink();
         updateLB();
-        runLB();
 
         if (count == 10) {
             writeInterruptPose();
