@@ -14,74 +14,14 @@ bool colorDetected = false;
 // bool buttonUpPressed = false;
 // bool colorDetected = false;
 
-void colorSort(int lol) {
-    while (true) {
-        if(sortState == 1) {
-            if(optical.get_hue() < 30 && optical.get_hue() > 0) {
-                if(!colorDetected) {
-                    colorDetected = true;
-                    
-                    if(intake.get_actual_velocity() >= 200 ) {
-                        pros::Task::delay(50);
-                        intake.move_voltage(-12000);
-                        pros::Task::delay(200);
-                        intake.move_voltage(12000);
-                    } else {
-                        intake.move_voltage(-12000);
-                        pros::Task::delay(750);
-                        intake.move_voltage(12000);
-                    }
-                }
-            } else {
-                colorDetected = false;
-            }
-            
-        } else if(sortState == 2) {
-            if(optical.get_hue() < 245 && optical.get_hue() > 90) {
-                if(!colorDetected) {
-                    colorDetected = true;
-                    
-                    if(intake.get_actual_velocity() >= 200) {
-                        pros::Task::delay(50);
-                        intake.move_voltage(-12000);
-                        pros::Task::delay(200);
-                        intake.move_voltage(-12000);
-                    } else {
-                        intake.move_voltage(-12000);
-                        pros::Task::delay(750);
-                        intake.move_voltage(12000);
-                    }
-                }
-            } else {
-                colorDetected = false;
-            }
-        }
-
-        pros::delay(10);
-    }
-
-}
-
 void intakeInit() { 
-    intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST); 
-    sortState = 0; //TODO: sortState in initialize intake
+    intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+    optical.set_led_pwm(100);
 
-    void* colorSorted = (void*)colorSort;
+    pros::Task pd_task2(colorSort);
+    pros::Task pd_task3(antiJam);
 
-    pros::task_fn_t colorSortation = (pros::task_fn_t) colorSorted;
-
-    pros::Task sortTask (colorSortation);
 }
-
-void antiJamInit() { 
-    void* antiJammed = (void*)antiJam;
-
-    pros::task_fn_t antiJamtation = (pros::task_fn_t) antiJammed;
-
-    pros::Task jamTask (antiJamtation);
-}
-
-void opticalInit() { optical.set_led_pwm(100); }
 
 void updateIntake() {
     static bool buttonl1Pressed = false;
@@ -157,13 +97,63 @@ void updateColorSort() {
     */
 }
 
+void colorSort() {
+    while (true) {
+        if(sortState == 1) {
+            if(optical.get_hue() < 30 && optical.get_hue() > 0) {
+                if(!colorDetected) {
+                    colorDetected = true;
+                    
+                    if(intake.get_actual_velocity() >= 200 ) {
+                        pros::Task::delay(50);
+                        intake.move_voltage(-12000);
+                        pros::Task::delay(200);
+                        intake.move_voltage(12000);
+                    } else {
+                        intake.move_voltage(-12000);
+                        pros::Task::delay(750);
+                        intake.move_voltage(12000);
+                    }
+                }
+            } else {
+                colorDetected = false;
+            }
+            
+        } else if(sortState == 2) {
+            if(optical.get_hue() < 245 && optical.get_hue() > 90) {
+                if(!colorDetected) {
+                    colorDetected = true;
+                    
+                    if(intake.get_actual_velocity() >= 200) {
+                        pros::Task::delay(50);
+                        intake.move_voltage(-12000);
+                        pros::Task::delay(200);
+                        intake.move_voltage(-12000);
+                    } else {
+                        intake.move_voltage(-12000);
+                        pros::Task::delay(750);
+                        intake.move_voltage(12000);
+                    }
+                }
+            } else {
+                colorDetected = false;
+            }
+        }
+
+        pros::delay(10);
+    }
+
+}
+
 void antiJam() {
     while (true) {
         std::cout<<std::to_string(intake.get_current_draw())<<"\n";
-        if(intake.get_actual_velocity() < 100 && intake.get_current_draw() > 0) {
+        if(intake.get_actual_velocity() < 100 && intake.get_current_draw() > 2000) {
             intake.move_voltage(12000);
             pros::Task::delay(40);
             intake.move_voltage(-12000);
         }
+
+        pros::delay(10);
     }
 }

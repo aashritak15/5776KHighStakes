@@ -7,14 +7,12 @@ inline pros::Motor intake(14, pros::MotorGearset::blue); //changed from blue to 
 inline pros::Optical optical(16);
 
 void intakeInit();
-void opticalInit();
 
 void updateIntake();
 void updateColorSort();
 
-void colorSort(int lol);
+void colorSort();
 void antiJam();
-void antiJamInit();
 
 extern int intakeState;
 extern int sortState;

@@ -11,11 +11,11 @@ void ladyBrownInit() {
     ladyBrown.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
     lbRotation.reset_position();
     lbRotation.set_position(0);
+
+    pros::Task pd_task1(lbTask);
 }
 
 double globalTarget = 0;
-double prevDistance = 0;
-double prevDistance1 = 0;
 double kP = 0.9;
 double kD = 0.7;
 
@@ -45,37 +45,69 @@ void updateLB() {
     }
 }
 
-void runLB() {
-    double currentAngle = lbRotation.get_position() / 100.0;
-    double distance = globalTarget - currentAngle;
-    double derivative = distance - prevDistance;
-    double armMoveSpeed = (kP * distance) + (kD * derivative);
+// void runLB() {
+//     double currentAngle = lbRotation.get_position() / 100.0;
+//     double distance = globalTarget - currentAngle;
+//     double derivative = distance - prevDistance;
+//     double armMoveSpeed = (kP * distance) + (kD * derivative);
 
-    if(std::abs(armMoveSpeed) > 65) {
-        if(armMoveSpeed < 0) {
-            armMoveSpeed = -65;
-        } else {
-            armMoveSpeed = 65;
+//     if(std::abs(armMoveSpeed) > 65) {
+//         if(armMoveSpeed < 0) {
+//             armMoveSpeed = -65;
+//         } else {
+//             armMoveSpeed = 65;
+//         }
+//     }
+
+//     ladyBrown.move_velocity(armMoveSpeed);
+//     prevDistance = distance;
+// }
+
+void lbTask() {
+    double currentAngle;
+    double prevSpeedError = 0;
+    double speedError = 0;
+    double derivative;
+    double armMoveSpeed;
+
+    float kP = 0;
+    float kD = 0;
+
+    while(true) {
+        currentAngle = lbRotation.get_position() / 100.0;
+        speedError = (currentAngle - globalTarget) / globalTarget * 100;
+        derivative = prevSpeedError - speedError;
+
+        armMoveSpeed = (kP * speedError) + (kD * derivative);
+
+        if(std::abs(armMoveSpeed) > 70) {
+            if(armMoveSpeed < 0) {
+                armMoveSpeed = -70;
+            } else {
+                armMoveSpeed = 70;
+            }
         }
-    }
 
-    ladyBrown.move_velocity(armMoveSpeed);
-    prevDistance = distance;
-}
-
-void autonLB(double ladyTarget, int timeout) {
-    lemlib::Timer timer(timeout);
-
-    while (!timer.isDone() && std::abs(ladyTarget - lbRotation.get_position() / 100.0) >= 1) {
-        double currentAngle = lbRotation.get_position() / 100.0;
-        double distance = ladyTarget - currentAngle;
-        double derivative = distance - prevDistance1;
-        double armMoveSpeed = (kP * distance) + (kD * derivative);
-        // if (armMoveSpeed < 1) {
-        //     armMoveSpeed = 0;
-        // }
         ladyBrown.move_velocity(armMoveSpeed);
-        prevDistance1 = distance;
+        prevSpeedError = speedError;
+
+        pros::delay(10);
     }
-    ladyBrown.move_velocity(0);
 }
+
+// void autonLB(double ladyTarget, int timeout) {
+//     lemlib::Timer timer(timeout);
+
+//     while (!timer.isDone() && std::abs(ladyTarget - lbRotation.get_position() / 100.0) >= 1) {
+//         double currentAngle = lbRotation.get_position() / 100.0;
+//         double distance = ladyTarget - currentAngle;
+//         double derivative = distance - prevDistance1;
+//         double armMoveSpeed = (kP * distance) + (kD * derivative);
+//         // if (armMoveSpeed < 1) {
+//         //     armMoveSpeed = 0;
+//         // }
+//         ladyBrown.move_velocity(armMoveSpeed);
+//         prevDistance1 = distance;
+//     }
+//     ladyBrown.move_velocity(0);
+// }

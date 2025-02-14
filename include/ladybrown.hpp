@@ -8,17 +8,15 @@ inline pros::Motor ladyBrown(-5, pros::MotorGearset::red);
 inline pros::Rotation lbRotation(20);
 
 void ladyBrownInit();
-void updateLB();
-void rotationInit();
-void updateLift();
-void allianceStake();
+
 void updateLB();
 void runLB();
 
 // extern double ladyTarget;
 
-void updateLadyTask(double target);
-void autonLB(double ladyTarget, int timeout);
+// void updateLadyTask(double target);
+// void autonLB(double ladyTarget, int timeout);
+void lbTask();
 
 extern double globalTarget;
 

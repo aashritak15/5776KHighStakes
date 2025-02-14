@@ -15,7 +15,6 @@ void initialize() {
     doinkInit();
     intakeInit();
     ladyBrownInit();
-    opticalInit();
 
     chassis.calibrate(true);
     chassis.setPose(0, 0, 0);
@@ -92,8 +91,13 @@ void opcontrol() {
 
     // chassis.follow(interruptAutonomous_txt, interruptExtra_txt, 10, 1000000, true, false);
 
-    chassis.calibrate();
-    chassis.setPose(0, 0, 0);
+    // chassis.calibrate();
+    // chassis.setPose(0, 0, 0);
+    //TODO: COMMENTED OUT BC IN INITIALIZE
+    //TODO: COMMENTED OUT BC IN INITIALIZE
+    //TODO: COMMENTED OUT BC IN INITIALIZE
+    //TODO: COMMENTED OUT BC IN INITIALIZE
+
 
     initO();
 

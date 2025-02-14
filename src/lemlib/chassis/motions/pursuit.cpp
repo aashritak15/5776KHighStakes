@@ -355,7 +355,6 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, float lookahea
         else if (subValues.at(closestPoint)[1] == "1") {mogoClamp.set_value(true);}        
 
         globalTarget = stod(subValues.at(closestPoint)[2]);
-        runLB();
 
         // prevLBTarget = lbTarget; //*huh
         // lbTarget = stod(subValues.at(closestPoint)[2]);
