@@ -22,9 +22,7 @@ void initialize() {
     chassis.setPose(0, 0, 0);
     chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE); //TODO: need to change back to coast
 
-    pros::Task pd_task3(screenTask, "screen task");
-
-    // pros::Task selectorTask(autonSelector, "auton selector");
+    autonSelector();
 }
 
 // Runs while the robot is disabled

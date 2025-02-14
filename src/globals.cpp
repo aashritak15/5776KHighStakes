@@ -108,117 +108,118 @@ void interruptLoop() {
 
         closeOInterrupt();
 
-        pros::delay(10);
+        pros::Task::delay(10);
     }
 }
 
 void screenTask() {
     while (true) {
         //* line 7 reserved for rerun states.
-        // if(autonSelected) {
-            std::cout<<"screen task running\n";
-            pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
-            pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
-            pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
-            pros::lcd::print(3, "Color: %f", optical.get_hue());
-            pros::lcd::print(4, "LB Rot Sensor: %i", lbRotation.get_position());
-            pros::lcd::print(5, "Intake vel: %d", intake.get_actual_velocity());
-        // }
-        pros::delay(50);
+        std::cout<<"screen task running\n";
+        pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
+        pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
+        pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
+        pros::lcd::print(3, "Color: %f", optical.get_hue());
+        pros::lcd::print(4, "LB Rot Sensor: %i", lbRotation.get_position());
+        pros::lcd::print(5, "Intake vel: %d", intake.get_actual_velocity());
+        pros::Task::delay(50);
     }
 }
 
-// void autonSelector() {
-//     while(!colorSelected) {
+void autonSelector() {
+    while(!colorSelected) {
             
-//         if(pros::lcd::read_buttons() & LCD_BTN_LEFT) {
-//             pros::lcd::print(7, "Left button");
-//         } else if(pros::lcd::read_buttons() & LCD_BTN_CENTER) {
-//             pros::lcd::print(7, "Center button");
-//         } else if(pros::lcd::read_buttons() & LCD_BTN_RIGHT) {
-//             pros::lcd::print(7, "Right button");
-//         } else {
-//             pros::lcd::print(7, "No button");
-//         }
+        if(pros::lcd::read_buttons() & LCD_BTN_LEFT) {
+            pros::lcd::print(7, "Left button");
+        } else if(pros::lcd::read_buttons() & LCD_BTN_CENTER) {
+            pros::lcd::print(7, "Center button");
+        } else if(pros::lcd::read_buttons() & LCD_BTN_RIGHT) {
+            pros::lcd::print(7, "Right button");
+        } else {
+            pros::lcd::print(7, "No button");
+        }
 
-//         if(color == 0) {
-//             pros::lcd::print(0, "Red");
-//         } else if(color == 1) {
-//             pros::lcd::print(0, "Blue");
-//         }
+        if(color == 0) {
+            pros::lcd::print(0, "Red");
+        } else if(color == 1) {
+            pros::lcd::print(0, "Blue");
+        }
         
-//         if(pros::lcd::read_buttons() & LCD_BTN_CENTER) { //center button
-//             if (!middlePressed) {
-//                 middlePressed = true;
-//                 if (color == 0 || color == 2) {
-//                     color = 1;
-//                 } else if (color == 1) {
-//                     color = 0;
+        if(pros::lcd::read_buttons() & LCD_BTN_CENTER) { //center button
+            if (!middlePressed) {
+                middlePressed = true;
+                if (color == 0 || color == 2) {
+                    color = 1;
+                } else if (color == 1) {
+                    color = 0;
 
-//                 }
-//             }
-//         } else {
-//             middlePressed = false;
-//         }
+                }
+            }
+        } else {
+            middlePressed = false;
+        }
 
-//         if(pros::lcd::read_buttons() & LCD_BTN_RIGHT) { //right
-//             colorSelected = true;
-//             pros::lcd::print(1, "Color Selected!");
-//         }
+        if(pros::lcd::read_buttons() & LCD_BTN_RIGHT) { //right
+            colorSelected = true;
+            pros::lcd::print(1, "Color Selected!");
+        }
 
-//         pros::delay(100);
-//     }
+        pros::delay(100);
+    }
     
-//     while(!autonSelected) {
-//         if(pros::lcd::read_buttons() & LCD_BTN_RIGHT) { //right
-//             if(auton == MAX) {
-//                 auton = 1;
-//             }
-//             auton++;
-//         }
+    while(!autonSelected) {
+        if(pros::lcd::read_buttons() & LCD_BTN_RIGHT) { //right
+            if(auton == MAX) {
+                auton = 1;
+            }
+            auton++;
+        }
 
-//         if(pros::lcd::read_buttons() & LCD_BTN_LEFT) { //left
-//             if(auton == 1) {
-//                 auton = MAX;
-//             }
-//             auton--;
-//         }
+        if(pros::lcd::read_buttons() & LCD_BTN_LEFT) { //left
+            if(auton == 1) {
+                auton = MAX;
+            }
+            auton--;
+        }
         
-//         if(pros::lcd::read_buttons() & LCD_BTN_CENTER) { //center
-//             autonSelected = true;
-//             pros::lcd::print(3, "Auton Selected!");
-//         }
+        if(pros::lcd::read_buttons() & LCD_BTN_CENTER) { //center
+            autonSelected = true;
+            pros::lcd::print(3, "Auton Selected!");
+        }
 
-//         switch(auton) {
-//             case 1:
-//                 pros::lcd::print(2, "Solo WP"); 
-//                 break;
-//             case 2:
-//                 pros::lcd::print(2, "Mogo Rush"); 
-//                 break;
-//             case 3:
-//                 pros::lcd::print(2, "Straight"); 
-//                 break;
-//             case 4:
-//                 pros::lcd::print(2, "Turn 90"); 
-//                 break;
-//             case 5:
-//                 pros::lcd::print(2, "Turn 180"); 
-//                 break;
-//             case 6:
-//                 pros::lcd::print(2, "Solo WP"); 
-//                 break;
-//             case 7:
-//                 pros::lcd::print(2, "Solo WP"); 
-//                 break;
-//             case 8:
-//                 pros::lcd::print(2, "Solo WP"); 
-//                 break;
-//         }
-//         pros::delay(100);
-//     }
+        switch(auton) {
+            case 1:
+                pros::lcd::print(2, "Solo WP"); 
+                break;
+            case 2:
+                pros::lcd::print(2, "Mogo Rush"); 
+                break;
+            case 3:
+                pros::lcd::print(2, "Straight"); 
+                break;
+            case 4:
+                pros::lcd::print(2, "Turn 90"); 
+                break;
+            case 5:
+                pros::lcd::print(2, "Turn 180"); 
+                break;
+            case 6:
+                pros::lcd::print(2, "Solo WP"); 
+                break;
+            case 7:
+                pros::lcd::print(2, "Solo WP"); 
+                break;
+            case 8:
+                pros::lcd::print(2, "Solo WP"); 
+                break;
+        }
+        pros::delay(100);
+    }
 
-//     pros::delay(250);
-//     pros::lcd::clear();
-//     pros::delay(250);
-// }
+    // std::cout<<"halsidjflas\n";
+
+    // pros::delay(250);
+    // pros::lcd::clear();
+    // pros::delay(250);
+    // pros::Task callScreenTask(screenTask, "screen task");
+}

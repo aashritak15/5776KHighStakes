@@ -91,7 +91,7 @@ void lbTask() {
             prevSpeedError = speedError;
         // }
 
-        pros::delay(10);
+        pros::Task::delay(10);
     }
 }
 
