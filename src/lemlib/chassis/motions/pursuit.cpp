@@ -304,7 +304,9 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pa
 
         //     initInterrupt(stoi(subValues.at(closestPoint)[5]), closestPoint);
 
-        //     interruptLoop();
+        //     pros::delay(5000);
+
+        //     opcontrol();
         // }
 
         // autonomous and extra files NEED to be same as the path you want to interrupt

@@ -33,4 +33,4 @@ extern bool middlePressed;
 
 void interruptLoop();
 void screenTask();
-void autonSelector();
+//void autonSelector();

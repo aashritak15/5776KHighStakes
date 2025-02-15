@@ -38,10 +38,12 @@ void initInterrupt(int lastSection, int stopIndex) {
     fileI.open("/usd/autonomous.txt");
     fileITwo.open("/usd/extra.txt");
 
-    if(!fileInterrupt || !fileInterruptTwo || fileI || fileITwo) {
+    if(!fileInterrupt || !fileInterruptTwo || !fileI || !fileITwo) {
         controller.set_text(0, 0, "failed to open");
+        active = false;
     } else {
         controller.set_text(0, 0, "open successful");
+        active = true;
     }
 
     std::string dataLine;
@@ -60,6 +62,9 @@ void initInterrupt(int lastSection, int stopIndex) {
 
     fileInterrupt.flush();
     fileInterruptTwo.flush();
+
+    fileI.close();
+    fileITwo.close();
 
     controller.set_text(0, 0, "copied");
 }
@@ -113,7 +118,7 @@ void closeOInterrupt() {
         dataLine.append(std::to_string((round(chassis.getPose().x*1000))/1000) + ", "); //*all rounded to 3 decimal places
         dataLine.append(std::to_string((round(chassis.getPose().y*1000))/1000) + ", ");
         dataLine.append(std::to_string((round(chassis.getPose().theta*1000))/1000) + ", ");
-        dataLine.append("0\n");
+        dataLine.append("0\nendData");
         fileInterrupt << dataLine;
 
         fileInterrupt.flush();
@@ -209,7 +214,7 @@ void writeInterruptPose() {
 
     fileInterrupt << dataLine;
     
-    if(!fileInterrupt) {
+    if(!fileInterrupt && active) {
         controller.set_text(0, 0, "write error");
     }
 }
@@ -224,7 +229,7 @@ void writeInterruptAdditional() {
     std::int32_t right = rightMotors.get_voltage(); 
     float total = left + right;
 
-    if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) { //TODO: change button back
+    if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_B)) { //TODO: change button back
         if (!buttonPressed) {
             buttonPressed = true;
             section++;
@@ -280,62 +285,66 @@ void reflect(bool x, bool y) {
 
     while (std::getline(fileI, tempData)) {
         std::vector<std::string> pointData = readElementMagic(tempData, ", ");
-        for(int i = 0; i<pointData.size(); i++) {
-
-            if(i == 1) {
-                if(x) {
-                    dataLine.append(std::to_string(stof(pointData.at(i)) * -1));
-                    dataLine.append(std::to_string(stof(pointData.at(2)) * -1));
-                }
-            } /*else if(i == 0) {
-                if(y) {
-                    dataLine.append(std::to_string(stof(pointData.at(i)) * -1));
-                    dataLine.append(std::to_string(stof(pointData.at(2)) * -1));
-                }
-            }*/
-
-            dataLine.append(pointData.at(i));
-        }
+        for(int i = 0; i<4; i++) {
         
+            if(i == 0) { //x coord
+                if (y) {
+                    dataLine.append(std::to_string(std::stof(pointData.at(i)) * -1) + ", ");
+                } else {
+                    dataLine.append(pointData.at(i) + ", ");
+                }
+            }
+
+            else if(i == 1) { //y coord
+                if (x) {
+                    dataLine.append(std::to_string(std::stof(pointData.at(i)) * -1) + ", ");
+                } else {
+                    dataLine.append(pointData.at(i) + ", ");
+                }
+            }
+
+            else if(i == 2) { //heading
+                if (x) {
+                    dataLine.append(std::to_string(std::stof(pointData.at(i)) * -1) + ", ");
+                } else if (y) {
+                    dataLine.append(std::to_string(std::stof(pointData.at(i)) * -1) + ", ");
+                } else { //for either double reflection or no reflection
+                    dataLine.append(std::to_string(std::stof(pointData.at(i))) + ", ");
+                }
+            }
+
+            else if(i == 3) { //vel
+                dataLine.append(pointData.at(i) + "\n");
+            }
+        }
         reflector<<dataLine;
+        dataLine.clear();
     }
+
+    dataLine.append("endData");
+    reflector<<dataLine;
+    dataLine.clear();
 
     while (std::getline(fileITwo, tempData)) {
         std::vector<std::string> pointData = readElementMagic(tempData, ", ");
         for(int i = 0; i<pointData.size(); i++) {
-            dataLine.append(pointData.at(i));
+            if(i == pointData.size() - 1) {
+                dataLine.append(pointData.at(i) + "\n");
+            } else {
+                dataLine.append(pointData.at(i) + ", ");
+            }
         }
         
         reflectorTwo<<dataLine;
+        dataLine.clear();
     }
+
+    dataLine.append("endData");
+    reflectorTwo<<dataLine;
+    dataLine.clear();
 
     controller.set_text(0, 0, "reflected"); 
-}
 
-void rerunPIDs() {
-    float avgVel = ((leftMotors.get_voltage() + rightMotors.get_voltage()) / 2.0);
-    float targetVel = 400.0;
-    prevError = targetVel;
-
-    while(true) {
-        float Kd = 0;
-        float Kp = 1;
-        
-        avgVel = ((leftMotors.get_voltage() + rightMotors.get_voltage()) / 2.0);
-        
-        float error = targetVel - avgVel;
-        float errorChange = prevError - error;
-
-        float proportional = error * Kp;
-        float derivative = errorChange * Kd;
-
-        targetVel = proportional + derivative;
-
-        leftMotors.move_voltage(targetVel);
-        rightMotors.move_voltage(targetVel);
-
-        pros::delay(10);
-    }
 }
 
 std::vector<std::string> readElementMagic(const std::string& input, const std::string& delimiter) {

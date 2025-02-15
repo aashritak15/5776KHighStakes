@@ -40,24 +40,6 @@ void updateLB() {
     // }
 }
 
-// void runLB() {
-//     double currentAngle = lbRotation.get_position() / 100.0;
-//     double distance = globalTarget - currentAngle;
-//     double derivative = distance - prevDistance;
-//     double armMoveSpeed = (kP * distance) + (kD * derivative);
-
-//     if(std::abs(armMoveSpeed) > 65) {
-//         if(armMoveSpeed < 0) {
-//             armMoveSpeed = -65;
-//         } else {
-//             armMoveSpeed = 65;
-//         }
-//     }
-
-//     ladyBrown.move_velocity(armMoveSpeed);
-//     prevDistance = distance;
-// }
-
 void lbTask() {
     double currentAngle;
     double prevSpeedError = 0;

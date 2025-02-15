@@ -77,41 +77,6 @@ lemlib::ExpoDriveCurve steerCurve(5, // joystick deadband out of 127
 // create the chassis
 lemlib::Chassis chassis(drivetrain, linearController, angularController, sensors, &throttleCurve, &steerCurve);
 
-void interruptLoop() {
-    int count = 1; // TODO: check count and segCount logic
-    int segCount = 1;
-
-    while (true) {
-        int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
-        int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
-
-        chassis.arcade(leftY, rightX * 0.9);
-
-        updateIntake();
-        updateColorSort();
-        updateClamp();
-        updateDoink();
-        updateLB();
-
-        if (count == 10) {
-            writeInterruptPose();
-            writeInterruptAdditional();
-            count = 1;
-            fileInterrupt.flush();
-            fileInterruptTwo.flush();
-        }
-
-        if (segCount == 100) { section++; }
-
-        count++;
-        segCount++;
-
-        closeOInterrupt();
-
-        pros::Task::delay(10);
-    }
-}
-
 void screenTask() {
     while (true) {
         //* line 7 reserved for rerun states.
@@ -126,6 +91,7 @@ void screenTask() {
     }
 }
 
+/*
 void autonSelector() {
     while(!colorSelected) {
             
@@ -223,3 +189,4 @@ void autonSelector() {
     // pros::delay(250);
     // pros::Task callScreenTask(screenTask, "screen task");
 }
+    */

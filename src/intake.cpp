@@ -102,16 +102,16 @@ void colorSort() {
                 if (!colorDetected) {
                     colorDetected = true;
 
-                    if (intake.get_actual_velocity() >= 200) {
+                    // if (intake.get_actual_velocity() >= 200) {
                         pros::Task::delay(65);
                         intake.move_voltage(-12000);
                         pros::Task::delay(200);
                         intake.move_voltage(12000);
-                    } else {
-                        intake.move_voltage(-12000);
-                        pros::Task::delay(750);
-                        intake.move_voltage(12000);
-                    }
+                    // } else {
+                    //     intake.move_voltage(-12000);
+                    //     pros::Task::delay(750);
+                    //     intake.move_voltage(12000);
+                    // }
                 }
             } else {
                 colorDetected = false;
@@ -122,16 +122,16 @@ void colorSort() {
                 if (!colorDetected) {
                     colorDetected = true;
 
-                    if (intake.get_actual_velocity() >= 200) {
+                    // if (intake.get_actual_velocity() >= 200) {
                         pros::Task::delay(65);
                         intake.move_voltage(-12000);
                         pros::Task::delay(200);
                         intake.move_voltage(-12000);
-                    } else {
-                        intake.move_voltage(-12000);
-                        pros::Task::delay(750);
-                        intake.move_voltage(12000);
-                    }
+                    // } else {
+                    //     intake.move_voltage(-12000);
+                    //     pros::Task::delay(750);
+                    //     intake.move_voltage(12000);
+                    // }
                 }
             } else {
                 colorDetected = false;
