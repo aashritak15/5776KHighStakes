@@ -17,7 +17,6 @@ void ladyBrownInit() {
 
 double globalTarget = 0;
 
-
 void updateLB() {
     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) { //*ZERO
         globalTarget = 3;
@@ -31,13 +30,16 @@ void updateLB() {
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) { //*TIP MOGO
         globalTarget = 300;
 
-    } //else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) { //*MANUAL DOWN
-    //     ladyBrown.move_velocity(-60); bgh
+    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT)) { //*SCORE MOGO
+        globalTarget = 60;
+    }
+    // else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) { //*MANUAL DOWN
+    //     ladyBrown.move_velocity(-60);
 
     // } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) { //*MANUAL UP
     //     ladyBrown.move_velocity(60);
 
-    // }
+    // }}
 }
 
 void lbTask() {
@@ -48,29 +50,30 @@ void lbTask() {
     double armMoveSpeed;
 
     double kP = 0.9;
-    double kD = 0.9; //0.86
+    double kD = 0.9; // 0.86
 
     while (true) {
         currentAngle = lbRotation.get_position() / 100.0;
 
-        // if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_A) || controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) {
+        // if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_A) ||
+        // controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) {
         //     prevSpeedError = 0;
         //     speedError = 0;
         //     globalTarget = currentAngle;
         // } else {
-            speedError = globalTarget - currentAngle;
+        speedError = globalTarget - currentAngle;
 
-            derivative = speedError - prevSpeedError;
-    
-            armMoveSpeed = (kP * speedError) + (kD * derivative);
+        derivative = speedError - prevSpeedError;
 
-            if (std::abs(armMoveSpeed) > 70) { armMoveSpeed = (armMoveSpeed < 0) ? -70 : 70; }
-            if (std::abs(armMoveSpeed) < 3) { armMoveSpeed = 0; }
+        armMoveSpeed = (kP * speedError) + (kD * derivative);
 
-            armMoveSpeed = (kP * speedError) + (kD * derivative);
-            ladyBrown.move_velocity(armMoveSpeed);
+        if (std::abs(armMoveSpeed) > 70) { armMoveSpeed = (armMoveSpeed < 0) ? -70 : 70; }
+        if (std::abs(armMoveSpeed) < 3) { armMoveSpeed = 0; }
 
-            prevSpeedError = speedError;
+        armMoveSpeed = (kP * speedError) + (kD * derivative);
+        ladyBrown.move_velocity(armMoveSpeed);
+
+        prevSpeedError = speedError;
         // }
 
         pros::Task::delay(10);
