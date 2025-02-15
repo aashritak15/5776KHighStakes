@@ -3,6 +3,8 @@
 // Here is a link to the original document
 // https://www.chiefdelphi.com/uploads/default/original/3X/b/e/be0e06de00e07db66f97686505c3f4dde2e332dc.pdf
 
+// k team on top tho.
+
 #include <iostream>
 #include <cmath>
 #include <vector>
@@ -254,6 +256,8 @@ float findLookaheadCurvature(lemlib::Pose pose, float heading, lemlib::Pose look
     float x = std::fabs(a * lookahead.x + lookahead.y + c) / std::sqrt((a * a) + 1);
     float d = std::hypot(lookahead.x - pose.x, lookahead.y - pose.y);
 
+    std::cout<<std::to_string(d)<<"\n";
+
     if (d < 3) { // TODO: tune lookahead distance from exclusion tolerance
         return 0;
     }
@@ -263,6 +267,8 @@ float findLookaheadCurvature(lemlib::Pose pose, float heading, lemlib::Pose look
 }
 
 void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pathID) {
+    chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
+
     std::vector<lemlib::Pose> pathPoints = getData(path); // get list of path points
     std::vector<std::vector<std::string>> subValues = getSubData(sub); // get subsystem values
     std::vector<std::string> velocities = getVelocities(path); // get velocities
@@ -286,12 +292,6 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pa
 
     float minLookahead = 5; // TODO: tune min/max lookahead
     float maxLookahead = 10;
-
-    if (pathID == "blue") {
-        sortState = 1;
-    } else if (pathID == "red") {
-        sortState = 2;
-    }
 
     this->requestMotionStart();
 
@@ -400,7 +400,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pa
             while (subValues.at(closestPoint)[4] == "TURNING CW" || subValues.at(closestPoint)[4] == "TURNING CCW") {
                 closestPoint++;
             }
-            closestPoint++; //*go forward one packet past the turn to account for angle imperfections
+            // closestPoint++; //TODO: THERE SHOULD BE NO PURPOSE FOR THIS
 
             dataLine.append("turn target index: " + std::to_string(closestPoint) + "\n");
 
@@ -419,10 +419,6 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pa
                                       {.direction = AngularDirection::CCW_COUNTERCLOCKWISE, .maxSpeed = 80}, false);
                 dataLine.append("ending theta: " + std::to_string(chassis.getPose().theta) + "\n");
             }
-
-            // chassis.setPose(pathPoints[closestPoint].x, pathPoints[closestPoint].y, pathPoints[closestPoint].theta);
-            // // temp reset position because bot being fat ///TODO: we hate this forever and ever and evere and eva
-            // sdlkfj;asjf;klaew;isodjkl
 
             dataLine.append("current x: " + std::to_string(this->getPose().x) + "\n");
             dataLine.append("current y: " + std::to_string(this->getPose().y) + "\n\n");
@@ -471,16 +467,45 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pa
         dataLine.append("target vel: " + std::to_string(targetVel) + "\n"); // write target vel
 
         //*SEGMENT MULTIPLIERS
-        // if(pathID == "red") {
-        switch (std::stoi(subValues.at(closestPoint)[5])) {
-            case 0: targetVel *= 2; break;
-            case 1: targetVel *= 2; break;
-            case 2: targetVel *= 2; break;
-            case 3: targetVel *= 2; break;
-            case 4: targetVel *= 2; break;
-            case 5: targetVel *= 2; break;
-            case 6: targetVel *= 2; break;
+        if(pathID == "red mogo alliance" || pathID == "blue mogo alliance") {
+            switch (std::stoi(subValues.at(closestPoint)[5])) {
+                case 0: targetVel *= 2; break;
+                case 1: targetVel *= 2; break;
+                case 2: targetVel *= 2; break;
+                case 3: targetVel *= 2; break;
+                case 4: targetVel *= 2; break;
+                case 5: targetVel *= 2; break;
+                case 6: targetVel *= 2; break;
+            }
+        } else if(pathID == "red regional AWP" || pathID == "blue regional AWP") {
+            switch (std::stoi(subValues.at(closestPoint)[5])) {
+                case 0: targetVel *= 2; break;
+                case 1: targetVel *= 2; break;
+                case 2: targetVel *= 2; break;
+                case 3: targetVel *= 2; break;
+                case 4: targetVel *= 2; break;
+                case 5: targetVel *= 2; break;
+                case 6: targetVel *= 2; break;
+            }
+        } else if(pathID == "ASDF") {
+            switch (std::stoi(subValues.at(closestPoint)[5])) {
+                case 0: targetVel *= 2; break;
+                case 1: targetVel *= 2; break;
+                case 2: targetVel *= 2; break;
+                case 3: targetVel *= 2; break;
+                case 4: targetVel *= 2; break;
+                case 5: targetVel *= 2; break;
+                case 6: targetVel *= 2; break;
+                case 7: targetVel *= 2; break;
+                case 8: targetVel *= 2; break;
+                case 9: targetVel *= 2; break;
+                case 10: targetVel *= 2; break;
+                case 11: targetVel *= 2; break;
+                case 12: targetVel *= 2; break;
+                case 13: targetVel *= 2; break;
+            }
         }
+
         // } else if(pathID == "blue") {
 
         // }

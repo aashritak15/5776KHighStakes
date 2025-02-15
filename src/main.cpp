@@ -8,10 +8,47 @@
 #include "pros/rtos.h"
 #include <cmath>
 
-int sortState;
+ASSET(redMogoAlliancePath_txt); // TODO: add std functionality
+ASSET(redMogoAllianceExtra_txt);
+ASSET(autonomous_txt); // TODO: add std functionality
+ASSET(extra_txt);
+
+// ASSET(blueMogoAlliancePath_txt); // TODO: add std functionality
+// ASSET(blueMogoAllianceExtra_txt);
+
+void redMogoAlliance() {
+    sortState = 2;
+    chassis.follow(redMogoAlliancePath_txt, redMogoAllianceExtra_txt, "red mogo alliance");
+}
+
+// void blueMogoAlliance() {
+//     sortState = 1;
+//     chassis.follow(blueMogoAlliancePath_txt, blueMogoAllianceExtra_txt, "blue mogo alliance");
+// }
+
+rd::Selector selector({
+    {"red mogo alliance", &redMogoAlliance}
+    // {"blue mogo alliance", &blueMogoAlliance},
+});
+
+rd::Console console;
+
 
 void initialize() {
     pros::lcd::initialize();
+
+    
+
+    selector.focus();
+
+    selector.on_select([](std::optional<rd::Selector::routine_t> routine) {
+		if (routine == std::nullopt) {
+			std::cout << "No routine selected" << std::endl;
+		} else {
+			std::cout << "Selected Routine: " << routine.value().name << std::endl;
+		}
+	});
+
     if (pros::lcd::is_initialized()) { std::cout << "yippeee\n"; }
 
     clampInit();
@@ -19,18 +56,19 @@ void initialize() {
     intakeInit();
     ladyBrownInit();
 
-    chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE); // TODO: need to change back to coast
     chassis.calibrate(true);
     chassis.setPose(0, 0, 0);
 
-    pros::Task callScreenTask(screenTask, "screen task");
+    pros::Task screenTaskation(screenTask, "screen task");
 }
 
 // Runs while the robot is disabled
 void disabled() {}
 
 // Runs after initialize if the robot is connected to field control
-void competition_initialize() {}
+void competition_initialize() {
+    
+}
 
 void blueMogo() {
     // mogo
@@ -104,22 +142,17 @@ void redMogo1() {
     // chassis.turnToHeading(7, 2000);
 }
 
-ASSET(autonomous_txt); // TODO: add std functionality
-ASSET(extra_txt);
-
 void autonomous() {
     // chassis.calibrate();
     // chassis.setPose(0, 0, 0);
     // chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
     // // TODO: COMMENTED OUT BC TESTING IN INITIALIZE
-    // initDebug();
+    initDebug();
 
-    sortState = 2;
+    chassis.follow(autonomous_txt, extra_txt, "ASDF");
 
     // redMogo2();
     // blueMogo1();
-
-    chassis.follow(autonomous_txt, extra_txt, "red");
 
     // if(color == 0) { //red
     //     sortState = 2
@@ -194,6 +227,8 @@ void opcontrol() {
     // rerun
     initO();
 
+    chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
+
     int count = 1;
 
     while (true) {
@@ -224,13 +259,14 @@ void opcontrol() {
         }
         count++;
 
-        closeO();
+        // closeO();
         // closeOInterrupt(); //*INTERRUPT
 
         pros::delay(10);
     }
 
     // // drive
+    // chassis.setBrakeMode(pros::E_MOTOR_BRAKE_COAST);
     // while (true) {
     //     int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
     //     int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);

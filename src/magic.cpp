@@ -100,16 +100,14 @@ void closeO() {
         std::string dataLine = "0, 0, 0.000000, 0, STOPPED, -1\nendData";
         fileOTwo << dataLine;
 
-        dataLine = "";
-        dataLine.clear();
-        pros::delay(200); //TODO: test redumdancy
+        std::string dataLine2;
 
-        dataLine.append(std::to_string((round(chassis.getPose().x * 1000)) / 1000) +
+        dataLine2.append(std::to_string((round(chassis.getPose().x * 1000)) / 1000) +
                         ", "); //*all rounded to 3 decimal places
-        dataLine.append(std::to_string((round(chassis.getPose().y * 1000)) / 1000) + ", ");
-        dataLine.append(std::to_string((round(chassis.getPose().theta * 1000)) / 1000) + ", ");
-        dataLine.append("0\nendData");
-        fileO << dataLine;
+        dataLine2.append(std::to_string((round(chassis.getPose().y * 1000)) / 1000) + ", ");
+        dataLine2.append(std::to_string((round(chassis.getPose().theta * 1000)) / 1000) + ", ");
+        dataLine2.append("0\nendData");
+        fileO << dataLine2;
 
         fileO.flush();
         fileOTwo.flush();

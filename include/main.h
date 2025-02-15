@@ -36,6 +36,8 @@
 
 #include "api.h"
 
+#include "robodash/api.h"
+
 /**
  * You should add more #includes here
  */
