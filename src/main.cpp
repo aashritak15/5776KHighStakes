@@ -41,7 +41,7 @@ void autonomous() {
     // chassis.setPose(0, 0, 0);
     // chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
     // // TODO: COMMENTED OUT BC TESTING IN INITIALIZE
-    initDebug();
+    // initDebug();
 
     chassis.follow(autonomous_txt, extra_txt, "red");
 
@@ -108,8 +108,6 @@ void autonomous() {
     //             break;
     //     }
     // }
-
-    chassis.turnToHeading(90, 100000);
     // chassis.turnToHeading(180, 5000);
 }
 

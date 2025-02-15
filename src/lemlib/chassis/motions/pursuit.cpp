@@ -296,16 +296,16 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pa
     this->requestMotionStart();
 
     while (true) {
-        if (std::stoi(subValues.at(closestPoint)[5]) == 1) { // interrupt check (by segment)
-            drivetrain.leftMotors->move(0);
-            drivetrain.rightMotors->move(0);
+        // if (std::stoi(subValues.at(closestPoint)[5]) == 1) { // interrupt check (by segment)
+        //     drivetrain.leftMotors->move(0);
+        //     drivetrain.rightMotors->move(0);
 
-            initInterrupt(stoi(subValues.at(closestPoint)[5]), closestPoint);
+        //     initInterrupt(stoi(subValues.at(closestPoint)[5]), closestPoint);
 
-            opcontrol();
+        //     opcontrol();
 
-            return;
-        }
+        //     return;
+        // }
 
         // autonomous and extra files NEED to be same as the path you want to interrupt
         // if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_B)) { //interrupt check (by button) //TODO: swap button

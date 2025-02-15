@@ -27,11 +27,11 @@ void updateLB() {
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) { //*FULLSCORE
         globalTarget = 180;
 
-    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) { //*TIP MOGO
-        globalTarget = 300;
+    // } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) { //*TIP MOGO
+    //     globalTarget = 300;
 
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT)) { //*SCORE MOGO
-        globalTarget = 60;
+        globalTarget = 70;
     }
     // else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) { //*MANUAL DOWN
     //     ladyBrown.move_velocity(-60);
