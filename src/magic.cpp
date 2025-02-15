@@ -100,7 +100,9 @@ void closeO() {
         std::string dataLine = "0, 0, 0.000000, 0, STOPPED, -1\nendData";
         fileOTwo << dataLine;
 
+        dataLine = "";
         dataLine.clear();
+        pros::delay(200); //TODO: test redumdancy
 
         dataLine.append(std::to_string((round(chassis.getPose().x * 1000)) / 1000) +
                         ", "); //*all rounded to 3 decimal places
@@ -136,7 +138,10 @@ void closeOInterrupt() {
         std::string dataLine = "0, 0, 0.000000, 0, STOPPED, -1\nendData";
         fileInterruptTwo << dataLine;
 
+        dataLine = "";
         dataLine.clear();
+        pros::delay(200);
+        // dataLine.clear();
 
         dataLine.append(std::to_string((round(chassis.getPose().x * 1000)) / 1000) +
                         ", "); //*all rounded to 3 decimal places
