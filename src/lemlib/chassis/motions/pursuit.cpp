@@ -142,7 +142,7 @@ std::vector<std::vector<std::string>> getSubData(const asset& sub) {
  * @param path the path to follow
  * @return int index to the closest point
  */
-int findClosest(lemlib::Pose pose, std::vector<lemlib::Pose> path, int prevIndex) {
+int findClosest(lemlib::Pose pose, std::vector<lemlib::Pose>& path, int prevIndex) {
     int closestPoint;
     float closestDist = infinity();
     int maxIndex;
@@ -208,8 +208,8 @@ float circleIntersect(lemlib::Pose p1, lemlib::Pose p2, lemlib::Pose pose, float
  * @param closest - the index of the point closest to the robot
  * @param lookaheadDist - the lookahead distance of the algorithm
  */
-lemlib::Pose lookaheadPoint(lemlib::Pose lastLookahead, lemlib::Pose pose, std::vector<lemlib::Pose> path,
-                            std::vector<std::vector<std::string>> subValues, int closest, float lookaheadDist) {
+lemlib::Pose lookaheadPoint(lemlib::Pose lastLookahead, lemlib::Pose pose, const std::vector<lemlib::Pose>& path,
+                            const std::vector<std::vector<std::string>>& subValues, int closest, float lookaheadDist) {
     // optimizations applied:
     // only consider xintersections that have an index greater than or equal to the point closest
     // to the robot
@@ -430,7 +430,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pa
             fileOThree << dataLine;
             fileOThree.flush();
 
-            closestPoint++;
+            // closestPoint++; //TODO: THERE SHOULD BE NO PURPOSE FOR THIS
 
             this->requestMotionStart();
 
@@ -463,16 +463,14 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pa
         dataLine.append("lookahead y: " + std::to_string(lookaheadPose.y) + "\n");
 
         curvature = findLookaheadCurvature(pose, M_PI / 2 - (pose.theta), lookaheadPose);
-        // if(curvature<0.001 && curvature > -0.001) {
-        //     curvature = 0;
-        //     dataLine.append("zero");
-        // }
+
         dataLine.append("curvature: " + std::to_string(curvature) + "\n"); // write curvature
 
         targetVel = std::stof(velocities.at(closestPoint));
 
         dataLine.append("target vel: " + std::to_string(targetVel) + "\n"); // write target vel
 
+        //*SEGMENT MULTIPLIERS
         // if(pathID == "red") {
         switch (std::stoi(subValues.at(closestPoint)[5])) {
             case 0: targetVel *= 2; break;
