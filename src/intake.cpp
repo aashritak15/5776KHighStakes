@@ -6,7 +6,7 @@
 #include <iostream>
 
 int intakeState = 0;
-int sortState; // 1 = score blue sort red, 2 = score red sort blue
+int sortState = 1; // 1 = score blue sort red, 2 = score red sort blue
 bool buttonUpPressed = false;
 bool colorDetected = false;
 

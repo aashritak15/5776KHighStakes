@@ -106,7 +106,7 @@ void blueMogo() {
     // chassis.turnToHeading(7, 2000);
 }
 
-void redMogo1() {
+void redMogo1() { //blue
     // mogo
     int sortState = 1;
     chassis.moveToPoint(0, -27, 2000, {.forwards = false, .maxSpeed = 50});
@@ -118,15 +118,20 @@ void redMogo1() {
     pros::delay(250);
 
     // // ring
-    chassis.turnToHeading(-93, 1000);
-    chassis.moveToPoint(23, -35, 1000);
+    chassis.turnToHeading(93, 1000);
+    chassis.moveToPoint(23, -27, 1000);
     pros::delay(2000);
 
     // // //ladder
     chassis.turnToHeading(-256.4, 1000);
+    chassis.waitUntilDone();
+
+    mogoClamp.set_value(false);
+    globalTarget = 180;
 
     //
-    chassis.moveToPoint(7, -40, 1000);
+    chassis.moveToPoint(0, -40, 1000);
+
 
     // globalTarget = 1000;
 
@@ -147,9 +152,12 @@ void autonomous() {
     // chassis.setPose(0, 0, 0);
     // chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
     // // TODO: COMMENTED OUT BC TESTING IN INITIALIZE
-    initDebug();
+    //initDebug();
 
-    chassis.follow(autonomous_txt, extra_txt, "ASDF");
+    sortState = 1;
+    redMogo1();
+
+    //chassis.follow(autonomous_txt, extra_txt, "ASDF");
 
     // redMogo2();
     // blueMogo1();
