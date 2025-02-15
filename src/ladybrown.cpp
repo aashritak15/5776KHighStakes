@@ -22,24 +22,26 @@ void updateLB() {
         globalTarget = 3;
 
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) { //*LOAD
-        globalTarget = 38;
+        globalTarget = 40;
 
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) { //*FULLSCORE
         globalTarget = 180;
 
-    // } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) { //*TIP MOGO
-    //     globalTarget = 300;
+    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) { //*STRAIGHT UP
+        globalTarget = 120;
 
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT)) { //*SCORE MOGO
-        globalTarget = 70;
+        globalTarget = 60;
     }
     // else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) { //*MANUAL DOWN
-    //     ladyBrown.move_velocity(-60);
+    //     globalTarget -= 2;
+    //     //ladyBrown.move_velocity(-60);
 
     // } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) { //*MANUAL UP
-    //     ladyBrown.move_velocity(60);
+    //     globalTarget += 2;
+    //     //ladyBrown.move_velocity(60);
 
-    // }}
+    // }
 }
 
 void lbTask() {

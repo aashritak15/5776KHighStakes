@@ -192,7 +192,7 @@ void writeAdditional() {
     std::int32_t right = rightMotors.get_voltage();
     float total = left + right;
 
-    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_B)) { // TODO: change button back to x
+    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) { // TODO: change button back to x
         if (!buttonPressed) {
             buttonPressed = true;
             section++;
@@ -258,7 +258,7 @@ void writeInterruptAdditional() {
     std::int32_t right = rightMotors.get_voltage();
     float total = left + right;
 
-    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_B)) { // TODO: change button back
+    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) { // TODO: change button back
         if (!buttonPressed) {
             buttonPressed = true;
             section++;

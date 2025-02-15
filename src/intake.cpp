@@ -6,7 +6,7 @@
 #include <iostream>
 
 int intakeState = 0;
-int sortState = 2; // 1 = score blue sort red, 2 = score red sort blue
+int sortState; // 1 = score blue sort red, 2 = score red sort blue
 bool buttonUpPressed = false;
 bool colorDetected = false;
 
@@ -65,12 +65,15 @@ void updateColorSort() {
             if (sortState == 0) {
                 sortState = 1;
                 controller.set_text(0, 0, "scores blue      ");
+                pros::lcd::print(6, "Score blue");
             } else if (sortState == 1) {
                 sortState = 2;
                 controller.set_text(0, 0, "scores red       ");
+                pros::lcd::print(6, "Score red");
             } else if (sortState == 2) {
                 sortState = 0;
                 controller.set_text(0, 0, "no sort         ");
+                pros::lcd::print(6, "No sort");
             }
         }
     } else {

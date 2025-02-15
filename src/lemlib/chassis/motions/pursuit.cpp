@@ -308,7 +308,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pa
         // }
 
         // autonomous and extra files NEED to be same as the path you want to interrupt
-        // if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_B)) { //interrupt check (by button) //TODO: swap button
+        // if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) { //interrupt check (by button) //TODO: swap button
         //     controller.set_text(0,0,"interrupt");
         //     drivetrain.leftMotors->move(0);
         //     drivetrain.rightMotors->move(0);
@@ -480,21 +480,6 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pa
             case 4: targetVel *= 2; break;
             case 5: targetVel *= 2; break;
             case 6: targetVel *= 2; break;
-            case 7: targetVel *= 2; break;
-            case 8: targetVel *= 2; break;
-            case 9: targetVel *= 2; break;
-            case 10: targetVel *= 2; break;
-            case 11: targetVel *= 2; break;
-            case 12: targetVel *= 2; break;
-            case 13: targetVel *= 2; break;
-            case 14: targetVel *= 2; break;
-            case 15: targetVel *= 2; break;
-            case 16: targetVel *= 2; break;
-            case 17: targetVel *= 2; break;
-            case 18: targetVel *= 2; break;
-            case 19: targetVel *= 2; break;
-            case 20: targetVel *= 2; break;
-            case 21: targetVel *= 2; break;
         }
         // } else if(pathID == "blue") {
 

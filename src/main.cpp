@@ -8,23 +8,22 @@
 #include "pros/rtos.h"
 #include <cmath>
 
-
+int sortState;
 
 void initialize() {
     pros::lcd::initialize();
-    if(pros::lcd::is_initialized()) {std::cout<<"yippeee\n";}
+    if (pros::lcd::is_initialized()) { std::cout << "yippeee\n"; }
 
     clampInit();
     doinkInit();
     intakeInit();
     ladyBrownInit();
 
-    chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE); //TODO: need to change back to coast
+    chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE); // TODO: need to change back to coast
     chassis.calibrate(true);
     chassis.setPose(0, 0, 0);
 
     pros::Task callScreenTask(screenTask, "screen task");
-
 }
 
 // Runs while the robot is disabled
@@ -32,6 +31,78 @@ void disabled() {}
 
 // Runs after initialize if the robot is connected to field control
 void competition_initialize() {}
+
+void blueMogo() {
+    // mogo
+    int sortState = 2;
+    chassis.moveToPoint(0, -27, 2000, {.forwards = false, .maxSpeed = 50});
+    chassis.waitUntilDone();
+    mogoClamp.set_value(true);
+
+    pros::delay(250);
+    intake.move_voltage(12000);
+    pros::delay(250);
+
+    // // ring
+    chassis.turnToHeading(-93, 1000);
+    chassis.moveToPoint(-23, -35, 1000);
+    pros::delay(2000);
+
+    // // //ladder
+    chassis.turnToHeading(-256.4, 1000);
+
+    //
+    chassis.moveToPoint(-7, -40, 1000);
+
+    // globalTarget = 1000;
+
+    // // intake.move_voltage(0);
+
+    // // elims
+    // chassis.turnToHeading(-233.7, 2000);
+    // chassis.moveToPoint(-37, -19.6, 2000, {.forwards = false});
+    // chassis.waitUntilDone();
+    // mogoClamp.set_value(false);
+    // intake.move_voltage(0);
+    // chassis.moveToPoint(-24.5, -33, 2000);
+    // chassis.turnToHeading(7, 2000);
+}
+
+void redMogo1() {
+    // mogo
+    int sortState = 1;
+    chassis.moveToPoint(0, -27, 2000, {.forwards = false, .maxSpeed = 50});
+    chassis.waitUntilDone();
+    mogoClamp.set_value(true);
+
+    pros::delay(250);
+    intake.move_voltage(12000);
+    pros::delay(250);
+
+    // // ring
+    chassis.turnToHeading(-93, 1000);
+    chassis.moveToPoint(23, -35, 1000);
+    pros::delay(2000);
+
+    // // //ladder
+    chassis.turnToHeading(-256.4, 1000);
+
+    //
+    chassis.moveToPoint(7, -40, 1000);
+
+    // globalTarget = 1000;
+
+    // // intake.move_voltage(0);
+
+    // // elims
+    // chassis.turnToHeading(-233.7, 2000);
+    // chassis.moveToPoint(-37, -19.6, 2000, {.forwards = false});
+    // chassis.waitUntilDone();
+    // mogoClamp.set_value(false);
+    // intake.move_voltage(0);
+    // chassis.moveToPoint(-24.5, -33, 2000);
+    // chassis.turnToHeading(7, 2000);
+}
 
 ASSET(autonomous_txt); // TODO: add std functionality
 ASSET(extra_txt);
@@ -42,6 +113,11 @@ void autonomous() {
     // chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
     // // TODO: COMMENTED OUT BC TESTING IN INITIALIZE
     // initDebug();
+
+    sortState = 2;
+
+    // redMogo2();
+    // blueMogo1();
 
     chassis.follow(autonomous_txt, extra_txt, "red");
 
@@ -112,8 +188,10 @@ void autonomous() {
 }
 
 void opcontrol() {
-//     chassis.follow(autonomous_txt, extra_txt, "red");
+    // interrupt
+    //  chassis.follow(autonomous_txt, extra_txt, "red");
 
+    // rerun
     initO();
 
     int count = 1;
@@ -152,4 +230,20 @@ void opcontrol() {
         pros::delay(10);
     }
 
+    // // drive
+    // while (true) {
+    //     int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
+    //     int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+
+    //     chassis.arcade(leftY, rightX); // 0.9
+
+    //     updateIntake();
+    //     updateColorSort();
+    //     updateClamp();
+    //     updateDoink();
+    //     updateLB();
+    //     // lbTask();
+
+    //     pros::delay(10);
+    // }
 }
