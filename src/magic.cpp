@@ -73,6 +73,10 @@ void initInterrupt(int lastSection, int stopIndex) {
     fileITwo.close();
 
     controller.set_text(0, 0, "copied");
+
+    pros::delay(3000);
+
+    opcontrol();
 }
 
 void initDebug() {
@@ -105,8 +109,14 @@ void closeO() {
         controller.set_text(0, 0, "wait                          ");
         pros::delay(2500);
 
+        if (fileO.is_open() && fileOTwo.is_open()) {
+            fileO << dataLine;
+            fileOTwo << dataLine;
+        }
+        
         fileO.close();
         fileOTwo.close();
+        pros::delay(100);
 
         active = false;
 

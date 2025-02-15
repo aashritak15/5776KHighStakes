@@ -7,7 +7,7 @@
 #include "magic.hpp"
 #include "pros/rtos.h"
 #include <cmath>
-//#include "autoSelect/selection.h"
+
 
 
 void initialize() {
@@ -18,7 +18,6 @@ void initialize() {
     doinkInit();
     intakeInit();
     ladyBrownInit();
-    //selector::init();
 
     chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE); //TODO: need to change back to coast
     chassis.calibrate(true);
@@ -41,13 +40,13 @@ void autonomous() {
     // chassis.calibrate();
     // chassis.setPose(0, 0, 0);
     // chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
-    // TODO: COMMENTED OUT BC TESTING IN INITIALIZE
+    // // TODO: COMMENTED OUT BC TESTING IN INITIALIZE
     initDebug();
 
-    //chassis.follow(autonomous_txt, extra_txt, "adsf");
+    chassis.follow(autonomous_txt, extra_txt, "red");
 
     // if(color == 0) { //red
-    //     sortState = 2;
+    //     sortState = 2
     //     switch(auton) {
     //         case 1: //solo wp
     //             chassis.follow(autonomous_txt, extra_txt, "adsf");
@@ -110,7 +109,7 @@ void autonomous() {
     //     }
     // }
 
-    // chassis.turnToHeading(90, 100000);
+    chassis.turnToHeading(90, 100000);
     // chassis.turnToHeading(180, 5000);
 }
 

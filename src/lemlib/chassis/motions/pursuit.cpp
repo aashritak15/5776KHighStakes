@@ -303,10 +303,6 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pa
         //     drivetrain.rightMotors->move(0);
 
         //     initInterrupt(stoi(subValues.at(closestPoint)[5]), closestPoint);
-
-        //     pros::delay(5000);
-
-        //     opcontrol();
         // }
 
         // autonomous and extra files NEED to be same as the path you want to interrupt
@@ -456,18 +452,79 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pa
 
         dataLine.append("target vel: " + std::to_string(targetVel) + "\n"); //write target vel
 
-        if(pathID == "red") {
-            switch(std::stoi(subValues.at(closestPoint)[5])) {
-                case 1:
-                    targetVel *= 1;
-                    break;
-                case 2:
-                    targetVel *= 1;
-                    break;
-            }
-        } else if(pathID == "blue") {
-            
+        // if(pathID == "red") {
+        switch(std::stoi(subValues.at(closestPoint)[5])) {
+            case 0:
+                targetVel *= 2;
+                break;
+            case 1:
+                targetVel *= 2;
+                break;
+            case 2 :
+                targetVel *= 2;
+                break;
+            case 3 :
+                targetVel *= 2;
+                break;
+            case 4 :
+                targetVel *= 2;
+                break;
+            case 5 :
+                targetVel *= 2;
+                break;
+            case 6 :
+                targetVel *= 2;
+                break;
+            case 7 :
+                targetVel *= 2;
+                break;
+            case 8 :
+                targetVel *= 2;
+                break;
+            case 9 :
+                targetVel *= 2;
+                break;
+            case 10 :
+                targetVel *= 2;
+                break;
+            case 11 :
+                targetVel *= 2;
+                break;
+            case 12 :
+                targetVel *= 2;
+                break;
+            case 13 :
+                targetVel *= 2;
+                break;
+            case 14 :
+                targetVel *= 2;
+                break;
+            case 15 :
+                targetVel *= 2;
+                break;
+            case 16 :
+                targetVel *= 2;
+                break;
+            case 17 :
+                targetVel *= 2;
+                break;
+            case 18 :
+                targetVel *= 2;
+                break;
+            case 19 :
+                targetVel *= 2;
+            break;
+            case 20 :
+                targetVel *= 2;
+            break;
+            case 21 :
+                targetVel *= 2;
+            break;
+
         }
+        // } else if(pathID == "blue") {
+            
+        // }
 
         // calculate target left and right velocities
         targetLeftVel = targetVel * (2 + curvature * drivetrain.trackWidth) / 2;

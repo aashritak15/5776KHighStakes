@@ -8,12 +8,14 @@
 #include <cmath>
 #include "ladybrown.hpp"
 
+/*
 bool autonSelected = false;
 int color = 0;
 int auton = 1;
 bool colorSelected = false;
 bool middlePressed;
 const int MAX = 8;
+*/
 
 // Note: try moving all this back to main and see if initializing chassis works in initialize
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
@@ -42,7 +44,7 @@ lemlib::ControllerSettings linearController(7.3, // proportional gain (kP)
 
 // angular motion controller
 lemlib::ControllerSettings angularController(3.3, // proportional gain (kP) 4.6 //TODO: maybe tune more!
-                                             50, // integral gain (kI)
+                                             0, // integral gain (kI)
                                              20, // 38,//37.88, // 32.92, //40.5, // derivative gain (kD) 2
                                              0, // anti windup
                                              1, // small error range, in degrees
@@ -189,3 +191,77 @@ void autonSelector() {
     // pros::Task callScreenTask(screenTask, "screen task");
 }
     */
+
+    void autonSelector() {
+        bool colorSelected = false;
+        bool autonSelected = false;
+        bool middlePressed = false;
+        int color = 0;
+        int auton = 1;
+        const int MAX = 8;
+    
+        while (!colorSelected) {
+            int buttons = pros::lcd::read_buttons();
+    
+            if (buttons & LCD_BTN_LEFT) {
+                pros::lcd::print(7, "Left button");
+            } else if (buttons & LCD_BTN_CENTER) {
+                pros::lcd::print(7, "Center button");
+            } else if (buttons & LCD_BTN_RIGHT) {
+                pros::lcd::print(7, "Right button");
+            } else {
+                pros::lcd::print(7, "No button");
+            }
+    
+            pros::lcd::clear_line(0);
+            pros::lcd::print(0, color == 0 ? "Red" : "Blue");
+    
+            if (buttons & LCD_BTN_CENTER) {
+                if (!middlePressed) {
+                    middlePressed = true;
+                    color = (color == 0 || color == 2) ? 1 : 0;
+                }
+            } else {
+                middlePressed = false;
+            }
+    
+            if (buttons & LCD_BTN_RIGHT) {
+                colorSelected = true;
+                pros::lcd::print(1, "Color Selected!");
+            }
+    
+            pros::delay(100);
+        }
+    
+        while (!autonSelected) {
+            int buttons = pros::lcd::read_buttons();
+    
+            if (buttons & LCD_BTN_RIGHT) {
+                auton = (auton == MAX) ? 1 : auton + 1;
+            }
+    
+            if (buttons & LCD_BTN_LEFT) {
+                auton = (auton == 1) ? MAX : auton - 1;
+            }
+    
+            if (buttons & LCD_BTN_CENTER) {
+                autonSelected = true;
+                pros::lcd::print(3, "Auton Selected!");
+            }
+    
+            pros::lcd::clear_line(2);
+            switch (auton) {
+                case 1: pros::lcd::print(2, "Solo WP"); break;
+                case 2: pros::lcd::print(2, "Mogo Rush"); break;
+                case 3: pros::lcd::print(2, "Straight"); break;
+                case 4: pros::lcd::print(2, "Turn 90"); break;
+                case 5: pros::lcd::print(2, "Turn 180"); break;
+                case 6: pros::lcd::print(2, "Custom 1"); break;
+                case 7: pros::lcd::print(2, "Custom 2"); break;
+                case 8: pros::lcd::print(2, "Custom 3"); break;
+            }
+    
+            pros::delay(100);
+        }
+    }
+    
