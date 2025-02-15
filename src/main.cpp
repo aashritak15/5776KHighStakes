@@ -70,7 +70,7 @@ void competition_initialize() {
     
 }
 
-void blueMogo() {
+void redMogo() {
     // mogo
     int sortState = 2;
     chassis.moveToPoint(0, -27, 2000, {.forwards = false, .maxSpeed = 50});
@@ -83,14 +83,16 @@ void blueMogo() {
 
     // // ring
     chassis.turnToHeading(-93, 1000);
-    chassis.moveToPoint(-23, -35, 1000);
+    chassis.moveToPoint(-21, -30, 1000);
     pros::delay(2000);
 
     // // //ladder
     chassis.turnToHeading(-256.4, 1000);
+    chassis.waitUntilDone();
 
-    //
-    chassis.moveToPoint(-7, -40, 1000);
+    mogoClamp.set_value(false);
+    //globalTarget = 180;
+    //chassis.moveToPoint(-7, -38, 1000);
 
     // globalTarget = 1000;
 
@@ -106,7 +108,7 @@ void blueMogo() {
     // chassis.turnToHeading(7, 2000);
 }
 
-void redMogo1() { //blue
+void blueMogo() { //blue
     // mogo
     int sortState = 1;
     chassis.moveToPoint(0, -27, 2000, {.forwards = false, .maxSpeed = 50});
@@ -154,10 +156,10 @@ void autonomous() {
     // // TODO: COMMENTED OUT BC TESTING IN INITIALIZE
     //initDebug();
 
-    sortState = 1;
-    redMogo1();
+    //blueMogo();
+    redMogo();
 
-    //chassis.follow(autonomous_txt, extra_txt, "ASDF");
+    //chassis.follow(redMogoAlliancePath_txt, redMogoAllianceExtra_txt, "red mogo alliance");
 
     // redMogo2();
     // blueMogo1();
