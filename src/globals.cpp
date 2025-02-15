@@ -80,7 +80,6 @@ lemlib::Chassis chassis(drivetrain, linearController, angularController, sensors
 void screenTask() {
     while (true) {
         //* line 7 reserved for rerun states.
-        std::cout<<"screen task running\n";
         pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
         pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
         pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading

@@ -23,7 +23,7 @@ void updateLB() {
         globalTarget = 3;
 
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) { //*LOAD
-        globalTarget = 40;
+        globalTarget = 38;
 
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) { //*FULLSCORE
         globalTarget = 180;
@@ -32,7 +32,7 @@ void updateLB() {
         globalTarget = 300;
 
     } //else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) { //*MANUAL DOWN
-    //     ladyBrown.move_velocity(-60);
+    //     ladyBrown.move_velocity(-60); bgh
 
     // } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) { //*MANUAL UP
     //     ladyBrown.move_velocity(60);

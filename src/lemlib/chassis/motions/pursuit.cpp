@@ -298,7 +298,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pa
     this->requestMotionStart();
 
     while (true) {
-        // if(subValues.at(closestPoint)[5] == std::to_string(5)) { //interrupt check (by segment)
+        // if(std::stoi(subValues.at(closestPoint)[5]) == 1) { //interrupt check (by segment)
         //     drivetrain.leftMotors->move(0);
         //     drivetrain.rightMotors->move(0);
 

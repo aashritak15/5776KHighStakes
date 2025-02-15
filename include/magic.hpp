@@ -47,7 +47,7 @@ void addSegment();
 
 void rerunPIDs();
 
-void reflect();
+void reflect(bool x, bool y);
 
 std::vector<std::string> readElementMagic(const std::string& input, const std::string& delimiter);
 

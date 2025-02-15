@@ -41,6 +41,7 @@ void initInterrupt(int lastSection, int stopIndex) {
     if(!fileInterrupt || !fileInterruptTwo || !fileI || !fileITwo) {
         controller.set_text(0, 0, "failed to open");
         active = false;
+    
     } else {
         controller.set_text(0, 0, "open successful");
         active = true;
@@ -51,11 +52,16 @@ void initInterrupt(int lastSection, int stopIndex) {
     for (int i = 0; i<stopIndex; i++) { //TODO: add data checks (like if it isn't getting data properly)
         std::getline(fileI, dataLine);
         fileInterrupt<<dataLine<<"\n";
+        controller.set_text(0, 0, "copied fileI <3");
+
+
     }
 
     for (int j = 0; j<stopIndex; j++) {
         std::getline(fileITwo, dataLine);
         fileInterruptTwo<<dataLine<<"\n";
+        controller.set_text(0, 0, "copied fileITwo <3");
+
     }
 
     section = lastSection + 1;
@@ -269,22 +275,28 @@ void writeInterruptAdditional() {
 void reflect(bool x, bool y) {
 
     reflector.open("/usd/reflectAutonomous.txt", std::ios::out | std::ios::trunc);
-    reflector.open("/usd/reflectExtra.txt", std::ios::out | std::ios::trunc);
+    reflectorTwo.open("/usd/reflectExtra.txt", std::ios::out | std::ios::trunc);
 
     fileI.open("/usd/autonomous.txt");
     fileITwo.open("/usd/extra.txt");
 
-    if(!fileInterrupt || !fileInterruptTwo || fileI || fileITwo) {
+    if(!reflector || !reflectorTwo || !fileI || !fileITwo) {
         controller.set_text(0, 0, "failed to open");
+        return;
     } else {
-        controller.set_text(0, 0, "open successful");
+        controller.set_text(0, 0, "open successful");\
     }
 
-    std::string dataLine;
     std::string tempData;
 
+    std::cout<<"light\n";
+
+    pros::delay(2000);
+
     while (std::getline(fileI, tempData)) {
+        std::string dataLine;
         std::vector<std::string> pointData = readElementMagic(tempData, ", ");
+
         for(int i = 0; i<4; i++) {
         
             if(i == 0) { //x coord
@@ -318,14 +330,28 @@ void reflect(bool x, bool y) {
             }
         }
         reflector<<dataLine;
-        dataLine.clear();
+        reflector.flush();
+
+        if(!reflector) {
+            std::cout<<"reflector fail\n";
+            return;
+        }
+
+        if(!fileI) {
+            std::cout<<"input fail \n";
+            return;
+        }
     }
 
-    dataLine.append("endData");
-    reflector<<dataLine;
-    dataLine.clear();
+    std::cout<<"light\n";
+
+    reflector<<"endData";
+    reflector.flush();
 
     while (std::getline(fileITwo, tempData)) {
+
+        std::string dataLine;
+
         std::vector<std::string> pointData = readElementMagic(tempData, ", ");
         for(int i = 0; i<pointData.size(); i++) {
             if(i == pointData.size() - 1) {
@@ -336,13 +362,34 @@ void reflect(bool x, bool y) {
         }
         
         reflectorTwo<<dataLine;
-        dataLine.clear();
+        reflectorTwo.flush();
+
+        if(!reflectorTwo) {
+            std::cout<<"reflector fail 2\n";
+            return;
+        }
+
+        if(!fileITwo) {
+            std::cout<<"input fail 2\n";
+            return;
+        }
     }
 
-    dataLine.append("endData");
-    reflectorTwo<<dataLine;
-    dataLine.clear();
+    std::cout<<"light\n";
 
+    reflectorTwo<<"endData";
+
+    reflector.flush();
+    reflectorTwo.flush();
+
+    reflectorTwo.close();
+    reflector.close();
+    fileI.close();
+    fileITwo.close();
+
+    std::cout<<"light\n";
+
+    controller.clear_line(0);
     controller.set_text(0, 0, "reflected"); 
 
 }

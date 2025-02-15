@@ -20,8 +20,6 @@ void initialize() {
     ladyBrownInit();
     //selector::init();
 
-    initO();
-
     chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE); //TODO: need to change back to coast
     chassis.calibrate(true);
     chassis.setPose(0, 0, 0);
@@ -117,14 +115,9 @@ void autonomous() {
 }
 
 void opcontrol() {
-    // chassis.calibrate(); // *: NEVER COMMENT OUT CALIBRATE OR SETPOSE OR ELSE IT WILL BREAK!!!!!!!!
-    // chassis.setPose(0, 0, 0);
-    // TODO: COMMENTED OUT BC IN INITIALIZE
-    // TODO: COMMENTED OUT BC IN INITIALIZE
-    // TODO: COMMENTED OUT BC IN INITIALIZE
-    // TODO: COMMENTED OUT BC IN INITIALIZE
+//     chassis.follow(autonomous_txt, extra_txt, "red");
 
-    // initO();
+    initO();
 
     int count = 1;
 
@@ -161,4 +154,5 @@ void opcontrol() {
 
         pros::delay(10);
     }
+
 }
