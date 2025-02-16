@@ -77,7 +77,7 @@ void competition_initialize() {
 void redMogo() {
     // mogo
     int sortState = 2;
-    chassis.moveToPoint(0, -27, 2000, {.forwards = false, .maxSpeed = 50});
+    chassis.moveToPoint(0, -27, 2000, {.forwards = false, .maxSpeed = 80});
     chassis.waitUntilDone();
     mogoClamp.set_value(true);
 
@@ -91,7 +91,7 @@ void redMogo() {
     pros::delay(2000);
 
     //drop mogo
-    chassis.turnToHeading(-216.7, 2000, {.direction = lemlib::AngularDirection::CW_CLOCKWISE});
+    chassis.turnToHeading(-216.7, 2000, {.direction = lemlib::AngularDirection::CW_CLOCKWISE}); //change to counter to not hit ring
     chassis.waitUntilDone();
     mogoClamp.set_value(false);
 
@@ -101,13 +101,22 @@ void redMogo() {
     chassis.waitUntilDone();
     mogoClamp.set_value(true);
     pros::delay(500);
+    intake.move_velocity(0);
 
-    chassis.moveToPose(-32.4, 6.7, -55, 2000, {.lead = 0.7});
-    chassis.waitUntilDone();
-    doink.set_value(true);
+    // //move to corner
+    // chassis.moveToPose(-32.4, 6.7, -55, 2000, {.lead = 0.7});
+    // chassis.waitUntilDone();
+    // doink.set_value(true);
 
-    chassis.moveToPose(-37.6, 10.7, -61, 2000);
-    chassis.turnToHeading(-120, 1000);
+    // //doink
+    // chassis.moveToPose(-40, 12.7, -61, 2000);
+    // chassis.turnToHeading(-120, 1000);
+    
+    // //turn back and intake
+    // chassis.turnToHeading(-61, 1000);
+    // //intake.move_velocity(12000);
+    // doink.set_value(false);
+    // chassis.moveToPoint(-45, 12.7, 1000);
 
 
     // // // //ladder
@@ -315,48 +324,13 @@ void opcontrol() {
     // interrupt
     //  chassis.follow(autonomous_txt, extra_txt, "red");
 
-    // rerun
-    initO();
+    // // rerun
+    // initO();
 
-    chassis.setBrakeMode(pros::E_MOTOR_BRAKE_COAST);
-
-    int count = 1;
-
-    while (true) {
-        int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
-        int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
-
-        chassis.arcade(leftY, rightX); // 0.9
-
-        updateIntake();
-        updateColorSort();
-        updateClamp();
-        updateDoink();
-        updateLB();
-        // lbTask();
-
-        if (count == 5) { //*data written every 0.1 seconds
-            writePose();
-            writeAdditional();
-            count = 1;
-            fileO.flush();
-            fileOTwo.flush();
-
-            // writeInterruptPose(); //*INTERRUPT
-            // writeInterruptAdditional();
-            // count = 1;
-            // fileInterrupt.flush();
-            // fileInterruptTwo.flush();
-        }
-        count++;
-
-        closeO();
-
-        pros::delay(10);
-    }
-
-    // // drive
     // chassis.setBrakeMode(pros::E_MOTOR_BRAKE_COAST);
+
+    // int count = 1;
+
     // while (true) {
     //     int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
     //     int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
@@ -370,6 +344,41 @@ void opcontrol() {
     //     updateLB();
     //     // lbTask();
 
+    //     if (count == 5) { //*data written every 0.1 seconds
+    //         writePose();
+    //         writeAdditional();
+    //         count = 1;
+    //         fileO.flush();
+    //         fileOTwo.flush();
+
+    //         // writeInterruptPose(); //*INTERRUPT
+    //         // writeInterruptAdditional();
+    //         // count = 1;
+    //         // fileInterrupt.flush();
+    //         // fileInterruptTwo.flush();
+    //     }
+    //     count++;
+
+    //     closeO();
+
     //     pros::delay(10);
     // }
+
+    // drive
+    chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
+    while (true) {
+        int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
+        int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+
+        chassis.arcade(leftY, rightX); // 0.9
+
+        updateIntake();
+        updateColorSort();
+        updateClamp();
+        updateDoink();
+        updateLB();
+        // lbTask();
+
+        pros::delay(10);
+    }
 }
