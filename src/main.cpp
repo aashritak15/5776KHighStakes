@@ -108,6 +108,45 @@ void redMogo() {
     // chassis.turnToHeading(7, 2000);
 }
 
+void blueRing() {
+    // mogo
+    chassis.moveToPoint(0, -27, 2000, {.forwards = false, .maxSpeed = 50});
+    chassis.waitUntilDone();
+    mogoClamp.set_value(true);
+
+    pros::delay(250);
+    intake.move_voltage(12000);
+    pros::delay(250);
+
+    // // ring
+    chassis.turnToHeading(-93, 1000);
+    chassis.moveToPoint(-21, -30, 1000);
+    pros::delay(2000);
+
+    // // //ladder
+    chassis.turnToHeading(-256.4, 1000);
+    chassis.waitUntilDone();
+
+
+    //mogoClamp.set_value(false);
+    globalTarget = 180;
+    chassis.moveToPoint(-2, -38, 1000);
+
+    // globalTarget = 1000;
+
+    // // intake.move_voltage(0);
+
+    // // elims
+    // chassis.turnToHeading(-233.7, 2000);
+    // chassis.moveToPoint(-37, -19.6, 2000, {.forwards = false});
+    // chassis.waitUntilDone();
+    // mogoClamp.set_value(false);
+    // intake.move_voltage(0);
+    // chassis.moveToPoint(-24.5, -33, 2000);
+    // chassis.turnToHeading(7, 2000);
+}
+
+
 void blueMogo() { //blue
     // mogo
     int sortState = 1;
@@ -156,8 +195,9 @@ void autonomous() {
     // // TODO: COMMENTED OUT BC TESTING IN INITIALIZE
     //initDebug();
 
+    blueRing();
     //blueMogo();
-    redMogo();
+    //redMogo();
 
     //chassis.follow(redMogoAlliancePath_txt, redMogoAllianceExtra_txt, "red mogo alliance");
 
