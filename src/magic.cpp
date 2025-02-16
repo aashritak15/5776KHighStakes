@@ -295,7 +295,7 @@ void writeInterruptAdditional() {
     fileInterruptTwo << dataLine;
 }
 
-void reflect(bool x, bool y) {
+void reflect(bool x, bool y) { //TODO: remove extra reflection
     reflector.open("/usd/reflectAutonomous.txt", std::ios::out | std::ios::trunc);
     reflectorTwo.open("/usd/reflectExtra.txt", std::ios::out | std::ios::trunc);
 
@@ -349,9 +349,13 @@ void reflect(bool x, bool y) {
             else if (i == 3) { // vel
                 dataLine.append(pointData.at(i) + "\n");
             }
+
+            std::cout << pointData.at(i) << "\n";
         }
         reflector << dataLine;
         reflector.flush();
+
+        std::cout << dataLine << "\n";
 
         if (!reflector) {
             std::cout << "reflector fail\n";
@@ -362,6 +366,8 @@ void reflect(bool x, bool y) {
             std::cout << "input fail \n";
             return;
         }
+
+        tempData.clear();
     }
 
     std::cout << "light\n";
@@ -369,35 +375,7 @@ void reflect(bool x, bool y) {
     reflector << "endData";
     reflector.flush();
 
-    while (std::getline(fileITwo, tempData)) {
-        std::string dataLine;
-
-        std::vector<std::string> pointData = readElementMagic(tempData, ", ");
-        for (int i = 0; i < pointData.size(); i++) {
-            if (i == pointData.size() - 1) {
-                dataLine.append(pointData.at(i) + "\n");
-            } else {
-                dataLine.append(pointData.at(i) + ", ");
-            }
-        }
-
-        reflectorTwo << dataLine;
-        reflectorTwo.flush();
-
-        if (!reflectorTwo) {
-            std::cout << "reflector fail 2\n";
-            return;
-        }
-
-        if (!fileITwo) {
-            std::cout << "input fail 2\n";
-            return;
-        }
-    }
-
-    std::cout << "light\n";
-
-    reflectorTwo << "endData";
+    reflector.close();
 
     reflector.flush();
     reflectorTwo.flush();
