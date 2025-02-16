@@ -504,6 +504,23 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pa
                 case 12: targetVel *= 2; break;
                 case 13: targetVel *= 2; break;
             }
+        } else if(pathID == "skills") {
+            switch (std::stoi(subValues.at(closestPoint)[5])) {
+                case 0: targetVel *= 1; break;
+                case 1: targetVel *= 1; break;
+                case 2: targetVel *= 1; break;
+                case 3: targetVel *= 1; break;
+                case 4: targetVel *= 1; break;
+                case 5: targetVel *= 1; break;
+                case 6: targetVel *= 1; break;
+                case 7: targetVel *= 1; break;
+                case 8: targetVel *= 1; break;
+                case 9: targetVel *= 1; break;
+                case 10: targetVel *= 1; break;
+                case 11: targetVel *= 1; break;
+                case 12: targetVel *= 1; break;
+                case 13: targetVel *= 1; break;
+            }
         }
 
         // } else if(pathID == "blue") {

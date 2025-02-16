@@ -13,6 +13,8 @@ ASSET(redMogoAllianceExtra_txt);
 ASSET(autonomous_txt); // TODO: add std functionality
 ASSET(extra_txt);
 ASSET(blueMogoAlliancePath_txt);
+ASSET(skillsPath_txt); // TODO: add std functionality
+ASSET(skillsExtra_txt);
 
 // ASSET(blueMogoAlliancePath_txt); // TODO: add std functionality
 // ASSET(blueMogoAllianceExtra_txt);
@@ -88,11 +90,23 @@ void redMogo() {
     chassis.moveToPoint(-21, -30, 1000);
     pros::delay(2000);
 
-    // // //ladder
-    chassis.turnToHeading(-256.4, 1000);
+    //drop mogo
+    chassis.turnToHeading(-216.7, 2000, {.direction = lemlib::AngularDirection::CW_CLOCKWISE});
     chassis.waitUntilDone();
-
     mogoClamp.set_value(false);
+
+    //third mogo
+    chassis.turnToHeading(-4.7, 1000);
+    chassis.moveToPoint(-31.3, -29.8, 1000, {.forwards = false, .maxSpeed = 80});
+    chassis.waitUntilDone();
+    mogoClamp.set_value(true);
+
+
+    // // // //ladder
+    // chassis.turnToHeading(-256.4, 1000);
+    // chassis.waitUntilDone();
+
+    // mogoClamp.set_value(false);
     //globalTarget = 180;
     //chassis.moveToPoint(-7, -38, 1000);
 
@@ -202,6 +216,8 @@ void blueMogo() { //blue
 }
 
 void autonomous() {
+    //initDebug();
+    //chassis.follow(skillsPath_txt, skillsExtra_txt, "skills");
 
     //chassis.follow(blueMogoAlliancePath_txt, redMogoAllianceExtra_txt, "blue mogo alliance");
     
@@ -209,16 +225,14 @@ void autonomous() {
     // chassis.setPose(0, 0, 0);
     // chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
     // // TODO: COMMENTED OUT BC TESTING IN INITIALIZE
-    //initDebug();
+
 
     //blueRing();
-    blueMogo();
-    //redMogo();
+    //blueMogo();
+    redMogo();
 
     //chassis.follow(redMogoAlliancePath_txt, redMogoAllianceExtra_txt, "red mogo alliance");
 
-    // redMogo2();
-    // blueMogo1();
 
     // if(color == 0) { //red
     //     sortState = 2
