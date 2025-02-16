@@ -102,8 +102,12 @@ void redMogo() {
     mogoClamp.set_value(true);
     pros::delay(500);
 
-    chassis.moveToPose(-32.4, 6.7, -50, 2000, {.lead = 0.7});
+    chassis.moveToPose(-32.4, 6.7, -55, 2000, {.lead = 0.7});
+    chassis.waitUntilDone();
     doink.set_value(true);
+
+    chassis.moveToPose(-37.6, 10.7, -61, 2000);
+    chassis.turnToHeading(-120, 1000);
 
 
     // // // //ladder
