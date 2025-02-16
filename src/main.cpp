@@ -39,8 +39,6 @@ void redMogoAlliance() {
 void initialize() {
     pros::lcd::initialize();
 
-    
-
     // selector.focus();
 
     // selector.on_select([](std::optional<rd::Selector::routine_t> routine) {
@@ -164,18 +162,29 @@ void blueMogo() { //blue
 
     // // ring
     chassis.turnToHeading(93, 1000);
-    chassis.moveToPoint(23, -27, 1000);
+    chassis.moveToPoint(22, -27, 1000);
     pros::delay(2000);
 
-    // // //ladder
-    chassis.turnToHeading(-256.4, 1000);
+    //drop mogo
+    chassis.turnToHeading(216.7, 2000, {.direction = lemlib::AngularDirection::CW_CLOCKWISE});
+    chassis.waitUntilDone();
+    mogoClamp.set_value(false);
+
+    //third mogo
+    chassis.turnToHeading(-347.09, 1000);
+    chassis.moveToPoint(21.7, -36.2, 1000, {.forwards = false});
     chassis.waitUntilDone();
 
-    mogoClamp.set_value(false);
-    globalTarget = 180;
 
-    //
-    chassis.moveToPoint(0, -40, 1000);
+    // // //ladder
+    //chassis.turnToHeading(-256.4, 1000);
+    //chassis.waitUntilDone();
+
+    //mogoClamp.set_value(false);
+    // globalTarget = 180;
+    // chassis.moveToPoint(0, -40, 1000);
+
+
 
 
     // globalTarget = 1000;
@@ -285,48 +294,12 @@ void opcontrol() {
     //  chassis.follow(autonomous_txt, extra_txt, "red");
 
     // rerun
-    // initO();
+    initO();
 
-    // chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
-
-    // int count = 1;
-
-    // while (true) {
-    //     int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
-    //     int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
-
-    //     chassis.arcade(leftY, rightX); // 0.9
-
-    //     updateIntake();
-    //     updateColorSort();
-    //     updateClamp();
-    //     updateDoink();
-    //     updateLB();
-    //     // lbTask();
-
-    //     if (count == 5) { //*data written every 0.1 seconds
-    //         writePose();
-    //         writeAdditional();
-    //         count = 1;
-    //         fileO.flush();
-    //         fileOTwo.flush();
-
-    //         // writeInterruptPose(); //*INTERRUPT
-    //         // writeInterruptAdditional();
-    //         // count = 1;
-    //         // fileInterrupt.flush();
-    //         // fileInterruptTwo.flush();
-    //     }
-    //     count++;
-
-    //     // closeO();
-    //     // closeOInterrupt(); //*INTERRUPT
-
-    //     pros::delay(10);
-    // }
-
-    // drive
     chassis.setBrakeMode(pros::E_MOTOR_BRAKE_COAST);
+
+    int count = 1;
+
     while (true) {
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
@@ -340,6 +313,41 @@ void opcontrol() {
         updateLB();
         // lbTask();
 
+        if (count == 5) { //*data written every 0.1 seconds
+            writePose();
+            writeAdditional();
+            count = 1;
+            fileO.flush();
+            fileOTwo.flush();
+
+            // writeInterruptPose(); //*INTERRUPT
+            // writeInterruptAdditional();
+            // count = 1;
+            // fileInterrupt.flush();
+            // fileInterruptTwo.flush();
+        }
+        count++;
+
+        closeO();
+
         pros::delay(10);
     }
+
+    // // drive
+    // chassis.setBrakeMode(pros::E_MOTOR_BRAKE_COAST);
+    // while (true) {
+    //     int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
+    //     int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+
+    //     chassis.arcade(leftY, rightX); // 0.9
+
+    //     updateIntake();
+    //     updateColorSort();
+    //     updateClamp();
+    //     updateDoink();
+    //     updateLB();
+    //     // lbTask();
+
+    //     pros::delay(10);
+    // }
 }
