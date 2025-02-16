@@ -204,7 +204,7 @@ void autonomous() {
 
     blueRing();
     //blueMogo();
-    // redMogo();
+    //redMogo();
 
     //chassis.follow(redMogoAlliancePath_txt, redMogoAllianceExtra_txt, "red mogo alliance");
 
