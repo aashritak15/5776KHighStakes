@@ -37,7 +37,7 @@ void redMogoAlliance() {
 
 
 void initialize() {
-    // pros::lcd::initialize();
+    pros::lcd::initialize();
 
     
 
@@ -53,15 +53,15 @@ void initialize() {
 
     // if (pros::lcd::is_initialized()) { std::cout << "yippeee\n"; }
 
-    // clampInit();
-    // doinkInit();
-    // intakeInit();
-    // ladyBrownInit();
+    clampInit();
+    doinkInit();
+    intakeInit();
+    ladyBrownInit();
 
-    // chassis.calibrate(true);
-    // chassis.setPose(0, 0, 0);
+    chassis.calibrate(true);
+    chassis.setPose(0, 0, 0);
 
-    // pros::Task screenTaskation(screenTask, "screen task");
+    pros::Task screenTaskation(screenTask, "screen task");
 }
 
 // Runs while the robot is disabled
@@ -194,7 +194,7 @@ void blueMogo() { //blue
 
 void autonomous() {
 
-    chassis.follow(blueMogoAlliancePath_txt, redMogoAllianceExtra_txt, "blue mogo alliance");
+    //chassis.follow(blueMogoAlliancePath_txt, redMogoAllianceExtra_txt, "blue mogo alliance");
     
     // chassis.calibrate();
     // chassis.setPose(0, 0, 0);
@@ -202,8 +202,8 @@ void autonomous() {
     // // TODO: COMMENTED OUT BC TESTING IN INITIALIZE
     //initDebug();
 
-    blueRing();
-    //blueMogo();
+    //blueRing();
+    blueMogo();
     //redMogo();
 
     //chassis.follow(redMogoAlliancePath_txt, redMogoAllianceExtra_txt, "red mogo alliance");
