@@ -8,16 +8,6 @@
 #include <cmath>
 #include "ladybrown.hpp"
 
-/*
-bool autonSelected = false;
-int color = 0;
-int auton = 1;
-bool colorSelected = false;
-bool middlePressed;
-const int MAX = 8;
-*/
-
-// Note: try moving all this back to main and see if initializing chassis works in initialize
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
 pros::MotorGroup leftMotors({-8, -17, -12}, pros::MotorGearset::blue);
@@ -78,6 +68,14 @@ lemlib::ExpoDriveCurve steerCurve(5, // joystick deadband out of 127
 
 // create the chassis
 lemlib::Chassis chassis(drivetrain, linearController, angularController, sensors, &throttleCurve, &steerCurve);
+
+ASSET(redMogoAlliancePath_txt);
+ASSET(redMogoAllianceExtra_txt);
+ASSET(autonomous_txt); 
+ASSET(extra_txt);
+ASSET(blueMogoAlliancePath_txt);
+ASSET(skillsPath_txt); 
+ASSET(skillsExtra_txt);
 
 void screenTask() {
     while (true) {

@@ -1,5 +1,4 @@
 #include "main.h"
-#include "pros/colors.hpp"
 
 extern pros::Controller controller;
 
