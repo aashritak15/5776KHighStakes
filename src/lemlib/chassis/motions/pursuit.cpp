@@ -346,11 +346,14 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pa
 
         // update all subsystems
         if (subValues.at(closestPoint)[0] == "0") {
-            intake.move_voltage(0);
+            intake1.move_voltage(0);
+            intake2.move_voltage(0);
         } else if (subValues.at(closestPoint)[0] == "1") {
-            intake.move_voltage(12000);
+            intake1.move_voltage(12000);
+            intake2.move_voltage(12000);
         } else if (subValues.at(closestPoint)[0] == "2") {
-            intake.move_voltage(-12000);
+            intake1.move_voltage(-12000);
+            intake2.move_voltage(-12000);
         }
 
         if (subValues.at(closestPoint)[1] == "0") {

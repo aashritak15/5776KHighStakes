@@ -10,7 +10,7 @@
 
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
-pros::MotorGroup leftMotors({-8, -17, -12}, pros::MotorGearset::blue);
+pros::MotorGroup leftMotors({-8, -4, -12}, pros::MotorGearset::blue);
 pros::MotorGroup rightMotors({18, 15, 11}, pros::MotorGearset::blue);
 
 pros::Imu imu(3);
@@ -85,7 +85,7 @@ void screenTask() {
         pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
         pros::lcd::print(3, "Color: %f", optical.get_hue());
         pros::lcd::print(4, "LB Rot Sensor: %i", lbRotation.get_position());
-        pros::lcd::print(5, "Intake vel: %lf", intake.get_actual_velocity());
+        pros::lcd::print(5, "Intake vel: %lf", intake1.get_actual_velocity());
         pros::Task::delay(50);
     }
 }

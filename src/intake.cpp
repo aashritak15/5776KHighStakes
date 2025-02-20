@@ -14,7 +14,8 @@ bool colorDetected = false;
 // bool colorDetected = false;
 
 void intakeInit() {
-    intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+    intake1.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+    intake2.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
     optical.set_led_pwm(100);
 
     pros::Task pd_task2(colorSort, "color sort");
@@ -32,10 +33,12 @@ void updateIntake() {
             buttonl1Pressed = true;
             if (intakeState == 0 || intakeState == 2) {
                 intakeState = 1;
-                intake.move_voltage(12000);
+                intake1.move_voltage(12000);
+                intake2.move_voltage(12000);
             } else if (intakeState == 1) {
                 intakeState = 0;
-                intake.move_voltage(0);
+                intake1.move_voltage(0);
+                intake2.move_voltage(0);
             }
         }
     } else {
@@ -47,10 +50,12 @@ void updateIntake() {
             buttonxPressed = true;
             if (intakeState == 0 || intakeState == 1) {
                 intakeState = 2;
-                intake.move_voltage(-12000);
+                intake1.move_voltage(-12000);
+                intake2.move_voltage(-12000);
             } else if (intakeState == 2) {
                 intakeState = 0;
-                intake.move_voltage(0);
+                intake1.move_voltage(0);
+                intake2.move_voltage(0);
             }
         }
     } else {
@@ -107,9 +112,11 @@ void colorSort() {
 
                     // if (intake.get_actual_velocity() >= 200) {
                     pros::Task::delay(65);
-                    intake.move_voltage(-12000);
+                    intake1.move_voltage(-12000);
+                    intake2.move_voltage(-12000);
                     pros::Task::delay(200);
-                    intake.move_voltage(12000);
+                    intake1.move_voltage(12000);
+                    intake2.move_voltage(12000);
                     // } else {
                     //     intake.move_voltage(-12000);
                     //     pros::Task::delay(750);
@@ -127,9 +134,11 @@ void colorSort() {
 
                     // if (intake.get_actual_velocity() >= 200) {
                     pros::Task::delay(65);
-                    intake.move_voltage(-12000);
+                    intake1.move_voltage(-12000);
+                    intake2.move_voltage(-12000);
                     pros::Task::delay(200);
-                    intake.move_voltage(12000);
+                    intake1.move_voltage(12000);
+                    intake2.move_voltage(12000);
                     // } else {
                     //     intake.move_voltage(-12000);
                     //     pros::Task::delay(750);
@@ -145,21 +154,25 @@ void colorSort() {
     }
 }
 
-void antiJam() {
-    while (true) {
-        std::cout << "Intake Current: " << std::to_string(intake.get_current_draw()) << "\n";
+// void antiJam() {
+//     while (true) {
+//         std::cout << "Intake Current: " << std::to_string(intake.get_current_draw()) << "\n";
 
-        // Detect a jam based on velocity and current draw
-        if (intake.get_actual_velocity() < 100 && intake.get_current_draw() > 2400) {
-            intake.move_voltage(12000); // Try to push forward for a moment
-            pros::Task::delay(40);
-            intake.move_voltage(-12000); // Reverse to clear jam
-            pros::Task::delay(200); // Hold reverse for longer in case of severe jam
-            intake.move_voltage(6000); // Resume with reduced power before full power
-            pros::Task::delay(100);
-            intake.move_voltage(12000);
-        }
+//         // Detect a jam based on velocity and current draw
+//         if (intake.get_actual_velocity() < 100 && intake.get_current_draw() > 2400) {
+//             intake1.move_voltage(12000);
+//             intake2.move_voltage(12000); // Try to push forward for a moment
+//             pros::Task::delay(40);
+//             intake1.move_voltage(-12000);
+//             intake2.move_voltage(-12000); // Reverse to clear jam
+//             pros::Task::delay(200); // Hold reverse for longer in case of severe jam
+//             intake1.move_voltage(6000);
+//             intake2.move_voltage(6000); // Resume with reduced power before full power
+//             pros::Task::delay(100);
+//             intake1.move_voltage(12000);
+//             intake2.move_voltage(12000);
+//         }
 
-        pros::delay(10);
-    }
-}
+//         pros::delay(10);
+//     }
+// }

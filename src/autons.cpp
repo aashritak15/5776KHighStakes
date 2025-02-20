@@ -8,7 +8,8 @@ void redMogo() {
     mogoClamp.set_value(true);
 
     pros::delay(250);
-    intake.move_voltage(12000);
+    intake1.move_voltage(12000);
+    intake2.move_voltage(12000);
     pros::delay(250);
 
     // // ring
@@ -27,7 +28,8 @@ void redMogo() {
     chassis.waitUntilDone();
     mogoClamp.set_value(true);
     pros::delay(500);
-    intake.move_velocity(0);
+    intake1.move_velocity(0);
+    intake2.move_velocity(0);
 
     // //move to corner
     // chassis.moveToPose(-32.4, 6.7, -55, 2000, {.lead = 0.7});
@@ -74,7 +76,8 @@ void blueRing() {
     mogoClamp.set_value(true);
 
     pros::delay(250);
-    intake.move_voltage(12000);
+    intake1.move_voltage(12000);
+    intake2.move_voltage(12000);
     pros::delay(250);
 
     // // ring
@@ -114,7 +117,8 @@ void blueMogo() { //blue
     mogoClamp.set_value(true);
 
     pros::delay(250);
-    intake.move_voltage(12000);
+    intake1.move_voltage(12000);
+    intake2.move_voltage(12000);
     pros::delay(250);
 
     // // ring
