@@ -5,6 +5,8 @@
 #include "intake.hpp"
 #include "ladybrown.hpp"
 
+// add color sort after works
+
 rd::Selector selector({
     // TODO: figure this out!
     {"red mogo", &redMogo},
