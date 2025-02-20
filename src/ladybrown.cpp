@@ -26,17 +26,17 @@ void updateLB() {
         ladyBrown.move_voltage(0);
     }
     
-    // if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) { //*ZERO
-    //     globalTarget = 3;
+    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) { //*ZERO
+        globalTarget = 3;
 
-    // } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) { //*LOAD
-    //     globalTarget = 40;
+    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) { //*LOAD
+        globalTarget = 40;
 
-    // } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) { //*FULLSCORE
-    //     globalTarget = 180;
+    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) { //*FULLSCORE
+        globalTarget = 180;
 
-    // } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) { //*STRAIGHT UP
-    //     globalTarget = 120;
+    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) { //*STRAIGHT UP
+        globalTarget = 120;
 
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT)) { //*SCORE MOGO
         globalTarget = 60;
