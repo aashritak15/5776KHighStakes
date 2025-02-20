@@ -942,3 +942,8 @@ class Chassis {
 } // namespace lemlib
 
 std::vector<std::vector<std::string>> getSubData(const asset& sub);
+
+void updateSubsys();
+void doMultipliers(int segment, float& targetVel, std::string pathID);
+bool doExclusions(std::string& dataLine);
+float findLookaheadCurvature(std::string& dataLine, lemlib::Pose lastLookahead, lemlib::Pose currentPose);

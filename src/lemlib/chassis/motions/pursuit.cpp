@@ -10,7 +10,6 @@
 #include <vector>
 #include <string>
 #include <fstream>
-#include "pros/misc.hpp"
 #include "lemlib/logger/logger.hpp"
 #include "lemlib/chassis/chassis.hpp"
 #include "lemlib/util.hpp"
@@ -19,6 +18,13 @@
 #include "magic.hpp"
 #include "piston.hpp"
 #include "ladybrown.hpp"
+
+std::vector<lemlib::Pose> pathPoints;
+std::vector<std::vector<std::string>> subValues;
+std::vector<std::string> velocities;
+int closestPoint = 0;
+const float MIN_LOOKAHEAD = 5;
+const float MAX_LOOKAHEAD = 10;
 
 /**
  * @brief function that returns elements in a file line, separated by a delimeter
@@ -29,23 +35,18 @@
  */
 std::vector<std::string> readElement(const std::string& input, const std::string& delimiter) {
     std::string token;
-    std::string s = input;
+    std::string substring = input;
     std::vector<std::string> output;
     size_t pos = 0;
 
     // main loop
-    while ((pos = s.find(delimiter)) != std::string::npos) { // while there are still delimiters in the string
-        token = s.substr(0, pos); // processed substring
+    while ((pos = substring.find(delimiter)) != std::string::npos) { // while there are still delimiters in the string
+        token = substring.substr(0, pos); // processed substring
         output.push_back(token);
-        s.erase(0, pos + delimiter.length()); // remove the read substring
+        substring.erase(0, pos + delimiter.length()); // remove the read substring
     }
 
-    output.push_back(s); // add the last element to the returned string
-
-    // for(int i=0; i<output.size(); i++){
-    //     std::cout<<output[i]<<"\n";
-    // }
-    // std::cout<<output.size()<<"\n";
+    output.push_back(substring); // add the last element to the returned string
 
     return output;
 }
@@ -91,13 +92,8 @@ std::vector<lemlib::Pose> getData(const asset& path) {
         lemlib::Pose pathPoint(0, 0);
         pathPoint.x = std::stof(pointInput.at(0)); // x position
         pathPoint.y = std::stof(pointInput.at(1)); // y position
-        pathPoint.theta = std::stof(pointInput.at(2)); // ANGLE???? what a jumpscare
+        pathPoint.theta = std::stof(pointInput.at(2)); // heading
         robotPath.push_back(pathPoint); // save data
-        // lemlib::infoSink()->debug("read point {}", pathPoint);
-
-        // std::cout<<"x: "<<pathPoint.x<<"\n"; //* This works!!
-        // std::cout<<"y: "<<pathPoint.y<<"\n";
-        // std::cout<<"vel: "<<pathPoint.theta<<"\n\n";
     }
 
     return robotPath;
@@ -106,9 +102,11 @@ std::vector<lemlib::Pose> getData(const asset& path) {
 std::vector<std::string> getVelocities(const asset& path) {
     std::vector<std::string> robotVelocities;
 
+    // format data from the asset
     const std::string data(reinterpret_cast<char*>(path.buf), path.size);
     const std::vector<std::string> dataLines = readElement(data, "\n");
 
+    // read the points until 'endData' is read
     for (std::string line : dataLines) {
         if (line == "endData" || line == "endData\r") break;
 
@@ -144,20 +142,20 @@ std::vector<std::vector<std::string>> getSubData(const asset& sub) {
  * @param path the path to follow
  * @return int index to the closest point
  */
-int findClosest(lemlib::Pose pose, std::vector<lemlib::Pose>& path, int prevIndex) {
+int findClosest(lemlib::Pose pose, int prevIndex) {
     int closestPoint;
     float closestDist = infinity();
     int maxIndex;
 
-    if (prevIndex + 5 > path.size()) {
-        maxIndex = path.size();
+    if (prevIndex + 5 > pathPoints.size()) {
+        maxIndex = pathPoints.size();
     } else {
         maxIndex = prevIndex + 5; // TODO: tune path skip tolerance
     }
 
     // loop through all path points
     for (int i = prevIndex; i < maxIndex; i++) {
-        const float dist = pose.distance(path.at(i));
+        const float dist = pose.distance(pathPoints.at(i));
         if (dist < closestDist) { // new closest point
             closestDist = dist;
             closestPoint = i;
@@ -210,21 +208,20 @@ float circleIntersect(lemlib::Pose p1, lemlib::Pose p2, lemlib::Pose pose, float
  * @param closest - the index of the point closest to the robot
  * @param lookaheadDist - the lookahead distance of the algorithm
  */
-lemlib::Pose lookaheadPoint(lemlib::Pose lastLookahead, lemlib::Pose pose, const std::vector<lemlib::Pose>& path,
-                            const std::vector<std::vector<std::string>>& subValues, int closest, float lookaheadDist) {
+lemlib::Pose lookaheadPoint(lemlib::Pose lastLookahead, lemlib::Pose pose, int closest, float lookaheadDist) {
     // optimizations applied:
     // only consider xintersections that have an index greater than or equal to the point closest
     // to the robot
     // and intersections that have an index greater than or equal to the index of the last
     // lookahead point
 
-    for (int i = closest; i < path.size() - 1; i++) { //*-1 is for endData
-        lemlib::Pose lastPathPose = path.at(i);
-        lemlib::Pose currentPathPose = path.at(i + 1);
+    for (int i = closest; i < pathPoints.size() - 1; i++) { //*-1 is for endData
+        lemlib::Pose lastPathPose = pathPoints.at(i);
+        lemlib::Pose currentPathPose = pathPoints.at(i + 1);
 
         if (subValues.at(i)[4] == "STOPPED" || subValues.at(i)[4] == "TURNING CW" ||
             subValues.at(i)[4] == "TURNING CCW") { // TODO: does this make sense
-            return path.at(i);
+            return pathPoints.at(i);
         }
 
         float t = circleIntersect(lastPathPose, currentPathPose, pose, lookaheadDist);
@@ -247,7 +244,7 @@ lemlib::Pose lookaheadPoint(lemlib::Pose lastLookahead, lemlib::Pose pose, const
  * @param lookahead the lookahead point
  * @return float curvature
  */
-float findLookaheadCurvature(lemlib::Pose pose, float heading, lemlib::Pose lookahead) {
+float calculateCurvature(lemlib::Pose pose, float heading, lemlib::Pose lookahead) {
     // calculate whether the robot is on the left or right side of the circle
     float side = lemlib::sgn(std::sin(heading) * (lookahead.x - pose.x) - std::cos(heading) * (lookahead.y - pose.y));
     // calculate center point and radius
@@ -266,66 +263,190 @@ float findLookaheadCurvature(lemlib::Pose pose, float heading, lemlib::Pose look
     return side * ((2 * x) / (d * d));
 }
 
+void updateSubsys() {
+    intakeState = std::stoi(subValues.at(closestPoint)[0]);
+    clampState = std::stoi(subValues.at(closestPoint)[1]);
+    globalTarget = std::stod(subValues.at(closestPoint)[2]);
+    doinkState = std::stoi(subValues.at(closestPoint)[3]);
+}
+
+bool doExclusions(std::string& dataLine) {
+    // check for exclusions
+    if (subValues.at(closestPoint)[4] == "STOPPED") { 
+        drivetrain.leftMotors->move(0);
+        drivetrain.rightMotors->move(0);
+        ladyBrown.move(0);
+
+        pros::delay(50);
+
+        dataLine.append("DELAYED\n\n");
+        fileOThree << dataLine;
+        fileOThree.flush();
+        closestPoint++;
+        return true;
+
+    } else if (subValues.at(closestPoint)[4] == "TURNING CW" ||
+               subValues.at(closestPoint)[4] == "TURNING CCW") { //*turn exclusion
+        leftMotors.move(0);
+        rightMotors.move(0);
+        ladyBrown.move(0);
+
+        if (subValues.at(closestPoint)[4] == "TURNING CW") {
+            dataLine.append("TURN CLOCKWISE\n");
+        } else {
+            dataLine.append("TURN COUNTERCLOCKWISE\n");
+        }
+
+        int prevClosestPoint = closestPoint;
+
+        closestPoint++; //*advance index forward one to begin the check
+        while (subValues.at(closestPoint)[4] == "TURNING CW" || subValues.at(closestPoint)[4] == "TURNING CCW") {
+            closestPoint++;
+        }
+
+        dataLine.append("turn target index: " + std::to_string(closestPoint) + "\n");
+
+        dataLine.append("target theta: " + std::to_string(pathPoints.at(closestPoint).theta) + "\n");
+
+        if (subValues.at(prevClosestPoint)[4] == "TURNING CW") {
+            dataLine.append("beginning theta: " + std::to_string(chassis.getPose().theta) + "\n");
+            chassis.turnToHeading(pathPoints.at(closestPoint).theta, 2500,
+                                  {.direction = AngularDirection::CW_CLOCKWISE, .maxSpeed = 80},
+                                  false); // TODO: turn pid heading + max speed
+            dataLine.append("ending theta: " + std::to_string(chassis.getPose().theta) +
+                            "\n\n"); //* radians but i don't care anymore
+        } else {
+            dataLine.append("beginning theta: " + std::to_string(chassis.getPose().theta) + "\n");
+            chassis.turnToHeading(pathPoints.at(closestPoint).theta, 2500,
+                                  {.direction = AngularDirection::CCW_COUNTERCLOCKWISE, .maxSpeed = 80}, false);
+            dataLine.append("ending theta: " + std::to_string(chassis.getPose().theta) + "\n");
+        }
+
+        fileOThree << dataLine;
+        fileOThree.flush();
+        return true;
+    }
+
+    return false;
+}
+
+void doMultipliers(int segment, float& targetVel, std::string pathID) {
+    if(pathID == "red mogo alliance" || pathID == "blue mogo alliance") {
+        switch (std::stoi(subValues.at(closestPoint)[5])) {
+            case 0: targetVel *= 2; break;
+            case 1: targetVel *= 2; break;
+            case 2: targetVel *= 2; break;
+            case 3: targetVel *= 2; break;
+            case 4: targetVel *= 2; break;
+            case 5: targetVel *= 2; break;
+            case 6: targetVel *= 2; break;
+        }
+    } else if(pathID == "red regional AWP" || pathID == "blue regional AWP") {
+        switch (std::stoi(subValues.at(closestPoint)[5])) {
+            case 0: targetVel *= 2; break;
+            case 1: targetVel *= 2; break;
+            case 2: targetVel *= 2; break;
+            case 3: targetVel *= 2; break;
+            case 4: targetVel *= 2; break;
+            case 5: targetVel *= 2; break;
+            case 6: targetVel *= 2; break;
+        }
+    } else if(pathID == "ASDF") {
+        switch (std::stoi(subValues.at(closestPoint)[5])) {
+            case 0: targetVel *= 2; break;
+            case 1: targetVel *= 2; break;
+            case 2: targetVel *= 2; break;
+            case 3: targetVel *= 2; break;
+            case 4: targetVel *= 2; break;
+            case 5: targetVel *= 2; break;
+            case 6: targetVel *= 2; break;
+            case 7: targetVel *= 2; break;
+            case 8: targetVel *= 2; break;
+            case 9: targetVel *= 2; break;
+            case 10: targetVel *= 2; break;
+            case 11: targetVel *= 2; break;
+            case 12: targetVel *= 2; break;
+            case 13: targetVel *= 2; break;
+        }
+    } else if(pathID == "skills") {
+        switch (std::stoi(subValues.at(closestPoint)[5])) {
+            case 0: targetVel *= 1; break;
+            case 1: targetVel *= 1; break;
+            case 2: targetVel *= 1; break;
+            case 3: targetVel *= 1; break;
+            case 4: targetVel *= 1; break;
+            case 5: targetVel *= 1; break;
+            case 6: targetVel *= 1; break;
+            case 7: targetVel *= 1; break;
+            case 8: targetVel *= 1; break;
+            case 9: targetVel *= 1; break;
+            case 10: targetVel *= 1; break;
+            case 11: targetVel *= 1; break;
+            case 12: targetVel *= 1; break;
+            case 13: targetVel *= 1; break;
+        }
+    }
+}
+
+float findLookaheadCurvature(std::string& dataLine, lemlib::Pose lastLookahead, lemlib::Pose currentPose) {
+    // adaptive lookahead
+    float avgVel = round(((leftMotors.get_voltage() + rightMotors.get_voltage()) * 1000.0 / 2.0) / 1000.0);
+    float pctVel = std::abs(avgVel / 12000);
+
+    float lookaheadDist = MIN_LOOKAHEAD + ((MAX_LOOKAHEAD - MIN_LOOKAHEAD) * pctVel);
+
+    dataLine.append("lookahead dist: " + std::to_string(lookaheadDist) + "\n"); // write lookahead
+
+    // do lookahead
+    lemlib::Pose lookaheadPose = lookaheadPoint(lastLookahead, currentPose, closestPoint, lookaheadDist);
+    lastLookahead = lookaheadPose; //* update last lookahead position FOR DEVIATION FIXES
+
+    dataLine.append("lookahead x: " + std::to_string(lookaheadPose.x) + "\n");
+    dataLine.append("lookahead y: " + std::to_string(lookaheadPose.y) + "\n");
+
+    float curvature = calculateCurvature(currentPose, M_PI / 2 - (currentPose.theta), lookaheadPose);
+
+    dataLine.append("curvature: " + std::to_string(curvature) + "\n"); // write curvature
+
+    return curvature;
+}
+
+void interrupt() {
+    if (std::stoi(subValues.at(closestPoint)[5]) == 1) { // interrupt check (by segment)
+        drivetrain.leftMotors->move(0);
+        drivetrain.rightMotors->move(0);
+
+        initInterrupt(stoi(subValues.at(closestPoint)[5]), closestPoint);
+
+        opcontrol();
+
+        return;
+    }
+}
+
 void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pathID) {
     chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
 
-    std::vector<lemlib::Pose> pathPoints = getData(path); // get list of path points
-    std::vector<std::vector<std::string>> subValues = getSubData(sub); // get subsystem values
-    std::vector<std::string> velocities = getVelocities(path); // get velocities
+    pathPoints = getData(path); // get list of path points
+    subValues = getSubData(sub); // get subsystem values
+    velocities = getVelocities(path); // get velocities
 
     Pose pose = this->getPose(true); // initialize all the things //*: THE TRUE IS WHERE THE RADIANS COME FROM
     Pose lookaheadPose(0, 0, 0);
     Pose lastLookahead = pathPoints.at(0);
 
-    float curvature;
-    float lookaheadDist;
-
-    float targetVel;
-    float targetLeftVel;
-    float targetRightVel;
-    float avgVel;
-    float pctVel;
-
-    float ratio;
-
-    int closestPoint = 0;
-
-    float minLookahead = 5; // TODO: tune min/max lookahead
-    float maxLookahead = 10;
-
-    this->requestMotionStart();
-
     while (true) {
-        // if (std::stoi(subValues.at(closestPoint)[5]) == 1) { // interrupt check (by segment)
-        //     drivetrain.leftMotors->move(0);
-        //     drivetrain.rightMotors->move(0);
 
-        //     initInterrupt(stoi(subValues.at(closestPoint)[5]), closestPoint);
+        // interrupt();
 
-        //     opcontrol();
-
-        //     return;
-        // }
-
-        // autonomous and extra files NEED to be same as the path you want to interrupt
-        // if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) { //interrupt check (by button) //TODO: swap button
-        //     controller.set_text(0,0,"interrupt");
-        //     drivetrain.leftMotors->move(0);
-        //     drivetrain.rightMotors->move(0);
-
-        //     initInterrupt(stoi(subValues.at(closestPoint)[5]), closestPoint);
-
-        //     interruptLoop();
-        // }
-
-        std::string dataLine = ""; // initialize debug dataline
+        // initialize debug dataline
+        std::string dataLine = ""; 
 
         // get the current position of the robot
-        pose = this->getPose(true); //*this is where radians come from
+        pose = this->getPose(true); 
+        closestPoint = findClosest(pose, closestPoint); // find closest point
 
-        closestPoint = findClosest(pose, pathPoints, closestPoint); // find closest point
-
-        // line write: tick and index
+        // debug a new tick
         dataLine.append("NEW TICK\n");
         dataLine.append("target index: " + std::to_string(closestPoint) + "\n");
 
@@ -339,101 +460,17 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pa
             fileOThree.flush();
             fileOThree.close();
 
-            this->endMotion();
-
             return;
         }
 
         // update all subsystems
-        if (subValues.at(closestPoint)[0] == "0") {
-            intake.move_voltage(0);
-        } else if (subValues.at(closestPoint)[0] == "1") {
-            intake.move_voltage(12000);
-        } else if (subValues.at(closestPoint)[0] == "2") {
-            intake.move_voltage(-12000);
-        }
+        updateSubsys();
 
-        if (subValues.at(closestPoint)[1] == "0") {
-            mogoClamp.set_value(false);
-        } else if (subValues.at(closestPoint)[1] == "1") {
-            mogoClamp.set_value(true);
-        }
+        // exclusions
+        bool skip = doExclusions(dataLine);
+        if(skip) {continue;}
 
-        globalTarget = stod(subValues.at(closestPoint)[2]);
-
-        if (subValues.at(closestPoint)[3] == "0") {
-            doink.set_value(false);
-        } else if (subValues.at(closestPoint)[3] == "1") {
-            doink.set_value(true);
-        }
-
-        // check for exclusions
-        if (subValues.at(closestPoint)[4] == "STOPPED") { //*stop exclusion
-            drivetrain.leftMotors->move(0);
-            drivetrain.rightMotors->move(0);
-            ladyBrown.move(0);
-
-            pros::delay(50); //*CHANGE TO TICK SPEED
-
-            dataLine.append("DELAYED\n\n");
-            fileOThree << dataLine;
-            fileOThree.flush();
-            closestPoint++;
-            continue;
-
-        } else if (subValues.at(closestPoint)[4] == "TURNING CW" ||
-                   subValues.at(closestPoint)[4] == "TURNING CCW") { //*turn exclusion
-            leftMotors.move(0);
-            rightMotors.move(0);
-            ladyBrown.move(0);
-            this->endMotion();
-
-            if (subValues.at(closestPoint)[4] == "TURNING CW") {
-                dataLine.append("TURN CLOCKWISE\n");
-            } else {
-                dataLine.append("TURN COUNTERCLOCKWISE\n");
-            }
-
-            int prevClosestPoint = closestPoint;
-
-            closestPoint++; //*advance index forward one to begin the check
-            while (subValues.at(closestPoint)[4] == "TURNING CW" || subValues.at(closestPoint)[4] == "TURNING CCW") {
-                closestPoint++;
-            }
-            // closestPoint++; //TODO: THERE SHOULD BE NO PURPOSE FOR THIS
-
-            dataLine.append("turn target index: " + std::to_string(closestPoint) + "\n");
-
-            dataLine.append("target theta: " + std::to_string(pathPoints.at(closestPoint).theta) + "\n");
-
-            if (subValues.at(prevClosestPoint)[4] == "TURNING CW") {
-                dataLine.append("beginning theta: " + std::to_string(chassis.getPose().theta) + "\n");
-                chassis.turnToHeading(pathPoints.at(closestPoint).theta, 2500,
-                                      {.direction = AngularDirection::CW_CLOCKWISE, .maxSpeed = 80},
-                                      false); // TODO: turn pid heading + max speed
-                dataLine.append("ending theta: " + std::to_string(chassis.getPose().theta) +
-                                "\n\n"); //* radians but i don't care anymore
-            } else {
-                dataLine.append("beginning theta: " + std::to_string(chassis.getPose().theta) + "\n");
-                chassis.turnToHeading(pathPoints.at(closestPoint).theta, 2500,
-                                      {.direction = AngularDirection::CCW_COUNTERCLOCKWISE, .maxSpeed = 80}, false);
-                dataLine.append("ending theta: " + std::to_string(chassis.getPose().theta) + "\n");
-            }
-
-            dataLine.append("current x: " + std::to_string(this->getPose().x) + "\n");
-            dataLine.append("current y: " + std::to_string(this->getPose().y) + "\n\n");
-
-            fileOThree << dataLine;
-            fileOThree.flush();
-
-            // closestPoint++; //TODO: THERE SHOULD BE NO PURPOSE FOR THIS
-
-            this->requestMotionStart();
-
-            continue;
-        }
-
-        // line write: coordinates and target
+        // debug non-exclusion-relevant information
         dataLine.append("current x: " + std::to_string(pose.x) + "\n");
         dataLine.append("current y: " + std::to_string(pose.y) + "\n");
         dataLine.append("current theta RAD: " + std::to_string(pose.theta) + "\n");
@@ -441,95 +478,18 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pa
         dataLine.append("target x: " + std::to_string(pathPoints.at(closestPoint).x) + "\n");
         dataLine.append("target y: " + std::to_string(pathPoints.at(closestPoint).y) + "\n");
 
-        // find the lookahead point
-
-        // adaptive lookahead
-        avgVel = round(((leftMotors.get_voltage() + rightMotors.get_voltage()) * 1000.0 / 2.0) / 1000.0);
-        pctVel = std::abs(avgVel / 12000);
-
-        lookaheadDist = minLookahead + ((maxLookahead - minLookahead) * pctVel);
-
-        dataLine.append("lookahead dist: " + std::to_string(lookaheadDist) + "\n"); // write lookahead
-
-        // do lookahead
-        lookaheadPose = lookaheadPoint(lastLookahead, pose, pathPoints, subValues, closestPoint, lookaheadDist);
-        lastLookahead = lookaheadPose; //* update last lookahead position FOR DEVIATION FIXES
-
-        dataLine.append("lookahead x: " + std::to_string(lookaheadPose.x) + "\n");
-        dataLine.append("lookahead y: " + std::to_string(lookaheadPose.y) + "\n");
-
-        curvature = findLookaheadCurvature(pose, M_PI / 2 - (pose.theta), lookaheadPose);
-
-        dataLine.append("curvature: " + std::to_string(curvature) + "\n"); // write curvature
-
-        targetVel = std::stof(velocities.at(closestPoint));
-
+        // find target avg velocity
+        float targetVel = std::stof(velocities.at(closestPoint));
         dataLine.append("target vel: " + std::to_string(targetVel) + "\n"); // write target vel
 
-        //*SEGMENT MULTIPLIERS
-        if(pathID == "red mogo alliance" || pathID == "blue mogo alliance") {
-            switch (std::stoi(subValues.at(closestPoint)[5])) {
-                case 0: targetVel *= 2; break;
-                case 1: targetVel *= 2; break;
-                case 2: targetVel *= 2; break;
-                case 3: targetVel *= 2; break;
-                case 4: targetVel *= 2; break;
-                case 5: targetVel *= 2; break;
-                case 6: targetVel *= 2; break;
-            }
-        } else if(pathID == "red regional AWP" || pathID == "blue regional AWP") {
-            switch (std::stoi(subValues.at(closestPoint)[5])) {
-                case 0: targetVel *= 2; break;
-                case 1: targetVel *= 2; break;
-                case 2: targetVel *= 2; break;
-                case 3: targetVel *= 2; break;
-                case 4: targetVel *= 2; break;
-                case 5: targetVel *= 2; break;
-                case 6: targetVel *= 2; break;
-            }
-        } else if(pathID == "ASDF") {
-            switch (std::stoi(subValues.at(closestPoint)[5])) {
-                case 0: targetVel *= 2; break;
-                case 1: targetVel *= 2; break;
-                case 2: targetVel *= 2; break;
-                case 3: targetVel *= 2; break;
-                case 4: targetVel *= 2; break;
-                case 5: targetVel *= 2; break;
-                case 6: targetVel *= 2; break;
-                case 7: targetVel *= 2; break;
-                case 8: targetVel *= 2; break;
-                case 9: targetVel *= 2; break;
-                case 10: targetVel *= 2; break;
-                case 11: targetVel *= 2; break;
-                case 12: targetVel *= 2; break;
-                case 13: targetVel *= 2; break;
-            }
-        } else if(pathID == "skills") {
-            switch (std::stoi(subValues.at(closestPoint)[5])) {
-                case 0: targetVel *= 1; break;
-                case 1: targetVel *= 1; break;
-                case 2: targetVel *= 1; break;
-                case 3: targetVel *= 1; break;
-                case 4: targetVel *= 1; break;
-                case 5: targetVel *= 1; break;
-                case 6: targetVel *= 1; break;
-                case 7: targetVel *= 1; break;
-                case 8: targetVel *= 1; break;
-                case 9: targetVel *= 1; break;
-                case 10: targetVel *= 1; break;
-                case 11: targetVel *= 1; break;
-                case 12: targetVel *= 1; break;
-                case 13: targetVel *= 1; break;
-            }
-        }
+        // apply rerun multipliers
+        doMultipliers(std::stoi(subValues.at(closestPoint)[5]), targetVel, pathID);
 
-        // } else if(pathID == "blue") {
+        // do all pure pursuit calculations
+        float curvature = findLookaheadCurvature(dataLine, lastLookahead, pose);
 
-        // }
-
-        // calculate target left and right velocities
-        targetLeftVel = targetVel * (2 + curvature * drivetrain.trackWidth) / 2;
-        targetRightVel = targetVel * (2 - curvature * drivetrain.trackWidth) / 2;
+        float targetLeftVel = targetVel * (2 + curvature * drivetrain.trackWidth) / 2;
+        float targetRightVel = targetVel * (2 - curvature * drivetrain.trackWidth) / 2;
 
         // fallback exclusion
         if ((std::abs(targetLeftVel) < 600) && (std::abs(targetRightVel) < 600)) {
@@ -544,33 +504,24 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pa
         }
 
         // ratio the speeds to respect the max speed
-        ratio = std::max(std::fabs(targetLeftVel), std::fabs(targetRightVel)) / 12000;
+        float ratio = std::max(std::fabs(targetLeftVel), std::fabs(targetRightVel)) / 12000;
         if (ratio > 1) {
             targetLeftVel /= ratio;
             targetRightVel /= ratio;
         }
 
         // write velocities
-        dataLine.append("current velocities: " + std::to_string(leftMotors.get_voltage()) + " " +
-                        std::to_string(rightMotors.get_voltage()) + "\n");
-        dataLine.append("target vels: " + std::to_string(targetLeftVel) + " " + std::to_string(targetRightVel) +
-                        "\n\n");
+        dataLine.append("current velocities: " + std::to_string(leftMotors.get_voltage()) + " " + std::to_string(rightMotors.get_voltage()) + "\n");
+        dataLine.append("target vels: " + std::to_string(targetLeftVel) + " " + std::to_string(targetRightVel) + "\n\n");
 
         // send velocity
         leftMotors.move_voltage(targetLeftVel);
         rightMotors.move_voltage(targetRightVel);
 
+        // write to debug
         fileOThree << dataLine;
         fileOThree.flush();
 
         pros::delay(10);
     }
-
-    // stop the robot
-    drivetrain.leftMotors->move(0);
-    drivetrain.rightMotors->move(0);
-    // set distTraveled to -1 to indicate that the function has finished
-    distTraveled = -1;
-    // give the mutex back
-    this->endMotion();
 }

@@ -85,7 +85,7 @@ void screenTask() {
         pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
         pros::lcd::print(3, "Color: %f", optical.get_hue());
         pros::lcd::print(4, "LB Rot Sensor: %i", lbRotation.get_position());
-        pros::lcd::print(5, "Intake vel: %lf", intake.get_actual_velocity());
+        pros::lcd::print(5, "Intake vel: %lf", intakeLower.get_actual_velocity());
         pros::Task::delay(50);
     }
 }

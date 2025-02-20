@@ -33,15 +33,6 @@ void updateLB() {
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT)) { //*SCORE MOGO
         globalTarget = 60;
     }
-    // else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) { //*MANUAL DOWN
-    //     globalTarget -= 2;
-    //     //ladyBrown.move_velocity(-60);
-
-    // } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) { //*MANUAL UP
-    //     globalTarget += 2;
-    //     //ladyBrown.move_velocity(60);
-
-    // }
 }
 
 void lbTask() {
@@ -57,12 +48,6 @@ void lbTask() {
     while (true) {
         currentAngle = lbRotation.get_position() / 100.0;
 
-        // if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_A) ||
-        // controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) {
-        //     prevSpeedError = 0;
-        //     speedError = 0;
-        //     globalTarget = currentAngle;
-        // } else {
         speedError = globalTarget - currentAngle;
 
         derivative = speedError - prevSpeedError;
@@ -76,25 +61,7 @@ void lbTask() {
         ladyBrown.move_velocity(armMoveSpeed);
 
         prevSpeedError = speedError;
-        // }
 
         pros::Task::delay(10);
     }
 }
-
-// void autonLB(double ladyTarget, int timeout) {
-//     lemlib::Timer timer(timeout);
-
-//     while (!timer.isDone() && std::abs(ladyTarget - lbRotation.get_position() / 100.0) >= 1) {
-//         double currentAngle = lbRotation.get_position() / 100.0;
-//         double distance = ladyTarget - currentAngle;
-//         double derivative = distance - prevDistance1;
-//         double armMoveSpeed = (kP * distance) + (kD * derivative);
-//         // if (armMoveSpeed < 1) {
-//         //     armMoveSpeed = 0;
-//         // }
-//         ladyBrown.move_velocity(armMoveSpeed);
-//         prevDistance1 = distance;
-//     }
-//     ladyBrown.move_velocity(0);
-// }

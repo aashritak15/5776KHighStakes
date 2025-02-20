@@ -1,4 +1,3 @@
-#include "lemlib/api.hpp"
 #include "piston.hpp"
 #include "intake.hpp"
 #include "globals.hpp"
@@ -33,7 +32,6 @@ void initialize() {
     // if (pros::lcd::is_initialized()) { std::cout << "yippeee\n"; }
 
     clampInit();
-    doinkInit();
     intakeInit();
     ladyBrownInit();
 
