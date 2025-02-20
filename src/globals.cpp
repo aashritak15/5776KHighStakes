@@ -71,24 +71,11 @@ lemlib::Chassis chassis(drivetrain, linearController, angularController, sensors
 
 ASSET(redMogoAlliancePath_txt);
 ASSET(redMogoAllianceExtra_txt);
-ASSET(autonomous_txt); 
+ASSET(autonomous_txt);
 ASSET(extra_txt);
 ASSET(blueMogoAlliancePath_txt);
-ASSET(skillsPath_txt); 
+ASSET(skillsPath_txt);
 ASSET(skillsExtra_txt);
-
-void screenTask() {
-    while (true) {
-        //* line 7 reserved for rerun states.
-        pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
-        pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
-        pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
-        pros::lcd::print(3, "Color: %f", optical.get_hue());
-        pros::lcd::print(4, "LB Rot Sensor: %i", lbRotation.get_position());
-        pros::lcd::print(5, "Intake vel: %lf", intakeLower.get_actual_velocity());
-        pros::Task::delay(50);
-    }
-}
 
 // void autonSelector() {
 //     while (!colorSelected) {

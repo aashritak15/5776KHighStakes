@@ -8,67 +8,56 @@
 #include "main.h"
 #include "loops.hpp"
 
-// rd::Selector selector({ //TODO: figure this out!
-//     {"red mogo alliance", &redMogoAlliance}
-//     // {"blue mogo alliance", &blueMogoAlliance},
-// });
-
-// rd::Console console;
-
+#include "autonSelector.hpp"
 
 void initialize() {
     pros::lcd::initialize();
+    console.focus();
+    console.printf("Initializing...\n");
+    chassis.calibrate();
+    chassis.setPose(0, 0, 0);
 
-    // selector.focus();
+    pros::delay(250);
 
-    // selector.on_select([](std::optional<rd::Selector::routine_t> routine) {
-	// 	if (routine == std::nullopt) {
-	// 		std::cout << "No routine selected" << std::endl;
-	// 	} else {
-	// 		std::cout << "Selected Routine: " << routine.value().name << std::endl;
-	// 	}
-	// });
+    selector.focus();
 
-    // if (pros::lcd::is_initialized()) { std::cout << "yippeee\n"; }
+    selector.on_select([](std::optional<rd::Selector::routine_t> routine) {
+        if (routine == std::nullopt) {
+            std::cout << "No routine selected" << std::endl;
+        } else {
+            std::cout << "Selected Routine: " << routine.value().name << std::endl;
+        }
+    });
 
     clampInit();
     intakeInit();
     ladyBrownInit();
 
-    chassis.calibrate(true);
-    chassis.setPose(0, 0, 0);
-
-    pros::Task screenTaskActual(screenTask, "screen task");
+    // pros::Task screenTaskActual(screenTask, "screen task");
 }
 
 // Runs while the robot is disabled
-void disabled() {
-    
-}
+void disabled() {}
 
 // Runs after initialize if the robot is connected to field control
-void competition_initialize() {
-    
-}
+void competition_initialize() {}
 
 void autonomous() {
-    //initDebug();
-    //chassis.follow(skillsPath_txt, skillsExtra_txt, "skills");
+    // initDebug();
+    // chassis.follow(skillsPath_txt, skillsExtra_txt, "skills");
 
-    //chassis.follow(blueMogoAlliancePath_txt, redMogoAllianceExtra_txt, "blue mogo alliance");
-    
+    // chassis.follow(blueMogoAlliancePath_txt, redMogoAllianceExtra_txt, "blue mogo alliance");
+
     // chassis.calibrate();
     // chassis.setPose(0, 0, 0);
     // chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
     // // TODO: COMMENTED OUT BC TESTING IN INITIALIZE
 
-
-    //blueRing();
-    //blueMogo();
+    // blueRing();
+    // blueMogo();
     redMogo();
 
-    //chassis.follow(redMogoAlliancePath_txt, redMogoAllianceExtra_txt, "red mogo alliance");
-
+    // chassis.follow(redMogoAlliancePath_txt, redMogoAllianceExtra_txt, "red mogo alliance");
 
     // if(color == 0) { //red
     //     sortState = 2
@@ -137,8 +126,9 @@ void autonomous() {
 }
 
 void opcontrol() {
-
     // rerunControl();
+
+    printCoords();
 
     matchControl();
 }
