@@ -165,6 +165,6 @@ void antiJam() {
             intakeUpper.move_voltage(12000);
         }
 
-        pros::delay(10);
-    }
-}
+//         pros::delay(10);
+//     }
+// }
