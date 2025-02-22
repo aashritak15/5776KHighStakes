@@ -103,7 +103,7 @@ void closeO() {
         std::string dataLine2;
 
         dataLine2.append(std::to_string((round(chassis.getPose().x * 1000)) / 1000) +
-                        ", "); //*all rounded to 3 decimal places
+                         ", "); //*all rounded to 3 decimal places
         dataLine2.append(std::to_string((round(chassis.getPose().y * 1000)) / 1000) + ", ");
         dataLine2.append(std::to_string((round(chassis.getPose().theta * 1000)) / 1000) + ", ");
         dataLine2.append("0\nendData");
@@ -295,7 +295,7 @@ void writeInterruptAdditional() {
     fileInterruptTwo << dataLine;
 }
 
-void reflect(bool x, bool y) { //TODO: remove extra reflection
+void reflect(bool x, bool y) { // TODO: remove extra reflection
     reflector.open("/usd/reflectAutonomous.txt", std::ios::out | std::ios::trunc);
     reflectorTwo.open("/usd/reflectExtra.txt", std::ios::out | std::ios::trunc);
 
@@ -408,3 +408,77 @@ std::vector<std::string> readElementMagic(const std::string& input, const std::s
 
     return output;
 }
+
+// filters
+
+void removeIsolatedTurns(std::vector<std::string>& extra, std::vector<std::string>& autonomous) {
+    std::vector<std::string> cleaned_extra, cleaned_autonomous;
+    for (size_t i = 0; i < extra.size(); i++) {
+        if ((extra[i] == "TURNING CW," || extra[i] == "TURNING CCW,") &&
+            ((i == 0 || (extra[i - 1] != "TURNING CW," && extra[i - 1] != "TURNING CCW,")) &&
+             (i == extra.size() - 1 || (extra[i + 1] != "TURNING CW," && extra[i + 1] != "TURNING CCW,")))) {
+            continue;
+        }
+        cleaned_extra.push_back(extra[i]);
+        cleaned_autonomous.push_back(autonomous[i]);
+    }
+    extra = cleaned_extra;
+    autonomous = cleaned_autonomous;
+}
+
+void stoppedSequences(std::vector<std::string>& extra, std::vector<std::string>& autonomous) {
+    std::vector<std::string> cleaned_extra, cleaned_autonomous;
+    int stop_count = 0;
+    for (size_t i = 0; i < extra.size(); i++) {
+        if (extra[i] == "STOPPED,") {
+            stop_count++;
+            if (stop_count > 5) continue; // maximum of 5
+        } else {
+            stop_count = 0;
+        }
+        cleaned_extra.push_back(extra[i]);
+        cleaned_autonomous.push_back(autonomous[i]);
+    }
+    extra = cleaned_extra;
+    autonomous = cleaned_autonomous;
+}
+
+// remove isolated stops
+
+void removeIsolatedStopped(std::vector<std::string>& extra, std::vector<std::string>& autonomous) {
+    std::vector<std::string> cleaned_extra, cleaned_autonomous;
+    for (size_t i = 0; i < extra.size(); i++) {
+        if (extra[i] == "STOPPED," &&
+            ((i == 0 || extra[i - 1] != "STOPPED,") && (i == extra.size() - 1 || extra[i + 1] != "STOPPED,"))) {
+            continue;
+        }
+        cleaned_extra.push_back(extra[i]);
+        cleaned_autonomous.push_back(autonomous[i]);
+    }
+    extra = cleaned_extra;
+    autonomous = cleaned_autonomous;
+}
+
+void optimizeTurns(std::vector<std::string>& extra, std::vector<std::string>& autonomous) {
+    std::vector<std::string> cleaned_extra, cleaned_autonomous;
+    size_t i = 0;
+    while (i < extra.size()) {
+        if (extra[i] == "TURNING CW," || extra[i] == "TURNING CCW,") {
+            size_t start = i;
+            while (i < extra.size() && (extra[i] == "TURNING CW," || extra[i] == "TURNING CCW,")) { i++; }
+            size_t end = i - 1;
+            cleaned_extra.push_back(extra[start]); // Keep first turn
+            cleaned_extra.push_back(extra[end]); // Keep last turn
+            cleaned_autonomous.push_back(autonomous[start]);
+            cleaned_autonomous.push_back(autonomous[end]);
+        } else {
+            cleaned_extra.push_back(extra[i]);
+            cleaned_autonomous.push_back(autonomous[i]);
+        }
+        i++;
+    }
+    extra = cleaned_extra;
+    autonomous = cleaned_autonomous;
+}
+
+// TODO: add read/write stuff

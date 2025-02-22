@@ -51,11 +51,16 @@ void reflect(bool x, bool y);
 
 std::vector<std::string> readElementMagic(const std::string& input, const std::string& delimiter);
 
-//jerry
+// jerry
 
-// extern std::vector<Waypoint> route; 
+// extern std::vector<Waypoint> route;
 
 // void followRoute(const std::vector<Waypoint>& route);
-// void readRouteFile; 
+// void readRouteFile;
+
+void removeIsolatedTurns(std::vector<std::string>& extra, std::vector<std::string>& autonomous);
+void stoppedSequences(std::vector<std::string>& extra, std::vector<std::string>& autonomous);
+void removeIsolatedStopped(std::vector<std::string>& extra, std::vector<std::string>& autonomous);
+void optimizeTurns(std::vector<std::string>& extra, std::vector<std::string>& autonomous);
 
 #endif
