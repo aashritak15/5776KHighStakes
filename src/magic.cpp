@@ -409,6 +409,24 @@ std::vector<std::string> readElementMagic(const std::string& input, const std::s
     return output;
 }
 
+// general read/write fns
+
+std::vector<std::string> readFile(const std::string& filename) {
+    std::ifstream file(filename);
+    std::vector<std::string> lines;
+    std::string line;
+    while (std::getline(file, line)) { lines.push_back(line); }
+    file.close();
+    return lines;
+}
+
+// write the vector of strings into a file
+void writeFile(const std::string& filename, const std::vector<std::string>& lines) {
+    std::ofstream file(filename);
+    for (const auto& line : lines) { file << line << "\n"; }
+    file.close();
+}
+
 // filters
 
 void removeIsolatedTurns(std::vector<std::string>& extra, std::vector<std::string>& autonomous) {

@@ -63,4 +63,8 @@ void stoppedSequences(std::vector<std::string>& extra, std::vector<std::string>&
 void removeIsolatedStopped(std::vector<std::string>& extra, std::vector<std::string>& autonomous);
 void optimizeTurns(std::vector<std::string>& extra, std::vector<std::string>& autonomous);
 
+std::vector<std::string> readFile(const std::string& filename);
+
+void writeFile(const std::string& filename, const std::vector<std::string>& lines);
+
 #endif

@@ -77,6 +77,24 @@ ASSET(blueMogoAlliancePath_txt);
 ASSET(skillsPath_txt);
 ASSET(skillsExtra_txt);
 
+void filterAuton() {
+    std::string extraFile = "extra.txt";
+    std::string autonomousFile = "autonomous.txt";
+
+    std::vector<std::string> extra = readFile(extraFile);
+    std::vector<std::string> autonomous = readFile(autonomousFile);
+
+    removeIsolatedTurns(extra, autonomous);
+    stoppedSequences(extra, autonomous);
+    removeIsolatedStopped(extra, autonomous);
+    optimizeTurns(extra, autonomous);
+
+    writeFile(extraFile, extra);
+    writeFile(autonomousFile, autonomous);
+
+    std::cout << "Filtering is comlete!";
+}
+
 // void autonSelector() {
 //     while (!colorSelected) {
 //         if (pros::lcd::read_buttons() & LCD_BTN_LEFT) {
