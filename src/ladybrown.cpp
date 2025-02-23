@@ -18,13 +18,13 @@ void ladyBrownInit() {
 double globalTarget = 0;
 
 void updateLB() {
-    // if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
-    //     ladyBrown.move_voltage(12000);
-    // } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
-    //     ladyBrown.move_voltage(-12000);
-    // } else {
-    //     ladyBrown.move_voltage(0);
-    // }
+    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
+        ladyBrown.move_voltage(12000);
+    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
+        ladyBrown.move_voltage(-12000);
+    } else {
+        ladyBrown.move_voltage(0);
+    }
 
     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) { //*ZERO
         globalTarget = 0;
