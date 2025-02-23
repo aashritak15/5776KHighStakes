@@ -2,6 +2,7 @@
 #include "pros/misc.h"
 #include "pros/motors.h"
 #include "ladybrown.hpp"
+#include "intake.hpp"
 #include "globals.hpp"
 #include "lemlib/timer.hpp"
 #include <cmath>
@@ -13,31 +14,21 @@ void ladyBrownInit() {
     lbRotation.set_position(0);
 
     pros::Task pd_task1(lbTask, "lb task");
+    pros::Task updateLBTask(updateLB, "update LB task");
 }
 
 double globalTarget = 0;
 
 void updateLB() {
-    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
-        ladyBrown.move_voltage(12000);
-    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
-        ladyBrown.move_voltage(-12000);
-    } else {
-        ladyBrown.move_voltage(0);
-    }
-
     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) { //*ZERO
         globalTarget = 0;
-
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) { //*LOAD
-        globalTarget = 28.37;
-
+        globalTarget = 34;
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) { //*FULLSCORE
-        globalTarget = 153;
+        globalTarget = 156;
 
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) { //*STRAIGHT UP
-        globalTarget = 104;
-
+        globalTarget = 102.32;
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT)) { //*SCORE MOGO
         globalTarget = 60;
     }
@@ -63,7 +54,7 @@ void lbTask() {
         armMoveVoltage = (kP * speedError) + (kD * derivative);
 
         // Scale the output from -100 to 100 range to -12000 to 12000
-        armMoveVoltage = armMoveVoltage * 120;
+        armMoveVoltage = armMoveVoltage * 1200;
 
         if (std::abs(armMoveVoltage) > 12000) { armMoveVoltage = (armMoveVoltage < 0) ? -12000 : 12000; }
         if (std::abs(armMoveVoltage) < 360) { armMoveVoltage = 0; } // Adjusted small deadzone for voltage

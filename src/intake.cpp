@@ -22,7 +22,6 @@ void intakeInit() {
     pros::Task intakeTask(runIntake, "intake");
 }
 
-
 /**
  *@brief update intake global state based on button inputs
  */
@@ -135,7 +134,7 @@ void runColorSort() {
  *@brief run intake motors based on global state
  */
 void runIntake() {
-    while(true) {
+    while (true) {
         if (intakeState == 0) {
             intakeUpper.move_voltage(0);
             intakeLower.move_voltage(0);
@@ -153,7 +152,6 @@ void runIntake() {
 
 void antiJam() {
     while (true) {
-
         // Detect a jam based on velocity and current draw
         if (intakeUpper.get_actual_velocity() < 100 && intakeLower.get_current_draw() > 2400) {
             intakeUpper.move_voltage(12000); // Try to push forward for a moment
@@ -165,6 +163,6 @@ void antiJam() {
             intakeUpper.move_voltage(12000);
         }
 
-//         pros::delay(10);
+        //         pros::delay(10);
     }
 }

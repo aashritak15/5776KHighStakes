@@ -20,5 +20,6 @@ extern int intakeState;
 extern int sortState;
 extern bool buttonUpPressed;
 extern bool colorDetected;
+]
 
 #endif
