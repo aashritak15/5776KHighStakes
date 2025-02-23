@@ -450,7 +450,7 @@ void stoppedSequences(std::vector<std::string>& extra, std::vector<std::string>&
     for (size_t i = 0; i < extra.size(); i++) {
         if (extra[i] == "STOPPED,") {
             stop_count++;
-            if (stop_count > 5) continue; // maximum of 5
+            if (stop_count > 20) continue; // maximum of 20
         } else {
             stop_count = 0;
         }

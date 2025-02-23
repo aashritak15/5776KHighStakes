@@ -9,34 +9,34 @@
 void ladyBrownInit() {
     ladyBrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
     ladyBrown.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
-    lbRotation.reset_position();
+    // lbRotation.reset_position();
     lbRotation.set_position(0);
 
-    //pros::Task pd_task1(lbTask, "lb task");
+    pros::Task pd_task1(lbTask, "lb task");
 }
 
 double globalTarget = 0;
 
 void updateLB() {
-    if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
-        ladyBrown.move_voltage(12000);
-    } else if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
-        ladyBrown.move_voltage(-12000);
-    } else {
-        ladyBrown.move_voltage(0);
-    }
-    
+    // if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
+    //     ladyBrown.move_voltage(12000);
+    // } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
+    //     ladyBrown.move_voltage(-12000);
+    // } else {
+    //     ladyBrown.move_voltage(0);
+    // }
+
     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) { //*ZERO
-        globalTarget = 3;
+        globalTarget = 0;
 
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) { //*LOAD
-        globalTarget = 40;
+        globalTarget = 28.37;
 
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) { //*FULLSCORE
-        globalTarget = 180;
+        globalTarget = 153;
 
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) { //*STRAIGHT UP
-        globalTarget = 120;
+        globalTarget = 104;
 
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT)) { //*SCORE MOGO
         globalTarget = 60;
@@ -48,10 +48,10 @@ void lbTask() {
     double prevSpeedError = 0;
     double speedError = 0;
     double derivative;
-    double armMoveSpeed;
+    double armMoveVoltage;
 
-    double kP = 0.9;
-    double kD = 0.9; // 0.86
+    double kP = 0.1;
+    double kD = 0; // 0.86
 
     while (true) {
         currentAngle = lbRotation.get_position() / 100.0;
@@ -60,13 +60,15 @@ void lbTask() {
 
         derivative = speedError - prevSpeedError;
 
-        armMoveSpeed = (kP * speedError) + (kD * derivative);
+        armMoveVoltage = (kP * speedError) + (kD * derivative);
 
-        if (std::abs(armMoveSpeed) > 70) { armMoveSpeed = (armMoveSpeed < 0) ? -70 : 70; }
-        if (std::abs(armMoveSpeed) < 3) { armMoveSpeed = 0; }
+        // Scale the output from -100 to 100 range to -12000 to 12000
+        armMoveVoltage = armMoveVoltage * 120;
 
-        armMoveSpeed = (kP * speedError) + (kD * derivative);
-        ladyBrown.move_velocity(armMoveSpeed);
+        if (std::abs(armMoveVoltage) > 12000) { armMoveVoltage = (armMoveVoltage < 0) ? -12000 : 12000; }
+        if (std::abs(armMoveVoltage) < 360) { armMoveVoltage = 0; } // Adjusted small deadzone for voltage
+
+        ladyBrown.move_voltage(-armMoveVoltage);
 
         prevSpeedError = speedError;
 

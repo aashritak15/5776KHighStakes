@@ -10,24 +10,31 @@
 
 #include "autonSelector.hpp"
 
+std::vector<rd::Selector::routine_t> autonRoutines = {
+    {"Blue Auton", []() { blueMogo(); }, "", 210}, // Blue color hue
+    {"Red Auton", []() { redMogo(); }, "", 0}, // Red color hue
+
+};
+
+rd::Selector selector("Auton Selector", autonRoutines);
+
 void initialize() {
-    pros::lcd::initialize();
-    console.focus();
-    console.printf("Initializing...\n");
-    chassis.calibrate();
-    chassis.setPose(0, 0, 0);
-
-    pros::delay(250);
-
     selector.focus();
+    // console.focus();
+    //  console.printf("Initializing...\n");
+    chassis.calibrate();
 
-    selector.on_select([](std::optional<rd::Selector::routine_t> routine) {
-        if (routine == std::nullopt) {
-            std::cout << "No routine selected" << std::endl;
-        } else {
-            std::cout << "Selected Routine: " << routine.value().name << std::endl;
-        }
-    });
+    // chassis.setPose(0, 0, 0);
+
+    // pros::delay(250);
+
+    // selector.on_select([](std::optional<rd::Selector::routine_t> routine) {
+    //     if (routine == std::nullopt) {
+    //         std::cout << "No routine selected" << std::endl;
+    //     } else {
+    //         std::cout << "Selected Routine: " << routine.value().name << std::endl;
+    //     }
+    // });
 
     clampInit();
     intakeInit();
@@ -40,11 +47,12 @@ void initialize() {
 void disabled() {}
 
 // Runs after initialize if the robot is connected to field control
-void competition_initialize() {}
+void competition_initialize() { selector.focus(); } // selector.focus(); }
 
 void autonomous() {
-    // initDebug();
-    // chassis.follow(skillsPath_txt, skillsExtra_txt, "skills");
+    selector.run_auton();
+    initDebug();
+    //  chassis.follow(skillsPath_txt, skillsExtra_txt, "skills");
 
     // chassis.follow(blueMogoAlliancePath_txt, redMogoAllianceExtra_txt, "blue mogo alliance");
 
@@ -55,7 +63,7 @@ void autonomous() {
 
     // blueRing();
     // blueMogo();
-    redMogo();
+    // redMogo();
 
     // chassis.follow(redMogoAlliancePath_txt, redMogoAllianceExtra_txt, "red mogo alliance");
 
@@ -126,7 +134,8 @@ void autonomous() {
 }
 
 void opcontrol() {
-    // rerunControl();
+    selector.focus();
+    //  rerunControl();
 
     printCoords();
 

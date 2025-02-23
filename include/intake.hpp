@@ -4,7 +4,7 @@
 #include "main.h"
 
 inline pros::Motor intakeUpper(14, pros::MotorGearset::blue);
-inline pros::Motor intakeLower(-1, pros::MotorGearset::green); //TODO: find port
+inline pros::Motor intakeLower(-17, pros::MotorGearset::green); // TODO: find port
 inline pros::Optical optical(16);
 
 void intakeInit();
