@@ -1,4 +1,5 @@
 #include "loops.hpp"
+#include "magic.hpp"
 
 void matchControl() {
     chassis.setBrakeMode(pros::E_MOTOR_BRAKE_COAST);
@@ -11,7 +12,8 @@ void matchControl() {
         updateIntake();
         updateColorSort();
         updateClamp();
-        updateDoink();
+        updateDoinkRight();
+        updateDoinkLeft();
         updateLB();
 
         pros::delay(10);
@@ -34,7 +36,8 @@ void rerunControl() {
         updateIntake();
         updateColorSort();
         updateClamp();
-        updateDoink();
+        updateDoinkRight();
+        updateDoinkLeft();
         updateLB();
 
         if (count == 5) { //*data written every 0.1 seconds
@@ -49,10 +52,11 @@ void rerunControl() {
 
         closeO();
 
-        if (!active) {
-            filterAuton(); // i thinks this shdu sowrk
-            // break;
-        }
+        //wasnt building so gotta fix later
+        // if (!active) {
+        //     filterAuton(); // i thinks this shdu sowrk
+        //     // break;
+        // }
 
         pros::delay(10);
     }

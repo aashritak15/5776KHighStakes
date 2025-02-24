@@ -5,16 +5,19 @@
 #include "globals.hpp"
 
 inline pros::adi::DigitalOut mogoClamp('A');
-inline pros::adi::DigitalOut doink('B');
+inline pros::adi::DigitalOut doinkRight('B');
+inline pros::adi::DigitalOut doinkLeft('C');
+inline pros::adi::DigitalOut intakePiston('D');
 
 
 void updateClamp();
 void clampInit();
-void updateDoink();
+void updateDoinkRight();
+void updateDoinkLeft();
 void doinkInit();
 void runPistons();
 
 extern int clampState;
-extern int doinkState;
+extern int doinkRightState;
 
 #endif

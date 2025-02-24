@@ -2,16 +2,20 @@
 
 void clampInit() { 
     mogoClamp.set_value(false); 
-    doink.set_value(false);
+    doinkRight.set_value(false);
+    doinkLeft.set_value(false);
+    intakePiston.set_value(false);
 
     pros::Task pistonTask(runPistons, "pistons");
 }
 
 int clampState = 0;
-int doinkState = 0;
+int doinkRightState = 0;
+int doinkLeftState = 0;
 
 bool buttonYPressed = false;
-bool buttonDoinkPressed = false;
+bool buttonBPressed = false;
+bool buttonXPressed = false;
 
 void updateClamp() {
     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_Y)) {
@@ -28,18 +32,33 @@ void updateClamp() {
     }
 }
 
-void updateDoink() {
+void updateDoinkRight() {
     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_B)) {
-        if (!buttonDoinkPressed) {
-            buttonDoinkPressed = true;
-            if(doinkState == 0) {
-                doinkState = 1;
+        if (!buttonBPressed) {
+            buttonBPressed = true;
+            if(doinkRightState == 0) {
+                doinkRightState = 1;
             } else {
-                doinkState = 0;
+                doinkRightState = 0;
             }
         }
     } else {
-        buttonDoinkPressed = false;
+        buttonBPressed = false;
+    }
+}
+
+void updateDoinkLeft() {
+    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) {
+        if (!buttonXPressed) {
+            buttonXPressed = true;
+            if(doinkLeftState == 0) {
+                doinkLeftState = 1;
+            } else {
+                doinkLeftState = 0;
+            }
+        }
+    } else {
+        buttonXPressed = false;
     }
 }
 
@@ -51,10 +70,16 @@ void runPistons() {
             mogoClamp.set_value(false);
         }
 
-        if(doinkState == 1) {
-            doink.set_value(true);
+        if(doinkRightState == 1) {
+            doinkRight.set_value(true);
         } else {
-            doink.set_value(false);
+            doinkRight.set_value(false);
+        }
+
+        if(doinkLeftState == 1) {
+            doinkLeft.set_value(true);
+        } else {
+            doinkLeft.set_value(false);
         }
     }
 

@@ -267,7 +267,8 @@ void updateSubsys() {
     intakeState = std::stoi(subValues.at(closestPoint)[0]);
     clampState = std::stoi(subValues.at(closestPoint)[1]);
     globalTarget = std::stod(subValues.at(closestPoint)[2]);
-    doinkState = std::stoi(subValues.at(closestPoint)[3]);
+    doinkRightState = std::stoi(subValues.at(closestPoint)[3]);
+    //add left doinker in magic and here
 }
 
 bool doExclusions(std::string& dataLine) {

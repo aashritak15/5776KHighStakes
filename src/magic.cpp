@@ -202,7 +202,7 @@ void writeAdditional() {
     dataLine.append(std::to_string(intakeState) + ", ");
     dataLine.append(std::to_string(clampState) + ", ");
     dataLine.append(std::to_string(globalTarget) + ", ");
-    dataLine.append(std::to_string(doinkState) + ", ");
+    dataLine.append(std::to_string(doinkRightState) + ", ");
 
     if (std::abs(total) < 600) { // TODO: tune stop bound
 
@@ -268,7 +268,8 @@ void writeInterruptAdditional() {
     dataLine.append(std::to_string(intakeState) + ", ");
     dataLine.append(std::to_string(clampState) + ", ");
     dataLine.append(std::to_string(globalTarget) + ", ");
-    dataLine.append(std::to_string(doinkState) + ", ");
+    dataLine.append(std::to_string(doinkRightState) + ", ");
+    //add doink left and intake piston
 
     if (std::abs(total) < 600) { // TODO: tune stop bound
 
