@@ -14,7 +14,6 @@ void ladyBrownInit() {
     lbRotation.set_position(0);
 
     pros::Task pd_task1(lbTask, "lb task");
-    pros::Task updateLBTask(updateLB, "update LB task");
 }
 
 double globalTarget = 0;

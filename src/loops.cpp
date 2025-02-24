@@ -49,6 +49,11 @@ void rerunControl() {
 
         closeO();
 
+        if (!active) {
+            filterAuton(); // i thinks this shdu sowrk
+            // break;
+        }
+
         pros::delay(10);
     }
 }

@@ -19,9 +19,9 @@ std::vector<rd::Selector::routine_t> autonRoutines = {
 rd::Selector selector("Auton Selector", autonRoutines);
 
 void initialize() {
-    selector.focus();
-    // console.focus();
-    //  console.printf("Initializing...\n");
+    // selector.focus();
+    //  console.focus();
+    //   console.printf("Initializing...\n");
     chassis.calibrate();
 
     // chassis.setPose(0, 0, 0);
@@ -40,17 +40,17 @@ void initialize() {
     intakeInit();
     ladyBrownInit();
 
-    // pros::Task screenTaskActual(screenTask, "screen task");
+    pros::Task screenTaskActual(screenTask, "screen task");
 }
 
 // Runs while the robot is disabled
 void disabled() {}
 
 // Runs after initialize if the robot is connected to field control
-void competition_initialize() { selector.focus(); } // selector.focus(); }
+void competition_initialize() {} // selector.focus(); }}
 
 void autonomous() {
-    selector.run_auton();
+    // selector.run_auton();
     initDebug();
     //  chassis.follow(skillsPath_txt, skillsExtra_txt, "skills");
 
@@ -134,8 +134,8 @@ void autonomous() {
 }
 
 void opcontrol() {
-    selector.focus();
-    //  rerunControl();
+    // selector.focus();
+    //   rerunControl();
 
     printCoords();
 

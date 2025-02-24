@@ -427,7 +427,7 @@ void writeFile(const std::string& filename, const std::vector<std::string>& line
     file.close();
 }
 
-// filters
+// filters stuff
 
 void removeIsolatedTurns(std::vector<std::string>& extra, std::vector<std::string>& autonomous) {
     std::vector<std::string> cleaned_extra, cleaned_autonomous;
