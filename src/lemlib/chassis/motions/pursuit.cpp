@@ -95,23 +95,6 @@ std::vector<std::string> getVelocities(const asset& path) {
     return robotVelocities;
 }
 
-std::vector<std::vector<std::string>> getSubData(const asset& sub) {
-    // format data from the asset
-    const std::string data(reinterpret_cast<char*>(sub.buf), sub.size);
-    const std::vector<std::string> dataLines = readElement(data, "\n");
-    std::vector<std::vector<std::string>> pointInput;
-
-    // read the points until 'endData' is read
-    for (std::string line : dataLines) {
-        // lemlib::infoSink()->debug("read raw line {}", stringToHex(line));
-        if (line == "endData" || line == "endData\r") break;
-        const std::vector<std::string> temp = readElement(line, ", ");
-        pointInput.push_back(temp); // parse line
-    }
-
-    return pointInput;
-}
-
 /**
  * @brief find the closest point on the path to the robot
  *

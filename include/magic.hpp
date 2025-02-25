@@ -49,7 +49,7 @@ void rerunPIDs();
 
 void reflect(bool x, bool y);
 
-std::vector<std::vector<std::string>> getSubData1(const asset& sub);
+std::vector<std::vector<std::string>> getSubData(const asset& sub);
 
 std::vector<lemlib::Pose> getData(const asset& path);
 

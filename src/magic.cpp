@@ -123,23 +123,23 @@ void closeO() {
         if (fileO.is_open()) fileO.close();
         if (fileOTwo.is_open()) fileOTwo.close();
 
-        pros::delay(100);
+        // pros::delay(100);
 
-        active = false;
+        // active = false;
 
-        controller.set_text(0, 0, "file closed");
+        // controller.set_text(0, 0, "file closed");
 
-        pros::delay(1000);
+        // pros::delay(1000);
 
-        controller.set_text(0, 0, "running filters");
+        // controller.set_text(0, 0, "running filters");
 
-        pros::delay(1000);
+        // pros::delay(1000);
 
-        // filterAuton();
+        // // filterAuton();
 
-        pros::delay(1000);
+        // pros::delay(1000);
 
-        controller.set_text(0, 0, "filters cleaned");
+        // controller.set_text(0, 0, "filters cleaned");
     }
 }
 
@@ -448,7 +448,7 @@ std::vector<lemlib::Pose> getData(const asset& path) {
     return robotPath;
 }
 
-std::vector<std::vector<std::string>> getSubData1(const asset& sub) {
+std::vector<std::vector<std::string>> getSubData(const asset& sub) {
     // format data from the asset
     const std::string data(reinterpret_cast<char*>(sub.buf), sub.size);
     const std::vector<std::string> dataLines = readElementMagic(data, "\n");
