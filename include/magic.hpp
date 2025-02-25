@@ -49,6 +49,12 @@ void rerunPIDs();
 
 void reflect(bool x, bool y);
 
+std::vector<std::vector<std::string>> getSubData1(const asset& sub);
+
+std::vector<lemlib::Pose> getData(const asset& path);
+
+extern bool active;
+
 std::vector<std::string> readElementMagic(const std::string& input, const std::string& delimiter);
 
 // jerry
@@ -59,7 +65,8 @@ std::vector<std::string> readElementMagic(const std::string& input, const std::s
 // void readRouteFile;
 
 void removeIsolatedTurns(std::vector<std::string>& extra, std::vector<std::string>& autonomous);
-void stoppedSequences(std::vector<std::string>& extra, std::vector<std::string>& autonomous);
+void stoppedSequences(std::vector<std::vector<std::string>>& extra, std::vector<std::vector<std::string>>& autonomous);
+
 void removeIsolatedStopped(std::vector<std::string>& extra, std::vector<std::string>& autonomous);
 void optimizeTurns(std::vector<std::string>& extra, std::vector<std::string>& autonomous);
 

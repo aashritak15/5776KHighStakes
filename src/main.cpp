@@ -24,7 +24,7 @@ void initialize() {
     //   console.printf("Initializing...\n");
     chassis.calibrate();
 
-    // chassis.setPose(0, 0, 0);
+    chassis.setPose(0, 0, 0);
 
     // pros::delay(250);
 
@@ -49,10 +49,13 @@ void disabled() {}
 // Runs after initialize if the robot is connected to field control
 void competition_initialize() {} // selector.focus(); }}
 
+ASSET(autonomous_txt);
+ASSET(extra_txt);
+
 void autonomous() {
     // selector.run_auton();
     initDebug();
-    //  chassis.follow(skillsPath_txt, skillsExtra_txt, "skills");
+    chassis.follow(autonomous_txt, extra_txt, "skills");
 
     // chassis.follow(blueMogoAlliancePath_txt, redMogoAllianceExtra_txt, "blue mogo alliance");
 
@@ -135,9 +138,9 @@ void autonomous() {
 
 void opcontrol() {
     // selector.focus();
-    //   rerunControl();
+    rerunControl();
 
-    printCoords();
+    // printCoords();
 
-    matchControl();
+    // matchControl();
 }

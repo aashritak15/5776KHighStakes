@@ -97,7 +97,7 @@ void initDebug() {
 
 void closeO() {
     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
-        std::string dataLine = "0, 0, 0.000000, 0, STOPPED, -1\nendData";
+        std::string dataLine = "0, 0, 0.000000, 0, STOPPED, -1, 0\nendData";
         fileOTwo << dataLine;
 
         std::string dataLine2;
@@ -128,6 +128,18 @@ void closeO() {
         active = false;
 
         controller.set_text(0, 0, "file closed");
+
+        pros::delay(1000);
+
+        controller.set_text(0, 0, "running filters");
+
+        pros::delay(1000);
+
+        // filterAuton();
+
+        pros::delay(1000);
+
+        controller.set_text(0, 0, "filters cleaned");
     }
 }
 
@@ -182,7 +194,7 @@ void writePose() {
 }
 
 void writeAdditional() {
-    //*0 is intake, 1 is mogo, 2 is lb, 3 is doinker, 4 is state, 5 is segment
+    //*0 is intake, 1 is mogo, 2 is lb, 3 is doinker right, 4 is state, 5 is segment, 6 is doinker left
 
     std::string dataLine = "";
 
@@ -224,7 +236,9 @@ void writeAdditional() {
         dataLine.append("GOING, ");
     }
 
-    dataLine.append(std::to_string(section) + "\n");
+    dataLine.append(std::to_string(section) + ", ");
+
+    dataLine.append(std::to_string(doinkLeftState) + "\n");
 
     fileOTwo << dataLine;
 }
@@ -269,7 +283,7 @@ void writeInterruptAdditional() {
     dataLine.append(std::to_string(clampState) + ", ");
     dataLine.append(std::to_string(globalTarget) + ", ");
     dataLine.append(std::to_string(doinkRightState) + ", ");
-    //add doink left and intake piston
+    // add doink left and intake piston
 
     if (std::abs(total) < 600) { // TODO: tune stop bound
 
@@ -392,6 +406,8 @@ void reflect(bool x, bool y) { // TODO: remove extra reflection
     controller.set_text(0, 0, "reflected");
 }
 
+// parse a string using a delimiter
+
 std::vector<std::string> readElementMagic(const std::string& input, const std::string& delimiter) {
     std::string token;
     std::string s = input;
@@ -410,6 +426,45 @@ std::vector<std::string> readElementMagic(const std::string& input, const std::s
     return output;
 }
 
+std::vector<lemlib::Pose> getData(const asset& path) {
+    std::vector<lemlib::Pose> robotPath;
+    // format data from the asset
+    const std::string data(reinterpret_cast<char*>(path.buf), path.size);
+    const std::vector<std::string> dataLines = readElementMagic(data, "\n");
+
+    // read the points until 'endData' is read
+    for (std::string line : dataLines) {
+        if (line == "endData" || line == "endData\r") break;
+
+        const std::vector<std::string> pointInput = readElementMagic(line, ", "); // parse line
+
+        lemlib::Pose pathPoint(0, 0);
+        pathPoint.x = std::stof(pointInput.at(0)); // x position
+        pathPoint.y = std::stof(pointInput.at(1)); // y position
+        pathPoint.theta = std::stof(pointInput.at(2)); // heading
+        robotPath.push_back(pathPoint); // save data
+    }
+
+    return robotPath;
+}
+
+std::vector<std::vector<std::string>> getSubData1(const asset& sub) {
+    // format data from the asset
+    const std::string data(reinterpret_cast<char*>(sub.buf), sub.size);
+    const std::vector<std::string> dataLines = readElementMagic(data, "\n");
+    std::vector<std::vector<std::string>> pointInput;
+
+    // read the points until 'endData' is read
+    for (std::string line : dataLines) {
+        // lemlib::infoSink()->debug("read raw line {}", stringToHex(line));
+        if (line == "endData" || line == "endData\r") break;
+        const std::vector<std::string> temp = readElementMagic(line, ", ");
+        pointInput.push_back(temp); // parse line
+    }
+
+    return pointInput;
+}
+
 // general read/write fns
 
 std::vector<std::string> readFile(const std::string& filename) {
@@ -422,9 +477,17 @@ std::vector<std::string> readFile(const std::string& filename) {
 }
 
 // write the vector of strings into a file
-void writeFile(const std::string& filename, const std::vector<std::string>& lines) {
+void writeFile(const std::string& filename, const std::vector<std::vector<std::string>>& data) {
     std::ofstream file(filename);
-    for (const auto& line : lines) { file << line << "\n"; }
+    for (const auto& row : data) {
+        std::string line = "";
+        for (size_t i = 0; i < row.size(); i++) {
+            line += row[i];
+            if (i < row.size() - 1) line += ", ";
+        }
+        file << line << "\n";
+    }
+
     file.close();
 }
 
@@ -445,11 +508,11 @@ void removeIsolatedTurns(std::vector<std::string>& extra, std::vector<std::strin
     autonomous = cleaned_autonomous;
 }
 
-void stoppedSequences(std::vector<std::string>& extra, std::vector<std::string>& autonomous) {
-    std::vector<std::string> cleaned_extra, cleaned_autonomous;
+void stoppedSequences(std::vector<std::vector<std::string>>& extra, std::vector<std::vector<std::string>>& autonomous) {
+    std::vector<std::vector<std::string>> cleaned_extra, cleaned_autonomous;
     int stop_count = 0;
     for (size_t i = 0; i < extra.size(); i++) {
-        if (extra[i] == "STOPPED,") {
+        if (extra[i][4].find("STOPPED") != std::string::npos) {
             stop_count++;
             if (stop_count > 20) continue; // maximum of 20
         } else {

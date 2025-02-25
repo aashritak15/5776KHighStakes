@@ -71,29 +71,28 @@ lemlib::Chassis chassis(drivetrain, linearController, angularController, sensors
 
 ASSET(redMogoAlliancePath_txt);
 ASSET(redMogoAllianceExtra_txt);
-ASSET(autonomous_txt);
-ASSET(extra_txt);
+
 ASSET(blueMogoAlliancePath_txt);
 ASSET(skillsPath_txt);
 ASSET(skillsExtra_txt);
 
-void filterAuton() {
-    std::string extraFile = "extra.txt";
-    std::string autonomousFile = "autonomous.txt";
+// void filterAuton() {
+//     std::string extraFile = "/usd/extra.txt";
+//     std::string autonomousFile = "/usd/autonomous.txt";
 
-    std::vector<std::string> extra = readFile(extraFile);
-    std::vector<std::string> autonomous = readFile(autonomousFile);
+//     std::vector<std::vector<std::string>> extra = getSubData1(extraFile);
+//     std::vector<std::vector<std::string>> autonomous = readFile()
 
-    removeIsolatedTurns(extra, autonomous);
-    stoppedSequences(extra, autonomous);
-    removeIsolatedStopped(extra, autonomous);
-    optimizeTurns(extra, autonomous);
+//         // removeIsolatedTurns(extra, autonomous);
+//         stoppedSequences(extra, autonomous);
+//     // removeIsolatedStopped(extra, autonomous);
+//     // optimizeTurns(extra, autonomous);
 
-    writeFile(extraFile, extra);
-    writeFile(autonomousFile, autonomous);
+//     writeFile(extraFile, extra);
+//     writeFile(autonomousFile, autonomous);
 
-    std::cout << "Filtering is comlete!";
-}
+//     controller.set_text(0, 0, "filter function ran");
+// }
 
 // void autonSelector() {
 //     while (!colorSelected) {

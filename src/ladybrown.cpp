@@ -13,7 +13,8 @@ void ladyBrownInit() {
     // lbRotation.reset_position();
     lbRotation.set_position(0);
 
-    pros::Task pd_task1(lbTask, "lb task");
+    pros::Task pd_task1(lbTask, "lb run task");
+    pros::Task updateLBTask2(updateLBTask, "lb update task");
 }
 
 double globalTarget = 0;
@@ -25,12 +26,35 @@ void updateLB() {
         globalTarget = 31;
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) { //*FULLSCORE
         globalTarget = 156;
-
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) { //*STRAIGHT UP
         globalTarget = 102.32;
-    }// } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT)) { //*SCORE MOGO
-    //     globalTarget = 60;
-    // }
+    }
+}
+
+void updateLBTask() {
+    int prevIntakeState;
+
+    while (true) {
+        if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) { //*ZERO
+            globalTarget = 0;
+        } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) { //*LOAD
+            globalTarget = 31;
+        } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) { //*FULLSCORE
+            globalTarget = 156;
+            prevIntakeState = intakeState;
+            intakeState = 2;
+            pros::delay(100);
+            intakeState = prevIntakeState;
+        } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) { //*STRAIGHT UP
+            globalTarget = 102.32;
+            prevIntakeState = intakeState;
+            intakeState = 2;
+            pros::delay(100);
+            intakeState = prevIntakeState;
+        }
+
+        pros::delay(10);
+    }
 }
 
 void lbTask() {

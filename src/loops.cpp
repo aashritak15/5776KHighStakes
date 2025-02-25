@@ -52,12 +52,6 @@ void rerunControl() {
 
         closeO();
 
-        //wasnt building so gotta fix later
-        // if (!active) {
-        //     filterAuton(); // i thinks this shdu sowrk
-        //     // break;
-        // }
-
         pros::delay(10);
     }
 }

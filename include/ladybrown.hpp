@@ -12,6 +12,7 @@ void ladyBrownInit();
 void updateLB();
 void runLB();
 
+void updateLBTask();
 void lbTask();
 
 extern double globalTarget;

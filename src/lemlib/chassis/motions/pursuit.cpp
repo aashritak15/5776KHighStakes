@@ -75,29 +75,6 @@ std::string stringToHex(const std::string& input) {
  * @param filePath The file to read from
  * @return std::vector<lemlib::Pose> vector of points on the path
  */
-std::vector<lemlib::Pose> getData(const asset& path) {
-    std::vector<lemlib::Pose> robotPath;
-    // format data from the asset
-    const std::string data(reinterpret_cast<char*>(path.buf), path.size);
-    const std::vector<std::string> dataLines = readElement(data, "\n");
-
-    // read the points until 'endData' is read
-    for (std::string line : dataLines) {
-        lemlib::infoSink()->debug("read raw line {}", stringToHex(line));
-
-        if (line == "endData" || line == "endData\r") break;
-
-        const std::vector<std::string> pointInput = readElement(line, ", "); // parse line
-
-        lemlib::Pose pathPoint(0, 0);
-        pathPoint.x = std::stof(pointInput.at(0)); // x position
-        pathPoint.y = std::stof(pointInput.at(1)); // y position
-        pathPoint.theta = std::stof(pointInput.at(2)); // heading
-        robotPath.push_back(pathPoint); // save data
-    }
-
-    return robotPath;
-}
 
 std::vector<std::string> getVelocities(const asset& path) {
     std::vector<std::string> robotVelocities;
@@ -253,7 +230,7 @@ float calculateCurvature(lemlib::Pose pose, float heading, lemlib::Pose lookahea
     float x = std::fabs(a * lookahead.x + lookahead.y + c) / std::sqrt((a * a) + 1);
     float d = std::hypot(lookahead.x - pose.x, lookahead.y - pose.y);
 
-    std::cout<<std::to_string(d)<<"\n";
+    std::cout << std::to_string(d) << "\n";
 
     if (d < 3) { // TODO: tune lookahead distance from exclusion tolerance
         return 0;
@@ -268,12 +245,14 @@ void updateSubsys() {
     clampState = std::stoi(subValues.at(closestPoint)[1]);
     globalTarget = std::stod(subValues.at(closestPoint)[2]);
     doinkRightState = std::stoi(subValues.at(closestPoint)[3]);
-    //add left doinker in magic and here
+    doinkLeftState = std::stoi(subValues.at(closestPoint)[6]);
+
+    // add left doinker in magic and here
 }
 
 bool doExclusions(std::string& dataLine) {
     // check for exclusions
-    if (subValues.at(closestPoint)[4] == "STOPPED") { 
+    if (subValues.at(closestPoint)[4] == "STOPPED") {
         drivetrain.leftMotors->move(0);
         drivetrain.rightMotors->move(0);
         ladyBrown.move(0);
@@ -332,7 +311,7 @@ bool doExclusions(std::string& dataLine) {
 }
 
 void doMultipliers(int segment, float& targetVel, std::string pathID) {
-    if(pathID == "red mogo alliance" || pathID == "blue mogo alliance") {
+    if (pathID == "red mogo alliance" || pathID == "blue mogo alliance") {
         switch (std::stoi(subValues.at(closestPoint)[5])) {
             case 0: targetVel *= 2; break;
             case 1: targetVel *= 2; break;
@@ -342,7 +321,7 @@ void doMultipliers(int segment, float& targetVel, std::string pathID) {
             case 5: targetVel *= 2; break;
             case 6: targetVel *= 2; break;
         }
-    } else if(pathID == "red regional AWP" || pathID == "blue regional AWP") {
+    } else if (pathID == "red regional AWP" || pathID == "blue regional AWP") {
         switch (std::stoi(subValues.at(closestPoint)[5])) {
             case 0: targetVel *= 2; break;
             case 1: targetVel *= 2; break;
@@ -352,7 +331,7 @@ void doMultipliers(int segment, float& targetVel, std::string pathID) {
             case 5: targetVel *= 2; break;
             case 6: targetVel *= 2; break;
         }
-    } else if(pathID == "ASDF") {
+    } else if (pathID == "ASDF") {
         switch (std::stoi(subValues.at(closestPoint)[5])) {
             case 0: targetVel *= 2; break;
             case 1: targetVel *= 2; break;
@@ -369,7 +348,7 @@ void doMultipliers(int segment, float& targetVel, std::string pathID) {
             case 12: targetVel *= 2; break;
             case 13: targetVel *= 2; break;
         }
-    } else if(pathID == "skills") {
+    } else if (pathID == "skills") {
         switch (std::stoi(subValues.at(closestPoint)[5])) {
             case 0: targetVel *= 1; break;
             case 1: targetVel *= 1; break;
@@ -437,14 +416,13 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pa
     Pose lastLookahead = pathPoints.at(0);
 
     while (true) {
-
         // interrupt();
 
         // initialize debug dataline
-        std::string dataLine = ""; 
+        std::string dataLine = "";
 
         // get the current position of the robot
-        pose = this->getPose(true); 
+        pose = this->getPose(true);
         closestPoint = findClosest(pose, closestPoint); // find closest point
 
         // debug a new tick
@@ -469,7 +447,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pa
 
         // exclusions
         bool skip = doExclusions(dataLine);
-        if(skip) {continue;}
+        if (skip) { continue; }
 
         // debug non-exclusion-relevant information
         dataLine.append("current x: " + std::to_string(pose.x) + "\n");
@@ -512,8 +490,10 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pa
         }
 
         // write velocities
-        dataLine.append("current velocities: " + std::to_string(leftMotors.get_voltage()) + " " + std::to_string(rightMotors.get_voltage()) + "\n");
-        dataLine.append("target vels: " + std::to_string(targetLeftVel) + " " + std::to_string(targetRightVel) + "\n\n");
+        dataLine.append("current velocities: " + std::to_string(leftMotors.get_voltage()) + " " +
+                        std::to_string(rightMotors.get_voltage()) + "\n");
+        dataLine.append("target vels: " + std::to_string(targetLeftVel) + " " + std::to_string(targetRightVel) +
+                        "\n\n");
 
         // send velocity
         leftMotors.move_voltage(targetLeftVel);

@@ -19,3 +19,5 @@ extern lemlib::ExpoDriveCurve steerCurve;
 extern lemlib::Chassis chassis;
 
 void screenTask();
+
+void filterAuton();
