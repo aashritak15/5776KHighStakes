@@ -455,7 +455,7 @@ std::vector<std::vector<std::string>> readExtraFile(const std::string& filename)
 
 // write the vector of strings into a file
 void writeFileExtra(const std::string& filename, const std::vector<std::vector<std::string>>& data) {
-    std::ofstream file(filename);
+    std::ofstream file(filename, std::ios::out | std::ios::trunc);
     for (const auto& row : data) {
         std::string line = "";
         for (size_t i = 0; i < row.size(); i++) {
@@ -469,7 +469,7 @@ void writeFileExtra(const std::string& filename, const std::vector<std::vector<s
 }
 
 void writeFileAuton(const std::string& filename, const std::vector<std::string>& data) {
-    std::ofstream file(filename);
+    std::ofstream file(filename, std::ios::out | std::ios::trunc);
     for (const auto& row : data) {
         std::string line = "";
         for (size_t i = 0; i < row.size(); i++) {

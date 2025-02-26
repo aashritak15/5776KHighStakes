@@ -228,8 +228,8 @@ void updateSubsys() {
     clampState = std::stoi(subValues.at(closestPoint)[1]);
     globalTarget = std::stod(subValues.at(closestPoint)[2]);
     doinkRightState = std::stoi(subValues.at(closestPoint)[3]);
-    doinkLeftState = std::stoi(subValues.at(closestPoint)[4]);
-    intakePistonState = std::stoi(subValues.at(closestPoint)[5]);
+    intakePistonState = std::stoi(subValues.at(closestPoint)[4]);
+    doinkLeftState = std::stoi(subValues.at(closestPoint)[5]);
 
     // add left doinker in magic and here
 }
@@ -268,6 +268,8 @@ bool doExclusions(std::string& dataLine) {
             closestPoint++;
         }
 
+        closestPoint++; //TODO: does this improve accuracy?
+
         dataLine.append("turn target index: " + std::to_string(closestPoint) + "\n");
 
         dataLine.append("target theta: " + std::to_string(pathPoints.at(closestPoint).theta) + "\n");
@@ -285,6 +287,8 @@ bool doExclusions(std::string& dataLine) {
                                   {.direction = AngularDirection::CCW_COUNTERCLOCKWISE, .maxSpeed = 80}, false);
             dataLine.append("ending theta: " + std::to_string(chassis.getPose().theta) + "\n");
         }
+
+        closestPoint--;
 
         fileOThree << dataLine;
         fileOThree.flush();
