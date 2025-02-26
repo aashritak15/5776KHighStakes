@@ -179,8 +179,8 @@ lemlib::Pose lookaheadPoint(lemlib::Pose lastLookahead, lemlib::Pose pose, int c
         lemlib::Pose lastPathPose = pathPoints.at(i);
         lemlib::Pose currentPathPose = pathPoints.at(i + 1);
 
-        if (subValues.at(i)[4] == "STOPPED" || subValues.at(i)[4] == "TURNING CW" ||
-            subValues.at(i)[4] == "TURNING CCW") { // TODO: does this make sense
+        if (subValues.at(i)[6] == "STOPPED" || subValues.at(i)[6] == "TURNING CW" ||
+            subValues.at(i)[6] == "TURNING CCW") { // TODO: does this make sense
             return pathPoints.at(i);
         }
 
@@ -228,14 +228,15 @@ void updateSubsys() {
     clampState = std::stoi(subValues.at(closestPoint)[1]);
     globalTarget = std::stod(subValues.at(closestPoint)[2]);
     doinkRightState = std::stoi(subValues.at(closestPoint)[3]);
-    doinkLeftState = std::stoi(subValues.at(closestPoint)[6]);
+    doinkLeftState = std::stoi(subValues.at(closestPoint)[4]);
+    intakePistonState = std::stoi(subValues.at(closestPoint)[5]);
 
     // add left doinker in magic and here
 }
 
 bool doExclusions(std::string& dataLine) {
     // check for exclusions
-    if (subValues.at(closestPoint)[4] == "STOPPED") {
+    if (subValues.at(closestPoint)[6] == "STOPPED") {
         drivetrain.leftMotors->move(0);
         drivetrain.rightMotors->move(0);
         ladyBrown.move(0);
@@ -248,13 +249,13 @@ bool doExclusions(std::string& dataLine) {
         closestPoint++;
         return true;
 
-    } else if (subValues.at(closestPoint)[4] == "TURNING CW" ||
-               subValues.at(closestPoint)[4] == "TURNING CCW") { //*turn exclusion
+    } else if (subValues.at(closestPoint)[6] == "TURNING CW" ||
+               subValues.at(closestPoint)[6] == "TURNING CCW") { //*turn exclusion
         leftMotors.move(0);
         rightMotors.move(0);
         ladyBrown.move(0);
 
-        if (subValues.at(closestPoint)[4] == "TURNING CW") {
+        if (subValues.at(closestPoint)[6] == "TURNING CW") {
             dataLine.append("TURN CLOCKWISE\n");
         } else {
             dataLine.append("TURN COUNTERCLOCKWISE\n");
@@ -263,7 +264,7 @@ bool doExclusions(std::string& dataLine) {
         int prevClosestPoint = closestPoint;
 
         closestPoint++; //*advance index forward one to begin the check
-        while (subValues.at(closestPoint)[4] == "TURNING CW" || subValues.at(closestPoint)[4] == "TURNING CCW") {
+        while (subValues.at(closestPoint)[6] == "TURNING CW" || subValues.at(closestPoint)[6] == "TURNING CCW") {
             closestPoint++;
         }
 
@@ -271,7 +272,7 @@ bool doExclusions(std::string& dataLine) {
 
         dataLine.append("target theta: " + std::to_string(pathPoints.at(closestPoint).theta) + "\n");
 
-        if (subValues.at(prevClosestPoint)[4] == "TURNING CW") {
+        if (subValues.at(prevClosestPoint)[6] == "TURNING CW") {
             dataLine.append("beginning theta: " + std::to_string(chassis.getPose().theta) + "\n");
             chassis.turnToHeading(pathPoints.at(closestPoint).theta, 2500,
                                   {.direction = AngularDirection::CW_CLOCKWISE, .maxSpeed = 80},
@@ -295,7 +296,7 @@ bool doExclusions(std::string& dataLine) {
 
 void doMultipliers(int segment, float& targetVel, std::string pathID) {
     if (pathID == "red mogo alliance" || pathID == "blue mogo alliance") {
-        switch (std::stoi(subValues.at(closestPoint)[5])) {
+        switch (std::stoi(subValues.at(closestPoint)[7])) {
             case 0: targetVel *= 2; break;
             case 1: targetVel *= 2; break;
             case 2: targetVel *= 2; break;
@@ -305,7 +306,7 @@ void doMultipliers(int segment, float& targetVel, std::string pathID) {
             case 6: targetVel *= 2; break;
         }
     } else if (pathID == "red regional AWP" || pathID == "blue regional AWP") {
-        switch (std::stoi(subValues.at(closestPoint)[5])) {
+        switch (std::stoi(subValues.at(closestPoint)[7])) {
             case 0: targetVel *= 2; break;
             case 1: targetVel *= 2; break;
             case 2: targetVel *= 2; break;
@@ -315,7 +316,7 @@ void doMultipliers(int segment, float& targetVel, std::string pathID) {
             case 6: targetVel *= 2; break;
         }
     } else if (pathID == "ASDF") {
-        switch (std::stoi(subValues.at(closestPoint)[5])) {
+        switch (std::stoi(subValues.at(closestPoint)[7])) {
             case 0: targetVel *= 2; break;
             case 1: targetVel *= 2; break;
             case 2: targetVel *= 2; break;
@@ -331,18 +332,18 @@ void doMultipliers(int segment, float& targetVel, std::string pathID) {
             case 12: targetVel *= 2; break;
             case 13: targetVel *= 2; break;
         }
-    } else if (pathID == "skills") {
-        switch (std::stoi(subValues.at(closestPoint)[5])) {
-            case 0: targetVel *= 1; break;
-            case 1: targetVel *= 1; break;
-            case 2: targetVel *= 1; break;
-            case 3: targetVel *= 1; break;
-            case 4: targetVel *= 1; break;
-            case 5: targetVel *= 1; break;
-            case 6: targetVel *= 1; break;
+    } else if (pathID == "red solo wp") {
+        switch (std::stoi(subValues.at(closestPoint)[7])) {
+            case 0: targetVel *= 2; break;
+            case 1: targetVel *= 2; break;
+            case 2: targetVel *= 2; break;
+            case 3: targetVel *= 2; break;
+            case 4: targetVel *= 2; break;
+            case 5: targetVel *= 2; break;
+            case 6: targetVel *= 2; break;
             case 7: targetVel *= 1; break;
-            case 8: targetVel *= 1; break;
-            case 9: targetVel *= 1; break;
+            case 8: targetVel *= 2; break;
+            case 9: targetVel *= 2; break;
             case 10: targetVel *= 1; break;
             case 11: targetVel *= 1; break;
             case 12: targetVel *= 1; break;
@@ -375,11 +376,11 @@ float findLookaheadCurvature(std::string& dataLine, lemlib::Pose lastLookahead, 
 }
 
 void interrupt() {
-    if (std::stoi(subValues.at(closestPoint)[5]) == 1) { // interrupt check (by segment)
+    if (std::stoi(subValues.at(closestPoint)[7]) == 1) { // interrupt check (by segment)
         drivetrain.leftMotors->move(0);
         drivetrain.rightMotors->move(0);
 
-        initInterrupt(stoi(subValues.at(closestPoint)[5]), closestPoint);
+        initInterrupt(stoi(subValues.at(closestPoint)[7]), closestPoint);
 
         opcontrol();
 
@@ -388,6 +389,7 @@ void interrupt() {
 }
 
 void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pathID) {
+    std::cout<<"following\n";
     chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
 
     pathPoints = getData(path); // get list of path points
@@ -399,6 +401,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pa
     Pose lastLookahead = pathPoints.at(0);
 
     while (true) {
+        std::cout<<"looping\n";
         // interrupt();
 
         // initialize debug dataline
@@ -413,7 +416,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pa
         dataLine.append("target index: " + std::to_string(closestPoint) + "\n");
 
         // path termination check
-        if (subValues.at(closestPoint)[5] == "-1") {
+        if (subValues.at(closestPoint)[7] == "-1") {
             drivetrain.leftMotors->move(0);
             drivetrain.rightMotors->move(0);
             dataLine.append("PATH FINISHED");
@@ -445,7 +448,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pa
         dataLine.append("target vel: " + std::to_string(targetVel) + "\n"); // write target vel
 
         // apply rerun multipliers
-        doMultipliers(std::stoi(subValues.at(closestPoint)[5]), targetVel, pathID);
+        doMultipliers(std::stoi(subValues.at(closestPoint)[7]), targetVel, pathID);
 
         // do all pure pursuit calculations
         float curvature = findLookaheadCurvature(dataLine, lastLookahead, pose);

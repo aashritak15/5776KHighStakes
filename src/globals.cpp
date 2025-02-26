@@ -77,6 +77,7 @@ ASSET(skillsPath_txt);
 ASSET(skillsExtra_txt);
 
 ASSET(autonomous_txt);
+ASSET(extra_txt);
 
 void filterAuton() {
     std::string extraFile = "/usd/extra.txt";

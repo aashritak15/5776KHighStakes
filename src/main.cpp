@@ -39,8 +39,9 @@ void initialize() {
     clampInit();
     intakeInit();
     ladyBrownInit();
+    controller.set_text(0,0,"initialized");
 
-    pros::Task screenTaskActual(screenTask, "screen task");
+   // pros::Task screenTaskActual(screenTask, "screen task");
 }
 
 // Runs while the robot is disabled
@@ -49,20 +50,21 @@ void disabled() {}
 // Runs after initialize if the robot is connected to field control
 void competition_initialize() {} // selector.focus(); }}
 
-ASSET(autonomous_txt);
-ASSET(extra_txt);
+ASSET(redwpPath_txt);
+ASSET(redwpExtra_txt);
 
 void autonomous() {
     // selector.run_auton();
     initDebug();
-    chassis.follow(autonomous_txt, extra_txt, "skills");
-
-    // chassis.follow(blueMogoAlliancePath_txt, redMogoAllianceExtra_txt, "blue mogo alliance");
-
     // chassis.calibrate();
     // chassis.setPose(0, 0, 0);
     // chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
-    // // TODO: COMMENTED OUT BC TESTING IN INITIALIZE
+   // // TODO: COMMENTED OUT BC TESTING IN INITIALIZE
+   
+   std::cout<<"running auton\n";
+    chassis.follow(redwpPath_txt, redwpExtra_txt, "red solo wp");
+
+    // chassis.follow(blueMogoAlliancePath_txt, redMogoAllianceExtra_txt, "blue mogo alliance");
 
     // blueRing();
     // blueMogo();
@@ -138,9 +140,9 @@ void autonomous() {
 
 void opcontrol() {
     // selector.focus();
-    // rerunControl();
+    rerunControl();
 
     // printCoords();
 
-    matchControl();
+    //matchControl();
 }

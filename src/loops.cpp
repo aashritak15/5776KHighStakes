@@ -14,13 +14,14 @@ void matchControl() {
         updateClamp();
         updateDoinkRight();
         updateDoinkLeft();
+        updateIntakePiston();
         // updateLB();
 
         pros::delay(10);
     }
 }
 
-void rerunControl() {
+void rerunControl() {    
     initO();
 
     chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
@@ -38,6 +39,7 @@ void rerunControl() {
         updateClamp();
         updateDoinkRight();
         updateDoinkLeft();
+        updateIntakePiston();
         updateLB();
 
         if (count == 5) { //*data written every 0.1 seconds

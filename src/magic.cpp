@@ -97,7 +97,7 @@ void initDebug() {
 
 void closeO() {
     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
-        std::string dataLine = "0, 0, 0.000000, 0, STOPPED, -1, 0\nendData";
+        std::string dataLine = "0, 0, 0.000000, 0, 0, 0, STOPPED, -1\nendData";
         fileOTwo << dataLine;
 
         std::string dataLine2;
@@ -115,10 +115,10 @@ void closeO() {
         controller.set_text(0, 0, "wait                          ");
         pros::delay(2500);
 
-        if (fileO.is_open() && fileOTwo.is_open()) {
-            fileO << dataLine;
-            fileOTwo << dataLine;
-        }
+        // if (fileO.is_open() && fileOTwo.is_open()) {
+        //     fileO << dataLine;
+        //     fileOTwo << dataLine;
+        // }
 
         if (fileO.is_open()) fileO.close();
         if (fileOTwo.is_open()) fileOTwo.close();
@@ -147,7 +147,7 @@ void closeO() {
 
 void closeOInterrupt() {
     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
-        std::string dataLine = "0, 0, 0.000000, 0, STOPPED, -1\nendData";
+        std::string dataLine = "0, 0, 0.000000, 0, 0, 0, STOPPED, -1\nendData";
         fileInterruptTwo << dataLine;
 
         dataLine = "";
@@ -213,14 +213,17 @@ void writeAdditional() {
         buttonPressed = false;
     }
 
-    dataLine.append(std::to_string(intakeState) + ", ");
-    dataLine.append(std::to_string(clampState) + ", ");
-    dataLine.append(std::to_string(globalTarget) + ", ");
-    dataLine.append(std::to_string(doinkRightState) + ", ");
+    dataLine.append(std::to_string(intakeState) + ", "); //0
+    dataLine.append(std::to_string(clampState) + ", "); //1
+    dataLine.append(std::to_string(globalTarget) + ", "); //2
+    dataLine.append(std::to_string(doinkRightState) + ", "); //3
+    dataLine.append(std::to_string(intakePistonState) + ", "); //4
+    dataLine.append(std::to_string(doinkLeftState) + ", "); //5
 
     if (std::abs(total) < 600) { // TODO: tune stop bound
 
-        if (std::abs(right) > 800 && std::abs(left) > 800) {
+        //change this condition - doesn't always accurately mark turns (doesnt end turn when it should)
+        if (std::abs(right) > 800 && std::abs(left) > 800) { 
             if (right < 0) {
                 dataLine.append("TURNING CW, ");
             } else if (right > 0) {
@@ -238,9 +241,7 @@ void writeAdditional() {
         dataLine.append("GOING, ");
     }
 
-    dataLine.append(std::to_string(section) + ", ");
-
-    dataLine.append(std::to_string(doinkLeftState) + "\n");
+    dataLine.append(std::to_string(section)+"\n");
 
     fileOTwo << dataLine;
 }
@@ -285,7 +286,8 @@ void writeInterruptAdditional() {
     dataLine.append(std::to_string(clampState) + ", ");
     dataLine.append(std::to_string(globalTarget) + ", ");
     dataLine.append(std::to_string(doinkRightState) + ", ");
-    // add doink left and intake piston
+    dataLine.append(std::to_string(doinkLeftState) + ", ");
+    dataLine.append(std::to_string(intakePistonState)+"\n");    
 
     if (std::abs(total) < 600) { // TODO: tune stop bound
 
@@ -483,6 +485,7 @@ void writeFileAuton(const std::string& filename, const std::vector<std::string>&
 // filters stuff
 
 void removeIsolatedTurns(std::vector<std::vector<std::string>>& extra, std::vector<std::string>& autonomous) {
+    controller.set_text(0,0,"removing isolated turns");
     std::vector<std::vector<std::string>> cleaned_extra;
     std::vector<std::string> cleaned_autonomous;
     for (size_t i = 0; i < extra.size(); i++) {
@@ -496,9 +499,11 @@ void removeIsolatedTurns(std::vector<std::vector<std::string>>& extra, std::vect
     }
     extra = cleaned_extra;
     autonomous = cleaned_autonomous;
+    controller.set_text(0,0,"done removing isolated turns");
 }
 
 void stoppedSequences(std::vector<std::vector<std::string>>& extra, std::vector<std::string>& autonomous) {
+    controller.set_text(0,0,"removing stopped sequences");
     std::vector<std::vector<std::string>> cleaned_extra;
     std::vector<std::string> cleaned_autonomous;
     int stop_count = 0;
@@ -514,11 +519,13 @@ void stoppedSequences(std::vector<std::vector<std::string>>& extra, std::vector<
     }
     extra = cleaned_extra;
     autonomous = cleaned_autonomous;
+    controller.set_text(0,0,"done removing stopped sequences");
 }
 
 // remove isolated stops
 
 void removeIsolatedStopped(std::vector<std::vector<std::string>>& extra, std::vector<std::string>& autonomous) {
+    controller.set_text(0,0,"removing isolated stops");
     std::vector<std::vector<std::string>> cleaned_extra;
     std::vector<std::string> cleaned_autonomous;
     for (size_t i = 0; i < extra.size(); i++) {
@@ -531,9 +538,11 @@ void removeIsolatedStopped(std::vector<std::vector<std::string>>& extra, std::ve
     }
     extra = cleaned_extra;
     autonomous = cleaned_autonomous;
+    controller.set_text(0,0,"done removing isolated stops");
 }
 
 void optimizeTurns(std::vector<std::vector<std::string>>& extra, std::vector<std::string>& autonomous) {
+    controller.set_text(0,0,"optimizing turns");
     std::vector<std::vector<std::string>> cleaned_extra;
     std::vector<std::string> cleaned_autonomous;
     size_t i = 0;
@@ -554,6 +563,7 @@ void optimizeTurns(std::vector<std::vector<std::string>>& extra, std::vector<std
     }
     extra = cleaned_extra;
     autonomous = cleaned_autonomous;
+    controller.set_text(0,0,"done optimizing turns");
 }
 
 

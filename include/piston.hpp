@@ -13,11 +13,13 @@ void updateClamp();
 void clampInit();
 void updateDoinkRight();
 void updateDoinkLeft();
+void updateIntakePiston();
 void doinkInit();
 void runPistons();
 
 extern int clampState;
 extern int doinkRightState;
 extern int doinkLeftState;
+extern int intakePistonState;
 
 #endif

@@ -12,10 +12,12 @@ void clampInit() {
 int clampState = 0;
 int doinkRightState = 0;
 int doinkLeftState = 0;
+int intakePistonState = 0;
 
 bool buttonYPressed = false;
 bool buttonBPressed = false;
 bool buttonXPressed = false;
+bool buttonLeftPressed = false;
 
 void updateClamp() {
     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_Y)) {
@@ -62,6 +64,21 @@ void updateDoinkLeft() {
     }
 }
 
+void updateIntakePiston() {
+    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT)) {
+        if (!buttonLeftPressed) {
+            buttonLeftPressed = true;
+            if(intakePistonState == 0) {
+                intakePistonState = 1;
+            } else {
+                intakePistonState = 0;
+            }
+        }
+    } else {
+        buttonLeftPressed = false;
+    }
+}
+
 void runPistons() {
     while(true) {
         if (clampState == 1) {
@@ -80,6 +97,12 @@ void runPistons() {
             doinkLeft.set_value(true);
         } else {
             doinkLeft.set_value(false);
+        }
+
+        if(intakePistonState == 1) {
+            intakePiston.set_value(true);
+        } else {
+            intakePiston.set_value(false);
         }
     }
 

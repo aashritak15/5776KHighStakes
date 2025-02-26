@@ -19,6 +19,7 @@ void printCoords() {
 
 void screenTask() {
     while (true) {
+        std::cout<<chassis.getPose().x<<", "<<chassis.getPose().y<<", "<<chassis.getPose().theta<<"\n";
         //* line 7 reserved for rerun states.
         pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
         pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y

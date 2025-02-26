@@ -23,7 +23,7 @@ void updateLB() {
     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) { //*ZERO
         globalTarget = 0;
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) { //*LOAD
-        globalTarget = 31;
+        globalTarget = 21.5;
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) { //*FULLSCORE
         globalTarget = 156;
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) { //*STRAIGHT UP
@@ -38,7 +38,7 @@ void updateLBTask() {
         if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) { //*ZERO
             globalTarget = 0;
         } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) { //*LOAD
-            globalTarget = 31;
+            globalTarget = 21.5;
         } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) { //*FULLSCORE
             globalTarget = 156;
             prevIntakeState = intakeState;
@@ -52,7 +52,7 @@ void updateLBTask() {
             pros::delay(200);
             intakeState = prevIntakeState;
         }
-
+        std::cout<<lbRotation.get_position() / 100.0<<"\n";
         pros::delay(10);
     }
 }
