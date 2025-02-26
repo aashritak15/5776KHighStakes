@@ -76,23 +76,26 @@ ASSET(blueMogoAlliancePath_txt);
 ASSET(skillsPath_txt);
 ASSET(skillsExtra_txt);
 
-// void filterAuton() {
-//     std::string extraFile = "/usd/extra.txt";
-//     std::string autonomousFile = "/usd/autonomous.txt";
+ASSET(autonomous_txt);
 
-//     std::vector<std::vector<std::string>> extra = getSubData1(extraFile);
-//     std::vector<std::vector<std::string>> autonomous = readFile()
+void filterAuton() {
+    std::string extraFile = "/usd/extra.txt";
+    std::string autonomousFile = "/usd/autonomous.txt";
 
-//         // removeIsolatedTurns(extra, autonomous);
-//         stoppedSequences(extra, autonomous);
-//     // removeIsolatedStopped(extra, autonomous);
-//     // optimizeTurns(extra, autonomous);
+    std::vector<std::string> autonomous = readAutonFile(autonomousFile);
+    std::vector<std::vector<std::string>> extra = readExtraFile(extraFile);
 
-//     writeFile(extraFile, extra);
-//     writeFile(autonomousFile, autonomous);
 
-//     controller.set_text(0, 0, "filter function ran");
-// }
+    removeIsolatedTurns(extra, autonomous);
+    stoppedSequences(extra, autonomous);
+    removeIsolatedStopped(extra, autonomous);
+    optimizeTurns(extra, autonomous);
+
+    writeFileExtra(extraFile, extra);
+    writeFileAuton(autonomousFile, autonomous);
+
+    controller.set_text(0, 0, "filter function ran");
+}
 
 // void autonSelector() {
 //     while (!colorSelected) {

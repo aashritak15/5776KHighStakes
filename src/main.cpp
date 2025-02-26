@@ -138,9 +138,9 @@ void autonomous() {
 
 void opcontrol() {
     // selector.focus();
-    rerunControl();
+    // rerunControl();
 
     // printCoords();
 
-    // matchControl();
+    matchControl();
 }

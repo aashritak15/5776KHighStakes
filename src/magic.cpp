@@ -123,23 +123,25 @@ void closeO() {
         if (fileO.is_open()) fileO.close();
         if (fileOTwo.is_open()) fileOTwo.close();
 
-        // pros::delay(100);
+        //TODO: all past here is filtering!
 
-        // active = false;
+        pros::delay(100);
 
-        // controller.set_text(0, 0, "file closed");
+        active = false;
 
-        // pros::delay(1000);
+        controller.set_text(0, 0, "file closed");
 
-        // controller.set_text(0, 0, "running filters");
+        pros::delay(1000);
 
-        // pros::delay(1000);
+        controller.set_text(0, 0, "running filters");
 
-        // // filterAuton();
+        pros::delay(1000);
 
-        // pros::delay(1000);
+        filterAuton();
 
-        // controller.set_text(0, 0, "filters cleaned");
+        pros::delay(1000);
+
+        controller.set_text(0, 0, "filters cleaned");
     }
 }
 
@@ -426,6 +428,135 @@ std::vector<std::string> readElementMagic(const std::string& input, const std::s
     return output;
 }
 
+// general read/write fns
+
+std::vector<std::string> readAutonFile(const std::string& filename) {
+    std::ifstream file(filename);
+    std::vector<std::string> lines;
+    std::string line;
+    while (std::getline(file, line)) { lines.push_back(line); }
+    file.close();
+    return lines;
+}
+
+std::vector<std::vector<std::string>> readExtraFile(const std::string& filename) {
+    std::ifstream file(filename);
+    std::vector<std::vector<std::string>> lines;
+    std::string line;
+    while (std::getline(file, line)) {
+        std::vector<std::string> pointInput = readElementMagic(line, ", ");
+        lines.push_back(pointInput);
+    }
+    file.close();
+    return lines;
+}
+
+// write the vector of strings into a file
+void writeFileExtra(const std::string& filename, const std::vector<std::vector<std::string>>& data) {
+    std::ofstream file(filename);
+    for (const auto& row : data) {
+        std::string line = "";
+        for (size_t i = 0; i < row.size(); i++) {
+            line += row[i];
+            if (i < row.size() - 1) line += ", ";
+        }
+        file << line << "\n";
+    }
+
+    file.close();
+}
+
+void writeFileAuton(const std::string& filename, const std::vector<std::string>& data) {
+    std::ofstream file(filename);
+    for (const auto& row : data) {
+        std::string line = "";
+        for (size_t i = 0; i < row.size(); i++) {
+            line += row[i];
+            if (i < row.size() - 1) line += ", ";
+        }
+        file << line << "\n";
+    }
+
+    file.close();
+}
+
+// filters stuff
+
+void removeIsolatedTurns(std::vector<std::vector<std::string>>& extra, std::vector<std::string>& autonomous) {
+    std::vector<std::vector<std::string>> cleaned_extra;
+    std::vector<std::string> cleaned_autonomous;
+    for (size_t i = 0; i < extra.size(); i++) {
+        if ((extra[i][4] == "TURNING CW," || extra[i][4] == "TURNING CCW,") &&
+            ((i == 0 || (extra[i - 1][4] != "TURNING CW," && extra[i - 1][4] != "TURNING CCW,")) &&
+             (i == extra.size() - 1 || (extra[i + 1][4] != "TURNING CW," && extra[i + 1][4] != "TURNING CCW,")))) {
+            continue;
+        }
+        cleaned_extra.push_back(extra[i]);
+        cleaned_autonomous.push_back(autonomous[i]);
+    }
+    extra = cleaned_extra;
+    autonomous = cleaned_autonomous;
+}
+
+void stoppedSequences(std::vector<std::vector<std::string>>& extra, std::vector<std::string>& autonomous) {
+    std::vector<std::vector<std::string>> cleaned_extra;
+    std::vector<std::string> cleaned_autonomous;
+    int stop_count = 0;
+    for (size_t i = 0; i < extra.size(); i++) {
+        if (extra[i][4].find("STOPPED") != std::string::npos) {
+            stop_count++;
+            if (stop_count > 20) continue; // maximum of 20
+        } else {
+            stop_count = 0;
+        }
+        cleaned_extra.push_back(extra[i]);
+        cleaned_autonomous.push_back(autonomous[i]);
+    }
+    extra = cleaned_extra;
+    autonomous = cleaned_autonomous;
+}
+
+// remove isolated stops
+
+void removeIsolatedStopped(std::vector<std::vector<std::string>>& extra, std::vector<std::string>& autonomous) {
+    std::vector<std::vector<std::string>> cleaned_extra;
+    std::vector<std::string> cleaned_autonomous;
+    for (size_t i = 0; i < extra.size(); i++) {
+        if (extra[i][4] == "STOPPED," &&
+            ((i == 0 || extra[i - 1][4] != "STOPPED,") && (i == extra.size() - 1 || extra[i + 1][4] != "STOPPED,"))) {
+            continue;
+        }
+        cleaned_extra.push_back(extra[i]);
+        cleaned_autonomous.push_back(autonomous[i]);
+    }
+    extra = cleaned_extra;
+    autonomous = cleaned_autonomous;
+}
+
+void optimizeTurns(std::vector<std::vector<std::string>>& extra, std::vector<std::string>& autonomous) {
+    std::vector<std::vector<std::string>> cleaned_extra;
+    std::vector<std::string> cleaned_autonomous;
+    size_t i = 0;
+    while (i < extra.size()) {
+        if (extra[i][4] == "TURNING CW," || extra[i][4] == "TURNING CCW,") {
+            size_t start = i;
+            while (i < extra.size() && (extra[i][4] == "TURNING CW," || extra[i][4] == "TURNING CCW,")) { i++; }
+            size_t end = i - 1;
+            cleaned_extra.push_back(extra[start]); // Keep first turn
+            cleaned_extra.push_back(extra[end]); // Keep last turn
+            cleaned_autonomous.push_back(autonomous[start]);
+            cleaned_autonomous.push_back(autonomous[end]);
+        } else {
+            cleaned_extra.push_back(extra[i]);
+            cleaned_autonomous.push_back(autonomous[i]);
+        }
+        i++;
+    }
+    extra = cleaned_extra;
+    autonomous = cleaned_autonomous;
+}
+
+
 std::vector<lemlib::Pose> getData(const asset& path) {
     std::vector<lemlib::Pose> robotPath;
     // format data from the asset
@@ -463,131 +594,6 @@ std::vector<std::vector<std::string>> getSubData(const asset& sub) {
     }
 
     return pointInput;
-}
-
-std::vector<std::vector<std::string>> getSubDataString(std::string fileID) {
-    // format data from the asset
-    std::ifstream input;
-    input.open(fileID);
-    const std::string data;
-
-    std::string tempData;
-
-    std::vector<std::string> dataLines;
-
-    while(std::getline(input, tempData)) {
-        dataLines.push_back(tempData);
-        tempData.clear();
-    }
-
-    std::vector<std::vector<std::string>> pointInput;
-
-    // read the points until 'endData' is read
-    for (std::string line : dataLines) {
-        if (line == "endData" || line == "endData\r") break;
-        const std::vector<std::string> temp = readElementMagic(line, ", ");
-        pointInput.push_back(temp); // parse line
-    }
-
-    return pointInput;
-}
-
-// general read/write fns
-
-std::vector<std::string> readFile(const std::string& filename) {
-    std::ifstream file(filename);
-    std::vector<std::string> lines;
-    std::string line;
-    while (std::getline(file, line)) { lines.push_back(line); }
-    file.close();
-    return lines;
-}
-
-// write the vector of strings into a file
-void writeFile(const std::string& filename, const std::vector<std::vector<std::string>>& data) {
-    std::ofstream file(filename);
-    for (const auto& row : data) {
-        std::string line = "";
-        for (size_t i = 0; i < row.size(); i++) {
-            line += row[i];
-            if (i < row.size() - 1) line += ", ";
-        }
-        file << line << "\n";
-    }
-
-    file.close();
-}
-
-// filters stuff
-
-void removeIsolatedTurns(std::vector<std::string>& extra, std::vector<std::string>& autonomous) {
-    std::vector<std::string> cleaned_extra, cleaned_autonomous;
-    for (size_t i = 0; i < extra.size(); i++) {
-        if ((extra[i] == "TURNING CW," || extra[i] == "TURNING CCW,") &&
-            ((i == 0 || (extra[i - 1] != "TURNING CW," && extra[i - 1] != "TURNING CCW,")) &&
-             (i == extra.size() - 1 || (extra[i + 1] != "TURNING CW," && extra[i + 1] != "TURNING CCW,")))) {
-            continue;
-        }
-        cleaned_extra.push_back(extra[i]);
-        cleaned_autonomous.push_back(autonomous[i]);
-    }
-    extra = cleaned_extra;
-    autonomous = cleaned_autonomous;
-}
-
-void stoppedSequences(std::vector<std::vector<std::string>>& extra, std::vector<std::vector<std::string>>& autonomous) {
-    std::vector<std::vector<std::string>> cleaned_extra, cleaned_autonomous;
-    int stop_count = 0;
-    for (size_t i = 0; i < extra.size(); i++) {
-        if (extra[i][4].find("STOPPED") != std::string::npos) {
-            stop_count++;
-            if (stop_count > 20) continue; // maximum of 20
-        } else {
-            stop_count = 0;
-        }
-        cleaned_extra.push_back(extra[i]);
-        cleaned_autonomous.push_back(autonomous[i]);
-    }
-    extra = cleaned_extra;
-    autonomous = cleaned_autonomous;
-}
-
-// remove isolated stops
-
-void removeIsolatedStopped(std::vector<std::string>& extra, std::vector<std::string>& autonomous) {
-    std::vector<std::string> cleaned_extra, cleaned_autonomous;
-    for (size_t i = 0; i < extra.size(); i++) {
-        if (extra[i] == "STOPPED," &&
-            ((i == 0 || extra[i - 1] != "STOPPED,") && (i == extra.size() - 1 || extra[i + 1] != "STOPPED,"))) {
-            continue;
-        }
-        cleaned_extra.push_back(extra[i]);
-        cleaned_autonomous.push_back(autonomous[i]);
-    }
-    extra = cleaned_extra;
-    autonomous = cleaned_autonomous;
-}
-
-void optimizeTurns(std::vector<std::string>& extra, std::vector<std::string>& autonomous) {
-    std::vector<std::string> cleaned_extra, cleaned_autonomous;
-    size_t i = 0;
-    while (i < extra.size()) {
-        if (extra[i] == "TURNING CW," || extra[i] == "TURNING CCW,") {
-            size_t start = i;
-            while (i < extra.size() && (extra[i] == "TURNING CW," || extra[i] == "TURNING CCW,")) { i++; }
-            size_t end = i - 1;
-            cleaned_extra.push_back(extra[start]); // Keep first turn
-            cleaned_extra.push_back(extra[end]); // Keep last turn
-            cleaned_autonomous.push_back(autonomous[start]);
-            cleaned_autonomous.push_back(autonomous[end]);
-        } else {
-            cleaned_extra.push_back(extra[i]);
-            cleaned_autonomous.push_back(autonomous[i]);
-        }
-        i++;
-    }
-    extra = cleaned_extra;
-    autonomous = cleaned_autonomous;
 }
 
 // TODO: add read/write stuff

@@ -14,7 +14,7 @@ void matchControl() {
         updateClamp();
         updateDoinkRight();
         updateDoinkLeft();
-        updateLB();
+        // updateLB();
 
         pros::delay(10);
     }
