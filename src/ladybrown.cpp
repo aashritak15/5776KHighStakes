@@ -43,13 +43,13 @@ void updateLBTask() {
             globalTarget = 156;
             prevIntakeState = intakeState;
             intakeState = 2;
-            pros::delay(100);
+            pros::delay(200);
             intakeState = prevIntakeState;
         } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) { //*STRAIGHT UP
             globalTarget = 102.32;
             prevIntakeState = intakeState;
             intakeState = 2;
-            pros::delay(100);
+            pros::delay(200);
             intakeState = prevIntakeState;
         }
 

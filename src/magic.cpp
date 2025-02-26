@@ -465,6 +465,33 @@ std::vector<std::vector<std::string>> getSubData(const asset& sub) {
     return pointInput;
 }
 
+std::vector<std::vector<std::string>> getSubDataString(std::string fileID) {
+    // format data from the asset
+    std::ifstream input;
+    input.open(fileID);
+    const std::string data;
+
+    std::string tempData;
+
+    std::vector<std::string> dataLines;
+
+    while(std::getline(input, tempData)) {
+        dataLines.push_back(tempData);
+        tempData.clear();
+    }
+
+    std::vector<std::vector<std::string>> pointInput;
+
+    // read the points until 'endData' is read
+    for (std::string line : dataLines) {
+        if (line == "endData" || line == "endData\r") break;
+        const std::vector<std::string> temp = readElementMagic(line, ", ");
+        pointInput.push_back(temp); // parse line
+    }
+
+    return pointInput;
+}
+
 // general read/write fns
 
 std::vector<std::string> readFile(const std::string& filename) {
