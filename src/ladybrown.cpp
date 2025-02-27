@@ -25,7 +25,7 @@ void updateLB() {
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) { //*LOAD
         globalTarget = 21.5;
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) { //*FULLSCORE
-        globalTarget = 156;
+        globalTarget = 140;
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) { //*STRAIGHT UP
         globalTarget = 102.32;
     }
@@ -40,7 +40,7 @@ void updateLBTask() {
         } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) { //*LOAD
             globalTarget = 21.5;
         } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) { //*FULLSCORE
-            globalTarget = 156;
+            globalTarget = 140;
             prevIntakeState = intakeState;
             intakeState = 2;
             pros::delay(200);
@@ -67,7 +67,7 @@ void lbTask() {
     double kP = 0.1;
     double kD = 0; // 0.86
 
-    while (true) {
+    while (true) {        
         currentAngle = lbRotation.get_position() / 100.0;
 
         speedError = globalTarget - currentAngle;

@@ -489,7 +489,7 @@ void removeIsolatedTurns(std::vector<std::vector<std::string>>& extra, std::vect
     std::vector<std::vector<std::string>> cleaned_extra;
     std::vector<std::string> cleaned_autonomous;
     for (size_t i = 0; i < extra.size(); i++) {
-        if ((extra[i][4] == "TURNING CW," || extra[i][4] == "TURNING CCW,") &&
+        if ((extra[i][6] == "TURNING CW," || extra[i][6] == "TURNING CCW,") &&
             ((i == 0 || (extra[i - 1][4] != "TURNING CW," && extra[i - 1][4] != "TURNING CCW,")) &&
              (i == extra.size() - 1 || (extra[i + 1][4] != "TURNING CW," && extra[i + 1][4] != "TURNING CCW,")))) {
             continue;
@@ -508,7 +508,7 @@ void stoppedSequences(std::vector<std::vector<std::string>>& extra, std::vector<
     std::vector<std::string> cleaned_autonomous;
     int stop_count = 0;
     for (size_t i = 0; i < extra.size(); i++) {
-        if (extra[i][4].find("STOPPED") != std::string::npos) {
+        if (extra[i][6].find("STOPPED") != std::string::npos) {
             stop_count++;
             if (stop_count > 20) continue; // maximum of 20
         } else {
@@ -529,7 +529,7 @@ void removeIsolatedStopped(std::vector<std::vector<std::string>>& extra, std::ve
     std::vector<std::vector<std::string>> cleaned_extra;
     std::vector<std::string> cleaned_autonomous;
     for (size_t i = 0; i < extra.size(); i++) {
-        if (extra[i][4] == "STOPPED," &&
+        if (extra[i][6] == "STOPPED," &&
             ((i == 0 || extra[i - 1][4] != "STOPPED,") && (i == extra.size() - 1 || extra[i + 1][4] != "STOPPED,"))) {
             continue;
         }
@@ -547,9 +547,9 @@ void optimizeTurns(std::vector<std::vector<std::string>>& extra, std::vector<std
     std::vector<std::string> cleaned_autonomous;
     size_t i = 0;
     while (i < extra.size()) {
-        if (extra[i][4] == "TURNING CW," || extra[i][4] == "TURNING CCW,") {
+        if (extra[i][6] == "TURNING CW," || extra[i][6] == "TURNING CCW,") {
             size_t start = i;
-            while (i < extra.size() && (extra[i][4] == "TURNING CW," || extra[i][4] == "TURNING CCW,")) { i++; }
+            while (i < extra.size() && (extra[i][6] == "TURNING CW," || extra[i][6] == "TURNING CCW,")) { i++; }
             size_t end = i - 1;
             cleaned_extra.push_back(extra[start]); // Keep first turn
             cleaned_extra.push_back(extra[end]); // Keep last turn
