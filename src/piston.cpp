@@ -65,7 +65,7 @@ void updateDoinkLeft() {
 }
 
 void updateIntakePiston() {
-    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT)) {
+    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_UP)) {
         if (!buttonLeftPressed) {
             buttonLeftPressed = true;
             if(intakePistonState == 0) {

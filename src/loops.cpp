@@ -14,7 +14,7 @@ void matchControl() {
         updateClamp();
         updateDoinkRight();
         updateDoinkLeft();
-        updateIntakePiston();
+        //updateIntakePiston();
         // updateLB();
 
         pros::delay(10);
@@ -27,6 +27,7 @@ void rerunControl() {
     chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
 
     int count = 1;
+    sortState = 2;
 
     while (true) {
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
@@ -35,12 +36,12 @@ void rerunControl() {
         chassis.arcade(leftY, rightX);
 
         updateIntake();
-        updateColorSort();
+        //updateColorSort();
         updateClamp();
         updateDoinkRight();
         updateDoinkLeft();
         updateIntakePiston();
-        updateLB();
+        //updateLB();
 
         if (count == 5) { //*data written every 0.1 seconds
             writePose();

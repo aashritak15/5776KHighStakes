@@ -18,6 +18,7 @@ void ladyBrownInit() {
 }
 
 double globalTarget = 0;
+bool comingDown = false;
 
 void updateLB() {
     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) { //*ZERO
@@ -38,21 +39,30 @@ void updateLBTask() {
         if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) { //*ZERO
             globalTarget = 0;
         } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) { //*LOAD
-            globalTarget = 21.5;
+            if(comingDown) { //diff angle for coming down because i think pid less accurate when going from 0 to load
+                globalTarget = 16;
+                pros::delay(200);
+                comingDown = false;
+            } else {
+                globalTarget = 21.5;
+            }
+            //globalTarget = 21.5;
         } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) { //*FULLSCORE
             globalTarget = 140;
             prevIntakeState = intakeState;
             intakeState = 2;
             pros::delay(200);
             intakeState = prevIntakeState;
+            comingDown = true;
         } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) { //*STRAIGHT UP
             globalTarget = 102.32;
             prevIntakeState = intakeState;
             intakeState = 2;
             pros::delay(200);
             intakeState = prevIntakeState;
+            comingDown = true;
         }
-        std::cout<<lbRotation.get_position() / 100.0<<"\n";
+        std::cout<<"lb: "<<lbRotation.get_position() / 100.0<<", comingDown: "<<comingDown<<"\n";
         pros::delay(10);
     }
 }

@@ -490,8 +490,8 @@ void removeIsolatedTurns(std::vector<std::vector<std::string>>& extra, std::vect
     std::vector<std::string> cleaned_autonomous;
     for (size_t i = 0; i < extra.size(); i++) {
         if ((extra[i][6] == "TURNING CW," || extra[i][6] == "TURNING CCW,") &&
-            ((i == 0 || (extra[i - 1][4] != "TURNING CW," && extra[i - 1][4] != "TURNING CCW,")) &&
-             (i == extra.size() - 1 || (extra[i + 1][4] != "TURNING CW," && extra[i + 1][4] != "TURNING CCW,")))) {
+            ((i == 0 || (extra[i - 1][6] != "TURNING CW," && extra[i - 1][6] != "TURNING CCW,")) &&
+             (i == extra.size() - 1 || (extra[i + 1][6] != "TURNING CW," && extra[i + 1][6] != "TURNING CCW,")))) {
             continue;
         }
         cleaned_extra.push_back(extra[i]);

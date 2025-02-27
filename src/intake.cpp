@@ -6,7 +6,7 @@
 #include <iostream>
 
 int intakeState = 0;
-int sortState = 2; // 1 = score blue sort red, 2 = score red sort blue
+int sortState; // 1 = score blue sort red, 2 = score red sort blue
 bool buttonUpPressed = false;
 bool colorDetected = false;
 
@@ -89,17 +89,17 @@ void runColorSort() {
             if (optical.get_hue() < 30 && optical.get_hue() > 0) {
                 if (!colorDetected) {
                     colorDetected = true;
-
                     // if (intake.get_actual_velocity() >= 200) {
                     pros::Task::delay(65);
-                    intakeUpper.move_voltage(-12000);
+                    intakeState = 2;
                     pros::Task::delay(200);
-                    intakeUpper.move_voltage(12000);
+                    intakeState = 1;
                     // } else {
                     //     intake.move_voltage(-12000);
                     //     pros::Task::delay(750);
                     //     intake.move_voltage(12000);
                     // }
+                    std::cout<<"sorted ";
                 }
             } else {
                 colorDetected = false;
@@ -112,20 +112,21 @@ void runColorSort() {
 
                     // if (intake.get_actual_velocity() >= 200) {
                     pros::Task::delay(65);
-                    intakeUpper.move_voltage(-12000);
+                    intakeState = 2;
                     pros::Task::delay(200);
-                    intakeUpper.move_voltage(12000);
+                    intakeState = 1;
                     // } else {
                     //     intake.move_voltage(-12000);
                     //     pros::Task::delay(750);
                     //     intake.move_voltage(12000);
                     // }
+                    std::cout<<"sorted ";
                 }
             } else {
                 colorDetected = false;
             }
         }
-
+        //std::cout<<"color: "<<optical.get_hue()<<"\n";
         pros::delay(10);
     }
 }

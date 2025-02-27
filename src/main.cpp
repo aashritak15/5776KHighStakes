@@ -52,17 +52,21 @@ void competition_initialize() {} // selector.focus(); }}
 
 ASSET(redwpPath_txt);
 ASSET(redwpExtra_txt);
+ASSET(autonomous_txt);
+ASSET(extra_txt);
 
 void autonomous() {
     // selector.run_auton();
-    initDebug();
-    // chassis.calibrate();
+   // initDebug();
+    //chassis.calibrate();
     // chassis.setPose(0, 0, 0);
     // chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
    // // TODO: COMMENTED OUT BC TESTING IN INITIALIZE
    
    std::cout<<"running auton\n";
-    chassis.follow(redwpPath_txt, redwpExtra_txt, "red solo wp");
+   //chassis.turnToHeading(90, 3000);
+   //chassis.moveToPoint(0, 24, 3000);
+   chassis.follow(autonomous_txt, extra_txt, "red solo wp");
 
     // chassis.follow(blueMogoAlliancePath_txt, redMogoAllianceExtra_txt, "blue mogo alliance");
 
@@ -140,9 +144,9 @@ void autonomous() {
 
 void opcontrol() {
     // selector.focus();
-    //rerunControl();
+    rerunControl();
 
     // printCoords();
 
-    matchControl();
+    //matchControl();
 }
