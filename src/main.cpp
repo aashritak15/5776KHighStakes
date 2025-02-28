@@ -54,9 +54,14 @@ ASSET(redwpPath_txt);
 ASSET(redwpExtra_txt);
 ASSET(autonomous_txt);
 ASSET(extra_txt);
+ASSET(redFiveRingAuton_txt);
+ASSET(redFiveRingExtra_txt);
+
 
 void autonomous() {
-    void fourRingRed();
+    sortState = 2;
+    chassis.follow(redFiveRingAuton_txt, redFiveRingExtra_txt, "red five ring");
+    // void fourRingRed();
 
     // selector.run_auton();
     // initDebug();

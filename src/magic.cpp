@@ -131,17 +131,17 @@ void closeO() {
 
         controller.set_text(0, 0, "file closed");
 
-        pros::delay(1000);
+        // pros::delay(1000);
 
-        controller.set_text(0, 0, "running filters");
+        // controller.set_text(0, 0, "running filters");
 
-        pros::delay(1000);
+        // pros::delay(1000);
 
-        filterAuton();
+        // filterAuton();
 
-        pros::delay(1000);
+        // pros::delay(1000);
 
-        controller.set_text(0, 0, "filters cleaned");
+        // controller.set_text(0, 0, "filters cleaned");
     }
 }
 

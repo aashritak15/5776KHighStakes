@@ -3,7 +3,7 @@
 
 #include "main.h"
 
-inline pros::Motor ladyBrown(-5, pros::MotorGearset::green);
+inline pros::Motor ladyBrown(-1, pros::MotorGearset::green);
 
 inline pros::Rotation lbRotation(20);
 

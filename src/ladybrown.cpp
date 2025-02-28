@@ -20,7 +20,7 @@ void ladyBrownInit() {
 double globalTarget = 0;
 bool comingDown = false;
 
-void updateLB() {
+void updateLB() { //TODO: outdated angles
     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) { //*ZERO
         globalTarget = 0;
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) { //*LOAD
@@ -39,62 +39,66 @@ void updateLBTask() {
         if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) { //*ZERO
             globalTarget = 0;
         } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) { //*LOAD
-            if(comingDown) { //diff angle for coming down because i think pid less accurate when going from 0 to load
-                globalTarget = 16;
-                pros::delay(200);
-                comingDown = false;
-            } else {
-                globalTarget = 21.5;
-            }
+            globalTarget = 23;
+
+            // if(comingDown) { //diff angle for coming down because i think pid less accurate when going from 0 to load
+            //     globalTarget = 16;
+            //     pros::delay(200);
+            //     comingDown = false;
+            // } else {
+            //     globalTarget = 21.5;
+            // }
             //globalTarget = 21.5;
         } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) { //*FULLSCORE
             globalTarget = 140;
             prevIntakeState = intakeState;
             intakeState = 2;
-            pros::delay(200);
+            pros::delay(25);
             intakeState = prevIntakeState;
-            comingDown = true;
+
+            // comingDown = true;
         } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) { //*STRAIGHT UP
             globalTarget = 102.32;
             prevIntakeState = intakeState;
             intakeState = 2;
-            pros::delay(200);
+            pros::delay(25);
             intakeState = prevIntakeState;
-            comingDown = true;
+
+            // comingDown = true;
         }
-        std::cout<<"lb: "<<lbRotation.get_position() / 100.0<<", comingDown: "<<comingDown<<"\n";
+        // std::cout<<"lb: "<<lbRotation.get_position() / 100.0<<", comingDown: "<<comingDown<<"\n";
         pros::delay(10);
     }
 }
 
 void lbTask() {
     double currentAngle;
-    double prevSpeedError = 0;
-    double speedError = 0;
+    double prevError = 0;
+    double error = 0;
     double derivative;
     double armMoveVoltage;
 
-    double kP = 0.1;
-    double kD = 0; // 0.86
+    double kP = 0.3;
+    double kD = 0.6; // 0.86
 
     while (true) {        
         currentAngle = lbRotation.get_position() / 100.0;
 
-        speedError = globalTarget - currentAngle;
+        error = globalTarget - currentAngle;
 
-        derivative = speedError - prevSpeedError;
+        derivative = error - prevError;
 
-        armMoveVoltage = (kP * speedError) + (kD * derivative);
+        armMoveVoltage = (kP * error) + (kD * derivative);
 
         // Scale the output from -100 to 100 range to -12000 to 12000
         armMoveVoltage = armMoveVoltage * 1200;
 
         if (std::abs(armMoveVoltage) > 12000) { armMoveVoltage = (armMoveVoltage < 0) ? -12000 : 12000; }
-        if (std::abs(armMoveVoltage) < 360) { armMoveVoltage = 0; } // Adjusted small deadzone for voltage
+        if (std::abs(armMoveVoltage) < 200) { armMoveVoltage = 0; } // Adjusted small deadzone for voltage
 
         ladyBrown.move_voltage(-armMoveVoltage);
 
-        prevSpeedError = speedError;
+        prevError = error;
 
         pros::Task::delay(10);
     }

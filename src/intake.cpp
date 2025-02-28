@@ -84,50 +84,45 @@ void updateColorSort() {
  *@brief run color sort based on global state
  */
 void runColorSort() {
+    int prevIntakeState;
+
     while (true) {
         if (sortState == 1) {
             if (optical.get_hue() < 30 && optical.get_hue() > 0) {
                 if (!colorDetected) {
                     colorDetected = true;
-                    // if (intake.get_actual_velocity() >= 200) {
-                    pros::Task::delay(65);
+
+                    prevIntakeState = intakeState;
+                    
+                    pros::Task::delay(50);
                     intakeState = 2;
                     pros::Task::delay(200);
-                    intakeState = 1;
-                    // } else {
-                    //     intake.move_voltage(-12000);
-                    //     pros::Task::delay(750);
-                    //     intake.move_voltage(12000);
-                    // }
-                    std::cout<<"sorted ";
+                    intakeState = prevIntakeState;
+                    
+                } else {
+                    colorDetected = false;
                 }
-            } else {
-                colorDetected = false;
             }
-
         } else if (sortState == 2) {
             if (optical.get_hue() < 245 && optical.get_hue() > 200) {
                 if (!colorDetected) {
                     colorDetected = true;
 
-                    // if (intake.get_actual_velocity() >= 200) {
-                    pros::Task::delay(65);
+                    prevIntakeState = intakeState;
+                    
+                    pros::Task::delay(50);
                     intakeState = 2;
                     pros::Task::delay(200);
-                    intakeState = 1;
-                    // } else {
-                    //     intake.move_voltage(-12000);
-                    //     pros::Task::delay(750);
-                    //     intake.move_voltage(12000);
-                    // }
-                    std::cout<<"sorted ";
+                    intakeState = prevIntakeState;
+
                 }
             } else {
                 colorDetected = false;
             }
         }
-        //std::cout<<"color: "<<optical.get_hue()<<"\n";
-        pros::delay(10);
+
+    pros::delay(10);
+
     }
 }
 

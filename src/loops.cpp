@@ -7,7 +7,7 @@ void matchControl() {
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
 
-        chassis.arcade(leftY, rightX); // 0.9
+        chassis.arcade(leftY, rightX * 0.85); // 0.9
 
         updateIntake();
         updateColorSort();
@@ -33,7 +33,7 @@ void rerunControl() {
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
 
-        chassis.arcade(leftY, rightX);
+        chassis.arcade(leftY, rightX * 0.85);
 
         updateIntake();
         //updateColorSort();

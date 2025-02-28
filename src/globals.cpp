@@ -87,9 +87,9 @@ void filterAuton() {
     std::vector<std::vector<std::string>> extra = readExtraFile(extraFile);
 
 
-    removeIsolatedTurns(extra, autonomous);
+    // removeIsolatedTurns(extra, autonomous);
     stoppedSequences(extra, autonomous);
-    removeIsolatedStopped(extra, autonomous);
+    // removeIsolatedStopped(extra, autonomous);
     optimizeTurns(extra, autonomous);
 
     writeFileExtra(extraFile, extra);

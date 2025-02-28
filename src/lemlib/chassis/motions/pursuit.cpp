@@ -299,27 +299,7 @@ bool doExclusions(std::string& dataLine) {
 }
 
 void doMultipliers(int segment, float& targetVel, std::string pathID) {
-    if (pathID == "red mogo alliance" || pathID == "blue mogo alliance") {
-        switch (std::stoi(subValues.at(closestPoint)[7])) {
-            case 0: targetVel *= 2; break;
-            case 1: targetVel *= 2; break;
-            case 2: targetVel *= 2; break;
-            case 3: targetVel *= 2; break;
-            case 4: targetVel *= 2; break;
-            case 5: targetVel *= 2; break;
-            case 6: targetVel *= 2; break;
-        }
-    } else if (pathID == "red regional AWP" || pathID == "blue regional AWP") {
-        switch (std::stoi(subValues.at(closestPoint)[7])) {
-            case 0: targetVel *= 2; break;
-            case 1: targetVel *= 2; break;
-            case 2: targetVel *= 2; break;
-            case 3: targetVel *= 2; break;
-            case 4: targetVel *= 2; break;
-            case 5: targetVel *= 2; break;
-            case 6: targetVel *= 2; break;
-        }
-    } else if (pathID == "ASDF") {
+    if (pathID == "red five ring" || pathID == "blue mogo alliance") {
         switch (std::stoi(subValues.at(closestPoint)[7])) {
             case 0: targetVel *= 2; break;
             case 1: targetVel *= 2; break;
@@ -334,26 +314,54 @@ void doMultipliers(int segment, float& targetVel, std::string pathID) {
             case 10: targetVel *= 2; break;
             case 11: targetVel *= 2; break;
             case 12: targetVel *= 2; break;
-            case 13: targetVel *= 2; break;
-        }
-    } else if (pathID == "red solo wp") {
-        switch (std::stoi(subValues.at(closestPoint)[7])) {
-            case 0: targetVel *= 2; break;
-            case 1: targetVel *= 2; break;
-            case 2: targetVel *= 2; break;
-            case 3: targetVel *= 1; break;
-            case 4: targetVel *= 2; break;
-            case 5: targetVel *= 1; break;
-            case 6: targetVel *= 1; break;
-            case 7: targetVel *= 1; break;
-            case 8: targetVel *= 1; break;
-            case 9: targetVel *= 1; break;
-            case 10: targetVel *= 1; break;
-            case 11: targetVel *= 1; break;
-            case 12: targetVel *= 1; break;
-            case 13: targetVel *= 1; break;
+
         }
     }
+    // } else if (pathID == "red regional AWP" || pathID == "blue regional AWP") {
+    //     switch (std::stoi(subValues.at(closestPoint)[7])) {
+    //         case 0: targetVel *= 2; break;
+    //         case 1: targetVel *= 2; break;
+    //         case 2: targetVel *= 2; break;
+    //         case 3: targetVel *= 2; break;
+    //         case 4: targetVel *= 2; break;
+    //         case 5: targetVel *= 2; break;
+    //         case 6: targetVel *= 2; break;
+    //     }
+    // } else if (pathID == "ASDF") {
+    //     switch (std::stoi(subValues.at(closestPoint)[7])) {
+    //         case 0: targetVel *= 2; break;
+    //         case 1: targetVel *= 2; break;
+    //         case 2: targetVel *= 2; break;
+    //         case 3: targetVel *= 2; break;
+    //         case 4: targetVel *= 2; break;
+    //         case 5: targetVel *= 2; break;
+    //         case 6: targetVel *= 2; break;
+    //         case 7: targetVel *= 2; break;
+    //         case 8: targetVel *= 2; break;
+    //         case 9: targetVel *= 2; break;
+    //         case 10: targetVel *= 2; break;
+    //         case 11: targetVel *= 2; break;
+    //         case 12: targetVel *= 2; break;
+    //         case 13: targetVel *= 2; break;
+    //     }
+    // } else if (pathID == "red solo wp") {
+    //     switch (std::stoi(subValues.at(closestPoint)[7])) {
+    //         case 0: targetVel *= 2; break;
+    //         case 1: targetVel *= 2; break;
+    //         case 2: targetVel *= 2; break;
+    //         case 3: targetVel *= 1; break;
+    //         case 4: targetVel *= 2; break;
+    //         case 5: targetVel *= 1; break;
+    //         case 6: targetVel *= 1; break;
+    //         case 7: targetVel *= 1; break;
+    //         case 8: targetVel *= 1; break;
+    //         case 9: targetVel *= 1; break;
+    //         case 10: targetVel *= 1; break;
+    //         case 11: targetVel *= 1; break;
+    //         case 12: targetVel *= 1; break;
+    //         case 13: targetVel *= 1; break;
+    //     }
+    // }
 }
 
 float findLookaheadCurvature(std::string& dataLine, lemlib::Pose lastLookahead, lemlib::Pose currentPose) {
