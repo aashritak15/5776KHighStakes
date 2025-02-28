@@ -23,7 +23,7 @@ std::vector<lemlib::Pose> pathPoints;
 std::vector<std::vector<std::string>> subValues;
 std::vector<std::string> velocities;
 int closestPoint = 0;
-const float MIN_LOOKAHEAD = 5;
+const float MIN_LOOKAHEAD = 3;
 const float MAX_LOOKAHEAD = 8;
 
 /**
@@ -110,7 +110,7 @@ int findClosest(lemlib::Pose pose, int prevIndex) {
     if (prevIndex + 5 > pathPoints.size()) {
         maxIndex = pathPoints.size();
     } else {
-        maxIndex = prevIndex + 5; // TODO: tune path skip tolerance
+        maxIndex = prevIndex + 15; // TODO: tune path skip tolerance
     }
 
     // loop through all path points
@@ -301,19 +301,15 @@ bool doExclusions(std::string& dataLine) {
 void doMultipliers(int segment, float& targetVel, std::string pathID) {
     if (pathID == "red five ring" || pathID == "blue mogo alliance") {
         switch (std::stoi(subValues.at(closestPoint)[7])) {
-            case 0: targetVel *= 2; break;
-            case 1: targetVel *= 2; break;
-            case 2: targetVel *= 2; break;
-            case 3: targetVel *= 2; break;
-            case 4: targetVel *= 2; break;
-            case 5: targetVel *= 2; break;
-            case 6: targetVel *= 2; break;
-            case 7: targetVel *= 2; break;
-            case 8: targetVel *= 2; break;
-            case 9: targetVel *= 2; break;
-            case 10: targetVel *= 2; break;
-            case 11: targetVel *= 2; break;
-            case 12: targetVel *= 2; break;
+            case 0: targetVel *= 1.5; break;
+            case 1: targetVel *= 1.5; break;
+            case 2: targetVel *= 1.5; break;
+            case 3: targetVel *= 1.5; break;
+            case 4: targetVel *= 1.5; break;
+            case 5: targetVel *= 1.5; break;
+            case 6: targetVel *= 1.5; break;
+            case 7: targetVel *= 1.5; break;
+            case 8: targetVel *= 1.5; break;
 
         }
     }
