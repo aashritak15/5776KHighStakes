@@ -6,3 +6,6 @@
 void redMogo();
 void blueMogo();
 void blueRing();
+
+void fourRingBlue();
+void fourRingRed();
