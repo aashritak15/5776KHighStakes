@@ -1,48 +1,45 @@
 #include "autons.hpp"
 
-void fourRingRed() {
-    chassis.setPose(0, 0, 0);
-    chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
+// void fourRingRed() {
+//     chassis.setPose(0, 0, 0);
+//     chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
 
-    chassis.moveToPoint(0.2, -29, 2000, {.forwards = false, .maxSpeed = 60}); // go to mogo
+//     chassis.moveToPoint(0.2, -29, 2000, {.forwards = false, .maxSpeed = 60}); // go to mogo
 
-    chassis.waitUntilDone();
-    mogoClamp.set_value(true);
-    pros::delay(250);
+//     chassis.waitUntilDone();
+//     clampState = 1;
+//     pros::delay(250);
 
-    chassis.turnToHeading(-90, 1000);
+//     chassis.turnToHeading(-90, 1000);
 
-    intakeUpper.move_velocity(600);
-    intakeLower.move_velocity(-200);
+//     intakeState = 1;
 
-    pros::delay(250);
+//     pros::delay(250);
 
-    chassis.moveToPoint(-22.4, -31, 2000); // intake ring # 1
+//     chassis.moveToPoint(-22.4, -31, 2000); // intake ring # 1
 
-    chassis.turnToHeading(0, 1000);
+//     chassis.turnToHeading(0, 1000);
 
-    chassis.moveToPoint(-23, -14, 1000);
+//     chassis.moveToPoint(-23, -12, 1000);
 
-    pros::delay(500);
+//     pros::delay(500);
 
-    chassis.turnToHeading(-44, 1000); // turn to face ring stack
+//     chassis.turnToHeading(-44, 1000); // turn to face ring stack
 
-    intakeUpper.move_velocity(-600);
-    intakeLower.move_velocity(200);
+//     intakeState = 2;
 
-    chassis.moveToPoint(-37.2, 0.9, 700);
-    chassis.waitUntilDone(); // go to ring stack
+//     // chassis.moveToPoint(-37.2, 0.9, 700);
+//     // chassis.waitUntilDone(); // go to ring stack
 
-    intakeUpper.move_velocity(600);
-    intakeLower.move_velocity(-200);
+//     // intakeState = 1;
 
-    pros::delay(500);
-    chassis.moveToPoint(-28.7, -4, 1000, {.forwards = false}); // go back
+//     // pros::delay(500);
+//     // chassis.moveToPoint(-28.7, -4, 1000, {.forwards = false}); // go back
 
-    chassis.turnToHeading(-266, 1000); // turn to face ladder
+//     // chassis.turnToHeading(-266, 1000); // turn to face ladder
 
-    chassis.moveToPoint(-1.23, -43, 6000); // go to the ladder
-}
+//     // chassis.moveToPoint(-1.23, -43, 6000); // go to the ladder
+// }
 
 void fourRingBlue() {
     chassis.setPose(0, 0, 0);
@@ -51,13 +48,12 @@ void fourRingBlue() {
     chassis.moveToPoint(-0.2, -29, 2000, {.forwards = false, .maxSpeed = 60}); // go to mogo
 
     chassis.waitUntilDone();
-    mogoClamp.set_value(true);
+    clampState = 1;
     pros::delay(250);
 
     chassis.turnToHeading(90, 1000);
 
-    intakeUpper.move_velocity(600);
-    intakeLower.move_velocity(-200);
+    intakeState = 1;
 
     pros::delay(250);
 
@@ -71,14 +67,12 @@ void fourRingBlue() {
 
     chassis.turnToHeading(44, 1000); // turn to face ring stack
 
-    intakeUpper.move_velocity(-600);
-    intakeLower.move_velocity(200);
+    intakeState = 2;
 
     chassis.moveToPoint(37.2, 0.9, 700);
     chassis.waitUntilDone(); // go to ring stack
 
-    intakeUpper.move_velocity(600);
-    intakeLower.move_velocity(-200);
+    intakeState = 1;
 
     pros::delay(500);
     chassis.moveToPoint(28.7, -4, 1000, {.forwards = false}); // go back

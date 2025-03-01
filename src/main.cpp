@@ -10,13 +10,13 @@
 
 #include "autonSelector.hpp"
 
-std::vector<rd::Selector::routine_t> autonRoutines = {
-    {"Blue Auton", []() { blueMogo(); }, "", 210}, // Blue color hue
-    {"Red Auton", []() { redMogo(); }, "", 0}, // Red color hue
+// std::vector<rd::Selector::routine_t> autonRoutines = {
+//     {"Blue Auton", []() { blueMogo(); }, "", 210}, // Blue color hue
+//     {"Red Auton", []() { redMogo(); }, "", 0}, // Red color hue
 
-};
+// };
 
-rd::Selector selector("Auton Selector", autonRoutines);
+//rd::Selector selector("Auton Selector", autonRoutines);
 
 void initialize() {
     // selector.focus();
@@ -41,7 +41,7 @@ void initialize() {
     ladyBrownInit();
     controller.set_text(0, 0, "initialized");
 
-    // pros::Task screenTaskActual(screenTask, "screen task");
+    pros::Task screenTaskActual(screenTask, "screen task");
 }
 
 // Runs while the robot is disabled
@@ -57,10 +57,66 @@ ASSET(extra_txt);
 ASSET(redFiveRingAuton_txt);
 ASSET(redFiveRingExtra_txt);
 
+void fourRingRed() {
+    chassis.setPose(0, 0, 0);
+    chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
+
+    chassis.moveToPoint(0.2, -29, 2000, {.forwards = false, .maxSpeed = 60}); // go to mogo
+
+    chassis.waitUntilDone();
+    clampState = 1;
+    pros::delay(500);
+
+    chassis.turnToHeading(-90, 1000);
+
+    intakeState = 1;
+
+    pros::delay(250);
+
+    chassis.moveToPoint(-22.4, -31, 2000); // intake ring # 1
+    chassis.waitUntilDone();
+
+    pros::delay(250);
+
+    chassis.turnToHeading(0, 1000);
+
+    chassis.moveToPoint(-23, -11.5, 1000);
+
+    pros::delay(500);
+
+    chassis.turnToHeading(-44, 1000); // turn to face ring stack
+
+    chassis.moveToPoint(-28.71, -5.99, 1000);
+    chassis.waitUntilDone();
+    intakeState = 2;
+    chassis.moveToPoint(-47.6, 13.55, 2000, {.minSpeed = 100});
+    chassis.waitUntilDone(); // go to ring stack
+
+    pros::delay(100);
+    intakeState = 1;
+
+    pros::delay(500);
+    chassis.moveToPoint(-28.71, -5.99, 1000, {.forwards = false}); // go back
+    chassis.waitUntilDone();
+    intakeState = 2;
+    chassis.moveToPoint(-47.6, 13.55, 2000, {.minSpeed = 80});
+    chassis.waitUntilDone(); // go to ring stack
+
+    pros::delay(100);
+    intakeState = 1;
+
+    pros::delay(500);
+    chassis.moveToPoint(-28.71, -5.99, 1000, {.forwards = false}); // go back
+
+    // chassis.turnToHeading(-266, 1000); // turn to face ladder
+
+    // chassis.moveToPoint(-1.23, -43, 6000); // go to the ladder
+}
+
 void autonomous() {
     sortState = 2;
 
-    fourRingBlue();
+    fourRingRed();
     // chassis.follow(redFiveRingAuton_txt, redFiveRingExtra_txt, "red five ring");
     // void fourRingRed();
 
