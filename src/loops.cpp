@@ -19,7 +19,7 @@ void matchControl() {
         //updateIntakePiston();
         // updateLB();
 
-        // std::cout<<std::to_string(optical.get_hue())<<"\n";
+        // std::cout<<std::to_string(optical.get_proximity())<<"\n";
 
         pros::delay(10);
     }

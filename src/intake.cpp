@@ -93,11 +93,10 @@ void runColorSort() {
         }
 
         if (sortState == 1) {
-            if (optical.get_hue() < 25 && optical.get_hue() > 10) {
+            if (optical.get_hue() < 25 && optical.get_hue() > 10 && optical.get_proximity() > 225) {
 
                 if (!colorDetected) {
                     colorDetected = true;
-                    
                     pros::Task::delay(25);
                     intakeState = 2;
                     pros::Task::delay(400);
@@ -108,10 +107,9 @@ void runColorSort() {
                 }
             }
         } else if (sortState == 2) {
-            if (optical.get_hue() < 230 && optical.get_hue() > 210) {
+            if (optical.get_hue() < 230 && optical.get_hue() > 210 && optical.get_proximity() > 225) {
                 if (!colorDetected) {
                     colorDetected = true;
-                    
                     pros::Task::delay(25);
                     intakeState = 2;
                     pros::Task::delay(400);

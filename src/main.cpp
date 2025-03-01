@@ -213,11 +213,31 @@ void autonomous() {
 }
 
 void opcontrol() {
-    // selector.focus();
-    // rerunControl();
 
-    // printCoords();
+    // matchControl();
+    // rerunControl;
 
-    matchControl();
+    // *INTERRUPT
+    chassis.follow(redFiveRingAuton_txt, fiveRingExtra_txt, "five ring");
+
+    leftMotors.move_voltage(0);
+    rightMotors.move_voltage(0);
+    controller.set_text(0, 0, "GET READY!");
+    pros::delay(1000);
+    controller.set_text(0, 0, "4              ");
+    pros::delay(1000);
+    controller.clear();
+    controller.set_text(0, 0, "3              ");
+    pros::delay(1000);
+    controller.clear();
+    controller.set_text(0, 0, "2              ");
+    pros::delay(1000);
+    controller.clear();
+    controller.set_text(0, 0, "1              ");
+    pros::delay(1000);
+
+    rerunControl();
+
+    //*REFLECT
     // reflect(true, false);
 }
