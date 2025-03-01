@@ -94,9 +94,9 @@ void runColorSort() {
 
                     prevIntakeState = intakeState;
                     
-                    pros::Task::delay(30);
+                    pros::Task::delay(20);
                     intakeState = 2;
-                    pros::Task::delay(300);
+                    pros::Task::delay(400);
                     intakeState = prevIntakeState;
                     
                 } else {
@@ -110,9 +110,9 @@ void runColorSort() {
 
                     prevIntakeState = intakeState;
                     
-                    pros::Task::delay(30);
+                    pros::Task::delay(20);
                     intakeState = 2;
-                    pros::Task::delay(300);
+                    pros::Task::delay(400);
                     intakeState = prevIntakeState;
 
                 }
