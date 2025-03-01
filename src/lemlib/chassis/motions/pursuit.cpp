@@ -299,7 +299,7 @@ bool doExclusions(std::string& dataLine) {
 }
 
 void doMultipliers(int segment, float& targetVel, std::string pathID) {
-    if (pathID == "red five ring" || pathID == "blue mogo alliance") {
+    if (pathID == "five ring") {
         switch (std::stoi(subValues.at(closestPoint)[7])) {
             case 0: targetVel *= 1; break; //*stop
             case 1: targetVel *= 3; break;
@@ -307,8 +307,8 @@ void doMultipliers(int segment, float& targetVel, std::string pathID) {
             case 3: targetVel *= 3.5; break;
             case 4: targetVel *= 3.5; break;
             case 5: targetVel *= 3.5; break;
-            case 6: targetVel *= 1; break;
-            case 7: targetVel *= 1; break;
+            case 6: targetVel *= 2; break;
+            case 7: targetVel *= 2; break;
             case 8: targetVel *= 1; break;
             case 9: targetVel *= 1; break;
             case 10: targetVel *= 1; break;

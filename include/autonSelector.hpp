@@ -1,8 +1,8 @@
 #include "main.h"
 
-extern rd::Console console;
+// extern rd::Console console;
 
-extern rd::Selector selector;
+// extern rd::Selector selector;
 
-void screenTask();
-void printCoords();
+// void screenTask();
+// void printCoords();

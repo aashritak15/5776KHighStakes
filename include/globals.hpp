@@ -21,3 +21,5 @@ extern lemlib::Chassis chassis;
 void screenTask();
 
 void filterAuton();
+
+void screenInit();

@@ -84,36 +84,38 @@ void updateColorSort() {
  *@brief run color sort based on global state
  */
 void runColorSort() {
-    int prevIntakeState;
 
     while (true) {
+
+        if(intakeState == 0) { //TODO: see if this fixes
+            pros::delay(10);
+            continue;
+        }
+
         if (sortState == 1) {
-            if (optical.get_hue() < 30 && optical.get_hue() > 0) {
+            if (optical.get_hue() < 25 && optical.get_hue() > 10) {
+
                 if (!colorDetected) {
                     colorDetected = true;
-
-                    prevIntakeState = intakeState;
                     
-                    pros::Task::delay(20);
+                    pros::Task::delay(25);
                     intakeState = 2;
                     pros::Task::delay(400);
-                    intakeState = prevIntakeState;
+                    intakeState = 1;
                     
                 } else {
                     colorDetected = false;
                 }
             }
         } else if (sortState == 2) {
-            if (optical.get_hue() < 245 && optical.get_hue() > 200) {
+            if (optical.get_hue() < 230 && optical.get_hue() > 210) {
                 if (!colorDetected) {
                     colorDetected = true;
-
-                    prevIntakeState = intakeState;
                     
-                    pros::Task::delay(20);
+                    pros::Task::delay(25);
                     intakeState = 2;
                     pros::Task::delay(400);
-                    intakeState = prevIntakeState;
+                    intakeState = 1;
 
                 }
             } else {

@@ -316,23 +316,23 @@ void writeInterruptAdditional() {
 
 void reflect(bool x, bool y) { // TODO: remove extra reflection
     reflector.open("/usd/reflectAutonomous.txt", std::ios::out | std::ios::trunc);
-    reflectorTwo.open("/usd/reflectExtra.txt", std::ios::out | std::ios::trunc);
 
     fileI.open("/usd/autonomous.txt");
-    fileITwo.open("/usd/extra.txt");
 
     if (!reflector || !reflectorTwo || !fileI || !fileITwo) {
         controller.set_text(0, 0, "failed to open");
+        std::cout<<"failed to open";
         return;
     } else {
         controller.set_text(0, 0, "open successful");
+        std::cout<<"failed to open";
     }
 
     std::string tempData;
 
-    std::cout << "light\n";
+    std::cout << "opened all\n";
 
-    pros::delay(2000);
+    pros::delay(1000);
 
     while (std::getline(fileI, tempData)) {
         std::string dataLine;
@@ -371,8 +371,8 @@ void reflect(bool x, bool y) { // TODO: remove extra reflection
 
             std::cout << pointData.at(i) << "\n";
         }
+
         reflector << dataLine;
-        reflector.flush();
 
         std::cout << dataLine << "\n";
 
@@ -382,32 +382,26 @@ void reflect(bool x, bool y) { // TODO: remove extra reflection
         }
 
         if (!fileI) {
-            std::cout << "input fail \n";
+            std::cout << "input fail\n";
             return;
         }
 
         tempData.clear();
     }
 
-    std::cout << "light\n";
+    std::cout << "reflection finished\n";
 
     reflector << "endData";
-    reflector.flush();
-
-    reflector.close();
 
     reflector.flush();
-    reflectorTwo.flush();
-
-    reflectorTwo.close();
     reflector.close();
     fileI.close();
-    fileITwo.close();
 
-    std::cout << "light\n";
+    pros::delay(1000);
 
-    controller.clear_line(0);
-    controller.set_text(0, 0, "reflected");
+    std::cout << "closed\n";
+
+    controller.set_text(0, 0, "reflected      ");
 }
 
 // parse a string using a delimiter

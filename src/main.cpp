@@ -26,6 +26,8 @@ void initialize() {
 
     chassis.setPose(0, 0, 0);
 
+    pros::lcd::initialize();
+
     // pros::delay(250);
 
     // selector.on_select([](std::optional<rd::Selector::routine_t> routine) {
@@ -39,9 +41,8 @@ void initialize() {
     clampInit();
     intakeInit();
     ladyBrownInit();
-    controller.set_text(0, 0, "initialized");
 
-    pros::Task screenTaskActual(screenTask, "screen task");
+    screenInit();
 }
 
 // Runs while the robot is disabled
@@ -51,7 +52,8 @@ void disabled() {}
 void competition_initialize() {} // selector.focus(); }}
 
 ASSET(redFiveRingAuton_txt);
-ASSET(redFiveRingExtra_txt);
+ASSET(blueFiveRingAuton_txt);
+ASSET(fiveRingExtra_txt);
 
 void fourRingRed() {
     chassis.setPose(0, 0, 0);
@@ -113,7 +115,15 @@ void autonomous() {
     sortState = 2;
 
     // fourRingRed();
-    chassis.follow(redFiveRingAuton_txt, redFiveRingExtra_txt, "red five ring");
+    chassis.follow(redFiveRingAuton_txt, fiveRingExtra_txt, "five ring");
+    // chassis.follow(blueFiveRingAuton_txt, fiveRingExtra_txt, "five ring");
+
+
+
+
+
+
+
     // void fourRingRed();
 
     // selector.run_auton();
@@ -204,9 +214,10 @@ void autonomous() {
 
 void opcontrol() {
     // selector.focus();
-    rerunControl();
+    // rerunControl();
 
     // printCoords();
 
-    // matchControl();
+    matchControl();
+    // reflect(true, false);
 }

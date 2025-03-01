@@ -3,7 +3,9 @@
 
 void matchControl() {
     chassis.setBrakeMode(pros::E_MOTOR_BRAKE_COAST);
+    controller.set_text(0, 0, "no sort");
     while (true) {
+        
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
 
@@ -16,6 +18,8 @@ void matchControl() {
         updateDoinkLeft();
         //updateIntakePiston();
         // updateLB();
+
+        // std::cout<<std::to_string(optical.get_hue())<<"\n";
 
         pros::delay(10);
     }
