@@ -50,10 +50,6 @@ void disabled() {}
 // Runs after initialize if the robot is connected to field control
 void competition_initialize() {} // selector.focus(); }}
 
-ASSET(redwpPath_txt);
-ASSET(redwpExtra_txt);
-ASSET(autonomous_txt);
-ASSET(extra_txt);
 ASSET(redFiveRingAuton_txt);
 ASSET(redFiveRingExtra_txt);
 
@@ -116,8 +112,8 @@ void fourRingRed() {
 void autonomous() {
     sortState = 2;
 
-    fourRingRed();
-    // chassis.follow(redFiveRingAuton_txt, redFiveRingExtra_txt, "red five ring");
+    // fourRingRed();
+    chassis.follow(redFiveRingAuton_txt, redFiveRingExtra_txt, "red five ring");
     // void fourRingRed();
 
     // selector.run_auton();

@@ -23,7 +23,7 @@ std::vector<lemlib::Pose> pathPoints;
 std::vector<std::vector<std::string>> subValues;
 std::vector<std::string> velocities;
 int closestPoint = 0;
-const float MIN_LOOKAHEAD = 3;
+const float MIN_LOOKAHEAD = 4;
 const float MAX_LOOKAHEAD = 8;
 
 /**
@@ -107,7 +107,7 @@ int findClosest(lemlib::Pose pose, int prevIndex) {
     float closestDist = infinity();
     int maxIndex;
 
-    if (prevIndex + 5 > pathPoints.size()) {
+    if (prevIndex + 15 > pathPoints.size()) {
         maxIndex = pathPoints.size();
     } else {
         maxIndex = prevIndex + 15; // TODO: tune path skip tolerance
@@ -215,7 +215,7 @@ float calculateCurvature(lemlib::Pose pose, float heading, lemlib::Pose lookahea
 
     std::cout << std::to_string(d) << "\n";
 
-    if (d < 3) { // TODO: tune lookahead distance from exclusion tolerance
+    if (d < 2) { // TODO: tune lookahead distance from exclusion tolerance
         return 0;
     }
 
@@ -302,15 +302,17 @@ void doMultipliers(int segment, float& targetVel, std::string pathID) {
     if (pathID == "red five ring" || pathID == "blue mogo alliance") {
         switch (std::stoi(subValues.at(closestPoint)[7])) {
             case 0: targetVel *= 1.5; break;
-            case 1: targetVel *= 1.5; break;
+            case 1: targetVel *= 1.75; break;
             case 2: targetVel *= 1.5; break;
-            case 3: targetVel *= 1.5; break;
+            case 3: targetVel *= 2.5; break;
             case 4: targetVel *= 1.5; break;
             case 5: targetVel *= 1.5; break;
             case 6: targetVel *= 1.5; break;
             case 7: targetVel *= 1.5; break;
             case 8: targetVel *= 1.5; break;
-
+            case 9: targetVel *= 1.5; break;
+            case 10: targetVel *= 1.5; break;
+            case 11: targetVel *= 1.5; break;
         }
     }
     // } else if (pathID == "red regional AWP" || pathID == "blue regional AWP") {
@@ -398,6 +400,9 @@ void interrupt() {
 
 void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pathID) {
     std::cout<<"following\n";
+
+    initDebug();
+
     chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
 
     pathPoints = getData(path); // get list of path points

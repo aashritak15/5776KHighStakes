@@ -69,16 +69,6 @@ lemlib::ExpoDriveCurve steerCurve(5, // joystick deadband out of 127
 // create the chassis
 lemlib::Chassis chassis(drivetrain, linearController, angularController, sensors, &throttleCurve, &steerCurve);
 
-ASSET(redMogoAlliancePath_txt);
-ASSET(redMogoAllianceExtra_txt);
-
-ASSET(blueMogoAlliancePath_txt);
-ASSET(skillsPath_txt);
-ASSET(skillsExtra_txt);
-
-ASSET(autonomous_txt);
-ASSET(extra_txt);
-
 void filterAuton() {
     std::string extraFile = "/usd/extra.txt";
     std::string autonomousFile = "/usd/autonomous.txt";
