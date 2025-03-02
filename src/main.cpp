@@ -84,37 +84,50 @@ void fourRingRed() {
 
     chassis.turnToHeading(-44, 1000); // turn to face ring stack
 
-    chassis.moveToPoint(-28.71, -5.99, 1000);
+    //ram 1
+    //chassis.moveToPoint(-30.71, -3.99, 1000);
+    //chassis.waitUntilDone();
+    intakeState = 2;
+    chassis.moveToPoint(-45.6, 11.55, 1500, {.minSpeed = 50});
+    chassis.waitUntilDone(); // go to ring stack
+    pros::delay(100);
+    intakeState = 1;
+
+    //ram 2
+    pros::delay(500);
+    chassis.moveToPoint(-30.71, -3.99, 1000, {.forwards = false, .minSpeed = 100}); // go back
     chassis.waitUntilDone();
     intakeState = 2;
-    chassis.moveToPoint(-47.6, 13.55, 2000, {.minSpeed = 100});
+    chassis.moveToPoint(-45.6, 11.55, 750, {.minSpeed = 50});
     chassis.waitUntilDone(); // go to ring stack
+    pros::delay(100);
+    intakeState = 1;
 
+    //ram 3
+    pros::delay(500);
+    chassis.moveToPoint(-30.71, -3.99, 1000, {.forwards = false, .minSpeed = 100}); // go back
+    chassis.waitUntilDone();
+    intakeState = 2;
+    chassis.moveToPoint(-45.6, 11.55, 750, {.minSpeed = 50});
+    chassis.waitUntilDone(); // go to ring stack
     pros::delay(100);
     intakeState = 1;
 
     pros::delay(500);
-    chassis.moveToPoint(-28.71, -5.99, 1000, {.forwards = false}); // go back
+    chassis.moveToPoint(-30.71, -3.99, 1000, {.forwards = false, .minSpeed = 100}); // go back
+
+    chassis.turnToHeading(-266, 1000); // turn to face ladder
     chassis.waitUntilDone();
-    intakeState = 2;
-    chassis.moveToPoint(-47.6, 13.55, 2000, {.minSpeed = 80});
-    chassis.waitUntilDone(); // go to ring stack
+    clampState = 0;
 
-    pros::delay(100);
-    intakeState = 1;
-
-    pros::delay(500);
-    chassis.moveToPoint(-28.71, -5.99, 1000, {.forwards = false}); // go back
-
-    // chassis.turnToHeading(-266, 1000); // turn to face ladder
-
-    // chassis.moveToPoint(-1.23, -43, 6000); // go to the ladder
+    chassis.moveToPoint(-1.23, -43, 6000, {.maxSpeed = 50}); // go to the ladder
+    globalTarget = 140;
 }
 
 void autonomous() {
     sortState = 2;
 
-    // fourRingRed();
+    //fourRingRed();
     chassis.follow(ringsideRed_txt, ringsideExtra_txt, "ringside");
     // chassis.follow(blueFiveRingAuton_txt, fiveRingExtra_txt, "ringside");
 
@@ -214,8 +227,8 @@ void autonomous() {
 
 void opcontrol() {
 
-    matchControl();
-    // rerunControl;
+    //matchControl();
+    rerunControl();
 
     // *INTERRUPT
     // chassis.follow(ringsideRed_txt, ringsideExtra_txt, "ringside");

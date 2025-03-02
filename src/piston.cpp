@@ -50,7 +50,7 @@ void updateDoinkRight() {
 }
 
 void updateDoinkLeft() {
-    if (false) { //TODO: change back to x
+    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_UP)) { //TODO: change back to x
         if (!buttonXPressed) {
             buttonXPressed = true;
             if(doinkLeftState == 0) {
@@ -65,7 +65,7 @@ void updateDoinkLeft() {
 }
 
 void updateIntakePiston() {
-    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_UP)) {
+    if (false) { //was up
         if (!buttonLeftPressed) {
             buttonLeftPressed = true;
             if(intakePistonState == 0) {

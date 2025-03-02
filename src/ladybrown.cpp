@@ -39,7 +39,7 @@ void updateLBTask() {
         if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) { //*ZERO
             globalTarget = 0;
         } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) { //*LOAD
-            globalTarget = 23;
+            globalTarget = 24;
 
             // if(comingDown) { //diff angle for coming down because i think pid less accurate when going from 0 to load
             //     globalTarget = 16;
