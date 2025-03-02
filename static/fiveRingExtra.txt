@@ -469,6 +469,7 @@
 1, 1, 0.000000, 0, 0, 0, GOING, 4
 1, 1, 0.000000, 0, 0, 0, GOING, 4
 1, 1, 0.000000, 0, 0, 0, GOING, 4
+<<<<<<< Updated upstream:static/fiveRingExtra.txt
 1, 1, 0.000000, 0, 0, 0, GOING, 4
 1, 1, 0.000000, 0, 0, 0, STOPPED, 4
 1, 1, 0.000000, 0, 0, 0, STOPPED, 4
@@ -610,4 +611,7 @@
 0, 1, 0.000000, 0, 0, 1, TURNING CCW, 5
 0, 1, 0.000000, 0, 0, 1, TURNING CCW, 5
 0, 0, 0.000000, 0, 0, 0, STOPPED, -1
+=======
+1, 1, 0.000000, 0, 0, 0, GOING, -1
+>>>>>>> Stashed changes:static/ringsideExtra.txt
 endData
