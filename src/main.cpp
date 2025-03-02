@@ -214,16 +214,12 @@ void autonomous() {
 
 void opcontrol() {
 
-    // matchControl();
+    matchControl();
     // rerunControl;
 
     // *INTERRUPT
-    chassis.follow(ringsideRed_txt, ringsideExtra_txt, "ringside");
-
-    controller.set_text(0, 0, "GET READY!");
-    pros::delay(1000);
-
-    rerunControl();
+    // chassis.follow(ringsideRed_txt, ringsideExtra_txt, "ringside");
+    // rerunControl();
 
     //*REFLECT
     // reflect(true, false);
