@@ -8,9 +8,6 @@
 #include <cmath>
 #include "ladybrown.hpp"
 
-<<<<<<< Updated upstream
-int section = 0;
-=======
 int section = 5; //TODO: CHANGE BACK PLEAAAAASE LORD
 //TODO: CHANGE BACK PLEAAAAASE LORD
 //TODO: CHANGE BACK PLEAAAAASE LORD
@@ -20,7 +17,6 @@ int section = 5; //TODO: CHANGE BACK PLEAAAAASE LORD
 //TODO: CHANGE BACK PLEAAAAASE LORD
 //TODO: CHANGE BACK PLEAAAAASE LORD
 
->>>>>>> Stashed changes
 bool buttonPressed = false;
 float prevError;
 
