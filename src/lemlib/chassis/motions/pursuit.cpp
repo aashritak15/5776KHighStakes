@@ -309,9 +309,9 @@ void doMultipliers(int segment, float& targetVel, std::string pathID) {
             case 4: targetVel *= 3; break;
             case 5: targetVel *= 3; break;
             case 6: targetVel *= 2.25; break;
-            case 7: targetVel *= 1.5; break;
-            case 8: targetVel *= 1.5; break;
-            case 9: targetVel *= 1.5; break;
+            case 7: targetVel *= 2.5; break;
+            case 8: targetVel *= 2.5; break;
+            case 9: targetVel *= 2.5; break;
         }
     }
 }
@@ -362,10 +362,12 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pa
     pathPoints = getData(path); // get list of path points
     subValues = getSubData(sub); // get subsystem values
     velocities = getVelocities(path); // get velocities
+    std::cout<<"data gotten\n";
 
     Pose pose = this->getPose(true); // initialize all the things //*: THE TRUE IS WHERE THE RADIANS COME FROM
     Pose lookaheadPose(0, 0, 0);
     Pose lastLookahead = pathPoints.at(0);
+    std::cout<<"initialized\n";
 
     while (true) {
         std::cout<<"looping\n";
