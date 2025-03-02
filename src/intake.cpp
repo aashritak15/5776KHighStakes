@@ -16,6 +16,7 @@ bool colorDetected = false;
 void intakeInit() {
     intakeUpper.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
     intakeLower.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+    optical.set_integration_time(10);
     optical.set_led_pwm(100);
 
     pros::Task sortTask(runColorSort, "color sort");
@@ -93,13 +94,13 @@ void runColorSort() {
         }
 
         if (sortState == 1) {
-            if (optical.get_hue() < 25 && optical.get_hue() > 10 && optical.get_proximity() > 225) {
+            if (optical.get_hue() < 25 && optical.get_hue() > 10 && optical.get_proximity() > 200) {
 
                 if (!colorDetected) {
                     colorDetected = true;
-                    pros::Task::delay(25);
+                    pros::Task::delay(40);
                     intakeState = 2;
-                    pros::Task::delay(400);
+                    pros::Task::delay(300);
                     intakeState = 1;
                     
                 } else {
@@ -107,12 +108,12 @@ void runColorSort() {
                 }
             }
         } else if (sortState == 2) {
-            if (optical.get_hue() < 230 && optical.get_hue() > 210 && optical.get_proximity() > 225) {
+            if (optical.get_hue() < 230 && optical.get_hue() > 210 && optical.get_proximity() > 200) {
                 if (!colorDetected) {
                     colorDetected = true;
-                    pros::Task::delay(25);
+                    pros::Task::delay(40);
                     intakeState = 2;
-                    pros::Task::delay(400);
+                    pros::Task::delay(300);
                     intakeState = 1;
 
                 }
