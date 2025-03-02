@@ -1,5 +1,5 @@
-#include "intake.hpp"
 #include "piston.hpp"
+#include "intake.hpp"
 #include "globals.hpp"
 #include "ladybrown.hpp"
 #include "magic.hpp"
@@ -51,9 +51,9 @@ void disabled() {}
 // Runs after initialize if the robot is connected to field control
 void competition_initialize() {} // selector.focus(); }}
 
-ASSET(ringsideRed_txt);
-ASSET(ringsideBlue_txt);
-ASSET(ringsideExtra_txt);
+ASSET(redFiveRingAuton_txt);
+ASSET(blueFiveRingAuton_txt);
+ASSET(fiveRingExtra_txt);
 
 void fourRingRed() {
     chassis.setPose(0, 0, 0);
@@ -115,8 +115,8 @@ void autonomous() {
     sortState = 2;
 
     // fourRingRed();
-    chassis.follow(ringsideRed_txt, ringsideExtra_txt, "ringside");
-    // chassis.follow(blueFiveRingAuton_txt, fiveRingExtra_txt, "ringside");
+    chassis.follow(redFiveRingAuton_txt, fiveRingExtra_txt, "five ring");
+    // chassis.follow(blueFiveRingAuton_txt, fiveRingExtra_txt, "five ring");
 
 
 

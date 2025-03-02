@@ -89,9 +89,9 @@ void initInterrupt(int lastSection, int stopIndex) {
 void initDebug() {
     fileOThree.open("/usd/debug.txt");
     if (!fileOThree) {
-        std::cout<<"debug failed\n";
+        controller.set_text(0, 0, "failed to open");
     } else {
-        std::cout<<"debug opened\n";
+        controller.set_text(0, 0, "opened");
         active = true;
     }
 }
@@ -315,8 +315,8 @@ void writeInterruptAdditional() {
     fileInterruptTwo << dataLine;
 }
 
-void reflect(bool x, bool y) {
-    reflector.open("/usd/reflected.txt", std::ios::out | std::ios::trunc);
+void reflect(bool x, bool y) { // TODO: remove extra reflection
+    reflector.open("/usd/reflectAutonomous.txt", std::ios::out | std::ios::trunc);
 
     fileI.open("/usd/autonomous.txt");
 
@@ -324,6 +324,9 @@ void reflect(bool x, bool y) {
         controller.set_text(0, 0, "failed to open");
         std::cout<<"failed to open";
         return;
+    } else {
+        controller.set_text(0, 0, "open successful");
+        std::cout<<"failed to open";
     }
 
     std::string tempData;
@@ -335,10 +338,6 @@ void reflect(bool x, bool y) {
     while (std::getline(fileI, tempData)) {
         std::string dataLine;
         std::vector<std::string> pointData = readElementMagic(tempData, ", ");
-
-        if(pointData.size() != 4) {
-            break;
-        }
 
         for (int i = 0; i < 4; i++) {
             if (i == 0) { // x coord
@@ -402,6 +401,8 @@ void reflect(bool x, bool y) {
     pros::delay(1000);
 
     std::cout << "closed\n";
+
+    controller.set_text(0, 0, "reflected      ");
 }
 
 // parse a string using a delimiter
