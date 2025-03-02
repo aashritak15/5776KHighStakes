@@ -50,18 +50,18 @@ void updateLBTask() {
             // }
             //globalTarget = 21.5;
         } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) { //*FULLSCORE
-            globalTarget = 140;
             prevIntakeState = intakeState;
             intakeState = 2;
             pros::delay(25);
+            globalTarget = 140;
             intakeState = prevIntakeState;
 
             // comingDown = true;
         } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) { //*STRAIGHT UP
-            globalTarget = 102.32;
             prevIntakeState = intakeState;
             intakeState = 2;
             pros::delay(25);
+            globalTarget = 102.32;
             intakeState = prevIntakeState;
 
             // comingDown = true;
@@ -94,7 +94,7 @@ void lbTask() {
         armMoveVoltage = armMoveVoltage * 1200;
 
         if (std::abs(armMoveVoltage) > 12000) { armMoveVoltage = (armMoveVoltage < 0) ? -12000 : 12000; }
-        if (std::abs(armMoveVoltage) < 200) { armMoveVoltage = 0; } // Adjusted small deadzone for voltage
+        if (std::abs(armMoveVoltage) < 1000) { armMoveVoltage = 0; } // Adjusted small deadzone for voltage
 
         ladyBrown.move_voltage(-armMoveVoltage);
 
