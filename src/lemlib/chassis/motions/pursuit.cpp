@@ -107,8 +107,8 @@ int findClosest(lemlib::Pose pose, int prevIndex) {
     float closestDist = infinity();
     int maxIndex;
 
-    if (prevIndex + 15 > pathPoints.size()) {
-        maxIndex = pathPoints.size();
+    if (prevIndex + 15 > pathPoints.size() - 2) { //-1 for endData and then -1 for the fact it's an index
+        maxIndex = pathPoints.size() - 2;
     } else {
         maxIndex = prevIndex + 15; // TODO: tune path skip tolerance
     }
@@ -116,6 +116,8 @@ int findClosest(lemlib::Pose pose, int prevIndex) {
     // loop through all path points
     for (int i = prevIndex; i < maxIndex; i++) {
         const float dist = pose.distance(pathPoints.at(i));
+        // std::cout<<i<<": "<<dist<<"\n";
+
         if (dist < closestDist) { // new closest point
             closestDist = dist;
             closestPoint = i;
@@ -180,7 +182,7 @@ lemlib::Pose lookaheadPoint(lemlib::Pose lastLookahead, lemlib::Pose pose, int c
         lemlib::Pose currentPathPose = pathPoints.at(i + 1);
 
         if (subValues.at(i)[6] == "STOPPED" || subValues.at(i)[6] == "TURNING CW" ||
-            subValues.at(i)[6] == "TURNING CCW") { // TODO: does this make sense
+            subValues.at(i)[6] == "TURNING CCW" || subValues.at(i)[7] == "-1") { // TODO: does this make sense
             return pathPoints.at(i);
         }
 
@@ -239,7 +241,6 @@ bool doExclusions(std::string& dataLine) {
     if (subValues.at(closestPoint)[6] == "STOPPED") {
         drivetrain.leftMotors->move(0);
         drivetrain.rightMotors->move(0);
-        ladyBrown.move(0);
 
         pros::delay(50);
 
@@ -299,7 +300,7 @@ bool doExclusions(std::string& dataLine) {
 }
 
 void doMultipliers(int segment, float& targetVel, std::string pathID) {
-    if (pathID == "five ring") {
+    if (pathID == "ringside") {
         switch (std::stoi(subValues.at(closestPoint)[7])) {
             case 0: targetVel *= 1; break; //*stop
             case 1: targetVel *= 3; break;
@@ -307,8 +308,8 @@ void doMultipliers(int segment, float& targetVel, std::string pathID) {
             case 3: targetVel *= 3.5; break;
             case 4: targetVel *= 3.5; break;
             case 5: targetVel *= 3.5; break;
-            case 6: targetVel *= 2; break;
-            case 7: targetVel *= 2; break;
+            case 6: targetVel *= 1; break;
+            case 7: targetVel *= 1; break;
             case 8: targetVel *= 1; break;
             case 9: targetVel *= 1; break;
             case 10: targetVel *= 1; break;
@@ -429,7 +430,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pa
         dataLine.append("target index: " + std::to_string(closestPoint) + "\n");
 
         // path termination check
-        if (subValues.at(closestPoint)[7] == "-1") {
+        if (subValues.at(closestPoint)[7] == "-1") { //TODO: is this fine
             drivetrain.leftMotors->move(0);
             drivetrain.rightMotors->move(0);
             dataLine.append("PATH FINISHED");
@@ -437,6 +438,8 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pa
             fileOThree << dataLine;
             fileOThree.flush();
             fileOThree.close();
+
+            controller.set_text(0, 0, "PATH FINISHED!");
 
             return;
         }
@@ -453,8 +456,8 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pa
         dataLine.append("current y: " + std::to_string(pose.y) + "\n");
         dataLine.append("current theta RAD: " + std::to_string(pose.theta) + "\n");
         dataLine.append("current theta DEG: " + std::to_string(pose.theta * 180 / M_PI) + "\n");
-        dataLine.append("target x: " + std::to_string(pathPoints.at(closestPoint).x) + "\n");
-        dataLine.append("target y: " + std::to_string(pathPoints.at(closestPoint).y) + "\n");
+        dataLine.append("closest path x: " + std::to_string(pathPoints.at(closestPoint).x) + "\n");
+        dataLine.append("closest path y: " + std::to_string(pathPoints.at(closestPoint).y) + "\n");
 
         // find target avg velocity
         float targetVel = std::stof(velocities.at(closestPoint));

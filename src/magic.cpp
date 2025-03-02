@@ -8,7 +8,15 @@
 #include <cmath>
 #include "ladybrown.hpp"
 
-int section = 0;
+int section = 6; //TODO: CHANGE BACK PLEAAAAASE LORD
+//TODO: CHANGE BACK PLEAAAAASE LORD
+//TODO: CHANGE BACK PLEAAAAASE LORD
+//TODO: CHANGE BACK PLEAAAAASE LORD
+//TODO: CHANGE BACK PLEAAAAASE LORD
+//TODO: CHANGE BACK PLEAAAAASE LORD
+//TODO: CHANGE BACK PLEAAAAASE LORD
+//TODO: CHANGE BACK PLEAAAAASE LORD
+
 bool buttonPressed = false;
 float prevError;
 
@@ -88,9 +96,9 @@ void initInterrupt(int lastSection, int stopIndex) {
 void initDebug() {
     fileOThree.open("/usd/debug.txt");
     if (!fileOThree) {
-        controller.set_text(0, 0, "failed to open");
+        std::cout<<"debug failed\n";
     } else {
-        controller.set_text(0, 0, "opened");
+        std::cout<<"debug opened\n";
         active = true;
     }
 }
@@ -314,8 +322,8 @@ void writeInterruptAdditional() {
     fileInterruptTwo << dataLine;
 }
 
-void reflect(bool x, bool y) { // TODO: remove extra reflection
-    reflector.open("/usd/reflectAutonomous.txt", std::ios::out | std::ios::trunc);
+void reflect(bool x, bool y) {
+    reflector.open("/usd/reflected.txt", std::ios::out | std::ios::trunc);
 
     fileI.open("/usd/autonomous.txt");
 
@@ -323,9 +331,6 @@ void reflect(bool x, bool y) { // TODO: remove extra reflection
         controller.set_text(0, 0, "failed to open");
         std::cout<<"failed to open";
         return;
-    } else {
-        controller.set_text(0, 0, "open successful");
-        std::cout<<"failed to open";
     }
 
     std::string tempData;
@@ -337,6 +342,10 @@ void reflect(bool x, bool y) { // TODO: remove extra reflection
     while (std::getline(fileI, tempData)) {
         std::string dataLine;
         std::vector<std::string> pointData = readElementMagic(tempData, ", ");
+
+        if(pointData.size() != 4) {
+            break;
+        }
 
         for (int i = 0; i < 4; i++) {
             if (i == 0) { // x coord
@@ -400,8 +409,6 @@ void reflect(bool x, bool y) { // TODO: remove extra reflection
     pros::delay(1000);
 
     std::cout << "closed\n";
-
-    controller.set_text(0, 0, "reflected      ");
 }
 
 // parse a string using a delimiter

@@ -47,7 +47,7 @@ void rerunControl() {
         updateIntakePiston();
         //updateLB();
 
-        if (count == 5) { //*data written every 0.1 seconds
+        if (count == 5) { //*data written every 0.05 seconds
             writePose();
             writeAdditional();
             count = 1;
