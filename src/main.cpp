@@ -54,6 +54,8 @@ void competition_initialize() {} // selector.focus(); }}
 ASSET(ringsideRed_txt);
 ASSET(ringsideBlue_txt);
 ASSET(ringsideExtra_txt);
+ASSET(skillsPath_txt);
+ASSET(skillsExtra_txt);
 
 void fourRingRed() {
     chassis.setPose(0, 0, 0);
@@ -128,9 +130,9 @@ void autonomous() {
     sortState = 2;
 
     //fourRingRed();
-    chassis.follow(ringsideRed_txt, ringsideExtra_txt, "ringside");
+    //chassis.follow(ringsideRed_txt, ringsideExtra_txt, "ringside");
     // chassis.follow(blueFiveRingAuton_txt, fiveRingExtra_txt, "ringside");
-
+    chassis.follow(skillsPath_txt, skillsExtra_txt, "skills");
 
 
 

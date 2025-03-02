@@ -313,6 +313,21 @@ void doMultipliers(int segment, float& targetVel, std::string pathID) {
             case 8: targetVel *= 2.5; break;
             case 9: targetVel *= 2.5; break;
         }
+    } else if(pathID == "skills") {
+        switch (std::stoi(subValues.at(closestPoint)[7])) {
+            case 0: targetVel *= 2; break; 
+            case 1: targetVel *= 2; break;
+            case 2: targetVel *= 2; break; 
+            case 3: targetVel *= 2; break;
+            case 4: targetVel *= 2; break;
+            case 5: targetVel *= 2; break;
+            case 6: targetVel *= 2; break;
+            case 7: targetVel *= 2; break;
+            case 8: targetVel *= 2; break;
+            case 9: targetVel *= 2; break;
+            case 10: targetVel *= 2; break;
+            case 11: targetVel *= 2; break;
+        }
     }
 }
 

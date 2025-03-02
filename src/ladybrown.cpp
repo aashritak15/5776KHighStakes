@@ -24,7 +24,7 @@ void updateLB() { //TODO: outdated angles
     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) { //*ZERO
         globalTarget = 0;
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) { //*LOAD
-        globalTarget = 24;
+        globalTarget = 25;
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) { //*FULLSCORE
         globalTarget = 140;
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) { //*STRAIGHT UP
@@ -39,7 +39,7 @@ void updateLBTask() {
         if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) { //*ZERO
             globalTarget = 0;
         } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) { //*LOAD
-            globalTarget = 24;
+            globalTarget = 25;
 
             // if(comingDown) { //diff angle for coming down because i think pid less accurate when going from 0 to load
             //     globalTarget = 16;
@@ -66,7 +66,7 @@ void updateLBTask() {
 
             // comingDown = true;
         }
-        // std::cout<<"lb: "<<lbRotation.get_position() / 100.0<<", comingDown: "<<comingDown<<"\n";
+        //std::cout<<"lb: "<<lbRotation.get_position() / 100.0<<"\n";//<<", comingDown: "<<comingDown<<"\n";
         pros::delay(10);
     }
 }
@@ -94,7 +94,7 @@ void lbTask() {
         armMoveVoltage = armMoveVoltage * 1200;
 
         if (std::abs(armMoveVoltage) > 12000) { armMoveVoltage = (armMoveVoltage < 0) ? -12000 : 12000; }
-        if (std::abs(armMoveVoltage) < 1000) { armMoveVoltage = 0; } // Adjusted small deadzone for voltage
+        if (std::abs(armMoveVoltage) < 200) { armMoveVoltage = 0; } // Adjusted small deadzone for voltage
 
         ladyBrown.move_voltage(-armMoveVoltage);
 
