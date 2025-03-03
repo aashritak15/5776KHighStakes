@@ -107,10 +107,10 @@ int findClosest(lemlib::Pose pose, int prevIndex) {
     float closestDist = infinity();
     int maxIndex;
 
-    if (prevIndex + 15 > pathPoints.size() - 2) { //-1 for endData and then -1 for the fact it's an index
+    if (prevIndex + 20 > pathPoints.size() - 2) { //-1 for endData and then -1 for the fact it's an index
         maxIndex = pathPoints.size() - 2;
     } else {
-        maxIndex = prevIndex + 15; // TODO: tune path skip tolerance
+        maxIndex = prevIndex + 20; // TODO: tune path skip tolerance
     }
 
     // loop through all path points
@@ -256,6 +256,8 @@ bool doExclusions(std::string& dataLine) {
         rightMotors.move(0);
         ladyBrown.move(0);
 
+        pros::delay(50);
+
         if (subValues.at(closestPoint)[6] == "TURNING CW") {
             dataLine.append("TURN CLOCKWISE\n");
         } else {
@@ -293,6 +295,8 @@ bool doExclusions(std::string& dataLine) {
 
         fileOThree << dataLine;
         fileOThree.flush();
+
+        pros::delay(50);
         return true;
     }
 
@@ -315,18 +319,16 @@ void doMultipliers(int segment, float& targetVel, std::string pathID) {
         }
     } else if(pathID == "skills") {
         switch (std::stoi(subValues.at(closestPoint)[7])) {
-            case 0: targetVel *= 2; break; 
-            case 1: targetVel *= 2; break;
-            case 2: targetVel *= 2; break; 
-            case 3: targetVel *= 2; break;
-            case 4: targetVel *= 2; break;
-            case 5: targetVel *= 2; break;
-            case 6: targetVel *= 2; break;
-            case 7: targetVel *= 2; break;
-            case 8: targetVel *= 2; break;
-            case 9: targetVel *= 2; break;
-            case 10: targetVel *= 2; break;
-            case 11: targetVel *= 2; break;
+            case 0: targetVel *= 3; break; 
+            case 1: targetVel *= 3; break;
+            case 2: targetVel *= 3; break; 
+            case 3: targetVel *= 3; break;
+            case 4: targetVel *= 3; break;
+            case 5: targetVel *= 3; break;
+            case 6: targetVel *= 3; break;
+            case 7: targetVel *= 3; break;
+            case 8: targetVel *= 3; break;
+            case 9: targetVel *= 3; break;
         }
     }
 }
@@ -384,6 +386,9 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pa
     Pose lastLookahead = pathPoints.at(0);
     std::cout<<"initialized\n";
 
+    int prevClosestPoint = 0;
+    int killCount = 1;
+
     while (true) {
         std::cout<<"looping\n";
         // interrupt();
@@ -412,6 +417,22 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pa
             controller.set_text(0, 0, "PATH FINISHED!");
 
             return;
+        }
+
+        // killtimer
+        if (std::stoi(subValues.at(closestPoint)[7]) == prevClosestPoint) {
+            killCount++;
+
+            if(killCount == 20) { //TODO: tune killcount time, 0.2s currently
+                closestPoint++;
+                killCount = 1;
+
+                prevClosestPoint = closestPoint;
+            }
+
+        } else {
+            killCount = 1;
+            prevClosestPoint = closestPoint;
         }
 
         // update all subsystems

@@ -31,7 +31,6 @@ void rerunControl() {
     chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
 
     int count = 1;
-    sortState = 2;
 
     while (true) {
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);

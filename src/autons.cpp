@@ -1,5 +1,162 @@
 #include "autons.hpp"
 
+void fourRingRed() {
+    chassis.setPose(0, 0, 0);
+    chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
+
+    chassis.moveToPoint(0.2, -29, 2000, {.forwards = false}); // go to mogo
+
+    chassis.waitUntilDone();
+    clampState = 1;
+    pros::delay(500);
+
+    chassis.turnToHeading(-90, 800);
+
+    intakeState = 1;
+
+    pros::delay(250);
+
+    chassis.moveToPoint(-22.4, -31, 2000); // intake ring # 1
+    chassis.waitUntilDone();
+
+    // pros::delay(250);
+
+    chassis.turnToHeading(0, 1000);
+
+    chassis.moveToPoint(-23, -11.5, 750);
+
+    pros::delay(600);
+
+    chassis.turnToHeading(-44, 800); // turn to face ring stack
+
+    // ram 1
+    // chassis.moveToPoint(-30.71, -3.99, 1000);
+    // chassis.waitUntilDone();
+
+    pros::delay(1000);
+
+    chassis.moveToPoint(-45.6, 11.55, 1050, {.minSpeed = 50});
+    intakeState = 2;
+    chassis.waitUntilDone(); // go to ring stack
+    pros::delay(100);
+    intakeState = 1;
+
+    // ram 2
+    pros::delay(500);
+    chassis.moveToPoint(-32.71, -1.99, 1000, {.forwards = false}); // go back
+    chassis.waitUntilDone();
+    intakeState = 2;
+    chassis.moveToPoint(-45.6, 11.55, 750, {.minSpeed = 50});
+    chassis.waitUntilDone(); // go to ring stack
+    pros::delay(100);
+    intakeState = 1;
+
+    // ram 3
+    pros::delay(500);
+    chassis.moveToPoint(-32.71, -1.99, 1000, {.forwards = false}); // go back
+    chassis.waitUntilDone();
+    intakeState = 2;
+    chassis.moveToPoint(-45.6, 11.55, 750, {.minSpeed = 50});
+    chassis.waitUntilDone(); // go to ring stack
+    pros::delay(100);
+    intakeState = 1;
+
+    pros::delay(500);
+    chassis.moveToPoint(-30.71, -3.99, 1000, {.forwards = false, .minSpeed = 100}); // go back
+
+    chassis.turnToHeading(134, 800); // turn to face ladder
+
+    intakeState = 0;
+    // chassis.waitUntilDone();
+    // clampState = 0;
+
+    chassis.moveToPoint(-1.52, -21.3, 6000); // go to the ladder
+
+    globalTarget = 140;
+}
+
+void fourRingBlue() {
+    chassis.setPose(0, 0, 0);
+    chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
+
+    chassis.moveToPoint(-0.2, -29, 1000, {.forwards = false}); // go to mogo
+
+    chassis.waitUntilDone();
+    clampState = 1;
+    pros::delay(500);
+
+    chassis.turnToHeading(90, 800);
+
+    intakeState = 1;
+
+    chassis.moveToPoint(18.3, -27.6, 800); // intake ring # 1
+    chassis.waitUntilDone();
+
+    // pros::delay(250);
+
+    chassis.turnToHeading(0, 1000);
+
+    chassis.moveToPoint(17.7, -5.2, 750);
+
+    // pros::delay(600);
+
+    chassis.turnToHeading(47, 800); // turn to face ring stack
+
+    pros::delay(250);
+
+    // // ram 1
+    chassis.moveToPoint(29.9, 5.9, 1000);
+
+    intakeState = 2;
+    chassis.waitUntilDone(); // go to ring stack
+    pros::delay(100);
+    intakeState = 1;
+
+    // ram 2
+    pros::delay(500);
+    chassis.moveToPoint(21.2, -2.6, 750, {.forwards = false}); // go back
+    chassis.waitUntilDone();
+    intakeState = 2;
+    chassis.moveToPoint(29.9, 5.9, 1000);
+    chassis.waitUntilDone(); // go to ring stack
+    pros::delay(100);
+    intakeState = 1;
+
+    // ram 3
+    pros::delay(500);
+    chassis.moveToPoint(21.2, -2.6, 750, {.forwards = false}); // go back
+    chassis.waitUntilDone();
+    intakeState = 2;
+    chassis.moveToPoint(30.9, 6.9, 750);
+    chassis.waitUntilDone(); // go to ring stack
+    pros::delay(100);
+    intakeState = 1;
+
+    pros::delay(500);
+    chassis.moveToPoint(21.71, 2.99, 750, {.forwards = false, .minSpeed = 100}); // go back
+
+    chassis.turnToHeading(243.9, 800); // turn to face ladder
+
+    intakeState = 0;
+    // chassis.waitUntilDone();
+    // clampState = 0;
+
+    chassis.moveToPoint(-19, -24, 3000);
+
+    // // globalTarget = 140;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 // void fourRingRed() {
 //     chassis.setPose(0, 0, 0);
 //     chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
