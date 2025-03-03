@@ -85,24 +85,21 @@ void updateColorSort() {
  *@brief run color sort based on global state
  */
 void runColorSort() {
-
     while (true) {
-
-        if(intakeState == 0) { //TODO: see if this fixes
+        if (intakeState == 0) { // TODO: see if this fixes
             pros::delay(10);
             continue;
         }
 
         if (sortState == 1) {
             if (optical.get_hue() < 25 && optical.get_hue() > 10 && optical.get_proximity() > 200) {
-
                 if (!colorDetected) {
                     colorDetected = true;
                     pros::Task::delay(40);
                     intakeState = 2;
                     pros::Task::delay(300);
                     intakeState = 1;
-                    
+
                 } else {
                     colorDetected = false;
                 }
@@ -115,15 +112,13 @@ void runColorSort() {
                     intakeState = 2;
                     pros::Task::delay(300);
                     intakeState = 1;
-
                 }
             } else {
                 colorDetected = false;
             }
         }
 
-    pros::delay(10);
-
+        pros::delay(10);
     }
 }
 
@@ -147,19 +142,19 @@ void runIntake() {
     }
 }
 
-void antiJam() {
-    while (true) {
-        // Detect a jam based on velocity and current draw
-        if (intakeUpper.get_actual_velocity() < 100 && intakeLower.get_current_draw() > 2400) {
-            intakeUpper.move_voltage(12000); // Try to push forward for a moment
-            pros::Task::delay(40);
-            intakeUpper.move_voltage(-12000); // Reverse to clear jam
-            pros::Task::delay(200); // Hold reverse for longer in case of severe jam
-            intakeUpper.move_voltage(6000); // Resume with reduced power before full power
-            pros::Task::delay(100);
-            intakeUpper.move_voltage(12000);
-        }
+// void antiJam() {
+//     while (true) {
+//         // Detect a jam based on velocity and current draw
+//         if (intakeUpper.get_actual_velocity() < 100 && intakeLower.get_current_draw() > 2400) {
+//             intakeUpper.move_voltage(12000); // Try to push forward for a moment
+//             pros::Task::delay(40);
+//             intakeUpper.move_voltage(-12000); // Reverse to clear jam
+//             pros::Task::delay(200); // Hold reverse for longer in case of severe jam
+//             intakeUpper.move_voltage(6000); // Resume with reduced power before full power
+//             pros::Task::delay(100);
+//             intakeUpper.move_voltage(12000);
+//         }
 
-        //         pros::delay(10);
-    }
-}
+//         //         pros::delay(10);
+//     }
+// }
