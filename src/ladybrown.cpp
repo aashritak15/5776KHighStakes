@@ -28,7 +28,7 @@ void updateLB() { //TODO: outdated angles
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) { //*FULLSCORE
         globalTarget = 140;
     } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) { //*STRAIGHT UP
-        globalTarget = 100;
+        globalTarget = 80;
     }
 }
 
@@ -61,7 +61,7 @@ void updateLBTask() {
             prevIntakeState = intakeState;
             intakeState = 2;
             pros::delay(25);
-            globalTarget = 102.32;
+            globalTarget = 80;
             intakeState = prevIntakeState;
 
             // comingDown = true;

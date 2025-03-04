@@ -87,15 +87,78 @@ ASSET(skillsExtra_txt);
 ASSET(autonomous_txt);
 ASSET(extra_txt);
 
+void skills() {
+    //alliance
+    intakeState = 1; 
+    pros::delay(500);
+    intakeState = 0;
+
+    //mogo
+    chassis.moveToPoint(0, 11, 500);
+    chassis.turnToHeading(90, 500);
+    chassis.moveToPoint(-25, 12.3, 750, {.forwards = false});
+    chassis.waitUntilDone();
+    clampState = 1;
+    pros::delay(250);
+
+    //mogo ring #1
+    chassis.turnToHeading(0, 500);
+    intakeState = 1;
+    chassis.moveToPoint(-25, 36, 500);
+    pros::delay(250);
+
+    //wall stake ring #1
+    chassis.turnToHeading(-30.5, 500);
+    chassis.waitUntilDone();
+    pros::delay(250);
+    globalTarget = 26;
+    chassis.moveToPoint(-48.5, 70.9, 1000);
+    chassis.waitUntilDone();
+    pros::delay(1000);
+    intakeState = 0;
+
+    //back up and go to wall stake
+    chassis.moveToPose(-34.1, 37.8, -51.6, 100000, {.forwards = false, .lead = 0.5, .minSpeed = 50});
+    chassis.moveToPose(-50, 49.5, -84, 100000, {.lead = 0.7, .minSpeed = 50});
+    chassis.moveToPose(-60.3, 49.5, -90, 750);
+    chassis.waitUntilDone();
+    
+    //score wall stake and get mogo ring #2
+    intakeState = 2;
+    pros::delay(25);
+    globalTarget = 80;
+    pros::delay(500);
+    intakeState = 1;
+    chassis.moveToPoint(-63.8, 49.5, 500);
+    chassis.waitUntilDone();
+    globalTarget = 140;
+    pros::delay(1000);
+
+    //back up and get mogo rings #3 4 5
+    chassis.moveToPoint(-48, 49.5, 500, {.forwards = false});
+    chassis.waitUntilDone();
+    globalTarget = 0;
+    chassis.turnToHeading(-178, 500);
+    chassis.moveToPose(-48.4, 32.4, 180, 500);
+    // chassis.waitUntilDone();
+    // chassis.moveToPose(-48.5, 13.14, 180, 500);
+    // chassis.waitUntilDone();
+    chassis.moveToPose(-48.6, 0.2, 180, 500);
+    chassis.waitUntilDone();
+
+}
+
 void autonomous() {
-    sortState = 1;
+    chassis.setBrakeMode(MOTOR_BRAKE_BRAKE);
+    sortState = 2;
+    skills();
 
     // fourRingRed();
 
     // fourRingBlue();
 
-    // chassis.follow(ringsideRed_txt, ringsideExtra_txt, "ringside");
-    chassis.follow(skillsPath_txt, skillsExtra_txt, "skills");
+    //chassis.follow(ringsideRed_txt, ringsideExtra_txt, "ringside");
+    //chassis.follow(skillsPath_txt, skillsExtra_txt, "skills");
     // chassis.follow(autonomous_txt, extra_txt, "test");
 
     // void fourRingRed();
@@ -189,14 +252,14 @@ void autonomous() {
 void opcontrol() {
 
     sortState = 0;
-    // matchControl();
+    matchControl();
 
     // sortState = 1;
     // rerunControl();
 
     // *INTERRUPT
-    chassis.follow(skillsPath_txt, skillsExtra_txt, "skills");
-    rerunControl();
+    //chassis.follow(skillsPath_txt, skillsExtra_txt, "skills");
+    //rerunControl();
 
     //*REFLECT
     // reflect(true, false);
