@@ -60,7 +60,6 @@ void initialize() {
             pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
             pros::lcd::print(3, "LB: %f", ladyBrown.get_position()); // lift encoder
             pros::lcd::print(4, "Color: %f ", optical.get_hue());
-            std::cout << chassis.getPose().x << ", " << chassis.getPose().y << ", " << chassis.getPose().theta << "\n";
 
             // log position telemetry
             lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
@@ -85,6 +84,8 @@ ASSET(ringsideBlue_txt);
 ASSET(ringsideExtra_txt);
 ASSET(skillsPath_txt);
 ASSET(skillsExtra_txt);
+ASSET(autonomous_txt);
+ASSET(extra_txt);
 
 void autonomous() {
     sortState = 1;
@@ -95,6 +96,7 @@ void autonomous() {
 
     // chassis.follow(ringsideRed_txt, ringsideExtra_txt, "ringside");
     chassis.follow(skillsPath_txt, skillsExtra_txt, "skills");
+    // chassis.follow(autonomous_txt, extra_txt, "test");
 
     // void fourRingRed();
 
@@ -185,14 +187,16 @@ void autonomous() {
 }
 
 void opcontrol() {
+
+    sortState = 0;
     // matchControl();
 
-    sortState = 1;
-    rerunControl();
+    // sortState = 1;
+    // rerunControl();
 
     // *INTERRUPT
-    // chassis.follow(ringsideRed_txt, ringsideExtra_txt, "ringside");
-    // rerunControl();
+    chassis.follow(skillsPath_txt, skillsExtra_txt, "skills");
+    rerunControl();
 
     //*REFLECT
     // reflect(true, false);

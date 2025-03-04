@@ -21,6 +21,7 @@ void intakeInit() {
 
     pros::Task sortTask(runColorSort, "color sort");
     pros::Task intakeTask(runIntake, "intake");
+    // pros::Task antiJamTask(antiJam, "anti jam");
 }
 
 /**
@@ -86,35 +87,42 @@ void updateColorSort() {
  */
 void runColorSort() {
     while (true) {
+        std::cout<<std::to_string(optical.get_hue())<<" ";
+        std::cout<<std::to_string(optical.get_proximity());
+        std::cout<<"\n";
+
         if (intakeState == 0) { // TODO: see if this fixes
             pros::delay(10);
             continue;
         }
 
         if (sortState == 1) {
-            if (optical.get_hue() < 25 && optical.get_hue() > 10 && optical.get_proximity() > 200) {
-                if (!colorDetected) {
-                    colorDetected = true;
-                    pros::Task::delay(40);
-                    intakeState = 2;
-                    pros::Task::delay(300);
-                    intakeState = 1;
+            if (optical.get_hue() < 30 && optical.get_hue() > 0 && optical.get_proximity() > 200) {
 
-                } else {
-                    colorDetected = false;
-                }
+                pros::Task::delay(30);
+
+                intakeState = -1; //TODO: special sauce intake state
+                intakeUpper.move_voltage(-12000);
+                intakeLower.move_voltage(12000);
+
+                pros::Task::delay(300);
+
+                intakeState = 1;
+
             }
         } else if (sortState == 2) {
-            if (optical.get_hue() < 230 && optical.get_hue() > 210 && optical.get_proximity() > 200) {
-                if (!colorDetected) {
-                    colorDetected = true;
-                    pros::Task::delay(40);
-                    intakeState = 2;
-                    pros::Task::delay(300);
-                    intakeState = 1;
-                }
-            } else {
-                colorDetected = false;
+            if (optical.get_hue() < 230 && optical.get_hue() > 200 && optical.get_proximity() > 200) {
+
+                pros::delay(30);
+
+                intakeState = -1; //TODO: special sauce intake state
+                intakeUpper.move_voltage(-12000);
+                intakeLower.move_voltage(12000);
+
+                pros::Task::delay(300);
+
+                intakeState = 1;
+
             }
         }
 
@@ -126,6 +134,7 @@ void runColorSort() {
  *@brief run intake motors based on global state
  */
 void runIntake() {
+
     while (true) {
         if (intakeState == 0) {
             intakeUpper.move_voltage(0);
@@ -142,19 +151,23 @@ void runIntake() {
     }
 }
 
-// void antiJam() {
-//     while (true) {
-//         // Detect a jam based on velocity and current draw
-//         if (intakeUpper.get_actual_velocity() < 100 && intakeLower.get_current_draw() > 2400) {
-//             intakeUpper.move_voltage(12000); // Try to push forward for a moment
-//             pros::Task::delay(40);
-//             intakeUpper.move_voltage(-12000); // Reverse to clear jam
-//             pros::Task::delay(200); // Hold reverse for longer in case of severe jam
-//             intakeUpper.move_voltage(6000); // Resume with reduced power before full power
-//             pros::Task::delay(100);
-//             intakeUpper.move_voltage(12000);
-//         }
+void antiJam() {
 
-//         //         pros::delay(10);
-//     }
-// }
+    int jamCount;
+
+    while (true) {
+        if (intakeUpper.get_actual_velocity() < 100 && intakeState == 1) { //TODO: ANTI JAM
+            jamCount++;
+
+            if (jamCount == 50) {
+                intakeState = 2;
+                pros::delay(250);
+                intakeState = 1;
+            }
+        } else {
+            jamCount = 0;
+        }
+
+        pros::delay(10);
+    }
+}

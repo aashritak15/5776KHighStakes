@@ -23,8 +23,8 @@ std::vector<lemlib::Pose> pathPoints;
 std::vector<std::vector<std::string>> subValues;
 std::vector<std::string> velocities;
 int closestPoint = 0;
-const float MIN_LOOKAHEAD = 5;
-const float MAX_LOOKAHEAD = 10;
+const float MIN_LOOKAHEAD = 8; //TODO: find good lookaheads
+const float MAX_LOOKAHEAD = 12;
 
 /**
  * @brief function that returns elements in a file line, separated by a delimeter
@@ -215,9 +215,7 @@ float calculateCurvature(lemlib::Pose pose, float heading, lemlib::Pose lookahea
     float x = std::fabs(a * lookahead.x + lookahead.y + c) / std::sqrt((a * a) + 1);
     float d = std::hypot(lookahead.x - pose.x, lookahead.y - pose.y);
 
-    std::cout << std::to_string(d) << "\n";
-
-    if (d < 2) { // TODO: tune lookahead distance from exclusion tolerance
+    if (d < 5) { // TODO: tune lookahead distance from exclusion tolerance
         return 0;
     }
 
@@ -252,11 +250,10 @@ bool doExclusions(std::string& dataLine) {
 
     } else if (subValues.at(closestPoint)[6] == "TURNING CW" ||
                subValues.at(closestPoint)[6] == "TURNING CCW") { //*turn exclusion
-        leftMotors.move(0);
-        rightMotors.move(0);
-        ladyBrown.move(0);
+        leftMotors.move_voltage(0);
+        rightMotors.move_voltage(0);
 
-        pros::delay(50);
+        pros::delay(100);
 
         if (subValues.at(closestPoint)[6] == "TURNING CW") {
             dataLine.append("TURN CLOCKWISE\n");
@@ -266,12 +263,12 @@ bool doExclusions(std::string& dataLine) {
 
         int prevClosestPoint = closestPoint;
 
-        closestPoint++; //*advance index forward one to begin the check
+        closestPoint++;
         while (subValues.at(closestPoint)[6] == "TURNING CW" || subValues.at(closestPoint)[6] == "TURNING CCW") {
             closestPoint++;
         }
 
-        closestPoint++; //TODO: does this improve accuracy?
+        // closestPoint++; //TODO: does this improve accuracy?
 
         dataLine.append("turn target index: " + std::to_string(closestPoint) + "\n");
 
@@ -279,24 +276,29 @@ bool doExclusions(std::string& dataLine) {
 
         if (subValues.at(prevClosestPoint)[6] == "TURNING CW") {
             dataLine.append("beginning theta: " + std::to_string(chassis.getPose().theta) + "\n");
+
             chassis.turnToHeading(pathPoints.at(closestPoint).theta, 2500,
-                                  {.direction = AngularDirection::CW_CLOCKWISE, .maxSpeed = 80},
+                                  {.direction = AngularDirection::CW_CLOCKWISE, .maxSpeed = 80}, //TODO: tune max speed
                                   false); // TODO: turn pid heading + max speed
+
             dataLine.append("ending theta: " + std::to_string(chassis.getPose().theta) +
                             "\n\n"); //* radians but i don't care anymore
         } else {
             dataLine.append("beginning theta: " + std::to_string(chassis.getPose().theta) + "\n");
+
             chassis.turnToHeading(pathPoints.at(closestPoint).theta, 2500,
-                                  {.direction = AngularDirection::CCW_COUNTERCLOCKWISE, .maxSpeed = 80}, false);
+                                  {.direction = AngularDirection::CCW_COUNTERCLOCKWISE, .maxSpeed = 80}, 
+                                  false);
+
             dataLine.append("ending theta: " + std::to_string(chassis.getPose().theta) + "\n");
         }
 
-        closestPoint--;
+        // closestPoint--;
 
         fileOThree << dataLine;
         fileOThree.flush();
 
-        pros::delay(50);
+        pros::delay(100);
         return true;
     }
 
@@ -319,16 +321,17 @@ void doMultipliers(int segment, float& targetVel, std::string pathID) {
         }
     } else if(pathID == "skills") {
         switch (std::stoi(subValues.at(closestPoint)[7])) {
-            case 0: targetVel *= 3; break; 
-            case 1: targetVel *= 3; break;
-            case 2: targetVel *= 3; break; 
-            case 3: targetVel *= 3; break;
-            case 4: targetVel *= 3; break;
-            case 5: targetVel *= 3; break;
-            case 6: targetVel *= 3; break;
-            case 7: targetVel *= 3; break;
-            case 8: targetVel *= 3; break;
-            case 9: targetVel *= 3; break;
+            case 0: targetVel *= 2; break; 
+            case 1: targetVel *= 2; break;
+            case 2: targetVel *= 2; break; 
+            case 3: targetVel *= 2; break;
+            case 4: targetVel *= 2; break;
+            case 5: targetVel *= 2; break;
+            case 6: targetVel *= 2; break;
+            case 7: targetVel *= 2; break;
+            case 8: targetVel *= 2; break;
+            case 9: targetVel *= 2; break;
+            case 10: targetVel *= 2; break;
         }
     }
 }
@@ -386,8 +389,8 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pa
     Pose lastLookahead = pathPoints.at(0);
     std::cout<<"initialized\n";
 
-    int prevClosestPoint = 0;
     int killCount = 1;
+    int prevClosestPoint = 0;
 
     while (true) {
         std::cout<<"looping\n";
@@ -405,7 +408,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pa
         dataLine.append("target index: " + std::to_string(closestPoint) + "\n");
 
         // path termination check
-        if (subValues.at(closestPoint)[7] == "-1") { //TODO: is this fine
+        if (subValues.at(closestPoint)[7] == "-1" || prevClosestPoint > closestPoint) { //TODO: is this fine
             drivetrain.leftMotors->move(0);
             drivetrain.rightMotors->move(0);
             dataLine.append("PATH FINISHED");
@@ -419,21 +422,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pa
             return;
         }
 
-        // killtimer
-        if (std::stoi(subValues.at(closestPoint)[7]) == prevClosestPoint) {
-            killCount++;
-
-            if(killCount == 20) { //TODO: tune killcount time, 0.2s currently
-                closestPoint++;
-                killCount = 1;
-
-                prevClosestPoint = closestPoint;
-            }
-
-        } else {
-            killCount = 1;
-            prevClosestPoint = closestPoint;
-        }
+        dataLine.append("kill count: " + std::to_string(killCount) + "\n");
 
         // update all subsystems
         updateSubsys();
@@ -441,6 +430,27 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pa
         // exclusions
         bool skip = doExclusions(dataLine);
         if (skip) { continue; }
+
+        // killtimer
+        if (std::stoi(subValues.at(closestPoint)[7]) == prevClosestPoint) {
+            killCount++;
+
+            if(killCount == 8) { //TODO: tune killcount time, 0.08s currently
+                dataLine.append("KILL TIMERED OUT\n\n");
+                closestPoint++;
+
+                prevClosestPoint = closestPoint;
+
+                fileOThree << dataLine;
+                fileOThree.flush();
+                
+                killCount = 1;
+                continue;
+            }
+
+        } else {
+            killCount = 1;
+        }
 
         // debug non-exclusion-relevant information
         dataLine.append("current x: " + std::to_string(pose.x) + "\n");
@@ -487,10 +497,12 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pa
                         std::to_string(rightMotors.get_voltage()) + "\n");
         dataLine.append("target vels: " + std::to_string(targetLeftVel) + " " + std::to_string(targetRightVel) +
                         "\n\n");
-
+ 
         // send velocity
         leftMotors.move_voltage(targetLeftVel);
         rightMotors.move_voltage(targetRightVel);
+
+        prevClosestPoint = closestPoint;
 
         // write to debug
         fileOThree << dataLine;
