@@ -89,6 +89,7 @@ ASSET(extra_txt);
 
 void skills() {
     //alliance
+    chassis.moveToPoint(0, 1, 600); //make this more it doesnt really show 
     intakeState = 1; 
     pros::delay(500);
     intakeState = 0;
@@ -113,13 +114,13 @@ void skills() {
     pros::delay(250);
     chassis.moveToPoint(-46, 70.9, 1000);
     chassis.waitUntilDone();
-    globalTarget = 26;
+    globalTarget = 24.5;
     pros::delay(500);
 
     //back up and go to wall stake
     chassis.moveToPose(-34.1, 37.8, -51.6, 100000, {.forwards = false, .lead = 0.5, .minSpeed = 50});
     chassis.moveToPose(-50, 51.25, -86, 100000, {.lead = 0.7, .minSpeed = 50});
-    chassis.moveToPose(-73, 51.25, -90, 1000);
+    chassis.moveToPose(-73, 51.25, -90, 1500);
     chassis.waitUntilDone();
     // leftMotors.move_voltage(8000);
     // rightMotors.move_voltage(8000);
@@ -133,19 +134,157 @@ void skills() {
     intakeState = 2;
     pros::delay(50);
     globalTarget = 140;
-    pros::delay(1500);
+    pros::delay(170);
     intakeState = 1;
+    pros::delay(800);
+ 
+
+  
+
+   
 
     //back up and get mogo rings #3 4 5
-    chassis.moveToPoint(-48, 49.5, 500, {.forwards = false});
+    chassis.moveToPoint(-49.5, 49.5, 500, {.forwards = false});
     chassis.waitUntilDone();
+      
     globalTarget = 0;
-    chassis.turnToHeading(-178, 500);
-    chassis.moveToPose(-48.4, 0, 180, 1500);
+
+    
+    chassis.turnToHeading(-180, 500);
+    chassis.moveToPose(-49.5, -1, 180, 2500, {.maxSpeed = 80});
+    
+
+   
+
+    chassis.waitUntilDone();
+
+   
+    pros::delay(500);
+
+    chassis.turnToHeading(-56, 1000); // turns to get ring # 6 
+
+    chassis.moveToPoint(-54.65, 2.65, 1000);
+
+     pros::delay(1500);
+
+    chassis.turnToHeading(35, 1000); // turn to face the corner 
+    chassis.waitUntilDone(); 
+     intakeState = 2; //outtake for a little bit to not let intake get stuck 
+    pros::delay(50);
+    intakeState = 0;
+  
+
+    pros::delay(300);
+
+    clampState = 0;
+
+    chassis.moveToPoint(-58, -0.5, 3000, {.forwards = false, .minSpeed = 50}); //move back into the corner
+
+
+    chassis.moveToPoint(-54.5, 3.2, 1000);  // move out of the corner 
+
+    chassis.turnToHeading(-90, 1000); // turn to face mogo in the second corner 
+
+   // chassis.moveToPoint(25, 12.3, 3000, {.forwards = false});
+
+   chassis.moveToPoint(0, 3.7, 4000, {.forwards = false}); // move to second mogo
+   chassis.moveToPoint(4, 3.7, 400, {.forwards = false, .maxSpeed = 80}); // slow down for mogo
+   chassis.waitUntilDone(); 
+    clampState = 1; //clamp onto mogo 
+    pros::delay(400);
+
+
+
+    //mogo ring #1
+    chassis.turnToHeading(0, 500); // turn to face ring 
+    intakeState = 1;
+    chassis.moveToPoint(4.5, 16, 2000); // move to ring 
+    pros::delay(250);
+
+
+
+
+
+
+    //wall stake ring #1
+      chassis.moveToPoint(19, 36, 800); // middle point to get the ring for wallstake 
+    chassis.turnToHeading(25.4, 500); 
+    chassis.moveToPoint(27, 58.8, 800); // wall stake ring point 
+    chassis.waitUntilDone();
+    globalTarget = 24.5;
+    pros::delay(500);
+
+    // //back up and go to wall stake
+     chassis.moveToPose(20.7, 41, 35, 100000, {.forwards = false, .lead = 0.5, .minSpeed = 50});
+
+    chassis.moveToPose(26.5, 41, 90, 100000, {.lead = 0.7, .minSpeed = 50});
+
+
+    chassis.moveToPose(44.5, 44.75, 90, 1500, {.maxSpeed= 100});
+    chassis.waitUntilDone();
+    // // leftMotors.move_voltage(8000);
+    // // rightMotors.move_voltage(8000);
+
+    // pros::delay(1500);
+    
+    // leftMotors.move_voltage(0);
+    // rightMotors.move_voltage(0);
+    
+    // //score wall stake and get mogo ring #2
+    intakeState = 2;
+    pros::delay(50);
+    globalTarget = 140;
+    pros::delay(170);
+    intakeState = 1;
+    pros::delay(800);
+ 
+
+  
+
+   
+
+    //back up and get mogo rings #3 4 5
+    chassis.moveToPoint(26.7, 44.75, 500, {.forwards = false});
+    chassis.waitUntilDone();
+      
+    globalTarget = 0;
+
+    
+    chassis.turnToHeading(180, 500);
+    chassis.moveToPose(26.12, -2.258, 180, 2500, {.maxSpeed = 80});
+    
+
+   
+
     // chassis.waitUntilDone();
     // chassis.moveToPose(-48.5, 13.14, 180, 500);
     // chassis.waitUntilDone();
     chassis.waitUntilDone();
+
+   
+    pros::delay(100);
+
+    chassis.turnToHeading(68.2, 1000);
+
+    chassis.moveToPoint(35.9, 3.9, 1000);
+
+    chassis.turnToHeading(-31.3, 1000);
+    chassis.waitUntilDone(); 
+     intakeState = 2;
+    pros::delay(50);
+    intakeState = 1;
+
+     pros::delay(300);
+
+    clampState = 0;
+
+    chassis.moveToPoint(37.5, 0, 3000, {.forwards = false, .minSpeed = 50});
+
+
+    // chassis.moveToPoint(-54.5, 4.2, 1000); 
+
+
+    
 
 }
 

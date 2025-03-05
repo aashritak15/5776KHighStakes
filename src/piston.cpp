@@ -50,7 +50,7 @@ void updateDoinkRight() {
 }
 
 void updateDoinkLeft() {
-    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_UP)) { // TODO: change back to x
+    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) { // TODO: change back to x
         if (!buttonXPressed) {
             buttonXPressed = true;
             if (doinkLeftState == 0) {

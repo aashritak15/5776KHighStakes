@@ -108,45 +108,45 @@ void initDebug() {
 
 void closeO() {
     // Check if the A button on the controller is pressed
-    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
-        // Write final data to fileOTwo
-        std::string dataLine = "0, 0, 0.000000, 0, 0, 0, STOPPED, -1\nendData";
-        fileOTwo << dataLine;
+    // if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
+    //     // Write final data to fileOTwo
+    //     std::string dataLine = "0, 0, 0.000000, 0, 0, 0, STOPPED, -1\nendData";
+    //     fileOTwo << dataLine;
 
-        std::string dataLine2;
+    //     std::string dataLine2;
 
-        // Append the chassis position data, rounded to 3 decimal places
-        dataLine2.append(std::to_string((round(chassis.getPose().x * 1000)) / 1000) + ", ");
-        dataLine2.append(std::to_string((round(chassis.getPose().y * 1000)) / 1000) + ", ");
-        dataLine2.append(std::to_string((round(chassis.getPose().theta * 1000)) / 1000) + ", ");
-        dataLine2.append("0\nendData");
+    //     // Append the chassis position data, rounded to 3 decimal places
+    //     dataLine2.append(std::to_string((round(chassis.getPose().x * 1000)) / 1000) + ", ");
+    //     dataLine2.append(std::to_string((round(chassis.getPose().y * 1000)) / 1000) + ", ");
+    //     dataLine2.append(std::to_string((round(chassis.getPose().theta * 1000)) / 1000) + ", ");
+    //     dataLine2.append("0\nendData");
 
-        // Write position data to fileO
-        fileO << dataLine2;
+    //     // Write position data to fileO
+    //     fileO << dataLine2;
 
-        // Ensure data is written to disk immediately
-        fileO.flush();
-        fileOTwo.flush();
+    //     // Ensure data is written to disk immediately
+    //     fileO.flush();
+    //     fileOTwo.flush();
 
-        // Display a waiting message and pause
-        controller.set_text(0, 0, "wait                          ");
-        pros::delay(2500);
+    //     // Display a waiting message and pause
+    //     controller.set_text(0, 0, "wait                          ");
+    //     pros::delay(2500);
 
-        // Close files properly
-        if (fileO.is_open()) fileO.close();
-        if (fileOTwo.is_open()) fileOTwo.close();
+    //     // Close files properly
+    //     if (fileO.is_open()) fileO.close();
+    //     if (fileOTwo.is_open()) fileOTwo.close();
 
-        pros::delay(100); // Small delay for stability
+    //     pros::delay(100); // Small delay for stability
 
-        active = false; 
+    //     active = false; 
 
-        controller.set_text(0, 0, "file closed"); // Confirm file closure
-        pros::delay(1000);
+    //     controller.set_text(0, 0, "file closed"); // Confirm file closure
+    //     pros::delay(1000);
 
-        controller.set_text(0, 0, "running filters"); // Notify user of next step
+    //     controller.set_text(0, 0, "running filters"); // Notify user of next step
 
-        filterAuton(); // Run filtering process
-    }
+    //     filterAuton(); // Run filtering process
+    // }
 }
 
 void closeOInterrupt() {
