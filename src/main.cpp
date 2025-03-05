@@ -104,46 +104,47 @@ void skills() {
     //mogo ring #1
     chassis.turnToHeading(0, 500);
     intakeState = 1;
-    chassis.moveToPoint(-25, 36, 500);
+    chassis.moveToPoint(-24, 36, 500);
     pros::delay(250);
 
     //wall stake ring #1
     chassis.turnToHeading(-30.5, 500);
     chassis.waitUntilDone();
     pros::delay(250);
-    globalTarget = 26;
-    chassis.moveToPoint(-48.5, 70.9, 1000);
+    chassis.moveToPoint(-46, 70.9, 1000);
     chassis.waitUntilDone();
-    pros::delay(1000);
-    intakeState = 0;
+    globalTarget = 26;
+    pros::delay(500);
 
     //back up and go to wall stake
     chassis.moveToPose(-34.1, 37.8, -51.6, 100000, {.forwards = false, .lead = 0.5, .minSpeed = 50});
-    chassis.moveToPose(-50, 49.5, -84, 100000, {.lead = 0.7, .minSpeed = 50});
-    chassis.moveToPose(-60.3, 49.5, -90, 750);
+    chassis.moveToPose(-50, 51.25, -86, 100000, {.lead = 0.7, .minSpeed = 50});
+    chassis.moveToPose(-73, 51.25, -90, 1000);
     chassis.waitUntilDone();
+    // leftMotors.move_voltage(8000);
+    // rightMotors.move_voltage(8000);
+
+    // pros::delay(1500);
     
-    //score wall stake and get mogo ring #2
+    // leftMotors.move_voltage(0);
+    // rightMotors.move_voltage(0);
+    
+    // //score wall stake and get mogo ring #2
     intakeState = 2;
-    pros::delay(25);
-    globalTarget = 80;
-    pros::delay(500);
-    intakeState = 1;
-    chassis.moveToPoint(-63.8, 49.5, 500);
-    chassis.waitUntilDone();
+    pros::delay(50);
     globalTarget = 140;
-    pros::delay(1000);
+    pros::delay(1500);
+    intakeState = 1;
 
     //back up and get mogo rings #3 4 5
     chassis.moveToPoint(-48, 49.5, 500, {.forwards = false});
     chassis.waitUntilDone();
     globalTarget = 0;
     chassis.turnToHeading(-178, 500);
-    chassis.moveToPose(-48.4, 32.4, 180, 500);
+    chassis.moveToPose(-48.4, 0, 180, 1500);
     // chassis.waitUntilDone();
     // chassis.moveToPose(-48.5, 13.14, 180, 500);
     // chassis.waitUntilDone();
-    chassis.moveToPose(-48.6, 0.2, 180, 500);
     chassis.waitUntilDone();
 
 }

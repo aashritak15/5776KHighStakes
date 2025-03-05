@@ -71,7 +71,6 @@ void updateColorSort() {
             } else if (sortState == 1) {
                 sortState = 2;
                 controller.set_text(0, 0, "scores red       ");
-                pros::lcd::print(6, "Score red");
             } else if (sortState == 2) {
                 sortState = 0;
                 controller.set_text(0, 0, "no sort         ");
@@ -99,13 +98,13 @@ void runColorSort() {
         if (sortState == 1) {
             if (optical.get_hue() < 30 && optical.get_hue() > 0 && optical.get_proximity() > 200) {
 
-                pros::Task::delay(30);
+                pros::Task::delay(35);
 
                 intakeState = -1; //TODO: special sauce intake state
                 intakeUpper.move_voltage(-12000);
                 intakeLower.move_voltage(12000);
 
-                pros::Task::delay(300);
+                pros::Task::delay(200);
 
                 intakeState = 1;
 
@@ -113,13 +112,13 @@ void runColorSort() {
         } else if (sortState == 2) {
             if (optical.get_hue() < 230 && optical.get_hue() > 200 && optical.get_proximity() > 200) {
 
-                pros::delay(30);
+                pros::delay(35);
 
                 intakeState = -1; //TODO: special sauce intake state
                 intakeUpper.move_voltage(-12000);
                 intakeLower.move_voltage(12000);
 
-                pros::Task::delay(300);
+                pros::Task::delay(200);
 
                 intakeState = 1;
 
