@@ -239,7 +239,9 @@ float calculateCurvature(lemlib::Pose pose, float heading, lemlib::Pose lookahea
     return side * ((2 * x) / (d * d));
 }
 
-// Updates subsystem states based on the closest point's data
+/**
+ * @brief Update all subsystem states for asynchronous subsystem tasks
+ */
 void updateSubsys() {
     // Parse subsystem states from the closest point's recorded values
     intakeState = std::stoi(subValues.at(closestPoint)[0]);       // Intake state
@@ -250,6 +252,11 @@ void updateSubsys() {
     doinkLeftState = std::stoi(subValues.at(closestPoint)[5]);   // Left doinker state
 }
 
+/**
+ * @brief Check for special exclusions
+
+ * @param dataLine reference to debug string
+ */
 bool doExclusions(std::string& dataLine) {
     // check if the robot needs to stop  
     if (subValues.at(closestPoint)[6] == "STOPPED") {
@@ -322,7 +329,13 @@ bool doExclusions(std::string& dataLine) {
     return false; // no exclusion triggered  
 }
 
-// adjusts target velocity based on path and segment type  
+/**
+ * @brief Multiply target velocity based on segment
+
+ * @param segment current segment
+ * @param targetVel reference to current tick's target velocity
+ * @param pathID identifier to chose correct multiplier
+ */
 void doMultipliers(int segment, float& targetVel, std::string pathID) {
     if (pathID == "ringside") {
         // check segment type and adjust velocity  
@@ -356,7 +369,13 @@ void doMultipliers(int segment, float& targetVel, std::string pathID) {
     }
 }
 
-// finds the curvature needed to follow the path based on a dynamic lookahead distance  
+/**
+ * @brief Finds the curvature needed to follow the path based on a dynamic lookahead distance 
+
+ * @param dataLine reference to debug string
+ * @param lastLookahead last lookahead point
+ * @param currentPose current lookahead point
+ */ 
 float findLookaheadCurvature(std::string& dataLine, lemlib::Pose lastLookahead, lemlib::Pose currentPose) {
     // calculate average motor voltage  
     float avgVel = round(((leftMotors.get_voltage() + rightMotors.get_voltage()) * 1000.0 / 2.0) / 1000.0);
@@ -398,8 +417,15 @@ void interrupt() {
     }
 }
 
+/**
+ * @brief Follow a VEX V5 KiwiRun path using Pure Pursuit
+
+ * @param path path file
+ * @param sub sub-information file
+ * @param pathID unique path identifier
+ */ 
 void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pathID) {
-    std::cout << "following\n";
+    std::cout << "following\n"; // start follower to console
 
     initDebug(); // start debug logging
 
