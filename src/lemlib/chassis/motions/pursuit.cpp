@@ -399,42 +399,39 @@ void interrupt() {
 }
 
 void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pathID) {
-    std::cout<<"following\n";
+    std::cout << "following\n";
 
-    initDebug();
+    initDebug(); // start debug logging
 
-    chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
+    chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE); 
 
-    pathPoints = getData(path); // get list of path points
-    subValues = getSubData(sub); // get subsystem values
-    velocities = getVelocities(path); // get velocities
-    std::cout<<"data gotten\n";
+    pathPoints = getData(path); // load the list of path points
+    subValues = getSubData(sub); // load subsystem states
+    velocities = getVelocities(path); // load recorded velocities
+    std::cout << "data gotten\n";
 
-    Pose pose = this->getPose(true); // initialize all the things //*: THE TRUE IS WHERE THE RADIANS COME FROM
-    Pose lookaheadPose(0, 0, 0);
-    Pose lastLookahead = pathPoints.at(0);
-    std::cout<<"initialized\n";
+    Pose pose = this->getPose(true); // get current robot position (true = radians)
+    Pose lookaheadPose(0, 0, 0); // lookahead position for pure pursuit
+    Pose lastLookahead = pathPoints.at(0); // initialize lookahead point
+    std::cout << "initialized\n";
 
-    int killCount = 1;
-    int prevClosestPoint = 0;
+    int killCount = 1; // counter to prevent getting stuck
+    int prevClosestPoint = 0; // track previous closest point
 
     while (true) {
-        std::cout<<"looping\n";
-        // interrupt();
+        std::cout << "looping\n";
+     
 
-        // initialize debug dataline
-        std::string dataLine = "";
+        std::string dataLine = ""; // debug string for logging
 
-        // get the current position of the robot
-        pose = this->getPose(true);
-        closestPoint = findClosest(pose, closestPoint); // find closest point
+        pose = this->getPose(true); // update the robot's current position
+        closestPoint = findClosest(pose, closestPoint); // find the closest recorded point on the path
 
-        // debug a new tick
         dataLine.append("NEW TICK\n");
         dataLine.append("target index: " + std::to_string(closestPoint) + "\n");
 
-        // path termination check
-        if (subValues.at(closestPoint)[7] == "-1" || prevClosestPoint > closestPoint) { //TODO: is this fine
+        // check if the path is finished
+        if (subValues.at(closestPoint)[7] == "-1" || prevClosestPoint > closestPoint) { 
             drivetrain.leftMotors->move(0);
             drivetrain.rightMotors->move(0);
             dataLine.append("PATH FINISHED");
@@ -450,21 +447,18 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pa
 
         dataLine.append("kill count: " + std::to_string(killCount) + "\n");
 
-        // update all subsystems
-        updateSubsys();
+        updateSubsys(); // update subsystem states
 
-        // exclusions
+        // handle any exceptions (stops, turns, delays)
         bool skip = doExclusions(dataLine);
-        if (skip) { continue; }
+        if (skip) { continue; } // skip to next loop iteration if an exclusion is triggered
 
-        // killtimer
+        // prevent the bot from getting stuck in the same position
         if (std::stoi(subValues.at(closestPoint)[7]) == prevClosestPoint) {
             killCount++;
-
-            if(killCount == 8) { //TODO: tune killcount time, 0.08s currently
+            if (killCount == 8) { 
                 dataLine.append("KILL TIMERED OUT\n\n");
                 closestPoint++;
-
                 prevClosestPoint = closestPoint;
 
                 fileOThree << dataLine;
@@ -473,12 +467,11 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pa
                 killCount = 1;
                 continue;
             }
-
         } else {
-            killCount = 1;
+            killCount = 1; // reset kill count if progress is being made
         }
 
-        // debug non-exclusion-relevant information
+        // log position data for debugging
         dataLine.append("current x: " + std::to_string(pose.x) + "\n");
         dataLine.append("current y: " + std::to_string(pose.y) + "\n");
         dataLine.append("current theta RAD: " + std::to_string(pose.theta) + "\n");
@@ -486,54 +479,55 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pa
         dataLine.append("closest path x: " + std::to_string(pathPoints.at(closestPoint).x) + "\n");
         dataLine.append("closest path y: " + std::to_string(pathPoints.at(closestPoint).y) + "\n");
 
-        // find target avg velocity
+        // get the target velocity for the next movement
         float targetVel = std::stof(velocities.at(closestPoint));
-        dataLine.append("target vel: " + std::to_string(targetVel) + "\n"); // write target vel
+        dataLine.append("target vel: " + std::to_string(targetVel) + "\n");
 
-        // apply rerun multipliers
+        // apply multipliers based on kiwirun segment data
         doMultipliers(std::stoi(subValues.at(closestPoint)[7]), targetVel, pathID);
 
-        // do all pure pursuit calculations
+        // calculate curvature for pure pursuit tracking
         float curvature = findLookaheadCurvature(dataLine, lastLookahead, pose);
 
+        // calculate target left and right wheel speeds based on curvature
         float targetLeftVel = targetVel * (2 + curvature * drivetrain.trackWidth) / 2;
         float targetRightVel = targetVel * (2 - curvature * drivetrain.trackWidth) / 2;
 
-        // fallback exclusion
+        // stop moving if velocity is too low
         if ((std::abs(targetLeftVel) < 600) && (std::abs(targetRightVel) < 600)) {
             dataLine.append("VEL < 600\n\n");
             leftMotors.move_velocity(0);
             rightMotors.move_velocity(0);
             ladyBrown.move(0);
 
-            pros::delay(50); //*change to tick speed always
+            pros::delay(50); // small delay before continuing
             closestPoint++;
             continue;
         }
 
-        // ratio the speeds to respect the max speed
+        // scale speeds down if they exceed max motor voltage (12000)
         float ratio = std::max(std::fabs(targetLeftVel), std::fabs(targetRightVel)) / 12000;
         if (ratio > 1) {
             targetLeftVel /= ratio;
             targetRightVel /= ratio;
         }
 
-        // write velocities
+        // log velocity data
         dataLine.append("current velocities: " + std::to_string(leftMotors.get_voltage()) + " " +
                         std::to_string(rightMotors.get_voltage()) + "\n");
         dataLine.append("target vels: " + std::to_string(targetLeftVel) + " " + std::to_string(targetRightVel) +
                         "\n\n");
  
-        // send velocity
+        // send velocity commands to motors
         leftMotors.move_voltage(targetLeftVel);
         rightMotors.move_voltage(targetRightVel);
 
-        prevClosestPoint = closestPoint;
+        prevClosestPoint = closestPoint; // update previous closest point
 
-        // write to debug
+        // write debug data to file
         fileOThree << dataLine;
         fileOThree.flush();
 
-        pros::delay(10);
+        pros::delay(10); // small delay to prevent overloading
     }
 }
