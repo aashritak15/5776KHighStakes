@@ -81,14 +81,23 @@ void updateColorSort() {
     }
 }
 
+bool intakeKeep;
+
 /**
  *@brief run color sort based on global state
  */
 void runColorSort() {
     while (true) {
-        std::cout<<std::to_string(optical.get_hue())<<" ";
-        std::cout<<std::to_string(optical.get_proximity());
-        std::cout<<"\n";
+        // std::cout<<std::to_string(optical.get_hue())<<" ";
+        // std::cout<<std::to_string(optical.get_proximity());
+        // std::cout<<"\n";
+
+        // while(intakeKeep) {
+        //     if(optical.get_hue() < 30 && optical.get_hue() > 0 && optical.get_proximity() > 200) {
+        //         intakeState = 0;
+        //     }
+        //     pros::delay(100);
+        // }
 
         if (intakeState == 0) { // TODO: see if this fixes
             pros::delay(10);
