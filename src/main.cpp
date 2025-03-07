@@ -234,11 +234,11 @@ void skills() {
    
     pros::delay(500);
 
-    chassis.turnToHeading(68.2, 1000);
+    chassis.turnToHeading(68.2, 1000); // getting third ring in the corner 
 
     chassis.moveToPoint(35.9, 3.9, 1000);
 
-    chassis.turnToHeading(-31.3, 1000);
+    chassis.turnToHeading(-31.3, 1000); // turn to face the corner 
     chassis.waitUntilDone(); 
      intakeState = 2;
     pros::delay(50);
@@ -251,104 +251,61 @@ void skills() {
     chassis.moveToPoint(35.5, 1, 3000, {.forwards = false, .minSpeed = 50});
 
 
-    // chassis.moveToPoint(-54.5, 4.2, 1000); 
+   chassis.moveToPoint(31.3, 8.7, 1000); 
 
     //third quadrant
 
     //move to ring #1 on second half
     //intakeKeep = true;
-    chassis.moveToPoint(31.1, 7.6, 500);
+ 
     chassis.turnToHeading(0, 500);
-    chassis.moveToPose(3, 70.4, -59, 3000);
+    chassis.moveToPose(3, 70.4, -59, 3000); // goes to ring on 3rd quadrant 
     chassis.waitUntilDone();
     //pros::delay(2000);
     intakeState = 0;
 
-    //clamp to push
+    // //clamp to push
     chassis.turnToHeading(180, 500);
-    chassis.moveToPoint(6, 87.23, 1000, {.forwards = false, .maxSpeed = 80});
+    chassis.moveToPoint(2.4, 92.9, 1000, {.forwards = false});
     chassis.waitUntilDone();
     clampState = 1;
     pros::delay(500);
-    //intakeKeep = false;
+    intakeKeep = false;
 
     //go to corner
-    chassis.turnToHeading(-100, 500);
+    chassis.turnToHeading(-109.8, 500);
     chassis.waitUntilDone();
     clampState = 0;
     // pros::delay(200);
-    chassis.moveToPoint(31.6, 94, 1000, {.forwards = false, .minSpeed = 100});
+    chassis.moveToPoint(30.5, 108.3, 3000, {.forwards = false, .minSpeed = 40}); //push it into the corner 
 
-    //chassis.turnToHeading(-285, 500);
-    //chassis.moveToPoint();
+     chassis.moveToPoint(6.7, 96.2, 1000);
 
-    
-    //get other mogo
-    chassis.moveToPoint(4.8, 84.8, 1000);
-    chassis.turnToHeading(-280, 500);
-    chassis.moveToPoint(-4.5, 83.2, 500, {.forwards = false});
-    chassis.waitUntilDone();
+    chassis.turnToHeading(-282.5, 1000); //turn to face mogo 
+
+   chassis.moveToPoint(-11.6, 90.5, 1000, {.forwards = false});
+   chassis.waitUntilDone();
     clampState = 1;
-    pros::delay(600);
 
-    // go to rings
-    //ring 1
-    chassis.turnToHeading(-115, 5000);
-    chassis.waitUntilDone();
-    intakeState = 1;
-    pros::delay(1000);
-    chassis.moveToPoint(-28, 74.5, 5000);
-    pros::delay(1000);
-    chassis.turnToHeading(-70, 5000);
-    pros::delay(1000);
-    chassis.moveToPoint(-57, 82.5, 5000);
-    pros::delay(2000);
+    chassis.turnToHeading(-294, 1000); //if we are runnig out of time you can change the turntoHeading before this to this angle itself
 
-    //other rings
-    chassis.moveToPoint(-46, 80.7, 5000, {.forwards = false});
-    pros::delay(1000);
-    chassis.turnToHeading(-21, 5000);
-    pros::delay(1000);
-    chassis.moveToPoint(-49.4, 89.1, 5000);
-    pros::delay(2000);
+    chassis.moveToPoint(-49.9, 76.1, 1000); // move back into 4th quadrant
+
+    chassis.turnToHeading(0, 1000); //turn to face the rings 
+
+ 
+
+    // // chassis.moveToPoint(-55.1, 71.9, 3000, {.forwards = false});
+
+    // // chassis.turnToHeading(0, 800); 
 
 
-    //mogo in corner
-    chassis.turnToHeading(120, 7500);
-    chassis.waitUntilDone();
-    intakeState = 2;
-    pros::delay(50);
-    intakeState = 0;
-    pros::delay(300);
-    clampState = 0;
-    chassis.moveToPoint(-64.2, 69.5, 5000, {.forwards = false});
-    pros::delay(2000);
 
-    // //alliance ring
-    // chassis.moveToPoint(-43.8, 70.7, 500);
-    // chassis.waitUntilDone();
-    // intakeState = 1;
-    // pros::delay(100);
-    // intakeState = 0;
 
-    // //go to alliance
-    // chassis.turnToHeading(232, 500);
-    // chassis.moveToPoint(-16.7, 93, 500);
-    // chassis.turnToHeading(180, 500);
-    // chassis.moveToPoint(-16.3, 99, 500);
-    // chassis.waitUntilDone();
-    // intakeState = 1;
-    // pros::delay(750);
-    // intakeState = 0;
 
-    // //ladder
-    // chassis.moveToPoint(-16.3, 92, 500);
-    // chassis.turnToHeading(138, 500);
-    // chassis.moveToPoint(5.6, 68.2, 500);
-    // chassis.turnToHeading(45, 500);
-    // chassis.waitUntilDone();
-    // globalTarget = 140;
-    // //chassis.moveToPoint()
+
+
+
 
 
 }
@@ -358,100 +315,6 @@ void autonomous() {
     sortState = 0;
     skills();
 
-    // fourRingRed();
-
-    // fourRingBlue();
-
-    //chassis.follow(ringsideRed_txt, ringsideExtra_txt, "ringside");
-    //chassis.follow(skillsPath_txt, skillsExtra_txt, "skills");
-    // chassis.follow(autonomous_txt, extra_txt, "test");
-
-    // void fourRingRed();
-
-    // selector.run_auton();
-    // initDebug();
-    // chassis.calibrate();
-    // chassis.setPose(0, 0, 0);
-    // chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
-    // // TODO: COMMENTED OUT BC TESTING IN INITIALIZE
-
-    // std::cout << "running auton\n";
-    // chassis.turnToHeading(90, 3000);
-    // chassis.moveToPoint(0, 24, 3000);
-    // chassis.follow(autonomous_txt, extra_txt, "red solo wp");
-
-    // chassis.follow(blueMogoAlliancePath_txt, redMogoAllianceExtra_txt, "blue mogo alliance");
-
-    // blueRing();
-    // blueMogo();
-    // redMogo();
-
-    // chassis.follow(redMogoAlliancePath_txt, redMogoAllianceExtra_txt, "red mogo alliance");
-
-    // if(color == 0) { //red
-    //     sortState = 2
-    //     switch(auton) {
-    //         case 1: //solo wp
-    //             chassis.follow(autonomous_txt, extra_txt, "adsf");
-    //             break;
-    //         case 2: //mogo rush
-    //             //chassis.follow(autonomous_txt, extra_txt, 10, 1000000, true, false);
-    //             break;
-    //         case 3:
-    //             chassis.moveToPoint(0, 24, 10000);
-    //             //chassis.follow(autonomous_txt, extra_txt, 10, 1000000, true, false);
-    //             break;
-    //         case 4:
-    //             chassis.turnToHeading(90, 10000);
-    //             //chassis.follow(autonomous_txt, extra_txt, 10, 1000000, true, false);
-    //             break;
-    //         case 5:
-    //             chassis.turnToHeading(180, 10000);
-    //             //chassis.follow(autonomous_txt, extra_txt, 10, 1000000, true, false);
-    //             break;
-    //         case 6:
-    //             //chassis.follow(autonomous_txt, extra_txt, 10, 1000000, true, false);
-    //             break;
-    //         case 7:
-    //             //chassis.follow(autonomous_txt, extra_txt, 10, 1000000, true, false);
-    //             break;
-    //         case 8:
-    //             //chassis.follow(autonomous_txt, extra_txt, 10, 1000000, true, false);
-    //             break;
-    //     }
-    // } else if(color == 1) { //blue
-    //     sortState = 1;
-    //     switch(auton) {
-    //         case 1: //solo wp
-    //             chassis.follow(autonomous_txt, extra_txt, "adsf");
-    //             break;
-    //         case 2: //mogo rush
-    //             //chassis.follow(autonomous_txt, extra_txt, 10, 1000000, true, false);
-    //             break;
-    //         case 3:
-    //             chassis.moveToPoint(0, 24, 10000);
-    //             //chassis.follow(autonomous_txt, extra_txt, 10, 1000000, true, false);
-    //             break;
-    //         case 4:
-    //             chassis.turnToHeading(90, 10000);
-    //             //chassis.follow(autonomous_txt, extra_txt, 10, 1000000, true, false);
-    //             break;
-    //         case 5:
-    //             chassis.turnToHeading(180, 10000);
-    //             //chassis.follow(autonomous_txt, extra_txt, 10, 1000000, true, false);
-    //             break;
-    //         case 6:
-    //             //chassis.follow(autonomous_txt, extra_txt, 10, 1000000, true, false);
-    //             break;
-    //         case 7:
-    //             //chassis.follow(autonomous_txt, extra_txt, 10, 1000000, true, false);
-    //             break;
-    //         case 8:
-    //             //chassis.follow(autonomous_txt, extra_txt, 10, 1000000, true, false);
-    //             break;
-    //     }
-    // }
-    // chassis.turnToHeading(180, 5000);
 }
 
 void opcontrol() {
