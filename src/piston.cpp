@@ -16,7 +16,7 @@ int intakePistonState = 0;
 
 bool buttonYPressed = false;
 bool buttonBPressed = false;
-bool buttonXPressed = false;
+bool buttonAPressed = false;
 bool buttonLeftPressed = false;
 
 void updateClamp() {
@@ -51,8 +51,8 @@ void updateDoinkRight() {
 
 void updateDoinkLeft() {
     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) { // TODO: change back to x
-        if (!buttonXPressed) {
-            buttonXPressed = true;
+        if (!buttonAPressed) {
+            buttonAPressed = true;
             if (doinkLeftState == 0) {
                 doinkLeftState = 1;
             } else {
@@ -60,7 +60,7 @@ void updateDoinkLeft() {
             }
         }
     } else {
-        buttonXPressed = false;
+        buttonAPressed = false;
     }
 }
 

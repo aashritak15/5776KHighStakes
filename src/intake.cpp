@@ -92,12 +92,14 @@ void runColorSort() {
         // std::cout<<std::to_string(optical.get_proximity());
         // std::cout<<"\n";
 
-        // while(intakeKeep) {
-        //     if(optical.get_hue() < 30 && optical.get_hue() > 0 && optical.get_proximity() > 200) {
-        //         intakeState = 0;
-        //     }
-        //     pros::delay(100);
-        // }
+        while(intakeKeep) {
+            if(optical.get_hue() < 30 && optical.get_hue() > 0 && optical.get_proximity() > 200) {
+                intakeState = 0;
+            }
+
+            pros::delay(10);
+            continue;
+        }
 
         if (intakeState == 0) { // TODO: see if this fixes
             pros::delay(10);
