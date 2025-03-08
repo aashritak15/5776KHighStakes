@@ -88,6 +88,85 @@ ASSET(skillsExtra_txt);
 ASSET(autonomous_txt);
 ASSET(extra_txt);
 
+void blueSoloWP() {
+    //inversed blue
+     sortState = 1;
+    chassis.turnToHeading(28, 1000);
+    chassis.moveToPoint(1.9, 2.7, 2000, {.forwards = false, .minSpeed = 70});
+    chassis.waitUntilDone();
+
+    globalTarget = 140;
+    pros::delay(600);
+    globalTarget = 0;
+
+    chassis.moveToPoint(-8.8, -24.2, 2000,  {.forwards = false} );
+    chassis.waitUntilDone();
+    clampState = 1;
+    pros::delay(250);
+    chassis.turnToHeading(-147, 1000);
+
+    chassis.moveToPose(-41, -49.5, -90, 2000);
+    intakeState = 1;
+
+    chassis.moveToPose(-20.3, -43.3, -123, 2000, {.forwards = false});
+
+    chassis.turnToHeading(-66.2, 1000);
+
+    chassis.moveToPoint(-30.25, -39.1, 1000); 
+
+    chassis.turnToHeading(90, 3000);
+    chassis.waitUntilDone();
+
+
+
+    chassis.moveToPoint(-9, -41, 5000);
+    globalTarget = 140;
+
+       
+
+
+}
+
+void redSoloWP() {
+    //inversed blue
+     sortState = 2;
+    chassis.turnToHeading(-28, 1000);
+    chassis.moveToPoint(-1.9, 2.7, 2000, {.forwards = false, .minSpeed = 70});
+    chassis.waitUntilDone();
+
+    globalTarget = 140;
+    pros::delay(600);
+    globalTarget = 0;
+
+    chassis.moveToPoint(7.36, -22, 2000,  {.forwards = false} );
+    chassis.waitUntilDone();
+    clampState = 1;
+    pros::delay(250);
+    chassis.turnToHeading(147, 1000);
+
+    chassis.moveToPose(37.2, -39, 90, 2000);
+    intakeState = 1;
+
+    chassis.moveToPose(13, -30.4, 123, 2000, {.forwards = false});
+
+    chassis.turnToHeading(68.2, 1000);
+
+    chassis.moveToPoint(22.5, -26.1, 1000); 
+
+    chassis.turnToHeading(90, 3000);
+      chassis.waitUntilDone();
+
+
+
+    chassis.moveToPoint(-3.7, -26.5, 5000);
+         globalTarget = 140;
+
+       
+
+
+}
+
+
 void skills() {
 
     sortState = 2;
@@ -110,7 +189,7 @@ void skills() {
     chassis.turnToHeading(0, 500);
     intakeState = 1;
     chassis.moveToPoint(-24, 36, 500);
-    pros::delay(250);
+    pros::delay(250); 
 
     //wall stake ring #1
     chassis.turnToHeading(-30.5, 500);
@@ -253,7 +332,7 @@ void skills() {
 
     chassis.turnToHeading(-31.3, 1000, {.maxSpeed = 90}); // turn to face the corner // TODO: might break some stuf
     chassis.waitUntilDone(); 
-     intakeState = 2;
+    intakeState = 2;
     pros::delay(25);
     intakeState = 1;
 
@@ -341,7 +420,7 @@ void skills() {
     //hang
     chassis.moveToPoint(-54.1, 75.6, 500);
     chassis.turnToHeading(-45, 500);
-    chassis.moveToPoint(-14.8, 34.9, 10000, {.forwards = false, .maxSpeed = 70});
+    chassis.moveToPoint(-15.8, 31.9, 10000, {.forwards = false, .maxSpeed = 70});
 
 
     //no time :(
@@ -379,8 +458,12 @@ void skills() {
 
 void autonomous() {
     chassis.setBrakeMode(MOTOR_BRAKE_BRAKE);
-    sortState = 2;
-    skills();
+
+
+    blueSoloWP();
+
+
+   // skills();
 
     // sortState = 2;
     // chassis.follow(ringsideRed_txt, ringsideExtra_txt, "ringside");

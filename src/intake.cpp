@@ -88,19 +88,27 @@ int timeCount = 0;
  *@brief run color sort based on global state
  */
 void runColorSort() {
+    int prevIntakeKeep = 0;
+
     while (true) {
         // std::cout<<std::to_string(optical.get_hue())<<" ";
         // std::cout<<std::to_string(optical.get_proximity());
         // std::cout<<"\n";
-
-        if(intakeKeep) {
+        
+        if (intakeKeep) {
             if(optical.get_hue() < 30 && optical.get_hue() > 0 && optical.get_proximity() > 200) {
-                intakeState = 2;
-                pros::Task::delay(100);
-                intakeState = 0;
-                pros::Task::delay(10);
-            }
+                if(prevIntakeKeep != intakeKeep) {
+                    intakeState = -1;
+                    intakeUpper.move_velocity(-300);
+                    intakeLower.move_velocity(100);
+                    pros::delay(80);
+                }
 
+                intakeState = 0;
+            }
+        }
+
+        prevIntakeKeep = intakeKeep;
 
             //velocity fluctuates too much to use
             // if(intakeState != 0 && intakeUpper.get_actual_velocity() < 300) {
@@ -121,10 +129,6 @@ void runColorSort() {
             //     pros::delay(10);
             //     continue;
             // }
-        }
-
-        
-
         
 
         if (intakeState == 0) { // TODO: see if this fixes
@@ -164,7 +168,9 @@ void runColorSort() {
 
         pros::delay(10);
     }
+
 }
+
 
 /**
  *@brief run intake motors based on global state
