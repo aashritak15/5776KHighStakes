@@ -148,6 +148,7 @@ void runColorSort() {
                 pros::Task::delay(200);
 
                 intakeState = 1;
+                std::cout<<"red detected\n";
 
             }
         } else if (sortState == 2) {
@@ -162,7 +163,7 @@ void runColorSort() {
                 pros::Task::delay(200);
 
                 intakeState = 1;
-
+                std::cout<<"blue detected\n";
             }
         }
 
