@@ -23,8 +23,8 @@ std::vector<lemlib::Pose> pathPoints;
 std::vector<std::vector<std::string>> subValues;
 std::vector<std::string> velocities;
 int closestPoint = 0;
-const float MIN_LOOKAHEAD = 8; //TODO: find good lookaheads
-const float MAX_LOOKAHEAD = 12;
+const float MIN_LOOKAHEAD = 5; //TODO: find good lookaheads
+const float MAX_LOOKAHEAD = 10;
 
 /**
  * @brief function that returns elements in a file line, separated by a delimeter
@@ -457,7 +457,7 @@ void lemlib::Chassis::follow(const asset& path, const asset& sub, std::string pa
         dataLine.append("target index: " + std::to_string(closestPoint) + "\n");
 
         // check if the path is finished
-        if (subValues.at(closestPoint)[7] == "-1" || prevClosestPoint > closestPoint) { 
+        if (subValues.at(closestPoint)[7] == "6" || prevClosestPoint > closestPoint) { 
             drivetrain.leftMotors->move(0);
             drivetrain.rightMotors->move(0);
             dataLine.append("PATH FINISHED");
