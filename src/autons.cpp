@@ -66,7 +66,7 @@ void fourRingRed() {
 
     chassis.turnToHeading(134, 800); // turn to face ladder
 
-    intakeState = 0;
+    //intakeState = 0;
     // chassis.waitUntilDone();
     // clampState = 0;
 
@@ -137,7 +137,7 @@ void fourRingBlue() {
 
     chassis.turnToHeading(243.9, 800); // turn to face ladder
 
-    intakeState = 0;
+    //intakeState = 0;
     // chassis.waitUntilDone();
     // clampState = 0;
 

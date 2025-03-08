@@ -19,6 +19,7 @@ void ladyBrownInit() {
 
 double globalTarget = 0;
 bool comingDown = false;
+//double maxSpeed = 0;
 
 void updateLB() { //TODO: outdated angles
     if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) { //*ZERO
@@ -66,6 +67,11 @@ void updateLBTask() {
 
             // comingDown = true;
         }
+
+        // if(ladyBrown.get_actual_velocity()<0 && (globalTarget == 0 || globalTarget == 23)) {
+        //     maxSpeed = 8000;
+        // }
+
         //std::cout<<"lb: "<<lbRotation.get_position() / 100.0<<"\n";//<<", comingDown: "<<comingDown<<"\n";
         pros::delay(10);
     }
@@ -95,6 +101,7 @@ void lbTask() {
 
         if (std::abs(armMoveVoltage) > 12000) { armMoveVoltage = (armMoveVoltage < 0) ? -12000 : 12000; }
         if (std::abs(armMoveVoltage) < 200) { armMoveVoltage = 0; } // Adjusted small deadzone for voltage
+       // if(std::abs(armMoveVoltage) > maxSpeed) {armMoveVoltage = maxSpeed;}
 
         ladyBrown.move_voltage(-armMoveVoltage);
 
