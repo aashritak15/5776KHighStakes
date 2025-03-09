@@ -48,18 +48,18 @@ void initialize() {
             std::cout<<chassis.getPose().x<<", "<<chassis.getPose().y<<", "<<chassis.getPose().theta<<"\n";
             std::vector<double> left = leftMotors.get_position_all();
             std::vector<double> right = rightMotors.get_position_all();
-            pros::lcd::print(1, "LeftF Encoders: %f", left[0]);
-            pros::lcd::print(2, "LeftM Encoders: %f", left[1]);
-            pros::lcd::print(3, "LeftB Encoders: %f", left[2]);
-            pros::lcd::print(4, "RightF Encoders: %f", right[0]);
-            pros::lcd::print(5, "RightM Encoders: %f", right[1]);
-            pros::lcd::print(6, "RightB Encoders: %f", right[2]);
+            // pros::lcd::print(1, "LeftF Encoders: %f", left[0]);
+            // pros::lcd::print(2, "LeftM Encoders: %f", left[1]);
+            // pros::lcd::print(3, "LeftB Encoders: %f", left[2]);
+            // pros::lcd::print(4, "RightF Encoders: %f", right[0]);
+            // pros::lcd::print(5, "RightM Encoders: %f", right[1]);
+            // pros::lcd::print(6, "RightB Encoders: %f", right[2]);
 
-            // pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
-            // pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
-            // pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
-            // pros::lcd::print(3, "LB: %f", ladyBrown.get_position()); // lift encoder
-            pros::lcd::print(0, "Color: %f ", optical.get_hue());
+            pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
+            pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
+            pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
+            pros::lcd::print(3, "LB: %f", ladyBrown.get_position()); // lift encoder
+           // pros::lcd::print(0, "Color: %f ", optical.get_hue());
             //pros::lcd::print(0, "Intake Velocity: %f", intakeUpper.get_actual_velocity());
 
             // log position telemetry
@@ -178,6 +178,8 @@ void fourRingBlue() {
     pros::delay(500);
 
     chassis.turnToHeading(90, 800);
+    chassis.waitUntilDone(); 
+    pros::delay(100); 
 
     intakeState = 1;
 
@@ -197,7 +199,7 @@ void fourRingBlue() {
     pros::delay(250);
 
     // // ram 1
-    chassis.moveToPoint(29.9, 5.9, 1000);
+    chassis.moveToPoint(29.9, 5.9, 1000, {.minSpeed = 50});
 
     intakeState = 2;
     chassis.waitUntilDone(); // go to ring stack
@@ -208,24 +210,24 @@ void fourRingBlue() {
     pros::delay(500);
     chassis.moveToPoint(21.2, -2.6, 750, {.forwards = false}); // go back
     chassis.waitUntilDone();
-    intakeState = 2;
-    chassis.moveToPoint(29.9, 5.9, 1000);
-    chassis.waitUntilDone(); // go to ring stack
-    pros::delay(100);
     intakeState = 1;
+    // chassis.moveToPoint(29.9, 5.9, 1000, {.minSpeed = 30});
+    // chassis.waitUntilDone(); // go to ring stack
+    // pros::delay(100);
+    // intakeState = 1;
 
-    // ram 3
-    pros::delay(500);
-    chassis.moveToPoint(21.2, -2.6, 750, {.forwards = false}); // go back
-    chassis.waitUntilDone();
-    intakeState = 2;
-    chassis.moveToPoint(30.9, 6.9, 750);
-    chassis.waitUntilDone(); // go to ring stack
-    pros::delay(100);
-    intakeState = 1;
+    // // ram 3
+    // pros::delay(500);
+    // chassis.moveToPoint(21.2, -2.6, 750, {.forwards = false}); // go back
+    // chassis.waitUntilDone();
+    // intakeState = 2;
+    // chassis.moveToPoint(30.9, 6.9, 750, {.minSpeed = 50});
+    // chassis.waitUntilDone(); // go to ring stack
+    // pros::delay(100);
+    // intakeState = 1;
 
-    pros::delay(500);
-    chassis.moveToPoint(21.71, 2.99, 750, {.forwards = false, .minSpeed = 100}); // go back
+    // pros::delay(500);
+    // chassis.moveToPoint(21.71, 2.99, 750, {.forwards = false, .minSpeed = 100}); // go back
 
     chassis.turnToHeading(243.9, 800); // turn to face ladder
 
@@ -233,11 +235,17 @@ void fourRingBlue() {
     chassis.waitUntilDone();
     clampState = 0;
 
+    globalTarget = 140;
+
+    chassis.moveToPoint(-5.2, -35, 1000);
+
+   // chassis.moveToPoint()
+
     // face third mogo
     //chassis.turnToHeading(0, 500);
     //chassis.moveToPoint(21.71, -32, 1000);
 
-    chassis.moveToPoint(-19, -34, 3000); //ladder
+    // chassis.moveToPoint(-19, -34, 3000); //ladder
 
     // // globalTarget = 140;
 }
@@ -624,12 +632,10 @@ void skills() {
 
 void autonomous() {
     chassis.setBrakeMode(MOTOR_BRAKE_BRAKE);
-    //blueMogoSide();
-
     // sortState = 2;
 
-    //fourRingBlue();
-    fourRingRed();
+    fourRingBlue();
+    //fourRingRed();
     //redSoloWP();
     //blueSoloWP();
 
@@ -640,7 +646,7 @@ void autonomous() {
 }
 
 void opcontrol() {
-    sortState = 2;
+    sortState = 1;
     matchControl();
 
     // sortState = 1;
