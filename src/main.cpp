@@ -45,7 +45,7 @@ void initialize() {
     pros::Task screenTask([&]() {
         while (true) {
             // print robot location to the brain screen
-            //std::cout<<chassis.getPose().x<<", "<<chassis.getPose().y<<", "<<chassis.getPose().theta<<"\n";
+            std::cout<<chassis.getPose().x<<", "<<chassis.getPose().y<<", "<<chassis.getPose().theta<<"\n";
             std::vector<double> left = leftMotors.get_position_all();
             std::vector<double> right = rightMotors.get_position_all();
             pros::lcd::print(1, "LeftF Encoders: %f", left[0]);
@@ -59,7 +59,7 @@ void initialize() {
             // pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
             // pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
             // pros::lcd::print(3, "LB: %f", ladyBrown.get_position()); // lift encoder
-            // pros::lcd::print(4, "Color: %f ", optical.get_hue());
+            // //pros::lcd::print(0, "Color: %f ", optical.get_hue());
             // pros::lcd::print(5, "Intake Velocity: %f", intakeUpper.get_actual_velocity());
 
             // log position telemetry
@@ -230,10 +230,14 @@ void fourRingBlue() {
     chassis.turnToHeading(243.9, 800); // turn to face ladder
 
     //intakeState = 0;
-    // chassis.waitUntilDone();
-    // clampState = 0;
+    chassis.waitUntilDone();
+    clampState = 0;
 
-    chassis.moveToPoint(-19, -24, 3000);
+    // face third mogo
+    //chassis.turnToHeading(0, 500);
+    //chassis.moveToPoint(21.71, -32, 1000);
+
+    chassis.moveToPoint(-19, -34, 3000); //ladder
 
     // // globalTarget = 140;
 }
@@ -245,7 +249,7 @@ void blueSoloWP() {
     chassis.moveToPoint(1.9, 2.7, 2000, {.forwards = false, .minSpeed = 70}); // move back to alliance
     chassis.waitUntilDone();
 
-    globalTarget = 140;
+    //globalTarget = 140;
     pros::delay(600);
     //globalTarget = 0;
 
@@ -255,7 +259,7 @@ void blueSoloWP() {
     pros::delay(250);
     chassis.turnToHeading(-147, 1000); //turn to face center stack
 
-    chassis.moveToPose(-42, -48, -89.5, 2000); // go to center rings 
+    chassis.moveToPose(-42, -48, -88.5, 2000); // go to center rings 
     intakeState = 1;
     pros::delay(250);
 
@@ -263,7 +267,7 @@ void blueSoloWP() {
 
     chassis.turnToHeading(-66.2, 1000); //turn to face second ring stack
 
-    chassis.moveToPoint(-32.25, -39, 1000); //move to second ring stack 
+    chassis.moveToPoint(-32.25, -38.5, 1000); //move to second ring stack 
     pros::delay(1500);
 
     chassis.turnToHeading(90, 3000); // turn to face ladder
@@ -296,7 +300,7 @@ void redSoloWP() {
     pros::delay(250);
     chassis.turnToHeading(147, 1000); //turn to face center stack
 
-    chassis.moveToPose(37.2, -39, 90, 2000); //go to center rings
+    chassis.moveToPose(37.2, -38.5, 90, 2000); //go to center rings
     intakeState = 1;
 
     chassis.moveToPose(13, -30.4, 123, 2000, {.forwards = false}); //move back
@@ -310,8 +314,8 @@ void redSoloWP() {
 
 
 
-    chassis.moveToPoint(-3.7, -26.5, 5000); //-27.5 //go to ladder
-         globalTarget = 140;
+    chassis.moveToPoint(-9, -24, 5000); //-3.7, -26.5 //go to ladder
+         //globalTarget = 140;
 
        
 
@@ -443,14 +447,14 @@ void skills() {
     chassis.waitUntilDone();
     globalTarget = 23;
     //intakeState = 0;
-    chassis.moveToPose(26.5, 47.7, 90, 100000, {.lead = 0.7, .minSpeed = 50});
+    chassis.moveToPose(26.5, 46.7, 90, 100000, {.lead = 0.7, .minSpeed = 50});
     pros::delay(1250);
     // chassis.waitUntilDone();
     // intakeState = 2;
     // pros::delay(50);
     // globalTarget = 80;
     // intakeState = 1;
-    chassis.moveToPoint(40.5, 45.5, 750);
+    chassis.moveToPoint(40.5, 43.5, 750);
     chassis.waitUntilDone();
     intakeState = 0;
     
@@ -460,7 +464,7 @@ void skills() {
     globalTarget = 140;
     pros::delay(170);
     intakeState = 1;
-    chassis.moveToPoint(40.5, 45.5, 500);
+    chassis.moveToPoint(40.5, 43.5, 500);
     pros::delay(800);
 
 
@@ -615,11 +619,11 @@ void autonomous() {
     // sortState = 2;
 
     //fourRingBlue();
-    fourRingRed();
+    //fourRingRed();
     //redSoloWP();
-    //blueSoloWP();
+    blueSoloWP();
 
-   // skills();
+    //skills();
 
     
     // chassis.follow(ringsideRed_txt, ringsideExtra_txt, "ringside");
