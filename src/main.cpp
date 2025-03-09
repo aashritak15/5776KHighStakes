@@ -95,22 +95,25 @@ void fourRingRed() {
     chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
     sortState = 2;
 
-    chassis.moveToPoint(0.2, -29, 2000, {.forwards = false}); // go to mogo
+    chassis.moveToPoint(0.2, -29, 1000, {.forwards = false}); // go to mogo
 
     chassis.waitUntilDone();
     clampState = 1;
-    pros::delay(500);
-
+    pros::delay(100);
+ 
     chassis.turnToHeading(-90, 800);
+
+    chassis.waitUntilDone();
 
     intakeState = 1;
 
-    pros::delay(250);
+    pros::delay(100);
 
     chassis.moveToPoint(-22.4, -31, 2000); // intake ring # 1
     chassis.waitUntilDone();
 
-    // pros::delay(250);
+    pros::delay(250);
+
 
     chassis.turnToHeading(0, 1000);
 
@@ -134,38 +137,44 @@ void fourRingRed() {
 
     // ram 2
     pros::delay(500);
-    chassis.moveToPoint(-32.71, -1.99, 1000, {.forwards = false}); // go back
-    chassis.waitUntilDone();
-    intakeState = 2;
-    chassis.moveToPoint(-45.6, 11.55, 750, {.minSpeed = 50});
-    chassis.waitUntilDone(); // go to ring stack
-    pros::delay(100);
-    intakeState = 1;
+    // chassis.moveToPoint(-32.71, -1.99, 1000, {.forwards = false, .maxSpeed = 90}); // go back
+    // chassis.waitUntilDone();
+    // intakeState = 2;
+    // chassis.moveToPoint(-45.6, 11.55, 750, {.minSpeed = 50});
+    // chassis.waitUntilDone(); // go to ring stack
+    // pros::delay(100);
+    // intakeState = 1;
 
     // ram 3
-    pros::delay(500);
-    chassis.moveToPoint(-32.71, -1.99, 1000, {.forwards = false}); // go back
-    chassis.waitUntilDone();
-    intakeState = 2;
-    chassis.moveToPoint(-45.6, 11.55, 750, {.minSpeed = 50});
-    chassis.waitUntilDone(); // go to ring stack
-    pros::delay(100);
-    intakeState = 1;
-
-    pros::delay(500);
-    chassis.moveToPoint(-30.71, -3.99, 1000, {.forwards = false, .minSpeed = 100}); // go back
-
-    chassis.turnToHeading(134, 800); // turn to face ladder
-    chassis.waitUntilDone();
-    clampState = 0;
-
-    //intakeState = 0;
+    // pros::delay(500);
+    // chassis.moveToPoint(-32.71, -1.99, 1000, {.forwards = false, .maxSpeed = 90}); // go back
     // chassis.waitUntilDone();
-    // clampState = 0;
+    // intakeState = 2;
+    // chassis.moveToPoint(-45.6, 11.55, 750, {.minSpeed = 50});
+    // chassis.waitUntilDone(); // go to ring stack
+    // pros::delay(100);
+    // intakeState = 1;
 
-    chassis.moveToPoint(-1.52, -43.3, 2000); // go to the ladder
+    // pros::delay(500);
+     chassis.moveToPoint(-30.71, -3.99, 1000, {.forwards = false, .maxSpeed = 90}); // go back
 
-    globalTarget = 140;
+
+
+    chassis.turnToHeading(90, 800);
+    chassis.waitUntilDone(); 
+    pros::delay(100); //temporary
+    clampState = 0; // turn to face ladder
+
+    chassis.turnToHeading(0, 800); 
+
+    chassis.moveToPoint(-32, -32, 1000, {.forwards = false});
+
+ 
+
+ 
+    // chassis.moveToPoint(-1.52, -41, 2000); // go to the ladder
+
+    // globalTarget = 140;
 }
 
 void fourRingBlue() {
@@ -241,6 +250,8 @@ void fourRingBlue() {
 
     chassis.moveToPoint(-5.2, -35, 1000);
 
+
+
    // chassis.moveToPoint()
 
     // face third mogo
@@ -254,12 +265,12 @@ void fourRingBlue() {
 
 void blueSoloWP() {
     //inversed blue
-     sortState = 1;
+    sortState = 1;
     chassis.turnToHeading(28, 1000);
-    chassis.moveToPoint(1.9, 2.7, 2000, {.forwards = false, .minSpeed = 70}); // move back to alliance
+    chassis.moveToPoint(1.9, 2.7, 1000, {.forwards = false, .minSpeed = 70}); // move back to alliance
     chassis.waitUntilDone();
 
-    //globalTarget = 140;
+    globalTarget = 140;
     pros::delay(600);
     //globalTarget = 0;
 
@@ -278,7 +289,9 @@ void blueSoloWP() {
     chassis.turnToHeading(-66.2, 1000); //turn to face second ring stack
 
     chassis.moveToPoint(-32.25, -38.5, 1000); //move to second ring stack 
-    pros::delay(1500);
+
+    pros::delay(500);
+
 
     chassis.turnToHeading(90, 3000); // turn to face ladder
     chassis.waitUntilDone();
@@ -371,14 +384,14 @@ void skills() {
     chassis.waitUntilDone();
     globalTarget = 21;
     // intakeState = 0;
-    chassis.moveToPose(-53, 51.25, -86, 1000, {.lead = 0.7, .minSpeed = 50});
+    chassis.moveToPose(-53, 51.5, -86, 1000, {.lead = 0.7, .minSpeed = 50});
     pros::delay(500);
     // chassis.waitUntilDone();
     // intakeState = 2;
     // pros::delay(50);
     // globalTarget = 80;
     // intakeState = 1;
-    chassis.moveToPose(-75, 51.25, -90, 1500);
+    chassis.moveToPose(-75, 51.5, -90, 1500);
     chassis.waitUntilDone();
     intakeState = 0;
     
@@ -389,7 +402,7 @@ void skills() {
     pros::delay(170);
     intakeState = 1;
     pros::delay(250);
-    chassis.moveToPose(-75, 51.25, -90, 250);
+    chassis.moveToPose(-75, 51.5, -90, 250);
 
     //back up and get mogo rings #3 4 5
     chassis.moveToPoint(-44, 49.5, 500, {.forwards = false});
@@ -458,14 +471,14 @@ void skills() {
     pros::delay(250);
     globalTarget = 21;
     //intakeState = 0;
-    chassis.moveToPose(26.5, 41, 89, 100000, {.lead = 0.7, .minSpeed = 50});
+    chassis.moveToPose(26.5, 41.5, 89, 100000, {.lead = 0.7, .minSpeed = 50});
     pros::delay(500);
     // chassis.waitUntilDone();
     // intakeState = 2;
     // pros::delay(50);
     // globalTarget = 80;
     // intakeState = 1;
-    chassis.moveToPoint(40.5, 43.65, 1500);
+    chassis.moveToPoint(40.5, 44.15, 1500);
     chassis.waitUntilDone();
     pros::delay(250);
     intakeState = 0;
@@ -477,7 +490,7 @@ void skills() {
     pros::delay(170);
     intakeState = 1;
     pros::delay(250);
-    chassis.moveToPoint(40.5, 43.65, 500);
+    chassis.moveToPoint(40.5, 44.15, 500);
 
 
     //back up and get mogo rings #3 4 5
@@ -636,19 +649,19 @@ void autonomous() {
     chassis.setBrakeMode(MOTOR_BRAKE_BRAKE);
     // sortState = 2;
 
-    fourRingBlue();
+    //fourRingBlue();
     //fourRingRed();
     //redSoloWP();
-    //blueSoloWP();
+   // blueSoloWP();
 
-    //skills();
+    skills();
 
     
     // chassis.follow(ringsideRed_txt, ringsideExtra_txt, "ringside");
 }
 
 void opcontrol() {
-    sortState = 1;
+    sortState = 2;
     matchControl();
 
     // sortState = 1;
