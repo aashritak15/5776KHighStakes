@@ -97,13 +97,10 @@ void runColorSort() {
         
         if (intakeKeep) {
             if(optical.get_hue() < 30 && optical.get_hue() > 0 && optical.get_proximity() > 200) {
-                if(prevIntakeKeep != intakeKeep) {
-                    intakeState = 3;
-                    pros::delay(80);
-                    intakeState = 0;
-                }
-
+                intakeState = 2;
+                pros::Task::delay(25);\
                 intakeState = 0;
+                pros::Task::delay(10);
             }
         }
 
@@ -151,7 +148,7 @@ void runColorSort() {
 
             }
         } else if (sortState == 2) {
-            if (optical.get_hue() < 230 && optical.get_hue() > 200 && optical.get_proximity() > 200) {
+            if (optical.get_hue() < 300 && optical.get_hue() > 100 && optical.get_proximity() > 200) {
 
                 pros::delay(35);
 
@@ -187,10 +184,10 @@ void runIntake() {
         } else if (intakeState == 2) {
             intakeUpper.move_voltage(-12000);
             intakeLower.move_voltage(12000);
-        } else if(intakeState = 3) {
-            intakeUpper.move_voltage(-6000);
-            intakeLower.move_voltage(6000);
-        }
+        } //else if(intakeState = 3) {
+        //     intakeUpper.move_voltage(-6000);
+        //     intakeLower.move_voltage(6000);
+        // }
 
         pros::delay(10);
     }
