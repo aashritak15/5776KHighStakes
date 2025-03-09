@@ -98,10 +98,9 @@ void runColorSort() {
         if (intakeKeep) {
             if(optical.get_hue() < 30 && optical.get_hue() > 0 && optical.get_proximity() > 200) {
                 if(prevIntakeKeep != intakeKeep) {
-                    intakeState = -1;
-                    intakeUpper.move_velocity(-300);
-                    intakeLower.move_velocity(100);
+                    intakeState = 3;
                     pros::delay(80);
+                    intakeState = 0;
                 }
 
                 intakeState = 0;
@@ -188,6 +187,9 @@ void runIntake() {
         } else if (intakeState == 2) {
             intakeUpper.move_voltage(-12000);
             intakeLower.move_voltage(12000);
+        } else if(intakeState = 3) {
+            intakeUpper.move_voltage(-6000);
+            intakeLower.move_voltage(6000);
         }
 
         pros::delay(10);

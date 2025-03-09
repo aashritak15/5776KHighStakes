@@ -361,14 +361,14 @@ void skills() {
     chassis.waitUntilDone();
     globalTarget = 22;
     // intakeState = 0;
-    chassis.moveToPose(-53, 51.25, -86, 1000, {.lead = 0.7, .minSpeed = 50});
+    chassis.moveToPose(-53, 51.75, -86, 1000, {.lead = 0.7, .minSpeed = 50});
     pros::delay(250);
     // chassis.waitUntilDone();
     // intakeState = 2;
     // pros::delay(50);
     // globalTarget = 80;
     // intakeState = 1;
-    chassis.moveToPose(-75, 51.25, -90, 1500);
+    chassis.moveToPose(-75, 51.75, -90, 1500);
     chassis.waitUntilDone();
     intakeState = 0;
     
@@ -378,8 +378,8 @@ void skills() {
     globalTarget = 140;
     pros::delay(170);
     intakeState = 1;
+    pros::delay(250);
     chassis.moveToPose(-75, 51.25, -90, 250);
-    pros::delay(800);
 
     //back up and get mogo rings #3 4 5
     chassis.moveToPoint(-47, 49.5, 500, {.forwards = false});
@@ -396,11 +396,11 @@ void skills() {
 
     chassis.turnToHeading(-56, 1000); // turns to get ring # 6 
 
-    chassis.moveToPoint(-54.65, 2.65, 1000);
+    chassis.moveToPoint(-54.65, 3.65, 1000);
 
      pros::delay(1500);
 
-    chassis.turnToHeading(35, 1000); // turn to face the corner 
+    chassis.turnToHeading(36, 1000); // turn to face the corner 
     chassis.waitUntilDone(); 
      intakeState = 2; //outtake for a little bit to not let intake get stuck 
     pros::delay(50);
@@ -411,15 +411,15 @@ void skills() {
 
     clampState = 0;
 
-    chassis.moveToPoint(-58, -0.5, 1500, {.forwards = false, .minSpeed = 50}); //move back into the corner
+    chassis.moveToPoint(-56.5, 1, 500, {.forwards = false, .minSpeed = 50}); //move back into the corner
 
 
-    chassis.moveToPoint(-54.5, 3.2, 1000);  // move out of the corner 
+    chassis.moveToPoint(-54, 5.2, 1000);  // move out of the corner 
 
 
     //next mogo
 
-    chassis.turnToHeading(-90, 1000); // turn to face mogo in the second corner 
+    chassis.turnToHeading(-90, 500); // turn to face mogo in the second corner 
     chassis.moveToPoint(0, 3.7, 4000, {.forwards = false}); // move to second mogo
     chassis.moveToPoint(6, 3.7, 400, {.forwards = false, .maxSpeed = 80}); // slow down for mogo
     chassis.waitUntilDone(); 
@@ -447,14 +447,14 @@ void skills() {
     chassis.waitUntilDone();
     globalTarget = 22;
     //intakeState = 0;
-    chassis.moveToPose(26.5, 46.7, 90, 100000, {.lead = 0.7, .minSpeed = 50});
-    pros::delay(1250);
+    chassis.moveToPose(26.5, 42, 90, 100000, {.lead = 0.7, .minSpeed = 50});
+    pros::delay(500);
     // chassis.waitUntilDone();
     // intakeState = 2;
     // pros::delay(50);
     // globalTarget = 80;
     // intakeState = 1;
-    chassis.moveToPoint(40.5, 44.5, 750);
+    chassis.moveToPoint(40.5, 43, 1500);
     chassis.waitUntilDone();
     intakeState = 0;
     
@@ -464,8 +464,8 @@ void skills() {
     globalTarget = 140;
     pros::delay(170);
     intakeState = 1;
-    chassis.moveToPoint(40.5, 44.5, 500);
-    pros::delay(800);
+    pros::delay(250);
+    chassis.moveToPoint(40.5, 43, 500);
 
 
     //back up and get mogo rings #3 4 5
@@ -486,7 +486,7 @@ void skills() {
 
     chassis.moveToPoint(35.9, 3.9, 1000);
 
-    chassis.turnToHeading(-31.3, 1000, {.maxSpeed = 90}); // turn to face the corner // TODO: might break some stuf
+    chassis.turnToHeading(-31.3, 750, {.maxSpeed = 90}); // turn to face the corner // TODO: might break some stuf
     chassis.waitUntilDone(); 
     intakeState = 2;
     pros::delay(25);
@@ -496,9 +496,9 @@ void skills() {
 
     clampState = 0;
 
-    chassis.moveToPoint(35.5, 2, 2000, {.forwards = false, .minSpeed = 50});
+    chassis.moveToPoint(35.5, 2, 500, {.forwards = false, .minSpeed = 50});
 
-    chassis.moveToPoint(31.3, 8.7, 1000); 
+    chassis.moveToPoint(31.3, 8.7, 750); 
 
 
 
@@ -522,11 +522,11 @@ void skills() {
     pros::delay(500);
 
     //turn to corner
-    chassis.turnToHeading(-109.8, 500);
+    chassis.turnToHeading(-111.8, 500);
     chassis.waitUntilDone();
     clampState = 0;
 
-    chassis.moveToPoint(30.5, 100.3, 2000, {.forwards = false, .minSpeed = 100}); //push it into the corner 
+    chassis.moveToPoint(30.5, 99, 2000, {.forwards = false, .minSpeed = 100}); //push it into the corner 
     chassis.moveToPoint(6.7, 96.2, 1000);
 
     //turn to face fourth mogo 
@@ -548,7 +548,7 @@ void skills() {
     chassis.waitUntilDone();
 
     // //drive through fourth quadrant rings
-    chassis.turnToHeading(-395, 1000);
+    chassis.turnToHeading(-395, 500);
     chassis.moveToPoint(-58, 80.7, 500);
     pros::delay(500);
     chassis.turnToHeading(-442, 500);
@@ -562,7 +562,7 @@ void skills() {
 
 
     //mogo
-    chassis.moveToPoint(-58, 75.4, 500, {.forwards = false});
+    chassis.moveToPoint(-58, 77.4, 500, {.forwards = false});
     chassis.turnToHeading(125.8, 500);
     chassis.waitUntilDone();
     intakeState = 2;
@@ -576,7 +576,9 @@ void skills() {
     //hang
     chassis.moveToPoint(-54.1, 75.6, 500);
     chassis.turnToHeading(-45, 500);
-    chassis.moveToPoint(-15.8, 31.9, 10000, {.forwards = false, .maxSpeed = 70});
+    chassis.moveToPoint(-11.8, 26.9, 2000, {.forwards = false, .maxSpeed = 100});
+    chassis.waitUntilDone();
+    globalTarget = 0;
 
 
     //no time :(
