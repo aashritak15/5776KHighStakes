@@ -45,7 +45,7 @@ void initialize() {
     pros::Task screenTask([&]() {
         while (true) {
             // print robot location to the brain screen
-            std::cout<<chassis.getPose().x<<", "<<chassis.getPose().y<<", "<<chassis.getPose().theta<<"\n";
+            // std::cout<<chassis.getPose().x<<", "<<chassis.getPose().y<<", "<<chassis.getPose().theta<<"\n";
             std::vector<double> left = leftMotors.get_position_all();
             std::vector<double> right = rightMotors.get_position_all();
             // pros::lcd::print(1, "LeftF Encoders: %f", left[0]);
@@ -59,11 +59,13 @@ void initialize() {
             pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
             pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
             pros::lcd::print(3, "LB: %f", ladyBrown.get_position()); // lift encoder
-           // pros::lcd::print(0, "Color: %f ", optical.get_hue());
-            //pros::lcd::print(0, "Intake Velocity: %f", intakeUpper.get_actual_velocity());
+            pros::lcd::print(5, "Color: %f ", optical.get_hue());
+            pros::lcd::print(4, "Intake Velocity: %f", intakeUpper.get_actual_velocity());
 
             // log position telemetry
             lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
+
+            std::cout<<optical.get_hue()<<"\n";
             // delay to save resources
             pros::delay(50);
         }

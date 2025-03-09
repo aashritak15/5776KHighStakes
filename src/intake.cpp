@@ -16,8 +16,8 @@ bool colorDetected = false;
 void intakeInit() {
     intakeUpper.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
     intakeLower.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-    optical.set_integration_time(10);
-    optical.set_led_pwm(100);
+    // optical.set_integration_time(10);
+    optical.set_led_pwm(50);
 
     pros::Task sortTask(runColorSort, "color sort");
     pros::Task intakeTask(runIntake, "intake");
@@ -98,34 +98,13 @@ void runColorSort() {
         if (intakeKeep) {
             if(optical.get_hue() < 30 && optical.get_hue() > 0 && optical.get_proximity() > 200) {
                 intakeState = 2;
-                pros::Task::delay(25);\
+                pros::Task::delay(25);
                 intakeState = 0;
                 pros::Task::delay(10);
             }
         }
 
         prevIntakeKeep = intakeKeep;
-
-            //velocity fluctuates too much to use
-            // if(intakeState != 0 && intakeUpper.get_actual_velocity() < 300) {
-            //     timeCount += 1;
-            //     std::cout<<"timer: "<<timeCount<<"\n";
-            //     if(timeCount >= 500) {
-            //         pros::delay(500);
-            //         intakeState = 0;
-            //         timeCount = 0;
-            //         pros::delay(10);
-            //         continue;
-            //     }
-
-            //     pros::delay(10);
-            //     continue;
-            // } else {
-            //     timeCount = 0;
-            //     pros::delay(10);
-            //     continue;
-            // }
-        
 
         if (intakeState == 0) { // TODO: see if this fixes
             pros::delay(10);
@@ -137,7 +116,7 @@ void runColorSort() {
 
                 pros::Task::delay(35);
 
-                intakeState = -1; //TODO: special sauce intake state
+                intakeState = -1;
                 intakeUpper.move_voltage(-12000);
                 intakeLower.move_voltage(12000);
 
@@ -152,7 +131,7 @@ void runColorSort() {
 
                 pros::delay(35);
 
-                intakeState = -1; //TODO: special sauce intake state
+                intakeState = -1;
                 intakeUpper.move_voltage(-12000);
                 intakeLower.move_voltage(12000);
 
