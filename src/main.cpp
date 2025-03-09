@@ -286,11 +286,11 @@ void blueSoloWP() {
 void redSoloWP() {
     //inversed blue
      sortState = 2;
-    chassis.turnToHeading(-28, 1000);
-    chassis.moveToPoint(-1.9, 2.7, 2000, {.forwards = false, .minSpeed = 70}); //move back to alliance
-    chassis.waitUntilDone();
+    //chassis.turnToHeading(-28, 1000);
+    //chassis.moveToPoint(-1.9, 2.7, 2000, {.forwards = false, .minSpeed = 70}); //move back to alliance
+    //chassis.waitUntilDone();
 
-    globalTarget = 140;
+    //globalTarget = 140;
     pros::delay(600);
     globalTarget = 0;
 
@@ -300,7 +300,7 @@ void redSoloWP() {
     pros::delay(250);
     chassis.turnToHeading(147, 1000); //turn to face center stack
 
-    chassis.moveToPose(37.2, -38.5, 90, 2000); //go to center rings
+    chassis.moveToPose(37.2, -39, 90, 2000); //go to center rings
     intakeState = 1;
 
     chassis.moveToPose(13, -30.4, 123, 2000, {.forwards = false}); //move back
@@ -322,7 +322,7 @@ void redSoloWP() {
 
 }
 
-
+//NOTE CHANGE globalTarget = 23 to globalTarget = 22
 void skills() {
 
     sortState = 2;
@@ -359,16 +359,16 @@ void skills() {
     //back up and go to wall stake
     chassis.moveToPose(-36.1, 38.3, -51.6, 100000, {.forwards = false, .lead = 0.5, .minSpeed = 50});
     chassis.waitUntilDone();
-    globalTarget = 23;
+    globalTarget = 22;
     // intakeState = 0;
-    chassis.moveToPose(-53, 52.25, -86, 1000, {.lead = 0.7, .minSpeed = 50});
+    chassis.moveToPose(-53, 51.25, -86, 1000, {.lead = 0.7, .minSpeed = 50});
     pros::delay(250);
     // chassis.waitUntilDone();
     // intakeState = 2;
     // pros::delay(50);
     // globalTarget = 80;
     // intakeState = 1;
-    chassis.moveToPose(-75, 52.25, -90, 1500);
+    chassis.moveToPose(-75, 51.25, -90, 1500);
     chassis.waitUntilDone();
     intakeState = 0;
     
@@ -382,7 +382,7 @@ void skills() {
     pros::delay(800);
 
     //back up and get mogo rings #3 4 5
-    chassis.moveToPoint(-49.5, 49.5, 500, {.forwards = false});
+    chassis.moveToPoint(-47, 49.5, 500, {.forwards = false});
     chassis.waitUntilDone();
       
     //globalTarget = 0;
@@ -421,7 +421,7 @@ void skills() {
 
     chassis.turnToHeading(-90, 1000); // turn to face mogo in the second corner 
     chassis.moveToPoint(0, 3.7, 4000, {.forwards = false}); // move to second mogo
-    chassis.moveToPoint(4.5, 3.7, 400, {.forwards = false, .maxSpeed = 80}); // slow down for mogo
+    chassis.moveToPoint(6, 3.7, 400, {.forwards = false, .maxSpeed = 80}); // slow down for mogo
     chassis.waitUntilDone(); 
     clampState = 1; //clamp onto mogo 
     pros::delay(400);
@@ -445,7 +445,7 @@ void skills() {
     //back up and go to wall stake
     chassis.moveToPose(20.7, 40.06, 35, 100000, {.forwards = false, .lead = 0.5, .minSpeed = 50});
     chassis.waitUntilDone();
-    globalTarget = 23;
+    globalTarget = 22;
     //intakeState = 0;
     chassis.moveToPose(26.5, 46.7, 90, 100000, {.lead = 0.7, .minSpeed = 50});
     pros::delay(1250);
@@ -454,7 +454,7 @@ void skills() {
     // pros::delay(50);
     // globalTarget = 80;
     // intakeState = 1;
-    chassis.moveToPoint(40.5, 43.5, 750);
+    chassis.moveToPoint(40.5, 44.5, 750);
     chassis.waitUntilDone();
     intakeState = 0;
     
@@ -464,12 +464,12 @@ void skills() {
     globalTarget = 140;
     pros::delay(170);
     intakeState = 1;
-    chassis.moveToPoint(40.5, 43.5, 500);
+    chassis.moveToPoint(40.5, 44.5, 500);
     pros::delay(800);
 
 
     //back up and get mogo rings #3 4 5
-    chassis.moveToPoint(25, 44.75, 500, {.forwards = false});
+    chassis.moveToPoint(25.5, 44.75, 500, {.forwards = false});
     chassis.waitUntilDone();
       
     //globalTarget = 0;
@@ -515,7 +515,7 @@ void skills() {
 
     //clamp to push
     chassis.turnToHeading(180, 500);
-    chassis.moveToPoint(2.4, 91.9, 1000, {.forwards = false});
+    chassis.moveToPoint(5.4, 91.9, 1000, {.forwards = false});
     chassis.waitUntilDone();
     intakeKeep = false;
     clampState = 1;
@@ -621,9 +621,9 @@ void autonomous() {
     //fourRingBlue();
     //fourRingRed();
     //redSoloWP();
-    blueSoloWP();
+    //blueSoloWP();
 
-    //skills();
+    skills();
 
     
     // chassis.follow(ringsideRed_txt, ringsideExtra_txt, "ringside");
