@@ -6,10 +6,10 @@ void matchControl() {
     controller.set_text(0, 0, "no sort");
     while (true) {
         
-        int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
-        int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
+        int throttle = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
+        int turn = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_X);
 
-        chassis.arcade(leftY, rightX * 0.85); // 0.9
+        chassis.arcade(throttle, turn); // 0.9
 
         updateIntake();
         updateColorSort();
