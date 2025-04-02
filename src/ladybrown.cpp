@@ -14,7 +14,7 @@ void ladyBrownInit() {
     lbRotation.set_position(0);
 
     pros::Task pd_task1(lbTask, "lb run task");
-    pros::Task updateLBTask2(updateLBTask, "lb update task");
+    // pros::Task updateLBTask2(updateLBTask, "lb update task");
 }
 
 double globalTarget = 0;
@@ -22,15 +22,16 @@ bool comingDown = false;
 //double maxSpeed = 0;
 
 void updateLB() { //TODO: outdated angles
-    if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) { //*ZERO
-        globalTarget = 0;
-    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) { //*LOAD
-        globalTarget = 21;
-    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) { //*FULLSCORE
-        globalTarget = 140;
-    } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) { //*STRAIGHT UP
-        globalTarget = 80;
-    }
+
+    // if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)) { //*ZERO
+    //     globalTarget = 0;
+    // } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) { //*LOAD
+    //     globalTarget = 21;
+    // } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) { //*FULLSCORE
+    //     globalTarget = 140;
+    // } else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) { //*STRAIGHT UP
+    //     globalTarget = 80;
+    // }
 }
 
 void updateLBTask() {
@@ -78,35 +79,42 @@ void updateLBTask() {
 }
 
 void lbTask() {
-    double currentAngle;
-    double prevError = 0;
-    double error = 0;
-    double derivative;
-    double armMoveVoltage;
+    // double currentAngle;
+    // double prevError = 0;
+    // double error = 0;
+    // double derivative;
+    // double armMoveVoltage;
 
-    double kP = 0.3;
-    double kD = 0.6; // 0.86
+    // double kP = 0.3;
+    // double kD = 0.6; // 0.86
 
-    while (true) {        
-        currentAngle = lbRotation.get_position() / 100.0;
+    while (true) {
 
-        error = globalTarget - currentAngle;
+        std::cout<<std::to_string(controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y))<<"\n";
 
-        derivative = error - prevError;
+        float multiplier = -1.0 * 127.0 / controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y);
 
-        armMoveVoltage = (kP * error) + (kD * derivative);
+        ladyBrown.move_velocity(multiplier * 200);
 
-        // Scale the output from -100 to 100 range to -12000 to 12000
-        armMoveVoltage = armMoveVoltage * 1200;
+    //     currentAngle = lbRotation.get_position() / 100.0;
 
-        if (std::abs(armMoveVoltage) > 12000) { armMoveVoltage = (armMoveVoltage < 0) ? -12000 : 12000; }
-        if (std::abs(armMoveVoltage) < 200) { armMoveVoltage = 0; } // Adjusted small deadzone for voltage
-       // if(std::abs(armMoveVoltage) > maxSpeed) {armMoveVoltage = maxSpeed;}
+    //     error = globalTarget - currentAngle;
 
-        ladyBrown.move_voltage(-armMoveVoltage);
+    //     derivative = error - prevError;
 
-        prevError = error;
+    //     armMoveVoltage = (kP * error) + (kD * derivative);
 
-        pros::Task::delay(10);
+    //     // Scale the output from -100 to 100 range to -12000 to 12000
+    //     armMoveVoltage = armMoveVoltage * 1200;
+
+    //     if (std::abs(armMoveVoltage) > 12000) { armMoveVoltage = (armMoveVoltage < 0) ? -12000 : 12000; }
+    //     if (std::abs(armMoveVoltage) < 200) { armMoveVoltage = 0; } // Adjusted small deadzone for voltage
+    //    // if(std::abs(armMoveVoltage) > maxSpeed) {armMoveVoltage = maxSpeed;}
+
+    //     ladyBrown.move_voltage(-armMoveVoltage);
+
+    //     prevError = error;
+
+        pros::Task::delay(25);
     }
 }
